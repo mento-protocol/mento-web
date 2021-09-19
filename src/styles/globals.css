@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+Backgrounds
+============
+*/
+
+.bg-gradient-radial {
+	/* TODO */
+  /* background: radial-gradient(50% 50% at 50% 50%, #DEEDE6 0.01%, #EAF2EE 100%, #DEEDE6 100%); */
+	background: '#DEEDE5'
+}
+
+/* 
+Scrollbar Overrides
+===================
+*/
+
+html {
+  --scrollbarBG: rgba(255, 255, 255, 0);
+  --thumbBG: #dddddd;
+}
+body {
+	scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: var(--scrollbarBG);
+}
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbarBG);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
+/* phones */
+@media only screen and (max-width: 767px) {
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+/* 
+Input Overrides
+===================
+*/
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* 
+Common animations
+=================
+*/
+
+@keyframes fadeOut {
+	0% { opacity: 1 }
+	100% { opacity: 0; display: none }
+}
+@keyframes fadeIn {
+	0% { opacity: 0 }
+	100% { opacity: 1; }
+}
+
+/* 
+Dropdowns
+=========
+*/
+
+.dropdown-menu {
+	position: absolute;
+	width: fit-content;
+	z-index: 100;
+	text-align: left;
+	margin-top: 0.8rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0.8rem 1rem;
+	border: 1px solid #ddd;
+	border-radius: 0.5rem;
+	box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease, opacity 0.2s ease, visibility 0s linear 0.2s;
+	will-change: transform;
+}
