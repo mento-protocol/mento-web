@@ -7,12 +7,13 @@ import Select, {
   SingleValueProps,
   Styles,
   Theme,
+  ValueType,
 } from 'react-select'
 import { getTokenById, NativeTokens, Token } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { Color } from 'src/styles/Color'
 
-interface TokenOption {
+export interface TokenOption {
   value: string
   label: string
 }
@@ -23,6 +24,7 @@ type Props = {
   name: string
   options: TokenOption[]
   label?: string
+  onChange?: (option: TokenOption | null | undefined) => void
 }
 
 const DEFAULT_VALUE: TokenOption = {
@@ -31,8 +33,14 @@ const DEFAULT_VALUE: TokenOption = {
 }
 
 export default function TokenSelectField(props: Props) {
-  const { id, name, label, options } = props
+  const { id, name, label, options, onChange } = props
   const [field, , helpers] = useField<string>(name)
+
+  const handleChange = (option: ValueType<TokenOption, false>) => {
+    helpers.setValue(option?.value || '')
+    if (onChange) onChange(option)
+  }
+
   return (
     <Select<TokenOption>
       id={id}
@@ -40,7 +48,7 @@ export default function TokenSelectField(props: Props) {
       options={options}
       name={field.name}
       value={options.find((option) => option.value === field.value) || DEFAULT_VALUE}
-      onChange={(option) => helpers.setValue(option?.value || '')}
+      onChange={handleChange}
       onBlur={field.onBlur}
       isLoading={false}
       isClearable={false}
@@ -120,8 +128,7 @@ const customStyles: Styles<any, false> = {
   }),
   option: (provided) => ({
     ...provided,
-    // borderBottom: `1px solid ${Color.borderLight}`,
-    padding: '10px 12px',
+    padding: '7px 12px',
     color: `${Color.primaryBlack} !important`,
     cursor: 'pointer',
   }),
