@@ -36,6 +36,7 @@ module.exports = {
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
       serif: ['serif'],
+      mono: ['Roboto Mono', 'Courier New', 'monospace'],
     },
     extend: {
       spacing: {

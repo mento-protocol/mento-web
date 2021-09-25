@@ -68,7 +68,7 @@ function SingleValue({ children, ...props }: PropsWithChildren<SingleValueProps<
     <div className="flex items-center p-1 tw-rounded-md">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
-        <label htmlFor={selectProps.name} className="text-sm text-gray-400">
+        <label htmlFor={selectProps.name} className="text-xs text-gray-400 cursor-pointer">
           {selectProps.singleValueLabel || 'Token'}
         </label>
         <div className="flex items-center">
@@ -83,7 +83,6 @@ function SingleValue({ children, ...props }: PropsWithChildren<SingleValueProps<
 }
 
 function Option(props: OptionProps<TokenOption, false>) {
-  // const  doo= props.
   const token = getTokenForValue(props.data)
   return (
     <components.Option {...props}>
@@ -134,7 +133,7 @@ const customStyles: Styles<any, false> = {
   }),
   singleValue: () => ({
     margin: 0,
-    fontSize: '18px',
+    fontSize: '16px',
     fontWeight: 500,
     color: Color.primaryBlack,
   }),

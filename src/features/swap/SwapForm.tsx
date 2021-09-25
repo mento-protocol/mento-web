@@ -82,19 +82,23 @@ function SwapFormInputs() {
             label="From Token"
             onChange={onChangeToken(true)}
           />
+          <FieldDividerLine />
         </div>
         <Field
           id="fromAmount"
           name="fromAmount"
           type="number"
           placeholder="0.00"
-          className="w-24 bg-transparent text-right text-lg focus:outline-none"
+          className="w-24 bg-transparent text-right text-xl font-mono focus:outline-none"
         />
       </div>
-      <div className="bg-white rounded-full absolute left-3.5 top-2/4 -translate-y-1/2 hover:rotate-180 transition-all">
+      <div className="bg-white rounded-full absolute left-4 top-2/4 -translate-y-1/2 hover:rotate-180 transition-all">
         <ReverseTokenButton />
       </div>
-      <div className="flex justify-between items-center py-2 px-3 mt-8 bg-greengray-lightest rounded-md">
+      <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
+        5.1 cUSD ~ 1 CELO
+      </div>
+      <div className="flex justify-between items-center py-2 px-3 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
           <TokenSelectField
             id="toTokenSelect"
@@ -103,6 +107,7 @@ function SwapFormInputs() {
             label="To Token"
             onChange={onChangeToken(false)}
           />
+          <FieldDividerLine />
         </div>
         <OutputEstimateField />
       </div>
@@ -119,7 +124,7 @@ function OutputEstimateField() {
     setToAmount(values.fromAmount?.toString() || '0.00')
   }, [values, touched, setFieldValue])
 
-  return <div className="text-lg text-right">{toAmount}</div>
+  return <div className="text-xl text-right font-mono">{toAmount}</div>
 }
 
 function ReverseTokenButton() {
@@ -136,11 +141,15 @@ function ReverseTokenButton() {
       imgSrc={DownArrow}
       width={32}
       height={32}
-      classes="p-2"
+      classes="p-1.5"
       title="Swap inputs"
       onClick={onClickReverse}
     />
   )
+}
+
+function FieldDividerLine() {
+  return <div className="w-px h-12 ml-3 bg-gray-300"></div>
 }
 
 function SettingsMenu() {
