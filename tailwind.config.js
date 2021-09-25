@@ -14,20 +14,26 @@ module.exports = {
       blue: colors.blue,
       red: colors.red,
       teal: colors.teal,
-      green: colors.emerald,
-      lime: {
-        darkest: '#C1CDAD',
-        dark: '#D1E1B7',
-        DEFAULT: '#E0E6D6',
-        light: '#F1F7E8',
-        lightest: '#F5F6F4',
+      green: {
+        darkest: '#3DBB78',
+        dark: '#43C37F',
+        DEFAULT: '#45CD85',
+        light: '#4CDA8F',
+        lightest: '#5AE89D',
+      },
+      greengray: {
+        darkest: '#C5D0CA',
+        dark: '#D1DDD7',
+        DEFAULT: '#DEE8E2',
+        light: '#F0F5F3',
+        lightest: '#F9FAFA',
       },
       bluegray: {
         DEFAULT: '#EAEFF0',
       },
     },
     fontFamily: {
-      sans: ['Karla', 'sans-serif'],
+      sans: ['Roboto', 'sans-serif'],
       serif: ['serif'],
     },
     extend: {

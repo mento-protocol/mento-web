@@ -5,10 +5,10 @@ export enum Color {
   primaryWhite = '#FFFFFF',
   primaryGrey = '#9CA4A9',
 
-  primaryLime = '#E0E6D6',
-  limeLight = '#F1F7E8',
-  limeLighter = '#F5F6F4',
-  limeLightest = 'FAFAF9',
+  primarygreengray = '#E0E6D6',
+  greengrayLight = '#F1F7E8',
+  greengrayLighter = '#F5F6F4',
+  greengrayLightest = 'FAFAF9',
 
   borderInactive = '#DDDDDD',
   borderActive = 'rgba(46, 51, 56, 0.8)',

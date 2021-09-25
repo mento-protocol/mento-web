@@ -8,9 +8,8 @@ Backgrounds
 */
 
 .bg-gradient-radial {
-	/* TODO */
-  /* background: radial-gradient(50% 50% at 50% 50%, #DEEDE6 0.01%, #EAF2EE 100%, #DEEDE6 100%); */
-	background: '#DEEDE5'
+	background: #deede5;
+	background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(222,237,229,1) 33%, rgba(222,237,229,1) 100%); 
 }
 
 /* 

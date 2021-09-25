@@ -17,7 +17,7 @@ export function DropdownNav({ align }: { align: 'l' | 'r' }) {
         passThruProps={buttonProps}
       />
       <div
-        className={`dropdown-menu bg-lime-light ${isOpen ? '' : 'hidden'} ${
+        className={`dropdown-menu bg-greengray-light ${isOpen ? '' : 'hidden'} ${
           align === 'l' ? '-left-1' : '-right-1'
         }`}
         role="menu"

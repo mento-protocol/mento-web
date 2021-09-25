@@ -116,9 +116,9 @@ const customTheme = (theme: Theme) => ({
   ...theme,
   colors: {
     ...theme.colors,
-    primary: Color.limeLight,
-    primary75: Color.limeLighter,
-    primary50: Color.limeLighter,
-    primary25: Color.limeLighter,
+    primary: Color.greengrayLight,
+    primary75: Color.greengrayLighter,
+    primary50: Color.greengrayLighter,
+    primary25: Color.greengrayLighter,
   },
 })

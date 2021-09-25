@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { BorderedButton } from 'src/components/buttons/BorderedButton'
-import { DropdownNav } from 'src/components/nav/DropdownNav'
-import { navLinks } from 'src/components/nav/navLinks'
+import { SolidButton } from 'src/components/buttons/SolidButton'
+import { NavBar } from 'src/components/nav/NavBar'
+import Wallet from 'src/images/icons/wallet.svg'
 import Logo from 'src/images/logo.svg'
 
 export function Header({ pathName }: { pathName: string }) {
@@ -13,35 +13,31 @@ export function Header({ pathName }: { pathName: string }) {
           <Link href="/">
             <a className="flex items-center w-52">
               <Image src={Logo} alt="Mento.fi Logo" quality={100} width={50} height={50} />
-              <div className="ml-3 text-xl">Mento.fi</div>
+              <div className="flex flex-col ml-3">
+                <h1 className="text-xl">Mento</h1>
+                <h2 className="text-base text-gray-500">Celo Exchange</h2>
+              </div>
             </a>
           </Link>
         </div>
-        <nav>
-          <div className="md:hidden">
+        {/* <div className="md:hidden">
             <DropdownNav align="l" />
-          </div>
-          <ul className="hidden md:flex list-none">
-            {navLinks.map((l) => (
-              <li key={l.label} className="px-6">
-                <Link href={l.to}>
-                  <a className="group text-xl font-medium flex flex-col">
-                    <div>{l.label}</div>
-                    <div
-                      className={`rounded-lg bg-black h-0.5 mt-1 ${
-                        pathName.includes(l.to) ? 'opacity-100' : 'opacity-0'
-                      } group-hover:opacity-100 transition-all`}
-                    ></div>
-                  </a>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          </div> */}
+        <NavBar pathName={pathName} />
         <div className="flex justify-end w-60">
-          <BorderedButton size="l">Connect Wallet</BorderedButton>
+          <SolidButton size="l" classes="shadow-md" icon={<WalletIcon />}>
+            Connect
+          </SolidButton>
         </div>
       </div>
     </header>
+  )
+}
+
+function WalletIcon() {
+  return (
+    <div className="flex items-center mr-2">
+      <Image src={Wallet} alt="Wallet" width={18} height={18} />
+    </div>
   )
 }

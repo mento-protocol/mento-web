@@ -1,8 +1,8 @@
 import { Field, Form, Formik, useFormikContext } from 'formik'
 import { useState } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
-import { BorderedButton } from 'src/components/buttons/BorderedButton'
 import { IconButton } from 'src/components/buttons/IconButton'
+import { SolidButton } from 'src/components/buttons/SolidButton'
 import TokenSelectField from 'src/components/input/TokenSelectField'
 import { CELO, cEUR, cUSD } from 'src/config/tokens'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
@@ -39,7 +39,7 @@ export function SwapForm() {
       <Formik initialValues={initialValues} onSubmit={onSubmit}>
         <Form>
           <div className="relative">
-            <div className="flex justify-between items-center p-3 mt-6 bg-lime-lightest rounded-md">
+            <div className="flex justify-between items-center py-2 px-3 mt-6 bg-greengray-lightest rounded-md">
               <div className="flex items-center">
                 <TokenSelectField
                   id="fromTokenSelect"
@@ -56,10 +56,10 @@ export function SwapForm() {
                 className="w-24 bg-transparent text-right text-lg focus:outline-none"
               />
             </div>
-            <div className="bg-white rounded-full absolute left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 hover:rotate-180 transition-all">
+            <div className="bg-white rounded-full absolute left-3.5 top-2/4 -translate-y-1/2 hover:rotate-180 transition-all">
               <ReverseTokenButton />
             </div>
-            <div className="flex justify-between items-center p-3 mt-5 bg-lime-lightest rounded-md">
+            <div className="flex justify-between items-center py-2 px-3 mt-8 bg-greengray-lightest rounded-md">
               <div className="flex items-center">
                 <TokenSelectField
                   id="toTokenSelect"
@@ -72,9 +72,9 @@ export function SwapForm() {
             </div>
           </div>
           <div className="flex justify-center mt-8">
-            <BorderedButton size="m" type="submit">
+            <SolidButton dark={true} size="m" type="submit">
               Connect Wallet
-            </BorderedButton>
+            </SolidButton>
           </div>
         </Form>
       </Formik>
@@ -91,7 +91,16 @@ function ReverseTokenButton() {
     setFieldValue('toToken', fromToken)
   }
 
-  return <IconButton imgSrc={DownArrow} width={32} height={32} onClick={onClickReverse} />
+  return (
+    <IconButton
+      imgSrc={DownArrow}
+      width={32}
+      height={32}
+      classes="p-3"
+      title="Swap inputs"
+      onClick={onClickReverse}
+    />
+  )
 }
 
 function SettingsMenu() {
