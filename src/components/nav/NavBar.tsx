@@ -13,7 +13,7 @@ export function NavBar({ pathName }: { pathName: string }) {
                 <a
                   className={`py-1.5 px-6 first:pl-7 last:pr-7 ${
                     active && 'bg-gray-100'
-                  } hover:bg-gray-50 text-lg ${active ? 'font-bold' : 'font-medium'}`}
+                  } hover:bg-gray-50 text-lg ${active ? 'font-medium' : 'font-base'}`}
                 >
                   {l.label}
                 </a>
