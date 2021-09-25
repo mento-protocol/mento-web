@@ -34,7 +34,7 @@ export default function AboutPage() {
           .
         </p>
         <HrDivider classes="mt-4" />
-        <p className={pClass}>
+        <p className={pClass + ' mb-3'}>
           This DApp is a free tool to help the Celo community use Mento. It was funded by the Celo
           Foundation and created by{' '}
           <TextLink href="https://twitter.com/RossyWrote" className="text-green">
