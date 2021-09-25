@@ -1,3 +1,4 @@
+// Should mostly match tailwind.config.js
 export enum Color {
   celoGreen = '#35D07F',
   celoGold = '#FBCC5C',
@@ -5,10 +6,10 @@ export enum Color {
   primaryWhite = '#FFFFFF',
   primaryGrey = '#9CA4A9',
 
-  primarygreengray = '#E0E6D6',
-  greengrayLight = '#F1F7E8',
-  greengrayLighter = '#F5F6F4',
-  greengrayLightest = 'FAFAF9',
+  primaryGreengray = '#DEE8E2',
+  greengrayLight = '#F0F5F3',
+  greengrayLighter = '#F6F9F8',
+  greengrayLightest = '#F9FAFA',
 
   borderInactive = '#DDDDDD',
   borderActive = 'rgba(46, 51, 56, 0.8)',

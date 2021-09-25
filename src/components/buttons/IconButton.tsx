@@ -13,13 +13,13 @@ interface ButtonProps {
 }
 
 export function IconButton(props: PropsWithChildren<ButtonProps>) {
-  const { width, height, onClick, imgSrc, disabled, title, passThruProps } = props
+  const { width, height, classes, onClick, imgSrc, disabled, title, passThruProps } = props
 
   const base = 'flex items-center justify-center transition-all'
   const onHover = 'hover:opacity-70'
   const onDisabled = 'disabled:opacity-50'
   const onActive = 'active:opacity-60'
-  const classes = `${base} ${onHover} ${onDisabled} ${onActive}`
+  const allClasses = `${base} ${onHover} ${onDisabled} ${onActive} ${classes}`
 
   return (
     <button
@@ -27,7 +27,7 @@ export function IconButton(props: PropsWithChildren<ButtonProps>) {
       type="button"
       disabled={disabled ?? false}
       title={title}
-      className={classes}
+      className={allClasses}
       {...passThruProps}
     >
       <Image src={imgSrc} alt={title} width={width} height={height} />

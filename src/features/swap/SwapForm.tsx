@@ -7,6 +7,7 @@ import TokenSelectField from 'src/components/input/TokenSelectField'
 import { CELO, cEUR, cUSD } from 'src/config/tokens'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import Sliders from 'src/images/icons/sliders.svg'
+import { FloatingBox } from 'src/layout/FloatingBox'
 
 const initialValues = {
   fromToken: CELO.id,
@@ -17,8 +18,8 @@ const initialValues = {
 type FormValues = typeof initialValues
 
 const tokens = [
-  { value: cUSD.id, label: cUSD.symbol },
   { value: CELO.id, label: CELO.symbol },
+  { value: cUSD.id, label: cUSD.symbol },
   { value: cEUR.id, label: cEUR.symbol },
 ]
 
@@ -31,7 +32,7 @@ export function SwapForm() {
   }
 
   return (
-    <div className="w-100 p-5 bg-white shadow-md rounded-lg">
+    <FloatingBox width="w-100">
       <div className="flex justify-between">
         <h2 className="text-lg font-medium">Swap</h2>
         <SettingsMenu />
@@ -78,7 +79,7 @@ export function SwapForm() {
           </div>
         </Form>
       </Formik>
-    </div>
+    </FloatingBox>
   )
 }
 
@@ -96,7 +97,7 @@ function ReverseTokenButton() {
       imgSrc={DownArrow}
       width={32}
       height={32}
-      classes="p-3"
+      classes="p-2"
       title="Swap inputs"
       onClick={onClickReverse}
     />

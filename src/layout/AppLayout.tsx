@@ -11,9 +11,11 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
   return (
     <>
       <HeadMeta pathName={pathName} />
-      <div className={`flex flex-col justify-between h-screen bg-gradient-radial`}>
+      <div
+        className={`flex flex-col justify-between h-full min-h-screen w-full min-w-screen bg-gradient-radial`}
+      >
         <Header pathName={pathName} />
-        <main className="flex-grow w-full">{children}</main>
+        <main className="w-full">{children}</main>
         <Footer />
       </div>
     </>

@@ -15,7 +15,7 @@ export function Header({ pathName }: { pathName: string }) {
               <Image src={Logo} alt="Mento.fi Logo" quality={100} width={50} height={50} />
               <div className="flex flex-col ml-3">
                 <h1 className="text-xl">Mento</h1>
-                <h2 className="text-base text-gray-500">Celo Exchange</h2>
+                <h2 className="text-sm text-gray-500">Celo Exchange</h2>
               </div>
             </a>
           </Link>

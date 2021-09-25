@@ -6,7 +6,7 @@ export function NavBar({ pathName }: { pathName: string }) {
     <nav>
       <ul className="flex items-center justify-center list-none rounded-full bg-white shadow-md overflow-hidden opacity-90">
         {navLinks.map((l) => {
-          const active = pathName.includes(l.to)
+          const active = pathName === l.to
           return (
             <li key={l.label} className="flex">
               <Link href={l.to}>

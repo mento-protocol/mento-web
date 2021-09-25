@@ -57,15 +57,15 @@ function _TokenIcon({ token, size = 'm' }: Props) {
 
 const sizeValues = {
   s: {
-    actualSize: '34px',
-    fontSize: '16px',
+    actualSize: '30px',
+    fontSize: '15px',
   },
   m: {
-    actualSize: '42px',
+    actualSize: '40px',
     fontSize: '18px',
   },
   l: {
-    actualSize: '50px',
+    actualSize: '48px',
     fontSize: '20px',
   },
 }

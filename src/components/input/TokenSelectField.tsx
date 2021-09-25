@@ -1,6 +1,13 @@
 import { useField } from 'formik'
 import React, { PropsWithChildren } from 'react'
-import Select, { components, OptionsType, SingleValueProps, Styles, Theme } from 'react-select'
+import Select, {
+  components,
+  OptionProps,
+  OptionsType,
+  SingleValueProps,
+  Styles,
+  Theme,
+} from 'react-select'
 import { getTokenById, NativeTokens, Token } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { Color } from 'src/styles/Color'
@@ -39,7 +46,7 @@ export default function TokenSelectField(props: Props) {
       isClearable={false}
       isSearchable={false}
       singleValueLabel={label}
-      components={{ SingleValue }}
+      components={{ SingleValue, Option }}
       styles={customStyles}
       theme={customTheme}
     />
@@ -51,7 +58,7 @@ function SingleValue({ children, ...props }: PropsWithChildren<SingleValueProps<
   const token = getTokenForValue(getValue())
   return (
     <div className="flex items-center p-1 tw-rounded-md">
-      <TokenIcon token={token} />
+      <TokenIcon size="l" token={token} />
       <div className="ml-3">
         <label htmlFor={selectProps.name} className="text-sm text-gray-400">
           {selectProps.singleValueLabel || 'Token'}
@@ -64,6 +71,19 @@ function SingleValue({ children, ...props }: PropsWithChildren<SingleValueProps<
         </div>
       </div>
     </div>
+  )
+}
+
+function Option(props: OptionProps<TokenOption, false>) {
+  // const  doo= props.
+  const token = getTokenForValue(props.data)
+  return (
+    <components.Option {...props}>
+      <div className="flex items-center">
+        <TokenIcon size="s" token={token} />
+        <div className="ml-3">{props.label}</div>
+      </div>
+    </components.Option>
   )
 }
 
@@ -88,7 +108,7 @@ const customStyles: Styles<any, false> = {
     boxShadow: 'none',
     background: 'transparent',
     ':hover': {
-      background: 'rgba(255,255,255,0.6)',
+      background: 'rgba(255,255,255,0.9)',
     },
   }),
   indicatorsContainer: () => ({
@@ -101,8 +121,9 @@ const customStyles: Styles<any, false> = {
   option: (provided) => ({
     ...provided,
     // borderBottom: `1px solid ${Color.borderLight}`,
-    padding: '10px 20px',
+    padding: '10px 12px',
     color: `${Color.primaryBlack} !important`,
+    cursor: 'pointer',
   }),
   singleValue: () => ({
     margin: 0,
@@ -117,7 +138,7 @@ const customTheme = (theme: Theme) => ({
   colors: {
     ...theme.colors,
     primary: Color.greengrayLight,
-    primary75: Color.greengrayLighter,
+    primary75: Color.greengrayLight,
     primary50: Color.greengrayLighter,
     primary25: Color.greengrayLighter,
   },
