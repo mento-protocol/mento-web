@@ -1,9 +1,10 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import counterReducer from 'src/features/counter/counterSlice'
+import { reducer as swapReducer } from 'src/features/swap/swapSlice'
 
 export function makeStore() {
   return configureStore({
-    reducer: { counter: counterReducer },
+    reducer: { counter: counterReducer, swap: swapReducer },
   })
 }
 

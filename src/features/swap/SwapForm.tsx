@@ -1,21 +1,18 @@
 import { Field, Form, Formik, useFormikContext } from 'formik'
 import { useEffect, useState } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
+import { useAppDispatch } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
 import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
+import { setFormValues } from 'src/features/swap/swapSlice'
+import { SwapFormValues } from 'src/features/swap/types'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import Sliders from 'src/images/icons/sliders.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
-interface FormValues {
-  fromTokenId: NativeTokenId
-  toTokenId: NativeTokenId
-  fromAmount: number | string
-}
-
-const initialValues: FormValues = {
+const initialValues: SwapFormValues = {
   fromTokenId: NativeTokenId.CELO,
   toTokenId: NativeTokenId.cUSD,
   fromAmount: '',
@@ -28,8 +25,11 @@ const tokens = [
 ]
 
 export function SwapForm() {
-  const onSubmit = (values: FormValues) => {
-    alert(JSON.stringify(values, null, 2))
+  const dispatch = useAppDispatch()
+
+  const onSubmit = (values: SwapFormValues) => {
+    console.log(JSON.stringify(values, null, 2))
+    dispatch(setFormValues(values))
   }
 
   return (
@@ -53,7 +53,7 @@ export function SwapForm() {
 }
 
 function SwapFormInputs() {
-  const { values, setFieldValue } = useFormikContext<FormValues>()
+  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
   const onChangeToken = (isFromToken: boolean) => (option: TokenOption | null | undefined) => {
     const tokenId = option?.value || NativeTokenId.CELO
@@ -118,7 +118,7 @@ function SwapFormInputs() {
 function OutputEstimateField() {
   const [toAmount, setToAmount] = useState('0.00')
 
-  const { values, touched, setFieldValue } = useFormikContext<FormValues>()
+  const { values, touched, setFieldValue } = useFormikContext<SwapFormValues>()
 
   useEffect(() => {
     setToAmount(values.fromAmount?.toString() || '0.00')
@@ -128,7 +128,7 @@ function OutputEstimateField() {
 }
 
 function ReverseTokenButton() {
-  const { values, setFieldValue } = useFormikContext<FormValues>()
+  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
   const { fromTokenId, toTokenId } = values
 
   const onClickReverse = () => {

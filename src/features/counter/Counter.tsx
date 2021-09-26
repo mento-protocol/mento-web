@@ -10,6 +10,7 @@ import {
   selectCount,
 } from './counterSlice'
 
+// TODO remove this whole folder
 function Counter() {
   const dispatch = useAppDispatch()
   const count = useAppSelector(selectCount)
