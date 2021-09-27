@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+Responsiveness
+==============
+*/
+@media only screen and (max-width: 479px) {
+	/* phones */
+	html {
+		font-size: 0.9rem;
+	}
+}
+@media only screen and (max-width: 359px) {
+	/* small phones */
+	html {
+		font-size: 0.8rem;
+	}
+}
+
 /* 
 Backgrounds
 ============

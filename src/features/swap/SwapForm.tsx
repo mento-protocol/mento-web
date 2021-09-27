@@ -33,7 +33,7 @@ export function SwapForm() {
   }
 
   return (
-    <FloatingBox width="w-100">
+    <FloatingBox width="w-100" classes="overflow-visible">
       <div className="flex justify-between">
         <h2 className="text-lg font-medium">Swap</h2>
         <SettingsMenu />
@@ -89,7 +89,7 @@ function SwapFormInputs() {
           name="fromAmount"
           type="number"
           placeholder="0.00"
-          className="w-24 bg-transparent text-right text-xl font-mono focus:outline-none"
+          className="w-36 bg-transparent text-right text-xl font-mono focus:outline-none"
         />
       </div>
       <div className="bg-white rounded-full absolute left-4 top-2/4 -translate-y-1/2 hover:rotate-180 transition-all">
@@ -124,7 +124,7 @@ function OutputEstimateField() {
     setToAmount(values.fromAmount?.toString() || '0.00')
   }, [values, touched, setFieldValue])
 
-  return <div className="text-xl text-right font-mono">{toAmount}</div>
+  return <div className="text-xl text-right font-mono w-36 overflow-hidden">{toAmount}</div>
 }
 
 function ReverseTokenButton() {
