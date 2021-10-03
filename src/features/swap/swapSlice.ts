@@ -27,4 +27,4 @@ export const swapSlice = createSlice({
 })
 
 export const { setFormValues, setExchangeRates, reset } = swapSlice.actions
-export const reducer = swapSlice.reducer
+export const swapReducer = swapSlice.reducer

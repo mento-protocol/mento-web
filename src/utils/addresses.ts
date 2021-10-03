@@ -1,7 +1,7 @@
 import { utils } from 'ethers'
 import { logger } from 'src/utils/logger'
 
-function validateAddress(address: string, context: string) {
+export function validateAddress(address: string, context: string) {
   if (!address || !utils.isAddress(address)) {
     const errorMsg = `Invalid addresses for ${context}: ${address}`
     logger.error(errorMsg)

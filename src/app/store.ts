@@ -1,10 +1,11 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
-import counterReducer from 'src/features/counter/counterSlice'
-import { reducer as swapReducer } from 'src/features/swap/swapSlice'
+import { accountReducer } from 'src/features/accounts/accountSlice'
+import { tokenPriceReducer } from 'src/features/chart/tokenPriceSlice'
+import { swapReducer } from 'src/features/swap/swapSlice'
 
 export function makeStore() {
   return configureStore({
-    reducer: { counter: counterReducer, swap: swapReducer },
+    reducer: { account: accountReducer, swap: swapReducer, tokenPrice: tokenPriceReducer },
   })
 }
 

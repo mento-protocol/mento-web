@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { SolidButton } from 'src/components/buttons/SolidButton'
+import { ConnectButton } from 'src/components/nav/ConnectButton'
 import { NavBar } from 'src/components/nav/NavBar'
-import Wallet from 'src/images/icons/wallet.svg'
 import Logo from 'src/images/logo.svg'
 
 export function Header({ pathName }: { pathName: string }) {
@@ -24,20 +23,8 @@ export function Header({ pathName }: { pathName: string }) {
             <DropdownNav align="l" />
           </div> */}
         <NavBar pathName={pathName} />
-        <div className="flex justify-end w-60">
-          <SolidButton size="l" classes="shadow-md" icon={<WalletIcon />}>
-            Connect
-          </SolidButton>
-        </div>
+        <ConnectButton />
       </div>
     </header>
-  )
-}
-
-function WalletIcon() {
-  return (
-    <div className="flex items-center mr-2">
-      <Image src={Wallet} alt="Wallet" width={18} height={18} />
-    </div>
   )
 }

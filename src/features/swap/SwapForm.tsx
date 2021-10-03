@@ -1,3 +1,4 @@
+import { useContractKit } from '@celo-tools/use-contractkit'
 import { Field, Form, Formik, useFormikContext } from 'formik'
 import { useEffect, useState } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
@@ -6,11 +7,13 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
 import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
+import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import Sliders from 'src/images/icons/sliders.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
+import { logger } from 'src/utils/logger'
 
 const initialValues: SwapFormValues = {
   fromTokenId: NativeTokenId.CELO,
@@ -25,12 +28,21 @@ const tokens = [
 ]
 
 export function SwapForm() {
-  const dispatch = useAppDispatch()
+  const { connect, address, kit } = useContractKit()
 
+  const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
     console.log(JSON.stringify(values, null, 2))
     dispatch(setFormValues(values))
   }
+
+  useEffect(() => {
+    if (!address || !kit) return
+    dispatch(fetchBalances({ address, kit })).catch((err) => {
+      // TODO surface error
+      logger.error('Failed to retrieve balances', err)
+    })
+  }, [address, kit])
 
   return (
     <FloatingBox width="w-100" classes="overflow-visible">
@@ -42,9 +54,15 @@ export function SwapForm() {
         <Form>
           <SwapFormInputs />
           <div className="flex justify-center mt-8">
-            <SolidButton dark={true} size="m" type="submit">
-              Connect Wallet
-            </SolidButton>
+            {address ? (
+              <SolidButton dark={true} size="m" type="submit">
+                Review Swap
+              </SolidButton>
+            ) : (
+              <SolidButton dark={true} size="m" onClick={connect}>
+                Connect Wallet
+              </SolidButton>
+            )}
           </div>
         </Form>
       </Formik>
