@@ -33,7 +33,7 @@ export function SolidButton(props: PropsWithChildren<ButtonProps>) {
       className={allClasses}
     >
       {icon ? (
-        <div className="flex items-center jusitify-center">
+        <div className="flex items-center justify-center">
           {props.icon}
           {props.children}
         </div>

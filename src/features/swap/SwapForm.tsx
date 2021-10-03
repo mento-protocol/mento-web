@@ -45,15 +45,15 @@ export function SwapForm() {
   }, [address, kit])
 
   return (
-    <FloatingBox width="w-100" classes="overflow-visible">
+    <FloatingBox width="w-96" classes="overflow-visible">
       <div className="flex justify-between">
-        <h2 className="text-lg font-medium">Swap</h2>
+        <h2 className="text-lg font-medium pl-1">Swap</h2>
         <SettingsMenu />
       </div>
       <Formik initialValues={initialValues} onSubmit={onSubmit}>
         <Form>
           <SwapFormInputs />
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-6 mb-1">
             {address ? (
               <SolidButton dark={true} size="m" type="submit">
                 Review Swap
@@ -91,7 +91,7 @@ function SwapFormInputs() {
 
   return (
     <div className="relative">
-      <div className="flex justify-between items-center py-2 px-3 mt-6 bg-greengray-lightest rounded-md">
+      <div className="flex justify-between items-center py-2 px-3 mt-5 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
           <TokenSelectField
             id="fromTokenSelect"
@@ -174,7 +174,7 @@ function SettingsMenu() {
   const { buttonProps, itemProps, isOpen } = useDropdownMenu(3)
 
   return (
-    <div className="relative">
+    <div className="relative mt-1 mr-1">
       <IconButton
         imgSrc={Sliders}
         width={20}

@@ -24,6 +24,7 @@
   "dependencies": {
     "@celo-tools/celo-ethers-wrapper": "^0.0.5",
     "@celo-tools/use-contractkit": "^1.2.0",
+    "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
     "@reduxjs/toolkit": "^1.6.1",
     "ethers": "^5.4.7",
     "formik": "^2.2.9",

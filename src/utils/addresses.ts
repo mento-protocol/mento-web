@@ -1,6 +1,17 @@
 import { utils } from 'ethers'
 import { logger } from 'src/utils/logger'
 
+export function isValidAddress(address: string) {
+  // Need to catch because ethers' isAddress throws in some cases (bad checksum)
+  try {
+    const isValid = address && utils.isAddress(address)
+    return !!isValid
+  } catch (error) {
+    logger.warn('Invalid address', error, address)
+    return false
+  }
+}
+
 export function validateAddress(address: string, context: string) {
   if (!address || !utils.isAddress(address)) {
     const errorMsg = `Invalid addresses for ${context}: ${address}`
