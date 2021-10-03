@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import { NativeTokenId } from 'src/config/tokens'
 import { AccountBalances, fetchBalances } from 'src/features/accounts/fetchBalances'
 
-interface SwapState {
+interface AccountState {
   balances: AccountBalances
   lastUpdated: number | null
 }
 
-const initialState: SwapState = {
+const initialState: AccountState = {
   balances: {
     [NativeTokenId.CELO]: '0',
     [NativeTokenId.cUSD]: '0',

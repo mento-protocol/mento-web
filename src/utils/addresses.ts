@@ -1,10 +1,10 @@
-import { utils } from 'ethers'
+import { getAddress, isAddress } from '@ethersproject/address'
 import { logger } from 'src/utils/logger'
 
 export function isValidAddress(address: string) {
   // Need to catch because ethers' isAddress throws in some cases (bad checksum)
   try {
-    const isValid = address && utils.isAddress(address)
+    const isValid = address && isAddress(address)
     return !!isValid
   } catch (error) {
     logger.warn('Invalid address', error, address)
@@ -13,7 +13,7 @@ export function isValidAddress(address: string) {
 }
 
 export function validateAddress(address: string, context: string) {
-  if (!address || !utils.isAddress(address)) {
+  if (!address || !isAddress(address)) {
     const errorMsg = `Invalid addresses for ${context}: ${address}`
     logger.error(errorMsg)
     throw new Error(errorMsg)
@@ -22,7 +22,7 @@ export function validateAddress(address: string, context: string) {
 
 export function normalizeAddress(address: string) {
   validateAddress(address, 'normalize')
-  return utils.getAddress(address)
+  return getAddress(address)
 }
 
 export function shortenAddress(address: string, elipsis?: boolean, capitalize?: boolean) {
@@ -38,7 +38,7 @@ export function capitalizeAddress(address: string) {
 export function areAddressesEqual(a1: string, a2: string) {
   validateAddress(a1, 'compare')
   validateAddress(a2, 'compare')
-  return utils.getAddress(a1) === utils.getAddress(a2)
+  return getAddress(a1) === getAddress(a2)
 }
 
 export function trimLeading0x(input: string) {

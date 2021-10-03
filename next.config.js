@@ -14,7 +14,7 @@ module.exports = {
   async rewrites() {
     return [
       {
-        source: '/:path*',
+        source: '/:any*',
         destination: '/',
       },
     ]

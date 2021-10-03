@@ -37,7 +37,7 @@ export function SwapConfirm(props: Props) {
   const toToken = NativeTokens[toTokenId]
 
   return (
-    <FloatingBox width="w-100">
+    <FloatingBox width="w-96">
       <div className="flex justify-between">
         <IconButton
           imgSrc={LeftArrow}
@@ -67,7 +67,6 @@ export function SwapConfirm(props: Props) {
           </div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4">
             <RightCircleArrow />
-            {/* <Image src={RightArrow} alt="Arrow" width={20} height={20} /> */}
           </div>
         </div>
         <div className="flex items-end justify-center">

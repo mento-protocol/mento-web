@@ -1,5 +1,5 @@
 import jazzicon from '@metamask/jazzicon'
-import { BigNumber } from 'ethers'
+import BigNumber from 'bignumber.js'
 import { CSSProperties, PureComponent } from 'react'
 import { isValidAddress, normalizeAddress } from 'src/utils/addresses'
 
@@ -10,7 +10,7 @@ type Props = {
 }
 
 function addressToSeed(address: string) {
-  return BigNumber.from(normalizeAddress(address).slice(0, 8)).toNumber()
+  return new BigNumber(normalizeAddress(address).slice(0, 8)).toNumber()
 }
 
 export class Identicon extends PureComponent<Props> {

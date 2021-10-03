@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers'
+import BigNumber from 'bignumber.js'
 import { fetchWithTimeout } from 'src/utils/timeout'
 
 interface BlockscoutResponse<R> {
@@ -45,7 +45,7 @@ export function validateBlockscoutLog(
 ) {
   if (!log) throw new Error('Log is nullish')
   if (!log.transactionHash) throw new Error('Log has no tx hash')
-  if (minBlock && (!log.blockNumber || BigNumber.from(log.blockNumber).lt(minBlock)))
+  if (minBlock && (!log.blockNumber || new BigNumber(log.blockNumber).lt(minBlock)))
     throw new Error('Log has invalid block number')
   if (!log.topics || !log.topics.length) throw new Error('Log has no topics')
   if (!log.topics || !log.topics.length) throw new Error('Log has no topics')

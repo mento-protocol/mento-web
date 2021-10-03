@@ -65,7 +65,7 @@ const sizeValues = {
     fontSize: '18px',
   },
   l: {
-    actualSize: '48px',
+    actualSize: '46px',
     fontSize: '20px',
   },
 }

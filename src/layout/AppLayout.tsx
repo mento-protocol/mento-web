@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { Footer } from 'src/components/nav/Footer'
 import { Header } from 'src/components/nav/Header'
+import { PollingWorker } from 'src/features/polling/PollingWorker'
 import { HeadMeta } from 'src/layout/HeadMeta'
 
 interface Props {
@@ -17,6 +18,7 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
         <Header pathName={pathName} />
         <main className="w-full">{children}</main>
         <Footer />
+        <PollingWorker />
       </div>
     </>
   )

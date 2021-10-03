@@ -7,13 +7,11 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
 import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
-import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import Sliders from 'src/images/icons/sliders.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { logger } from 'src/utils/logger'
 
 const initialValues: SwapFormValues = {
   fromTokenId: NativeTokenId.CELO,
@@ -28,21 +26,13 @@ const tokens = [
 ]
 
 export function SwapForm() {
-  const { connect, address, kit } = useContractKit()
+  const { connect, address } = useContractKit()
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
     console.log(JSON.stringify(values, null, 2))
     dispatch(setFormValues(values))
   }
-
-  useEffect(() => {
-    if (!address || !kit) return
-    dispatch(fetchBalances({ address, kit })).catch((err) => {
-      // TODO surface error
-      logger.error('Failed to retrieve balances', err)
-    })
-  }, [address, kit])
 
   return (
     <FloatingBox width="w-96" classes="overflow-visible">

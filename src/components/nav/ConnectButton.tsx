@@ -11,7 +11,7 @@ export function ConnectButton() {
   return (
     <div className="flex justify-end mb-1">
       {address ? (
-        <SolidButton size="l" classes="shadow-md pl-2 pr-2 sm:pr-4" onClick={connect}>
+        <SolidButton size="l" classes="shadow-md pl-2 pr-2 sm:pr-4 sm:pl-2" onClick={connect}>
           <div className="flex items-center">
             <Identicon address={address} size={30} />
             <div className="hidden sm:block ml-2.5 text-lg">

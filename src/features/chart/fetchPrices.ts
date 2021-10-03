@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { BigNumber, Contract } from 'ethers'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { getLatestBlockDetails, getNumBlocksPerInterval } from 'src/blockchain/blocks'
 // import { getContract } from 'src/blockchain/contracts'

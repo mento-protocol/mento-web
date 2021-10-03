@@ -22,11 +22,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@celo-tools/celo-ethers-wrapper": "^0.0.5",
     "@celo-tools/use-contractkit": "^1.2.0",
+    "@ethersproject/address": "^5.4.0",
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
     "@reduxjs/toolkit": "^1.6.1",
-    "ethers": "^5.4.7",
+    "bignumber.js": "^9.0.1",
     "formik": "^2.2.9",
     "frappe-charts": "^1.6.2",
     "next": "11.1.2",

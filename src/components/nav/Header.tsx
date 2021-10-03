@@ -10,7 +10,7 @@ export function Header({ pathName }: { pathName: string }) {
       <div className="flex items-center justify-between">
         <Link href="/">
           <a className="flex items-center">
-            <div className="scale-90 sm:scale-100 pt-px">
+            <div className="flex scale-90 sm:scale-100">
               <Image src={Logo} alt="Mento.fi Logo" quality={100} width={50} height={50} />
             </div>
             <div className="hidden sm:block flex flex-col ml-3">

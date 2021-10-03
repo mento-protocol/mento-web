@@ -1,7 +1,6 @@
-import { BigNumber, BigNumberish, FixedNumber } from 'ethers'
-import { WEI_PER_UNIT } from 'src/config/consts'
-import { toWei } from 'src/utils/amount'
-import { logger } from 'src/utils/logger'
+// import { WEI_PER_UNIT } from 'src/config/consts'
+// import { toWei } from 'src/utils/amount'
+// import { logger } from 'src/utils/logger'
 
 // TODO
 // export function useExchangeValues(
@@ -67,41 +66,41 @@ import { logger } from 'src/utils/logger'
 //   }
 // }
 
-export function calcSimpleExchangeRate(
-  amountInWei: BigNumberish,
-  buyBucket: string,
-  sellBucket: string,
-  spread: string,
-  sellCelo: boolean
-) {
-  try {
-    const fromAmountFN = FixedNumber.from(amountInWei)
-    const simulate = fromAmountFN.isZero() || fromAmountFN.isNegative()
-    // If no valid from amount provided, simulate rate with 1 unit
-    const fromAmountAdjusted = simulate ? FixedNumber.from(WEI_PER_UNIT) : fromAmountFN
+// export function calcSimpleExchangeRate(
+//   amountInWei: BigNumberish,
+//   buyBucket: string,
+//   sellBucket: string,
+//   spread: string,
+//   sellCelo: boolean
+// ) {
+//   try {
+//     const fromAmountFN = FixedNumber.from(amountInWei)
+//     const simulate = fromAmountFN.isZero() || fromAmountFN.isNegative()
+//     // If no valid from amount provided, simulate rate with 1 unit
+//     const fromAmountAdjusted = simulate ? FixedNumber.from(WEI_PER_UNIT) : fromAmountFN
 
-    const reducedSellAmt = fromAmountAdjusted.mulUnsafe(
-      FixedNumber.from(1).subUnsafe(FixedNumber.from(spread))
-    )
-    const toAmountFN = reducedSellAmt
-      .mulUnsafe(FixedNumber.from(buyBucket))
-      .divUnsafe(reducedSellAmt.addUnsafe(FixedNumber.from(sellBucket)))
+//     const reducedSellAmt = fromAmountAdjusted.mulUnsafe(
+//       FixedNumber.from(1).subUnsafe(FixedNumber.from(spread))
+//     )
+//     const toAmountFN = reducedSellAmt
+//       .mulUnsafe(FixedNumber.from(buyBucket))
+//       .divUnsafe(reducedSellAmt.addUnsafe(FixedNumber.from(sellBucket)))
 
-    const exchangeRateNum = toAmountFN.divUnsafe(fromAmountAdjusted).toUnsafeFloat()
-    const exchangeRateWei = toWei(exchangeRateNum)
-    const fromCeloRateWei = sellCelo
-      ? exchangeRateWei
-      : toWei(fromAmountAdjusted.divUnsafe(toAmountFN).toUnsafeFloat())
+//     const exchangeRateNum = toAmountFN.divUnsafe(fromAmountAdjusted).toUnsafeFloat()
+//     const exchangeRateWei = toWei(exchangeRateNum)
+//     const fromCeloRateWei = sellCelo
+//       ? exchangeRateWei
+//       : toWei(fromAmountAdjusted.divUnsafe(toAmountFN).toUnsafeFloat())
 
-    // The FixedNumber interface isn't very friendly, need to strip out the decimal manually for BigNumber
-    const toAmountWei = BigNumber.from(simulate ? 0 : toAmountFN.floor().toString().split('.')[0])
+//     // The FixedNumber interface isn't very friendly, need to strip out the decimal manually for BigNumber
+//     const toAmountWei = BigNumber.from(simulate ? 0 : toAmountFN.floor().toString().split('.')[0])
 
-    return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
-  } catch (error) {
-    logger.warn('Error computing exchange values')
-    return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
-  }
-}
+//     return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
+//   } catch (error) {
+//     logger.warn('Error computing exchange values')
+//     return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
+//   }
+// }
 
 // function getDefaultExchangeValues(
 //   _fromToken: Token | null | undefined,
