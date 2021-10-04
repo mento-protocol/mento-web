@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { DISPLAY_DECIMALS, MIN_ROUNDED_VALUE, WEI_PER_UNIT } from 'src/config/consts'
 import { logger } from 'src/utils/logger'
-import web3 from 'web3'
+import { fromWei as web3FromWei, toWei as web3ToWei } from 'web3-utils'
 
 export type NumberT = BigNumber | string | number
 
 export function fromWei(value: NumberT | null | undefined): number {
   if (!value) return 0
-  return parseFloat(web3.utils.fromWei(value.toString()))
+  return parseFloat(web3FromWei(value.toString()))
 }
 
 // Similar to fromWei above but rounds to set number of decimals
@@ -18,7 +18,7 @@ export function fromWeiRounded(
 ): string {
   if (!value) return '0'
 
-  const amount = new BigNumber(web3.utils.fromWei(value.toString()))
+  const amount = new BigNumber(web3FromWei(value.toString()))
   if (amount.isZero()) return '0'
 
   // If amount is less than min value
@@ -35,10 +35,10 @@ export function toWei(value: NumberT | null | undefined): BigNumber {
   const valueString = value.toString()
   const components = valueString.split('.')
   if (components.length === 1) {
-    return new BigNumber(web3.utils.toWei(value.toString()))
+    return new BigNumber(web3ToWei(value.toString()))
   } else if (components.length === 2) {
     const trimmedFraction = components[1].substring(0, WEI_PER_UNIT.length - 1)
-    return new BigNumber(web3.utils.toWei(`${components[0]}.${trimmedFraction}`))
+    return new BigNumber(web3ToWei(`${components[0]}.${trimmedFraction}`))
   } else {
     throw new Error(`Cannot convert ${valueString} to wei`)
   }

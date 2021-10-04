@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useAppDispatch } from 'src/app/hooks'
+import { LogoSpinner } from 'src/components/animation/LogoSpinner'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { NativeTokens } from 'src/config/tokens'
@@ -94,6 +95,7 @@ export function SwapConfirm(props: Props) {
           Swap
         </SolidButton>
       </div>
+      <LogoSpinner />
     </FloatingBox>
   )
 }

@@ -50,6 +50,9 @@ module.exports = {
       borderRadius: {
         '4xl': '2rem',
       },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
     },
   },
   variants: {
