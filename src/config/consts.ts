@@ -1,7 +1,7 @@
 export const WEI_PER_UNIT = '1000000000000000000' // 1 Celo or Ether
 export const NULL_ADDRESS = '0x0000000000000000000000000000000000000000'
 export const AVG_BLOCK_TIMES = 5000 // 5 seconds
-export const STALE_BLOCK_TIME = 20000 // 20 seconds
+export const STALE_BLOCK_TIME = 25000 // 25 seconds
 export const EXCHANGE_RATE_STALE_TIME = 5000 // 5 second
 export const BALANCE_STALE_TIME = 5000 // 5 seconds
 export const STATUS_POLLER_DELAY = 10000 // 10 seconds

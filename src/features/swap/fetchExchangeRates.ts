@@ -1,9 +1,9 @@
 import type { ContractKit } from '@celo/contractkit'
-import { StableToken } from '@celo/contractkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { EXCHANGE_RATE_STALE_TIME, MAX_EXCHANGE_SPREAD } from 'src/config/consts'
 import { NativeTokenId, StableTokenIds } from 'src/config/tokens'
+import { getExchangeContract } from 'src/features/swap/contracts'
 import { ExchangeRate, ToCeloRates } from 'src/features/swap/types'
 import { isStale } from 'src/utils/time'
 
@@ -51,17 +51,6 @@ async function _fetchExchangeRates(
     stableBucket: stableBucket.toString(),
     spread: spread.toString(),
     lastUpdated: Date.now(),
-  }
-}
-
-async function getExchangeContract(kit: ContractKit, tokenId: NativeTokenId) {
-  switch (tokenId) {
-    case NativeTokenId.cUSD:
-      return kit.contracts.getExchange(StableToken.cUSD)
-    case NativeTokenId.cEUR:
-      return kit.contracts.getExchange(StableToken.cEUR)
-    default:
-      throw new Error(`Could not get contract for token ${tokenId}`)
   }
 }
 

@@ -3,7 +3,7 @@ import { DISPLAY_DECIMALS, MIN_ROUNDED_VALUE, WEI_PER_UNIT } from 'src/config/co
 import { logger } from 'src/utils/logger'
 import { fromWei as web3FromWei, toWei as web3ToWei } from 'web3-utils'
 
-export type NumberT = BigNumber | string | number
+export type NumberT = BigNumber.Value
 
 export function fromWei(value: NumberT | null | undefined): number {
   if (!value) return 0

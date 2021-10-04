@@ -69,7 +69,6 @@ export function SwapForm() {
       >
         <Form>
           <SwapFormInputs balances={balances} toCeloRates={toCeloRates} isConnected={!!address} />
-          <ErrorMessage name="fromAmount" component={ErrorLine} />
           <div className="flex justify-center mt-5 mb-1">
             {address ? (
               <SolidButton dark={true} size="m" type="submit">
@@ -131,7 +130,7 @@ function SwapFormInputs(props: FormInputProps) {
   }
 
   return (
-    <div className="relative mb-1">
+    <div className="relative">
       <div className="flex justify-between items-center py-2 px-3 mt-5 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
           <TokenSelectField
@@ -167,7 +166,7 @@ function SwapFormInputs(props: FormInputProps) {
       <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
         {rate.isReady ? `${rateEstimate} ${stableTokenId} ~ 1 CELO` : 'Loading...'}
       </div>
-      <div className="flex justify-between items-center py-2 px-3 bg-greengray-lightest rounded-md">
+      <div className="flex justify-between items-center py-2 px-3 mb-1 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
           <TokenSelectField
             id="toTokenSelect"
@@ -180,6 +179,8 @@ function SwapFormInputs(props: FormInputProps) {
         </div>
         <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{toAmount}</div>
       </div>
+      <ErrorMessage name="fromAmount" component={ErrorLine} />
+      {/* TODO warning message if usemax */}
     </div>
   )
 }

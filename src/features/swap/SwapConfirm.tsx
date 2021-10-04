@@ -1,15 +1,20 @@
+import { useContractKit } from '@celo-tools/use-contractkit'
+import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { useAppDispatch } from 'src/app/hooks'
-import { LogoSpinner } from 'src/components/animation/LogoSpinner'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
-import { NativeTokens } from 'src/config/tokens'
+import { NativeTokenId, NativeTokens } from 'src/config/tokens'
+import { fetchBalances } from 'src/features/accounts/fetchBalances'
+import { getExchangeContract } from 'src/features/swap/contracts'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
 import LeftArrow from 'src/images/icons/arrow-left-circle.svg'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
+import { toWei } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
 
 interface Props {
   formValues: SwapFormValues
@@ -18,6 +23,7 @@ interface Props {
 export function SwapConfirm(props: Props) {
   const { fromAmount, fromTokenId, toTokenId } = props.formValues
   const dispatch = useAppDispatch()
+  const { address, kit, performActions } = useContractKit()
 
   useEffect(() => {
     // Validate formValues on mount, otherwise bail
@@ -26,8 +32,28 @@ export function SwapConfirm(props: Props) {
     }
   }, [fromAmount, fromTokenId, toTokenId, dispatch])
 
-  const onSubmit = () => {
-    alert(props.formValues)
+  const onSubmit = async () => {
+    if (!address || !kit) return
+    try {
+      await performActions(async (k) => {
+        const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
+        const sellGold = fromTokenId === NativeTokenId.CELO
+        const contract = await getExchangeContract(k, stableTokenId)
+        const amountInWei = toWei(fromAmount)
+        // TODO adjust amount based on balance
+        // TODO actual minBuyAmount
+        // TODO test throwing error in here
+        const minBuyAmount = new BigNumber(amountInWei).multipliedBy(0.98)
+        const tx = await contract.sell(amountInWei, minBuyAmount, sellGold)
+        const receipt = await tx.sendAndWaitForReceipt()
+        logger.info(`Tx receipt received for swap: ${receipt.transactionHash}`)
+        // TODO getconenctedkit here and throughout?
+        await dispatch(fetchBalances({ address, kit: k }))
+      })
+    } catch (e) {
+      // TODO surface error
+      logger.error(e)
+    }
   }
 
   const onClickBack = () => {
@@ -95,7 +121,6 @@ export function SwapConfirm(props: Props) {
           Swap
         </SolidButton>
       </div>
-      <LogoSpinner />
     </FloatingBox>
   )
 }

@@ -71,6 +71,7 @@ function BlockIndicator() {
           'border-' + classColor
         } border-opacity-50`}
       ></div>
+      <div className="hidden bg-yellow-300 bg-red-600"></div>
     </div>
   )
 }
