@@ -19,7 +19,6 @@ const initialState: AccountState = {
 export const accountSlice = createSlice({
   name: 'account',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     reset: () => initialState,
   },

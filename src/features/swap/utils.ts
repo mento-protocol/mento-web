@@ -2,129 +2,122 @@
 // import { toWei } from 'src/utils/amount'
 // import { logger } from 'src/utils/logger'
 
-// TODO
-// export function useExchangeValues(
-//   fromAmount: number | string | null | undefined,
-//   fromTokenId: string | null | undefined,
-//   toTokenId: string | null | undefined,
-//   balances: Balances,
-//   toCeloRates: ToCeloRates,
-//   isFromAmountWei: boolean
-// ) {
-//   // Return some defaults when values are missing
-//   if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues(cUSD, CELO)
+import BigNumber from 'bignumber.js'
+import { WEI_PER_UNIT } from 'src/config/consts'
+import { NativeTokenId } from 'src/config/tokens'
+import { ToCeloRates } from 'src/features/swap/types'
+import { NumberT, parseAmount, parseAmountWithDefault, toWei } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
 
-//   const sellCelo = fromTokenId === CELO.id
-//   const fromToken = balances.tokens[fromTokenId]
-//   const toToken = balances.tokens[toTokenId]
-//   const stableTokenId = sellCelo ? toTokenId : fromTokenId
-//   const toCeloRate = toCeloRates[stableTokenId]
-//   if (!toCeloRate) return getDefaultExchangeValues(fromToken, toToken)
+export function useExchangeValues(
+  fromAmount: NumberT | null | undefined,
+  fromTokenId: NativeTokenId | null | undefined,
+  toTokenId: NativeTokenId | null | undefined,
+  toCeloRates: ToCeloRates,
+  isFromAmountWei: boolean
+) {
+  // Return some defaults when values are missing
+  if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
 
-//   const { stableBucket, celoBucket, spread } = toCeloRate
-//   const [buyBucket, sellBucket] = sellCelo ? [stableBucket, celoBucket] : [celoBucket, stableBucket]
+  const sellCelo = fromTokenId === NativeTokenId.CELO
+  const stableTokenId = sellCelo ? toTokenId : fromTokenId
+  const toCeloRate = toCeloRates[stableTokenId]
+  if (!toCeloRate) return getDefaultExchangeValues(fromTokenId, toTokenId)
 
-//   const fromAmountWei = parseInputAmount(fromAmount, isFromAmountWei)
-//   const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } = calcSimpleExchangeRate(
-//     fromAmountWei,
-//     buyBucket,
-//     sellBucket,
-//     spread,
-//     sellCelo
-//   )
+  const { stableBucket, celoBucket, spread } = toCeloRate
+  const [buyBucket, sellBucket] = sellCelo ? [stableBucket, celoBucket] : [celoBucket, stableBucket]
 
-//   return {
-//     from: {
-//       weiAmount: fromAmountWei.toString(),
-//       token: fromToken,
-//     },
-//     to: {
-//       weiAmount: toAmountWei.toString(),
-//       token: toToken,
-//     },
-//     rate: {
-//       value: exchangeRateNum,
-//       weiValue: exchangeRateWei.toString(),
-//       fromCeloWeiValue: fromCeloRateWei.toString(),
-//       weiBasis: WEI_PER_UNIT,
-//       lastUpdated: toCeloRate.lastUpdated,
-//       isReady: true,
-//     },
-//   }
-// }
+  const fromAmountWei = parseInputExchangeAmount(fromAmount, isFromAmountWei)
+  const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } = calcSimpleExchangeRate(
+    fromAmountWei,
+    buyBucket,
+    sellBucket,
+    spread,
+    sellCelo
+  )
 
-// function parseInputAmount(amount: BigNumberish | null | undefined, isWei: boolean) {
-//   const zero = BigNumber.from(0)
-//   try {
-//     if (!amount) return zero
-//     const parsed = isWei ? BigNumber.from(amount) : toWei(amount)
-//     if (parsed.isNegative()) return zero
-//     return parsed
-//   } catch (error) {
-//     logger.warn('Error parsing input amount')
-//     return zero
-//   }
-// }
+  return {
+    from: {
+      weiAmount: fromAmountWei.toString(),
+      token: fromTokenId,
+    },
+    to: {
+      weiAmount: toAmountWei.toString(),
+      token: toTokenId,
+    },
+    rate: {
+      value: exchangeRateNum,
+      weiValue: exchangeRateWei.toString(),
+      fromCeloWeiValue: fromCeloRateWei.toString(),
+      weiBasis: WEI_PER_UNIT,
+      lastUpdated: toCeloRate.lastUpdated,
+      isReady: true,
+    },
+  }
+}
 
-// export function calcSimpleExchangeRate(
-//   amountInWei: BigNumberish,
-//   buyBucket: string,
-//   sellBucket: string,
-//   spread: string,
-//   sellCelo: boolean
-// ) {
-//   try {
-//     const fromAmountFN = FixedNumber.from(amountInWei)
-//     const simulate = fromAmountFN.isZero() || fromAmountFN.isNegative()
-//     // If no valid from amount provided, simulate rate with 1 unit
-//     const fromAmountAdjusted = simulate ? FixedNumber.from(WEI_PER_UNIT) : fromAmountFN
+function parseInputExchangeAmount(amount: NumberT | null | undefined, isWei: boolean) {
+  const parsed = parseAmountWithDefault(amount, 0)
+  const parsedWei = isWei ? parsed : toWei(parsed)
+  return BigNumber.max(parsedWei, 0)
+}
 
-//     const reducedSellAmt = fromAmountAdjusted.mulUnsafe(
-//       FixedNumber.from(1).subUnsafe(FixedNumber.from(spread))
-//     )
-//     const toAmountFN = reducedSellAmt
-//       .mulUnsafe(FixedNumber.from(buyBucket))
-//       .divUnsafe(reducedSellAmt.addUnsafe(FixedNumber.from(sellBucket)))
+export function calcSimpleExchangeRate(
+  amountInWei: NumberT,
+  buyBucket: string,
+  sellBucket: string,
+  spread: string,
+  sellCelo: boolean
+) {
+  try {
+    const fromAmount = parseAmount(amountInWei)
+    const simulate = !fromAmount || fromAmount.lte(0)
+    // If no valid from amount provided, simulate rate with 1 unit
+    const fromAmountAdjusted = simulate ? new BigNumber(WEI_PER_UNIT) : fromAmount
 
-//     const exchangeRateNum = toAmountFN.divUnsafe(fromAmountAdjusted).toUnsafeFloat()
-//     const exchangeRateWei = toWei(exchangeRateNum)
-//     const fromCeloRateWei = sellCelo
-//       ? exchangeRateWei
-//       : toWei(fromAmountAdjusted.divUnsafe(toAmountFN).toUnsafeFloat())
+    const spreadFactor = new BigNumber(1).minus(spread)
+    const reducedSellAmt = fromAmountAdjusted.multipliedBy(spreadFactor)
 
-//     // The FixedNumber interface isn't very friendly, need to strip out the decimal manually for BigNumber
-//     const toAmountWei = BigNumber.from(simulate ? 0 : toAmountFN.floor().toString().split('.')[0])
+    const toAmount = reducedSellAmt
+      .multipliedBy(buyBucket)
+      .dividedBy(reducedSellAmt.plus(sellBucket))
 
-//     return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
-//   } catch (error) {
-//     logger.warn('Error computing exchange values')
-//     return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
-//   }
-// }
+    const exchangeRateNum = toAmount.dividedBy(fromAmountAdjusted).toNumber()
+    const exchangeRateWei = toWei(exchangeRateNum)
+    const fromCeloRateWei = sellCelo
+      ? exchangeRateWei
+      : toWei(fromAmountAdjusted.dividedBy(toAmount).toNumber())
 
-// function getDefaultExchangeValues(
-//   _fromToken: Token | null | undefined,
-//   _toToken: Token | null | undefined
-// ) {
-//   const fromToken = _fromToken || cUSD
-//   const toToken = _toToken || CELO
+    // The FixedNumber interface isn't very friendly, need to strip out the decimal manually for BigNumber
+    const toAmountWei = new BigNumber(simulate ? 0 : toAmount).toFixed(0, BigNumber.ROUND_DOWN)
 
-//   return {
-//     from: {
-//       weiAmount: '0',
-//       token: fromToken,
-//     },
-//     to: {
-//       weiAmount: '0',
-//       token: toToken,
-//     },
-//     rate: {
-//       value: 0,
-//       weiValue: '0',
-//       fromCeloWeiValue: '0',
-//       weiBasis: WEI_PER_UNIT,
-//       lastUpdated: 0,
-//       isReady: false,
-//     },
-//   }
-// }
+    return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
+  } catch (error) {
+    logger.warn('Error computing exchange values')
+    return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
+  }
+}
+
+function getDefaultExchangeValues(
+  fromToken: NativeTokenId | null = NativeTokenId.CELO,
+  toToken: NativeTokenId | null = NativeTokenId.cUSD
+) {
+  return {
+    from: {
+      weiAmount: '0',
+      token: fromToken,
+    },
+    to: {
+      weiAmount: '0',
+      token: toToken,
+    },
+    rate: {
+      value: 0,
+      weiValue: '0',
+      fromCeloWeiValue: '0',
+      weiBasis: WEI_PER_UNIT,
+      lastUpdated: 0,
+      isReady: false,
+    },
+  }
+}

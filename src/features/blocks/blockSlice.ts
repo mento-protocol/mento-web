@@ -13,7 +13,6 @@ const initialState: BlockState = {
 export const blockSlice = createSlice({
   name: 'block',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     reset: () => initialState,
   },

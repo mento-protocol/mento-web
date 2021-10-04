@@ -28,8 +28,6 @@ export const fetchBalances = createAsyncThunk<
   }
 })
 
-// Currently this only fetches CELO to stable token prices
-// May eventually expand to fetch other pairs
 async function _fetchBalances(address: string, kit: ContractKit) {
   validateAddress(address, 'fetchBalances')
   const balances = await kit.getTotalBalance(address)
