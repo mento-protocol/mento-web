@@ -10,23 +10,20 @@ export enum CeloContract {
 }
 
 interface Config {
-  // TODO
-  // debug: boolean
-  // version: string | null
-  jsonRpcUrlPrimary: string
-  jsonRpcUrlSecondary?: string
-  gatewayFeeRecipient?: string
-  blockscoutUrl: string
-  walletConnectRelay: string
+  debug: boolean
+  version: string | null
+  jsonRpcUrlPrimary?: string
+  blockscoutUrl?: string
+  walletConnectRelay?: string
   chainId: number
   contractAddresses: Record<CeloContract, string>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const configMainnet: Config = {
-  jsonRpcUrlPrimary: 'https://forno.celo.org',
-  jsonRpcUrlSecondary: 'https://node.celowallet.app',
-  gatewayFeeRecipient: '0x97a5fF70483F9320aFA72e04AbA148Aa1c26946C',
+  debug: false,
+  version: '1.0.0',
+  jsonRpcUrlPrimary: 'https://node.celowallet.app',
   blockscoutUrl: 'https://explorer.celo.org',
   walletConnectRelay: 'wss://walletconnect.celo.org',
   chainId: 42220,
@@ -44,6 +41,8 @@ const configMainnet: Config = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const configAlfajores: Config = {
+  debug: true,
+  version: '1.0.0',
   jsonRpcUrlPrimary: 'https://alfajores-forno.celo-testnet.org',
   blockscoutUrl: 'https://alfajores-blockscout.celo-testnet.org',
   walletConnectRelay: 'wss://walletconnect.celo-networks-dev.org',

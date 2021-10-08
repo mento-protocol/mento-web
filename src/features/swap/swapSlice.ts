@@ -5,11 +5,13 @@ import { SwapFormValues, ToCeloRates } from 'src/features/swap/types'
 export interface SwapState {
   formValues: SwapFormValues | null
   toCeloRates: ToCeloRates
+  showSlippage: boolean
 }
 
 const initialState: SwapState = {
   formValues: null,
   toCeloRates: {},
+  showSlippage: false,
 }
 
 export const swapSlice = createSlice({
@@ -18,6 +20,9 @@ export const swapSlice = createSlice({
   reducers: {
     setFormValues: (state, action: PayloadAction<SwapFormValues | null>) => {
       state.formValues = action.payload
+    },
+    setShowSlippage: (state, action: PayloadAction<boolean>) => {
+      state.showSlippage = action.payload
     },
     reset: () => initialState,
   },
@@ -30,5 +35,5 @@ export const swapSlice = createSlice({
   },
 })
 
-export const { setFormValues, reset } = swapSlice.actions
+export const { setFormValues, setShowSlippage, reset } = swapSlice.actions
 export const swapReducer = swapSlice.reducer

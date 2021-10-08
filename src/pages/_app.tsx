@@ -1,9 +1,10 @@
-import { ContractKitProvider } from '@celo-tools/use-contractkit'
+import { Alfajores, Baklava, ContractKitProvider, Mainnet } from '@celo-tools/use-contractkit'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { PropsWithChildren } from 'hoist-non-react-statics/node_modules/@types/react'
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
+import { config } from 'src/config/config'
 import { AppLayout } from 'src/layout/AppLayout'
 import store from '../app/store'
 import '../styles/fonts.css'
@@ -26,6 +27,7 @@ function SafeHydrate({ children }: PropsWithChildren<any>) {
 
 export default function App({ Component, pageProps, router }: AppProps) {
   const pathName = router.pathname
+  const networks = getNetworkConfig()
   return (
     <SafeHydrate>
       <Provider store={store}>
@@ -37,6 +39,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               url: 'TODO',
               icon: 'TODO',
             }}
+            networks={networks}
           >
             <AppLayout pathName={pathName}>
               <Component {...pageProps} />
@@ -46,4 +49,14 @@ export default function App({ Component, pageProps, router }: AppProps) {
       </Provider>
     </SafeHydrate>
   )
+}
+
+function getNetworkConfig() {
+  const mainnet = {
+    ...Mainnet,
+    rpcUrl: config.jsonRpcUrlPrimary || Mainnet.rpcUrl,
+    explorer: config.blockscoutUrl || Mainnet.explorer,
+  }
+  console.log(mainnet)
+  return [mainnet, Alfajores, Baklava]
 }

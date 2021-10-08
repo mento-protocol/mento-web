@@ -4,6 +4,7 @@ export interface SwapFormValues {
   fromTokenId: NativeTokenId
   toTokenId: NativeTokenId
   fromAmount: number | string
+  slippage: string
 }
 
 export type ToCeloRates = Record<string, ExchangeRate> // token id to token<->CELO rate

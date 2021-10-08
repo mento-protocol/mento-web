@@ -5,11 +5,13 @@ import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
+import { SwitchButton } from 'src/components/buttons/SwitchButton'
+import { RadioInput } from 'src/components/input/RadioInput'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
 import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
-import { setFormValues } from 'src/features/swap/swapSlice'
+import { setFormValues, setShowSlippage } from 'src/features/swap/swapSlice'
 import { SwapFormValues, ToCeloRates } from 'src/features/swap/types'
 import { useExchangeValues } from 'src/features/swap/utils'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
@@ -21,6 +23,7 @@ const initialValues: SwapFormValues = {
   fromTokenId: NativeTokenId.CELO,
   toTokenId: NativeTokenId.cUSD,
   fromAmount: '',
+  slippage: '1.0',
 }
 
 const tokens = [
@@ -33,7 +36,7 @@ export function SwapForm() {
   const { connect, address } = useContractKit()
 
   const balances = useAppSelector((s) => s.account.balances)
-  const toCeloRates = useAppSelector((s) => s.swap.toCeloRates)
+  const { toCeloRates, showSlippage } = useAppSelector((s) => s.swap)
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
@@ -69,6 +72,7 @@ export function SwapForm() {
       >
         <Form>
           <SwapFormInputs balances={balances} toCeloRates={toCeloRates} isConnected={!!address} />
+          {showSlippage && <SlippageRow />}
           <div className="flex justify-center mt-5 mb-1">
             {address ? (
               <SolidButton dark={true} size="m" type="submit">
@@ -220,24 +224,39 @@ function ErrorLine({ children }: PropsWithChildren<any>) {
   )
 }
 
+function SlippageRow() {
+  return (
+    <div className="flex items-center justify-center mt-5 space-x-7 text-sm" role="group">
+      <div>Max Slippage:</div>
+      <RadioInput name="slippage" value="0.5" label="0.5%" />
+      <RadioInput name="slippage" value="1.0" label="1.0%" />
+      <RadioInput name="slippage" value="1.5" label="1.5%" />
+    </div>
+  )
+}
+
 function SettingsMenu() {
+  const showSlippage = useAppSelector((s) => s.swap.showSlippage)
+  const dispatch = useAppDispatch()
+  const onToggleSlippage = (checked: boolean) => {
+    dispatch(setShowSlippage(checked))
+  }
+
   const { buttonProps, itemProps, isOpen } = useDropdownMenu(3)
 
   return (
-    <div className="relative mt-1 mr-1">
+    <div className="relative mt-1 mr-1.5">
       <IconButton
         imgSrc={Sliders}
-        width={20}
-        height={20}
+        width={18}
+        height={18}
         title="Settings"
         passThruProps={buttonProps}
       />
       <div className={`dropdown-menu -right-1 bg-white ${isOpen ? '' : 'hidden'}`} role="menu">
-        <a {...itemProps[0]} href="https://example.com">
-          Regular link
-        </a>
-        <a {...itemProps[1]} onClick={() => alert('alert')}>
-          With click handler
+        <a {...itemProps[1]} className="text-sm flex items-center justify-between">
+          <div>Toggle Slippage</div>
+          <SwitchButton checked={showSlippage} onChange={onToggleSlippage} />
         </a>
       </div>
     </div>
