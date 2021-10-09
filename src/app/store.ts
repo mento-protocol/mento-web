@@ -1,4 +1,5 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { config } from 'src/config/config'
 import { accountReducer } from 'src/features/accounts/accountSlice'
 import { blockReducer } from 'src/features/blocks/blockSlice'
 import { tokenPriceReducer } from 'src/features/chart/tokenPriceSlice'
@@ -12,6 +13,7 @@ export function makeStore() {
       tokenPrice: tokenPriceReducer,
       block: blockReducer,
     },
+    devTools: config.debug,
   })
 }
 

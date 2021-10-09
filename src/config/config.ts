@@ -19,9 +19,11 @@ interface Config {
   contractAddresses: Record<CeloContract, string>
 }
 
+const isDevMode = process && process.env && process.env.NODE_ENV === 'development'
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const configMainnet: Config = {
-  debug: false,
+  debug: isDevMode,
   version: '1.0.0',
   jsonRpcUrlPrimary: 'https://node.celowallet.app',
   blockscoutUrl: 'https://explorer.celo.org',
