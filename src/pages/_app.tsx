@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'hoist-non-react-statics/node_modules/@types/r
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
+import { ErrorBoundary } from 'src/app/FailScreen'
 import { config } from 'src/config/config'
 import { AppLayout } from 'src/layout/AppLayout'
 import { logger } from 'src/utils/logger'
@@ -30,25 +31,27 @@ export default function App({ Component, pageProps, router }: AppProps) {
   const pathName = router.pathname
   const networks = getNetworkConfig()
   return (
-    <SafeHydrate>
-      <Provider store={store}>
-        <PersistWrapperTypeFixed wrapperConfig={nextPersistConfig}>
-          <ContractKitProvider
-            dapp={{
-              name: 'Mento',
-              description: 'Mento Exchange for Celo',
-              url: 'TODO',
-              icon: 'TODO',
-            }}
-            networks={networks}
-          >
-            <AppLayout pathName={pathName}>
-              <Component {...pageProps} />
-            </AppLayout>
-          </ContractKitProvider>
-        </PersistWrapperTypeFixed>
-      </Provider>
-    </SafeHydrate>
+    <ErrorBoundary>
+      <SafeHydrate>
+        <Provider store={store}>
+          <PersistWrapperTypeFixed wrapperConfig={nextPersistConfig}>
+            <ContractKitProvider
+              dapp={{
+                name: 'Mento',
+                description: 'Mento Exchange for Celo',
+                url: 'TODO',
+                icon: 'TODO',
+              }}
+              networks={networks}
+            >
+              <AppLayout pathName={pathName}>
+                <Component {...pageProps} />
+              </AppLayout>
+            </ContractKitProvider>
+          </PersistWrapperTypeFixed>
+        </Provider>
+      </SafeHydrate>
+    </ErrorBoundary>
   )
 }
 
