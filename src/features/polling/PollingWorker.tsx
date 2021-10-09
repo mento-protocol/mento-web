@@ -13,19 +13,21 @@ export function PollingWorker() {
   const { address, kit, initialised } = useContractKit()
 
   const onPoll = () => {
-    if (!address || !kit || !initialised) return
+    if (!kit || !initialised) return
     dispatch(fetchExchangeRates({ kit })).catch((err) => {
       // TODO surface error
       logger.error('Failed to retrieve exchange rates', err)
-    })
-    dispatch(fetchBalances({ address, kit })).catch((err) => {
-      // TODO surface error
-      logger.error('Failed to retrieve balances', err)
     })
     dispatch(fetchLatestBlock({ kit })).catch((err) => {
       // TODO surface error
       logger.error('Failed to retrieve latest block', err)
     })
+    if (address) {
+      dispatch(fetchBalances({ address, kit })).catch((err) => {
+        // TODO surface error
+        logger.error('Failed to retrieve balances', err)
+      })
+    }
   }
 
   useEffect(onPoll, [address, kit, initialised, dispatch])

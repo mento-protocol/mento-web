@@ -4,7 +4,7 @@ import { navLinks } from 'src/components/nav/navLinks'
 export function NavBar({ pathName }: { pathName: string }) {
   return (
     <nav>
-      <ul className="flex items-center justify-center list-none rounded-full bg-white shadow-md overflow-hidden opacity-90">
+      <ul className="flex items-center justify-center list-none rounded-full bg-white shadow-md overflow-hidden opacity-90 mr-3">
         {navLinks.map((l, i) => {
           const active = pathName === l.to
           return (

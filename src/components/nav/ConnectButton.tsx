@@ -18,7 +18,7 @@ export function ConnectButton() {
   }
 
   return (
-    <div className="flex justify-end mb-1 relative">
+    <div className="flex justify-end mb-1 relative opacity-90">
       {address ? (
         <SolidButton
           size="l"

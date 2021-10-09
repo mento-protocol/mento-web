@@ -1,6 +1,6 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
-import { ErrorMessage, Field, Form, Formik, FormikErrors, useFormikContext } from 'formik'
-import { PropsWithChildren } from 'react'
+import { Connector, useContractKit } from '@celo-tools/use-contractkit'
+import { Field, Form, Formik, FormikErrors, useFormikContext } from 'formik'
+import { useCallback } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
@@ -18,6 +18,7 @@ import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import Sliders from 'src/images/icons/sliders.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { areAmountsNearlyEqual, fromWeiRounded, parseAmount, toWei } from 'src/utils/amount'
+import { useTimeout } from 'src/utils/timeout'
 
 const initialValues: SwapFormValues = {
   fromTokenId: NativeTokenId.CELO,
@@ -69,20 +70,14 @@ export function SwapForm() {
         initialValues={initialValues}
         onSubmit={onSubmit}
         validate={validateForm}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
         <Form>
           <SwapFormInputs balances={balances} toCeloRates={toCeloRates} isConnected={!!address} />
           {showSlippage && <SlippageRow />}
           <div className="flex justify-center mt-5 mb-1">
-            {address ? (
-              <SolidButton dark={true} size="m" type="submit">
-                Continue
-              </SolidButton>
-            ) : (
-              <SolidButton dark={true} size="m" onClick={connect}>
-                Connect Wallet
-              </SolidButton>
-            )}
+            <SubmitButton address={address} connect={connect} />
           </div>
         </Form>
       </Formik>
@@ -183,8 +178,6 @@ function SwapFormInputs(props: FormInputProps) {
         </div>
         <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{toAmount}</div>
       </div>
-      <ErrorMessage name="fromAmount" component={ErrorLine} />
-      {/* TODO warning message if usemax */}
     </div>
   )
 }
@@ -214,16 +207,6 @@ function FieldDividerLine() {
   return <div className="w-px h-12 ml-3 bg-gray-300"></div>
 }
 
-function ErrorLine({ children }: PropsWithChildren<any>) {
-  return (
-    <div className="flex items-center justify-center space-x-2 mt-4 text-sm text-center text-red-600">
-      <div>--</div>
-      <div>{children}</div>
-      <div>--</div>
-    </div>
-  )
-}
-
 function SlippageRow() {
   return (
     <div className="flex items-center justify-center mt-5 space-x-7 text-sm" role="group">
@@ -232,6 +215,36 @@ function SlippageRow() {
       <RadioInput name="slippage" value="1.0" label="1.0%" />
       <RadioInput name="slippage" value="1.5" label="1.5%" />
     </div>
+  )
+}
+
+interface ButtonProps {
+  address: string | null
+  connect: () => Promise<Connector>
+}
+
+function SubmitButton({ address, connect }: ButtonProps) {
+  const { errors, setErrors, touched, setTouched } = useFormikContext<SwapFormValues>()
+  const error =
+    touched.fromAmount &&
+    (errors.fromAmount || errors.fromTokenId || errors.toTokenId || errors.slippage)
+  const classes = error ? 'bg-red-500 hover:bg-red-500 active:bg-red-500' : ''
+  const text = error ? error : address ? 'Continue' : 'Connect Wallet'
+  const type = address ? 'submit' : 'button'
+  const onClick = address ? undefined : connect
+
+  const clearErrors = useCallback(() => {
+    setErrors({})
+    setTouched({})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setErrors, setTouched, errors, touched])
+
+  useTimeout(clearErrors, 3000)
+
+  return (
+    <SolidButton dark={true} size="m" type={type} onClick={onClick} classes={classes}>
+      {text}
+    </SolidButton>
   )
 }
 

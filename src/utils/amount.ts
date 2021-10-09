@@ -7,7 +7,8 @@ export type NumberT = BigNumber.Value
 
 export function fromWei(value: NumberT | null | undefined): number {
   if (!value) return 0
-  return parseFloat(web3FromWei(value.toString()))
+  const flooredValue = new BigNumber(value).toFixed(0, BigNumber.ROUND_FLOOR)
+  return parseFloat(web3FromWei(flooredValue))
 }
 
 // Similar to fromWei above but rounds to set number of decimals
@@ -17,8 +18,8 @@ export function fromWeiRounded(
   roundDownIfSmall = false
 ): string {
   if (!value) return '0'
-
-  const amount = new BigNumber(web3FromWei(value.toString()))
+  const flooredValue = new BigNumber(value).toFixed(0, BigNumber.ROUND_FLOOR)
+  const amount = new BigNumber(web3FromWei(flooredValue))
   if (amount.isZero()) return '0'
 
   // If amount is less than min value

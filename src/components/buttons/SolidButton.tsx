@@ -16,7 +16,7 @@ interface ButtonProps {
 export function SolidButton(props: PropsWithChildren<ButtonProps>) {
   const { size, type, onClick, dark, classes, bold, icon, disabled, title, passThruProps } = props
 
-  const base = 'flex items-center justify-center rounded-full transition-all'
+  const base = 'flex items-center justify-center rounded-full transition-all duration-300'
   const sizing = sizeToClasses(size)
   const colors = dark ? 'bg-green text-white' : 'bg-white text-black'
   const onHover = dark ? 'hover:bg-green-dark' : 'hover:bg-gray-50'
