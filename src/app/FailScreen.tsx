@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Component } from 'react'
+import { Fade } from 'src/components/animation/Fade'
 import { TextLink } from 'src/components/buttons/TextLink'
 import SadFace from 'src/images/icons/sad_face.svg'
 import Logo from 'src/images/logo.svg'
@@ -34,22 +35,32 @@ export class ErrorBoundary extends Component<any, ErrorBoundaryState> {
   }
 }
 
-export function FailScreen({ details }: { details?: string }) {
+function FailScreen({ details }: { details?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen p-5">
+    <div className="flex flex-col items-center justify-center w-screen h-screen bg-gradient-radial">
       <div className="hidden sm:block fixed top-4 left-4">
         <Image src={Logo} alt="Mento.fi Logo" quality={100} width={60} height={60} />
       </div>
-      <h1 className="text-2xl mb-2 text-center">Something went wrong, sorry!</h1>
-      <Image src={SadFace} alt="Sad Face" width={175} height={230} />
-      <h3 className="text-lg mt-2 text-center">
-        Please refresh the page. If the problem persists, you can{' '}
-        <TextLink href="TODO" className="underline">
-          ask for help on Discord
-        </TextLink>
-        .
-      </h3>
-      {details && <p className="text-md text-center mt-6 text-gray-500">{details}</p>}
+      <FailContent details={details} />
     </div>
+  )
+}
+
+export function FailContent({ details }: { details?: string }) {
+  return (
+    <Fade show={true}>
+      <div className="flex flex-col items-center justify-center p-5">
+        <h1 className="text-2xl mb-2 text-center">Something went wrong, sorry!</h1>
+        <Image src={SadFace} alt="Sad Face" width={150} height={200} />
+        <h3 className="text-lg mt-2 text-center">
+          Please refresh the page. If the problem persists, you can{' '}
+          <TextLink href="TODO" className="underline">
+            ask for help on Discord
+          </TextLink>
+          .
+        </h3>
+        {details && <p className="text-md text-center mt-6 text-gray-500">{details}</p>}
+      </div>
+    </Fade>
   )
 }
