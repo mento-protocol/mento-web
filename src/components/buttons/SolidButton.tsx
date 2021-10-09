@@ -10,10 +10,11 @@ interface ButtonProps {
   disabled?: boolean
   icon?: ReactElement
   title?: string
+  passThruProps?: any
 }
 
 export function SolidButton(props: PropsWithChildren<ButtonProps>) {
-  const { size, type, onClick, dark, classes, bold, icon, disabled, title } = props
+  const { size, type, onClick, dark, classes, bold, icon, disabled, title, passThruProps } = props
 
   const base = 'flex items-center justify-center rounded-full transition-all'
   const sizing = sizeToClasses(size)
@@ -31,6 +32,7 @@ export function SolidButton(props: PropsWithChildren<ButtonProps>) {
       disabled={disabled ?? false}
       title={title}
       className={allClasses}
+      {...passThruProps}
     >
       {icon ? (
         <div className="flex items-center justify-center">

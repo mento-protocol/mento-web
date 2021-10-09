@@ -6,6 +6,7 @@ import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import { config } from 'src/config/config'
 import { AppLayout } from 'src/layout/AppLayout'
+import { logger } from 'src/utils/logger'
 import store from '../app/store'
 import '../styles/fonts.css'
 import '../styles/globals.css'
@@ -57,6 +58,6 @@ function getNetworkConfig() {
     rpcUrl: config.jsonRpcUrlPrimary || Mainnet.rpcUrl,
     explorer: config.blockscoutUrl || Mainnet.explorer,
   }
-  console.log(mainnet)
+  logger.debug('Using mainnet config:', mainnet)
   return [mainnet, Alfajores, Baklava]
 }

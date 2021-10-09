@@ -242,7 +242,7 @@ function SettingsMenu() {
     dispatch(setShowSlippage(checked))
   }
 
-  const { buttonProps, itemProps, isOpen } = useDropdownMenu(3)
+  const { buttonProps, itemProps, isOpen } = useDropdownMenu(1)
 
   return (
     <div className="relative mt-1 mr-1.5">
@@ -253,8 +253,11 @@ function SettingsMenu() {
         title="Settings"
         passThruProps={buttonProps}
       />
-      <div className={`dropdown-menu -right-1 bg-white ${isOpen ? '' : 'hidden'}`} role="menu">
-        <a {...itemProps[1]} className="text-sm flex items-center justify-between">
+      <div
+        className={`dropdown-menu w-46 mt-3 -right-1 bg-gray-50 ${isOpen ? '' : 'hidden'}`}
+        role="menu"
+      >
+        <a {...itemProps[0]} className="text-sm flex items-center justify-between">
           <div>Toggle Slippage</div>
           <SwitchButton checked={showSlippage} onChange={onToggleSlippage} />
         </a>

@@ -178,13 +178,9 @@ Dropdowns
 
 .dropdown-menu {
   position: absolute;
-  width: 11.5rem;
   z-index: 100;
   text-align: left;
-  margin-top: 0.7rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0.5rem 0.6rem;
+  padding: 0.6rem 0.7rem;
   border: 1px solid #F1F1F1;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
