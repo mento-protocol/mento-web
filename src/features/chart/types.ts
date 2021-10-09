@@ -1,4 +1,4 @@
-import { NativeTokenId } from 'src/tokens'
+import { NativeTokenId } from 'src/config/tokens'
 
 export enum ForeignQuoteCurrency {
   BTC = 'BTC',

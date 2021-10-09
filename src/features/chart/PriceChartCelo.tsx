@@ -1,9 +1,8 @@
-import { useEffect } from 'react'
 import ReactFrappeChart from 'react-frappe-charts'
-import { useAppDispatch, useAppSelector } from 'src/app/hooks'
+import { useAppSelector } from 'src/app/hooks'
 import { WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
-import { fetchTokenPriceActions } from 'src/features/chart/fetchPrices'
+// import { fetchTokenPriceActions } from 'src/features/chart/fetchPrices'
 import { findPriceForDay, tokenPriceHistoryToChartData } from 'src/features/chart/utils'
 import { calcSimpleExchangeRate } from 'src/features/swap/utils'
 import { Color } from 'src/styles/Color'
@@ -18,14 +17,14 @@ interface PriceChartProps {
 export function PriceChartCelo(props: PriceChartProps) {
   const { stableTokenId, showHeaderPrice, containerClasses, height } = props
 
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(
-      fetchTokenPriceActions.trigger({
-        baseCurrency: NativeTokenId.CELO,
-      })
-    )
-  }, [dispatch])
+  // const dispatch = useAppDispatch()
+  // useEffect(() => {
+  //   dispatch(
+  //     fetchTokenPriceActions.trigger({
+  //       baseCurrency: NativeTokenId.CELO,
+  //     })
+  //   )
+  // }, [dispatch])
 
   const toCeloRates = useAppSelector((s) => s.swap.toCeloRates)
   const allPrices = useAppSelector((s) => s.tokenPrice.prices)
