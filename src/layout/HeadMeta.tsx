@@ -4,8 +4,7 @@ import { toTitleCase } from 'src/utils/string'
 export function HeadMeta({ pathName }: { pathName: string }) {
   return (
     <Head>
-      <title>{`Mento | ${getHeadTitle(pathName)} [BETA]`}</title>
-      <link rel="icon" href="/favicon.ico" />
+      <title>{`Mento [ALPHA] | ${getHeadTitle(pathName)}`}</title>
     </Head>
   )
 }
