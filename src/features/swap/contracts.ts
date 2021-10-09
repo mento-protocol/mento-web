@@ -12,3 +12,16 @@ export async function getExchangeContract(kit: ContractKit, tokenId: NativeToken
       throw new Error(`Could not get contract for token ${tokenId}`)
   }
 }
+
+export async function getTokenContract(kit: ContractKit, tokenId: NativeTokenId) {
+  switch (tokenId) {
+    case NativeTokenId.cUSD:
+      return kit.contracts.getStableToken(StableToken.cUSD)
+    case NativeTokenId.cEUR:
+      return kit.contracts.getStableToken(StableToken.cEUR)
+    case NativeTokenId.CELO:
+      return kit.contracts.getGoldToken()
+    default:
+      throw new Error(`Could not get contract for token ${tokenId}`)
+  }
+}

@@ -41,7 +41,6 @@ export function SwapForm() {
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
-    console.log(JSON.stringify(values, null, 2))
     dispatch(setFormValues(values))
   }
 
@@ -95,17 +94,12 @@ function SwapFormInputs(props: FormInputProps) {
   const { balances, toCeloRates, isConnected } = props
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
-  const { to, rate } = useExchangeValues(
+  const { to, rate, stableTokenId } = useExchangeValues(
     values.fromAmount,
     values.fromTokenId,
     values.toTokenId,
-    toCeloRates,
-    false
+    toCeloRates
   )
-  const toAmount = fromWeiRounded(to.weiAmount, true)
-  const rateEstimate = fromWeiRounded(rate.fromCeloWeiValue, true)
-  const stableTokenId =
-    values.fromTokenId === NativeTokenId.CELO ? values.toTokenId : values.fromTokenId
 
   const roundedBalance = fromWeiRounded(balances[values.fromTokenId])
   const onClickUseMax = () => {
@@ -163,7 +157,7 @@ function SwapFormInputs(props: FormInputProps) {
         <ReverseTokenButton />
       </div>
       <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
-        {rate.isReady ? `${rateEstimate} ${stableTokenId} ~ 1 CELO` : 'Loading...'}
+        {rate.isReady ? `${rate.fromCeloValue} ${stableTokenId} ~ 1 CELO` : 'Loading...'}
       </div>
       <div className="flex justify-between items-center py-2 px-3 mb-1 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
@@ -176,7 +170,7 @@ function SwapFormInputs(props: FormInputProps) {
           />
           <FieldDividerLine />
         </div>
-        <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{toAmount}</div>
+        <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{to.amount}</div>
       </div>
     </div>
   )

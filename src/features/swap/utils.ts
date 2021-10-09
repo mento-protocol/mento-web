@@ -6,16 +6,45 @@ import BigNumber from 'bignumber.js'
 import { WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
 import { ToCeloRates } from 'src/features/swap/types'
-import { NumberT, parseAmount, parseAmountWithDefault, toWei } from 'src/utils/amount'
+import {
+  fromWeiRounded,
+  NumberT,
+  parseAmount,
+  parseAmountWithDefault,
+  toWei,
+} from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
+
+interface ExchangeValues {
+  from: {
+    amount: string
+    weiAmount: string
+    token: NativeTokenId
+  }
+  to: {
+    amount: string
+    weiAmount: string
+    token: NativeTokenId
+  }
+  rate: {
+    value: number
+    weiValue: string
+    fromCeloValue: string
+    fromCeloWeiValue: string
+    weiBasis: string
+    lastUpdated: number
+    isReady: boolean
+  }
+  stableTokenId: NativeTokenId
+}
 
 export function useExchangeValues(
   fromAmount: NumberT | null | undefined,
   fromTokenId: NativeTokenId | null | undefined,
   toTokenId: NativeTokenId | null | undefined,
   toCeloRates: ToCeloRates,
-  isFromAmountWei: boolean
-) {
+  isFromAmountWei = false
+): ExchangeValues {
   // Return some defaults when values are missing
   if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
 
@@ -38,21 +67,25 @@ export function useExchangeValues(
 
   return {
     from: {
+      amount: fromWeiRounded(fromAmountWei, true),
       weiAmount: fromAmountWei.toString(),
       token: fromTokenId,
     },
     to: {
+      amount: fromWeiRounded(toAmountWei, true),
       weiAmount: toAmountWei.toString(),
       token: toTokenId,
     },
     rate: {
       value: exchangeRateNum,
       weiValue: exchangeRateWei.toString(),
+      fromCeloValue: fromWeiRounded(fromCeloRateWei, true),
       fromCeloWeiValue: fromCeloRateWei.toString(),
       weiBasis: WEI_PER_UNIT,
       lastUpdated: toCeloRate.lastUpdated,
       isReady: true,
     },
+    stableTokenId,
   }
 }
 
@@ -99,25 +132,32 @@ export function calcSimpleExchangeRate(
 }
 
 function getDefaultExchangeValues(
-  fromToken: NativeTokenId | null = NativeTokenId.CELO,
-  toToken: NativeTokenId | null = NativeTokenId.cUSD
-) {
+  _fromToken?: NativeTokenId | null,
+  _toToken?: NativeTokenId | null
+): ExchangeValues {
+  const fromToken = _fromToken || NativeTokenId.CELO
+  const toToken = _toToken || NativeTokenId.cUSD
+  const stableTokenId = fromToken === NativeTokenId.CELO ? toToken : fromToken
   return {
     from: {
+      amount: '0',
       weiAmount: '0',
       token: fromToken,
     },
     to: {
+      amount: '0',
       weiAmount: '0',
       token: toToken,
     },
     rate: {
       value: 0,
       weiValue: '0',
+      fromCeloValue: '0',
       fromCeloWeiValue: '0',
       weiBasis: WEI_PER_UNIT,
       lastUpdated: 0,
       isReady: false,
     },
+    stableTokenId,
   }
 }
