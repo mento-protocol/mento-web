@@ -4,7 +4,8 @@
   "description": "A simple DApp for Celo Mento exchanges",
   "keywords": [
     "Celo",
-    "Mento"
+    "Mento",
+    "Exchange"
   ],
   "author": "J M Rossy",
   "repository": {
@@ -12,7 +13,7 @@
     "url": "https://github.com/celo-tools/mento-fi"
   },
   "homepage": "TODO",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "next",
     "build": "next build",
