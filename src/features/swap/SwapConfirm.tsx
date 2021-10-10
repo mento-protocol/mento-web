@@ -1,6 +1,7 @@
 import { useContractKit } from '@celo-tools/use-contractkit'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
@@ -55,7 +56,6 @@ export function SwapConfirm(props: Props) {
         const amountInWei = toWei(fromAmount)
         // TODO adjust amount based on balance
         // TODO actual minBuyAmount
-        // TODO test throwing error in here
         const minBuyAmount = new BigNumber(amountInWei).multipliedBy(4)
 
         const tokenContract = await getTokenContract(k, fromTokenId)
@@ -71,12 +71,11 @@ export function SwapConfirm(props: Props) {
         const exchangeTx = await exchangeContract.sell(amountInWei, minBuyAmount, sellGold)
         const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt()
         logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
-        // TODO getconenctedkit here and throughout before using thunks?
         await dispatch(fetchBalances({ address, kit: k }))
       })
-    } catch (e) {
-      // TODO surface error
-      logger.error(e)
+    } catch (err) {
+      toast.error('Unable to complete swap')
+      logger.error('Failed to execute swap', err)
     }
   }
 
@@ -87,7 +86,7 @@ export function SwapConfirm(props: Props) {
   const onClickRefresh = () => {
     if (!kit || !initialised) return
     dispatch(fetchExchangeRates({ kit })).catch((err) => {
-      // TODO surface error
+      toast.error('Error retrieving exchange rates')
       logger.error('Failed to retrieve exchange rates', err)
     })
   }

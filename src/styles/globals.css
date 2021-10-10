@@ -187,3 +187,58 @@ Dropdowns
   transition: transform 0.2s ease, opacity 0.2s ease, visibility 0s linear 0.2s;
   will-change: transform;
 }
+
+
+/*
+Toasts
+======
+*/
+:root {
+  --toastify-color-light: #ffffff;
+  --toastify-color-dark: #2E3338;
+  --toastify-color-info: #3498db;
+  --toastify-color-success: #35D07F;
+  --toastify-color-warning: #FCD34D;
+  --toastify-color-error: #DC2626;
+  --toastify-color-transparent: rgba(255, 255, 255, 0.7);
+
+  --toastify-icon-color-info: var(--toastify-color-info);
+  --toastify-icon-color-success: var(--toastify-color-success);
+  --toastify-icon-color-warning: var(--toastify-color-warning);
+  --toastify-icon-color-error: var(--toastify-color-error);
+
+  --toastify-toast-width: 300px;
+  --toastify-toast-background: #fff;
+  --toastify-toast-min-height: 64px;
+  --toastify-toast-max-height: 800px;
+  --toastify-font-family: Roboto, sans-serif;
+  --toastify-z-index: 9999;
+
+  --toastify-text-color-light: #2E3338;
+  --toastify-text-color-dark: #fff;
+
+  --toastify-text-color-info: #fff;
+  --toastify-text-color-success: #fff;
+  --toastify-text-color-warning: #fff;
+  --toastify-text-color-error: #fff;
+
+  --toastify-spinner-color: #616161;
+  --toastify-spinner-color-empty-area: #e0e0e0;
+
+  --toastify-color-progress-light: linear-gradient(
+    to right,
+    #4cd964,
+    #5ac8fa,
+    #007aff,
+    #34aadc,
+    #5856d6,
+    #ff2d55
+  );
+  --toastify-color-progress-dark: #bb86fc;
+  --toastify-color-progress-info: var(--toastify-color-info);
+  --toastify-color-progress-success: var(--toastify-color-success);
+  --toastify-color-progress-warning: var(--toastify-color-warning);
+  --toastify-color-progress-error: var(--toastify-color-error);
+}
+
+

@@ -4,13 +4,15 @@ import { PropsWithChildren } from 'hoist-non-react-statics/node_modules/@types/r
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
+import { toast, ToastContainer, Zoom } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { ErrorBoundary } from 'src/app/FailScreen'
 import { config } from 'src/config/config'
 import { AppLayout } from 'src/layout/AppLayout'
+import 'src/styles/fonts.css'
+import 'src/styles/globals.css'
 import { logger } from 'src/utils/logger'
 import store from '../app/store'
-import '../styles/fonts.css'
-import '../styles/globals.css'
 
 const nextPersistConfig = {
   method: 'localStorage',
@@ -47,6 +49,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
               </AppLayout>
+              <ToastContainer transition={Zoom} position={toast.POSITION.BOTTOM_RIGHT} />
             </ContractKitProvider>
           </PersistWrapperTypeFixed>
         </Provider>
