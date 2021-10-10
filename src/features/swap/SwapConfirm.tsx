@@ -5,19 +5,20 @@ import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
+import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { NativeTokenId, NativeTokens } from 'src/config/tokens'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { getExchangeContract, getTokenContract } from 'src/features/swap/contracts'
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
-import { useExchangeValues } from 'src/features/swap/utils'
+import { getMinBuyAmount, useExchangeValues } from 'src/features/swap/utils'
 import LeftArrow from 'src/images/icons/arrow-left-circle.svg'
 import RepeatArrow from 'src/images/icons/arrow-repeat.svg'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
-import { toWei } from 'src/utils/amount'
+import { fromWeiRounded } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
 interface Props {
@@ -44,31 +45,43 @@ export function SwapConfirm(props: Props) {
     toTokenId,
     toCeloRates
   )
+  const minBuyAmountWei = getMinBuyAmount(from.weiAmount, slippage, rate.value)
+  const minBuyAmount = fromWeiRounded(minBuyAmountWei, true)
   const fromToken = NativeTokens[fromTokenId]
   const toToken = NativeTokens[toTokenId]
 
   const onSubmit = async () => {
-    if (!address || !kit) return
+    if (!address || !kit) {
+      toast.error('Kit not connected')
+      return
+    }
+    if (new BigNumber(from.weiAmount).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
+      toast.error('Amount too large')
+      return
+    }
+    if (rate.value < MIN_EXCHANGE_RATE || rate.value > MAX_EXCHANGE_RATE) {
+      toast.error('Rate seems incorrect')
+      return
+    }
+
+    // TODO get adjusted amount?
+
     try {
       await performActions(async (k) => {
         const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
         const sellGold = fromTokenId === NativeTokenId.CELO
-        const amountInWei = toWei(fromAmount)
-        // TODO adjust amount based on balance
-        // TODO actual minBuyAmount
-        const minBuyAmount = new BigNumber(amountInWei).multipliedBy(4)
 
         const tokenContract = await getTokenContract(k, fromTokenId)
         const exchangeContract = await getExchangeContract(k, stableTokenId)
 
         const approveTx = await tokenContract.increaseAllowance(
           exchangeContract.address,
-          amountInWei
+          from.weiAmount
         )
         const approveReceipt = await approveTx.sendAndWaitForReceipt()
         logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
 
-        const exchangeTx = await exchangeContract.sell(amountInWei, minBuyAmount, sellGold)
+        const exchangeTx = await exchangeContract.sell(from.weiAmount, minBuyAmountWei, sellGold)
         const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt()
         logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
         await dispatch(fetchBalances({ address, kit: k }))
@@ -112,14 +125,14 @@ export function SwapConfirm(props: Props) {
       </div>
       <div className="mt-6 bg-greengray-lightest rounded-md">
         <div className="relative flex items-center justify-between">
-          <div className="flex flex-1 items-center px-2.5 py-2.5 border-r border-gray-400">
+          <div className="flex flex-1 items-center px-2.5 py-3 border-r border-gray-400">
             <TokenIcon size="l" token={fromToken} />
             <div className="flex flex-col flex-1 items-center px-2">
               <div className="text-sm text-center">{fromToken.symbol}</div>
               <div className="text-lg text-center font-mono leading-6">{from.amount}</div>
             </div>
           </div>
-          <div className="flex flex-1 items-center justify-end px-2.5 py-2">
+          <div className="flex flex-1 items-center justify-end px-2.5 py-3">
             <div className="flex flex-col flex-1 items-center px-2">
               <div className="text-sm text-center">{toToken.symbol}</div>
               <div className="text-lg text-center font-mono leading-6">{to.amount}</div>
@@ -142,11 +155,11 @@ export function SwapConfirm(props: Props) {
       <div className="flex flex-col items-center text-sm">
         <div className="flex items-center mt-5">
           <div className="w-32 text-right mr-6">Max Slippage:</div>
-          <div className="w-32">{`${slippage}%`}</div>
+          <div className="w-32 font-mono">{`${slippage}%`}</div>
         </div>
         <div className="flex items-center mt-3">
           <div className="w-32 text-right mr-6">Min Received:</div>
-          <div className="w-32">CELO TODO</div>
+          <div className="w-32 font-mono">{minBuyAmount}</div>
         </div>
       </div>
       <div className="flex justify-center mt-4">

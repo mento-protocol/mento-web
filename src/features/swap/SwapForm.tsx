@@ -2,6 +2,7 @@ import { Connector, useContractKit } from '@celo-tools/use-contractkit'
 import { Field, Form, Formik, FormikErrors, useFormikContext } from 'formik'
 import { useCallback } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
+import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
@@ -104,6 +105,9 @@ function SwapFormInputs(props: FormInputProps) {
   const roundedBalance = fromWeiRounded(balances[values.fromTokenId])
   const onClickUseMax = () => {
     setFieldValue('fromAmount', roundedBalance)
+    if (values.fromTokenId === NativeTokenId.CELO) {
+      toast.warn('Consider keeping some CELO for transaction fees')
+    }
   }
 
   const onChangeToken = (isFromToken: boolean) => (option: TokenOption | null | undefined) => {

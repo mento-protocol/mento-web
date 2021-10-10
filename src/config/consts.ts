@@ -19,5 +19,4 @@ export const MIN_ROUNDED_VALUE = 0.001
 export const DISPLAY_DECIMALS = 3
 export const MIN_EXCHANGE_RATE = 0.01 // 1<->100 ratio
 export const MAX_EXCHANGE_RATE = 100 // 1<->100 ratio
-export const MAX_EXCHANGE_LOSS = 0.015 // 1.5%
 export const MAX_EXCHANGE_SPREAD = 0.1 // 10%

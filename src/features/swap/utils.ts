@@ -161,3 +161,12 @@ function getDefaultExchangeValues(
     stableTokenId,
   }
 }
+
+export function getMinBuyAmount(
+  amountInWei: BigNumber.Value,
+  slippage: BigNumber.Value,
+  exchangeRate: BigNumber.Value
+): BigNumber {
+  const slippageFactor = new BigNumber(slippage).div(100).minus(1).times(-1)
+  return new BigNumber(amountInWei).times(exchangeRate).times(slippageFactor).decimalPlaces(0)
+}
