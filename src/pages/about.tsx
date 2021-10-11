@@ -22,9 +22,9 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
-          Granda Mento is a special process for very large exchanges. Each Granda exchange requires
-          rough consensus from the Celo community. The exchanger must lock their funds for at least
-          a week, during which the community can intervene. For more details see{' '}
+          Granda Mento is a process for large exchanges. Each exchange requires rough consensus from
+          the Celo community. The funds must be locked for a week, during which the community can
+          intervene. For details see{' '}
           <TextLink
             href="https://docs.celo.org/celo-codebase/protocol/stability/granda-mento"
             className="text-green"
