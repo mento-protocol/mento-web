@@ -1,10 +1,13 @@
 import { useContractKit } from '@celo-tools/use-contractkit'
+import { ContractKit } from '@celo/contractkit'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
+import { TextLink } from 'src/components/buttons/TextLink'
+import { config } from 'src/config/config'
 import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { NativeTokenId, NativeTokens } from 'src/config/tokens'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
@@ -66,26 +69,38 @@ export function SwapConfirm(props: Props) {
 
     // TODO get adjusted amount?
 
+    const approvalOperation = async (k: ContractKit) => {
+      const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
+      const tokenContract = await getTokenContract(k, fromTokenId)
+      const exchangeContract = await getExchangeContract(k, stableTokenId)
+      const approveTx = await tokenContract.increaseAllowance(
+        exchangeContract.address,
+        from.weiAmount
+      )
+      // Gas price must be set manually because contractkit pre-populate it and
+      // its helpers for getting gas price are only meant for stable token prices
+      const gasPrice = await k.web3.eth.getGasPrice()
+      const approveReceipt = await approveTx.sendAndWaitForReceipt({ gasPrice })
+      logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
+      return approveReceipt.transactionHash
+    }
+
+    const exchangeOperation = async (k: ContractKit) => {
+      const sellGold = fromTokenId === NativeTokenId.CELO
+      const exchangeContract = await getExchangeContract(k, stableTokenId)
+      const exchangeTx = await exchangeContract.sell(from.weiAmount, minBuyAmountWei, sellGold)
+      const gasPrice = await k.web3.eth.getGasPrice()
+      const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt({ gasPrice })
+      logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
+      await dispatch(fetchBalances({ address, kit: k }))
+      return exchangeReceipt.transactionHash
+    }
+
     try {
-      await performActions(async (k) => {
-        const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
-        const sellGold = fromTokenId === NativeTokenId.CELO
-
-        const tokenContract = await getTokenContract(k, fromTokenId)
-        const exchangeContract = await getExchangeContract(k, stableTokenId)
-
-        const approveTx = await tokenContract.increaseAllowance(
-          exchangeContract.address,
-          from.weiAmount
-        )
-        const approveReceipt = await approveTx.sendAndWaitForReceipt()
-        logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
-
-        const exchangeTx = await exchangeContract.sell(from.weiAmount, minBuyAmountWei, sellGold)
-        const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt()
-        logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
-        await dispatch(fetchBalances({ address, kit: k }))
-      })
+      const txHashes = (await performActions(approvalOperation, exchangeOperation)) as string[]
+      if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
+      toast.success(<SuccessToast txHash={txHashes[1]} />, { autoClose: 15000 })
+      dispatch(setFormValues(null))
     } catch (err) {
       toast.error('Unable to complete swap')
       logger.error('Failed to execute swap', err)
@@ -186,6 +201,17 @@ function RightCircleArrow() {
           d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
         />
       </svg>
+    </div>
+  )
+}
+
+function SuccessToast({ txHash }: { txHash: string }) {
+  return (
+    <div>
+      Swap Complete!{' '}
+      <TextLink className="underline" href={`${config.blockscoutUrl}/tx/${txHash}`}>
+        See Details
+      </TextLink>
     </div>
   )
 }

@@ -18,6 +18,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "clean": "rm -rf .next",
     "type-check": "tsc",
     "test": "jest",
     "lint": "eslint ."
