@@ -8,7 +8,12 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { config } from 'src/config/config'
-import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
+import {
+  MAX_EXCHANGE_RATE,
+  MAX_EXCHANGE_TOKEN_SIZE,
+  MIN_EXCHANGE_RATE,
+  SIGN_OPERATION_TIMEOUT,
+} from 'src/config/consts'
 import { NativeTokenId, NativeTokens } from 'src/config/tokens'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { getExchangeContract, getTokenContract } from 'src/features/swap/contracts'
@@ -23,6 +28,7 @@ import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
 import { fromWeiRounded } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
+import { asyncTimeout, PROMISE_TIMEOUT } from 'src/utils/timeout'
 
 interface Props {
   formValues: SwapFormValues
@@ -84,6 +90,7 @@ export function SwapConfirm(props: Props) {
       logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
       return approveReceipt.transactionHash
     }
+    const approvalOpWithTimeout = asyncTimeout(approvalOperation, SIGN_OPERATION_TIMEOUT)
 
     const exchangeOperation = async (k: ContractKit) => {
       const sellGold = fromTokenId === NativeTokenId.CELO
@@ -95,14 +102,22 @@ export function SwapConfirm(props: Props) {
       await dispatch(fetchBalances({ address, kit: k }))
       return exchangeReceipt.transactionHash
     }
+    const exchangeOpWithTimeout = asyncTimeout(exchangeOperation, SIGN_OPERATION_TIMEOUT)
 
     try {
-      const txHashes = (await performActions(approvalOperation, exchangeOperation)) as string[]
+      const txHashes = (await performActions(
+        approvalOpWithTimeout,
+        exchangeOpWithTimeout
+      )) as string[]
       if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
       toast.success(<SuccessToast txHash={txHashes[1]} />, { autoClose: 15000 })
       dispatch(setFormValues(null))
-    } catch (err) {
-      toast.error('Unable to complete swap')
+    } catch (err: any) {
+      if (err.message === PROMISE_TIMEOUT) {
+        toast.error('Action timed out')
+      } else {
+        toast.error('Unable to complete swap')
+      }
       logger.error('Failed to execute swap', err)
     }
   }

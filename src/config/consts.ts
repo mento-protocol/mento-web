@@ -5,6 +5,7 @@ export const STALE_BLOCK_TIME = 25000 // 25 seconds
 export const EXCHANGE_RATE_STALE_TIME = 5000 // 5 second
 export const BALANCE_STALE_TIME = 5000 // 5 seconds
 export const STATUS_POLLER_DELAY = 10000 // 10 seconds
+export const SIGN_OPERATION_TIMEOUT = 90000 // 90 seconds
 
 export const STALE_TOKEN_PRICE_TIME = 900000 // 15 minutes
 export const MAX_TOKEN_PRICE_NUM_DAYS = 14 // 14 days
