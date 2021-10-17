@@ -1,11 +1,12 @@
-import ReactFrappeChart from 'react-frappe-charts'
 import { useAppSelector } from 'src/app/hooks'
 import { WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
 // import { fetchTokenPriceActions } from 'src/features/chart/fetchPrices'
 import { findPriceForDay, tokenPriceHistoryToChartData } from 'src/features/chart/utils'
 import { calcSimpleExchangeRate } from 'src/features/swap/utils'
+import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
+import ReactFrappeChart from './ReactFrappeChart'
 
 interface PriceChartProps {
   stableTokenId: NativeTokenId
@@ -50,29 +51,31 @@ export function PriceChartCelo(props: PriceChartProps) {
   const chartHeight = height || 250
 
   return (
-    <div className={`flex flex-col ${containerClasses}`}>
-      {showHeaderPrice && (
-        <div className="flex items-end">
-          <label>CELO</label>
-          {headerRate ? (
-            <label>{`$${headerRate.toFixed(2)} (USD)`}</label>
-          ) : (
-            <label>Loading...</label>
-          )}
+    <FloatingBox width="w-96">
+      <div className={`flex flex-col ${containerClasses}`}>
+        {showHeaderPrice && (
+          <div className="flex items-end">
+            <label>CELO</label>
+            {headerRate ? (
+              <label>{`$${headerRate.toFixed(2)} (USD)`}</label>
+            ) : (
+              <label>Loading...</label>
+            )}
+          </div>
+        )}
+        <div>
+          <ReactFrappeChart
+            type="line"
+            colors={chartConfig.colors}
+            height={chartHeight}
+            axisOptions={chartConfig.axis}
+            tooltipOptions={chartConfig.tooltipOptions}
+            // @ts-ignore TODO find issue, works in Celo Wallet
+            data={chartData}
+          />
         </div>
-      )}
-      <div>
-        <ReactFrappeChart
-          type="line"
-          colors={chartConfig.colors}
-          height={chartHeight}
-          axisOptions={chartConfig.axis}
-          tooltipOptions={chartConfig.tooltipOptions}
-          // @ts-ignore TODO find issue, works in Celo Wallet
-          data={chartData}
-        />
       </div>
-    </div>
+    </FloatingBox>
   )
 }
 
