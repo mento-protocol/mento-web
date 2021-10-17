@@ -1,4 +1,5 @@
 import { useAppSelector } from 'src/app/hooks'
+import { config } from 'src/config/config'
 import { NativeTokenId } from 'src/config/tokens'
 import { PriceChartCelo } from 'src/features/chart/PriceChartCelo'
 import { SwapConfirm } from 'src/features/swap/SwapConfirm'
@@ -13,9 +14,9 @@ export default function SwapPage() {
       <div className="mb-12">
         {!formValues ? <SwapForm /> : <SwapConfirm formValues={formValues} />}
       </div>
-      {!isMobile && (
-        <div className="mb-12 ml-12">
-          <PriceChartCelo stableTokenId={NativeTokenId.cUSD} showHeaderPrice={true} />
+      {!isMobile && config.showPriceChart && (
+        <div className="mb-12 ml-10">
+          <PriceChartCelo stableTokenId={NativeTokenId.cUSD} height={265} />
         </div>
       )}
     </div>

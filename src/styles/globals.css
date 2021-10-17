@@ -28,7 +28,7 @@ Backgrounds
   background: #deede5;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 1) 0%,
+    rgb(239, 243, 241) 0%,
     rgba(222, 237, 229, 1) 33%,
     rgba(222, 237, 229, 1) 100%
   );

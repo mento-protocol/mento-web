@@ -183,16 +183,16 @@ export function SwapConfirm(props: Props) {
         </div>
       </div>
       <div className="flex flex-col items-center text-sm">
-        <div className="flex items-center mt-5">
+        <div className="flex items-center mt-6">
           <div className="w-32 text-right mr-6">Max Slippage:</div>
           <div className="w-32 font-mono">{`${slippage}%`}</div>
         </div>
-        <div className="flex items-center mt-3">
+        <div className="flex items-center mt-4">
           <div className="w-32 text-right mr-6">Min Received:</div>
           <div className="w-32 font-mono">{minBuyAmount}</div>
         </div>
       </div>
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-5 mb-1">
         <SolidButton dark={true} size="m" onClick={onSubmit}>
           Swap
         </SolidButton>

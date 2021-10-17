@@ -17,6 +17,7 @@ interface Config {
   walletConnectRelay?: string
   chainId: number
   contractAddresses: Record<CeloContract, string>
+  showPriceChart: boolean
 }
 
 const isDevMode = process && process.env && process.env.NODE_ENV === 'development'
@@ -39,6 +40,7 @@ const configMainnet: Config = {
     [CeloContract.StableToken]: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
     [CeloContract.StableTokenEUR]: '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
   },
+  showPriceChart: true,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,6 +61,7 @@ const configAlfajores: Config = {
     [CeloContract.StableToken]: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
     [CeloContract.StableTokenEUR]: '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
   },
+  showPriceChart: false,
 }
 
 export const config = Object.freeze(configMainnet)
