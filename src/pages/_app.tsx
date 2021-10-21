@@ -1,16 +1,17 @@
-import { ContractKitProvider } from '@celo-tools/use-contractkit'
+import { ContractKitProvider, Mainnet } from '@celo-tools/use-contractkit'
 import '@celo-tools/use-contractkit/lib/styles.css'
-import { PropsWithChildren } from 'hoist-non-react-statics/node_modules/@types/react'
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
+import { PropsWithChildren } from 'react'
 import { Provider } from 'react-redux'
 import { toast, ToastContainer, Zoom } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorBoundary } from 'src/app/FailScreen'
+import { store } from 'src/app/store'
+import { config } from 'src/config/config'
 import { AppLayout } from 'src/layout/AppLayout'
 import 'src/styles/fonts.css'
 import 'src/styles/globals.css'
-import store from '../app/store'
 
 const nextPersistConfig = {
   method: 'localStorage',
@@ -38,9 +39,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
               dapp={{
                 name: 'Mento',
                 description: 'Mento Exchange for Celo',
-                url: 'TODO',
-                icon: 'TODO',
+                url: config.url,
+                icon: `${config.url}/logo.svg`,
               }}
+              network={Mainnet}
             >
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
@@ -53,13 +55,3 @@ export default function App({ Component, pageProps, router }: AppProps) {
     </ErrorBoundary>
   )
 }
-
-// function getNetworkConfig() {
-//   const mainnet = {
-//     ...Mainnet,
-//     rpcUrl: config.jsonRpcUrlPrimary || Mainnet.rpcUrl,
-//     explorer: config.blockscoutUrl || Mainnet.explorer,
-//   }
-//   logger.debug('Using mainnet config:', mainnet)
-//   return [mainnet, Alfajores, Baklava]
-// }

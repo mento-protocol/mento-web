@@ -5,7 +5,7 @@ import { blockReducer } from 'src/features/blocks/blockSlice'
 import { tokenPriceReducer } from 'src/features/chart/tokenPriceSlice'
 import { swapReducer } from 'src/features/swap/swapSlice'
 
-export function makeStore() {
+export function createStore() {
   return configureStore({
     reducer: {
       account: accountReducer,
@@ -17,12 +17,10 @@ export function makeStore() {
   })
 }
 
-const store = makeStore()
+export const store = createStore()
 
 export type AppState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>
-
-export default store

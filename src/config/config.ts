@@ -12,6 +12,7 @@ export enum CeloContract {
 interface Config {
   debug: boolean
   version: string | null
+  url: string
   jsonRpcUrlPrimary?: string
   blockscoutUrl?: string
   walletConnectRelay?: string
@@ -26,6 +27,7 @@ const isDevMode = process && process.env && process.env.NODE_ENV === 'developmen
 const configMainnet: Config = {
   debug: isDevMode,
   version: '1.0.0',
+  url: 'https://mento.finance',
   jsonRpcUrlPrimary: 'https://node.celowallet.app',
   blockscoutUrl: 'https://explorer.celo.org',
   walletConnectRelay: 'wss://walletconnect.celo.org',
@@ -47,6 +49,7 @@ const configMainnet: Config = {
 const configAlfajores: Config = {
   debug: true,
   version: '1.0.0',
+  url: 'https://mento.finance',
   jsonRpcUrlPrimary: 'https://alfajores-forno.celo-testnet.org',
   blockscoutUrl: 'https://alfajores-blockscout.celo-testnet.org',
   walletConnectRelay: 'wss://walletconnect.celo-networks-dev.org',
