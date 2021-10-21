@@ -42,7 +42,7 @@ const configMainnet: Config = {
     [CeloContract.StableToken]: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
     [CeloContract.StableTokenEUR]: '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
   },
-  showPriceChart: true,
+  showPriceChart: false,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
