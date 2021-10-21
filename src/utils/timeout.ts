@@ -72,7 +72,7 @@ export function sleep(milliseconds: number) {
 
 export const PROMISE_TIMEOUT = '__promise_timeout__'
 
-export async function promiseTimeout<T extends any>(promise: Promise<T>, milliseconds: number) {
+export async function promiseTimeout<T>(promise: Promise<T>, milliseconds: number) {
   // Create a promise that rejects in <ms> milliseconds
   const timeout = new Promise<T>((_resolve, reject) => {
     const id = setTimeout(() => {
