@@ -1,3 +1,5 @@
+const { version } = require('./package.json')
+
 module.exports = {
   webpack: (config, { webpack }) => {
     config.resolve.fallback = {
@@ -18,5 +20,9 @@ module.exports = {
         destination: '/',
       },
     ]
+  },
+
+  env: {
+    NEXT_PUBLIC_VERSION: version,
   },
 }

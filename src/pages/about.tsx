@@ -1,4 +1,5 @@
 import { TextLink } from 'src/components/buttons/TextLink'
+import { config } from 'src/config/config'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { HrDivider } from 'src/layout/HrDivider'
 
@@ -34,7 +35,7 @@ export default function AboutPage() {
           .
         </p>
         <HrDivider classes="mt-4" />
-        <p className={pClass + ' mb-3'}>
+        <p className={pClass}>
           This DApp is a free tool to help the Celo community use Mento. It was funded by the Celo
           Foundation and created by{' '}
           <TextLink href="https://twitter.com/RossyWrote" className="text-green">
@@ -46,6 +47,7 @@ export default function AboutPage() {
           </TextLink>
           .
         </p>
+        <p className="mt-4 text-xs text-center">{`Version: ${config.version || 'Unknown'}`}</p>
       </FloatingBox>
     </div>
   )
