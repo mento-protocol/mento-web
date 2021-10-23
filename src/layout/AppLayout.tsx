@@ -1,4 +1,5 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
+import Modal from 'react-modal'
 import { Footer } from 'src/components/nav/Footer'
 import { Header } from 'src/components/nav/Header'
 import { PollingWorker } from 'src/features/polling/PollingWorker'
@@ -9,6 +10,12 @@ interface Props {
 }
 
 export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
+  // Required to prevent react-modal from showing aria related error
+  // Note react-modal not used directly, it's part of use-contractkit
+  useEffect(() => {
+    Modal.setAppElement('#__next')
+  }, [])
+
   return (
     <>
       <HeadMeta pathName={pathName} />
