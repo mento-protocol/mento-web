@@ -2,12 +2,13 @@
 
 This is the home for the Mento-fi web app for Celo!
 
-This DApp lets users make exchanges between Celo's native currencies using the Mento on-chain exchange mechanism.
+This DApp lets users make exchanges between Celo's native currencies using the Mento on-chain exchange mechanism. It also supports large exchanges via Granda Mento (coming soon).
+
 For more details about how Mento works, see the [documentation](https://docs.celo.org/celo-codebase/protocol/stability)
 
 ## Architecture
 
-This project uses Next.JS, React, Redux, and [use-contrackit](https://github.com/celo-org/use-contractkit)
+This project uses Next.JS, React, Redux, Taiwind, and [use-contrackit](https://github.com/celo-org/use-contractkit)
 
 ## Run Locally
 
