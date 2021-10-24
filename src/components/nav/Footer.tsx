@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import Image from 'next/image'
 import { useAppSelector } from 'src/app/hooks'
+import { config } from 'src/config/config'
 import { STALE_BLOCK_TIME } from 'src/config/consts'
 import Discord from 'src/images/logos/discord.svg'
 import Github from 'src/images/logos/github.svg'
@@ -20,7 +21,7 @@ export function Footer() {
             imgSrc={Github}
             alt="Github"
           />
-          <FooterIconLink to="TODO" imgSrc={Discord} alt="Discord" />
+          <FooterIconLink to={config.discordUrl} imgSrc={Discord} alt="Discord" />
           <FooterIconLink to="https://www.youtube.com/c/CeloOrg" imgSrc={Youtube} alt="Youtube" />
         </div>
         <BlockIndicator />

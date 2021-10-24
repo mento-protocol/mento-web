@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { TextLink } from 'src/components/buttons/TextLink'
+import { config } from 'src/config/config'
 import Support from 'src/images/icons/support-coin.png'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
@@ -10,7 +11,7 @@ export default function GrandaPage() {
         <h2 className="text-lg text-center font-medium mt-2">Granda Mento Coming Soon!</h2>
         <p className="mt-5 text-center leading-relaxed">
           Suport for Granda Mento is in progress! Check back here in a few weeks or join the{' '}
-          <TextLink href="TODO" className="text-green">
+          <TextLink href={config.discordUrl} className="text-green">
             Discord
           </TextLink>{' '}
           for updates.

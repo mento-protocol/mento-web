@@ -15,6 +15,7 @@ interface Config {
   jsonRpcUrlPrimary?: string
   blockscoutUrl?: string
   walletConnectRelay?: string
+  discordUrl: string
   chainId: number
   contractAddresses: Record<CeloContract, string>
   showPriceChart: boolean
@@ -31,6 +32,7 @@ const configMainnet: Config = {
   jsonRpcUrlPrimary: 'https://node.celowallet.app',
   blockscoutUrl: 'https://explorer.celo.org',
   walletConnectRelay: 'wss://walletconnect.celo.org',
+  discordUrl: 'https://discord.gg/E9AqUQnWQE',
   chainId: 42220,
   contractAddresses: {
     [CeloContract.Exchange]: '0x67316300f17f063085Ca8bCa4bd3f7a5a3C66275',
@@ -52,6 +54,7 @@ const configAlfajores: Config = {
   jsonRpcUrlPrimary: 'https://alfajores-forno.celo-testnet.org',
   blockscoutUrl: 'https://alfajores-blockscout.celo-testnet.org',
   walletConnectRelay: 'wss://walletconnect.celo-networks-dev.org',
+  discordUrl: 'https://discord.gg/E9AqUQnWQE',
   chainId: 44787,
   contractAddresses: {
     [CeloContract.Exchange]: '0x17bc3304F94c85618c46d0888aA937148007bD3C',

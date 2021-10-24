@@ -42,7 +42,7 @@ export default function AboutPage() {
             J M Rossy
           </TextLink>
           . For help, join the chat on{' '}
-          <TextLink href="TODO" className="text-green">
+          <TextLink href={config.discordUrl} className="text-green">
             Discord
           </TextLink>
           .
