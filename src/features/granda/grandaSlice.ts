@@ -1,16 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { GrandaFormValues, GrandaSubpage } from 'src/features/granda/types'
+import { fetchProposals } from 'src/features/granda/fetchProposals'
+import { GrandaFormValues, GrandaProposal, GrandaSubpage } from 'src/features/granda/types'
 
 export interface GrandaState {
   subpage: GrandaSubpage
-  formValues: GrandaFormValues | null
+  proposals: Record<string, GrandaProposal>
+  proposalsLastUpdated: number | null
   viewProposalId: string | null
+  formValues: GrandaFormValues | null
 }
 
 const initialState: GrandaState = {
   subpage: GrandaSubpage.List,
-  formValues: null,
+  proposals: {},
+  proposalsLastUpdated: null,
   viewProposalId: null,
+  formValues: null,
 }
 
 export const grandaSlice = createSlice({
@@ -32,6 +37,14 @@ export const grandaSlice = createSlice({
       state.subpage = GrandaSubpage.List
     },
     reset: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProposals.fulfilled, (state, action) => {
+      const proposals = action.payload
+      if (!proposals) return
+      state.proposals = proposals
+      state.proposalsLastUpdated = Date.now()
+    })
   },
 })
 

@@ -48,21 +48,20 @@ export function Table<T extends DataElement>(props: Props<T>) {
                 <th
                   key={`table-column-${column.id}`}
                   onClick={() => onColumnClick(column.id)}
-                  className={`font-medium text-center px-4 pb-3 border-b border-gray-400 cursor-pointer ${
-                    isSelected && 'pr-0'
-                  }`}
+                  className={`font-medium text-center px-2 pb-2 border-b 
+                  border-gray-400 cursor-pointer first:pl-0 last:pr-0`}
                 >
-                  <>
+                  <span>
                     {column.header}
                     {isSelected && (
                       <ChevronIcon
                         width="12px"
                         height="7px"
                         direction={sortDesc ? 's' : 'n'}
-                        classes="opacity-90 ml-2"
+                        classes="opacity-90 ml-2 inline"
                       />
                     )}
-                  </>
+                  </span>
                 </th>
               )
             })}

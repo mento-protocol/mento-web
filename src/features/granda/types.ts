@@ -12,3 +12,22 @@ export interface GrandaFormValues {
   toTokenId: NativeTokenId
   fromAmount: number | string
 }
+
+export enum GrandaProposalState {
+  Proposed = 'proposed',
+  Approved = 'approved',
+  Executed = 'executed',
+  Cancelled = 'cancelled',
+}
+
+export interface GrandaProposal {
+  id: string
+  state: GrandaProposalState
+  exchanger: string
+  stableToken: string
+  sellAmount: string
+  buyAmount: string
+  sellCelo: boolean
+  vetoPeriodSeconds: string
+  approvalTimestamp: string
+}
