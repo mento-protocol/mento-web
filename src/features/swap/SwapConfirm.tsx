@@ -4,7 +4,8 @@ import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
-import { IconButton } from 'src/components/buttons/IconButton'
+import { BackButton } from 'src/components/buttons/BackButton'
+import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { config } from 'src/config/config'
@@ -21,8 +22,6 @@ import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
 import { getMinBuyAmount, useExchangeValues } from 'src/features/swap/utils'
-import LeftArrow from 'src/images/icons/arrow-left-circle.svg'
-import RepeatArrow from 'src/images/icons/arrow-repeat.svg'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
@@ -137,21 +136,9 @@ export function SwapConfirm(props: Props) {
   return (
     <FloatingBox width="w-96">
       <div className="flex justify-between">
-        <IconButton
-          imgSrc={LeftArrow}
-          width={26}
-          height={26}
-          title="Go back"
-          onClick={onClickBack}
-        />
+        <BackButton width={26} height={26} onClick={onClickBack} />
         <h2 className="text-lg font-medium">Confirm Swap</h2>
-        <IconButton
-          imgSrc={RepeatArrow}
-          width={24}
-          height={24}
-          title="Refresh Rates"
-          onClick={onClickRefresh}
-        />
+        <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
       <div className="mt-6 bg-greengray-lightest rounded-md">
         <div className="relative flex items-center justify-between">

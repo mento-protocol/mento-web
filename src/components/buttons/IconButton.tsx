@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { PropsWithChildren } from 'react'
 
-interface ButtonProps {
+export interface IconButtonProps {
   width: number
   height: number
   classes?: string
@@ -12,7 +12,7 @@ interface ButtonProps {
   passThruProps?: any
 }
 
-export function IconButton(props: PropsWithChildren<ButtonProps>) {
+export function IconButton(props: PropsWithChildren<IconButtonProps>) {
   const { width, height, classes, onClick, imgSrc, disabled, title, passThruProps } = props
 
   const base = 'flex items-center justify-center transition-all'
