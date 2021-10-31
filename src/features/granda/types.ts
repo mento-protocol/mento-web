@@ -14,10 +14,10 @@ export interface GrandaFormValues {
 }
 
 export enum GrandaProposalState {
-  Proposed = 'proposed',
-  Approved = 'approved',
-  Executed = 'executed',
-  Cancelled = 'cancelled',
+  Proposed = 'Proposed',
+  Approved = 'Approved',
+  Executed = 'Executed',
+  Cancelled = 'Cancelled',
 }
 
 export interface GrandaProposal {
@@ -28,6 +28,6 @@ export interface GrandaProposal {
   sellAmount: string
   buyAmount: string
   sellCelo: boolean
-  vetoPeriodSeconds: string
-  approvalTimestamp: string
+  vetoPeriodSeconds: number
+  approvalTimestamp: number
 }
