@@ -3,15 +3,12 @@ import { ExchangeProposalState } from '@celo/contractkit/lib/wrappers/GrandaMent
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { GRANDA_PROPOSAL_STALE_TIME } from 'src/config/consts'
-import { NativeTokenId } from 'src/config/tokens'
 import { GrandaProposal, GrandaProposalState } from 'src/features/granda/types'
 import { isStale } from 'src/utils/time'
 
 interface FetchProposalsParams {
   kit: ContractKit
 }
-
-export type AccountBalances = Record<NativeTokenId, string>
 
 export const fetchProposals = createAsyncThunk<
   Record<string, GrandaProposal> | null,

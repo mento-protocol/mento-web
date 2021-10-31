@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
-import { setSubpage } from 'src/features/granda/grandaSlice'
+import { activateGranda, setSubpage } from 'src/features/granda/grandaSlice'
 import { ProposalConfirm } from 'src/features/granda/ProposalConfirm'
 import { ProposalForm } from 'src/features/granda/ProposalForm'
 import { ProposalList } from 'src/features/granda/ProposalList'
@@ -12,6 +12,8 @@ export default function GrandaPage() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    dispatch(activateGranda())
+
     // Restore subpage to list if users leaves granda
     return () => {
       dispatch(setSubpage(GrandaSubpage.List))

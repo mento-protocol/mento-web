@@ -31,3 +31,5 @@ export interface GrandaProposal {
   vetoPeriodSeconds: number
   approvalTimestamp: number
 }
+
+export type SizeLimits = Partial<Record<NativeTokenId, { min: string; max: string }>>

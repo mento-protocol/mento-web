@@ -1,5 +1,5 @@
 import type { ContractKit } from '@celo/contractkit'
-import { StableToken } from '@celo/contractkit'
+import { CeloContract, StableToken } from '@celo/contractkit'
 import { NativeTokenId } from 'src/config/tokens'
 
 export async function getExchangeContract(kit: ContractKit, tokenId: NativeTokenId) {
@@ -24,4 +24,11 @@ export async function getTokenContract(kit: ContractKit, tokenId: NativeTokenId)
     default:
       throw new Error(`Could not get contract for token ${tokenId}`)
   }
+}
+
+export function getNativeTokenId(name: CeloContract): NativeTokenId {
+  if (name === CeloContract.StableToken) return NativeTokenId.cUSD
+  if (name === CeloContract.StableTokenEUR) return NativeTokenId.cEUR
+  if (name === CeloContract.GoldToken) return NativeTokenId.CELO
+  throw new Error(`Unsupported token contract name {name}`)
 }

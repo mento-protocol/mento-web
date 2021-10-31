@@ -7,8 +7,6 @@ import PlusCircle from 'src/images/icons/plus-circle-fill.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
 export function ProposalList() {
-  const { address, kit, initialised } = useContractKit()
-
   const dispatch = useAppDispatch()
   const onRowClick = (id: string) => {
     dispatch(viewProposal(id))
