@@ -13,10 +13,9 @@ export default function GrandaPage() {
 
   useEffect(() => {
     dispatch(activateGranda())
-
     // Restore subpage to list if users leaves granda
     return () => {
-      dispatch(setSubpage(GrandaSubpage.List))
+      dispatch(setSubpage(GrandaSubpage.Form))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

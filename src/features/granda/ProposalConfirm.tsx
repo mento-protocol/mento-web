@@ -1,14 +1,13 @@
 import { useAppDispatch } from 'src/app/hooks'
 import { BackButton } from 'src/components/buttons/BackButton'
-import { setSubpage } from 'src/features/granda/grandaSlice'
-import { GrandaSubpage } from 'src/features/granda/types'
+import { setFormValues } from 'src/features/granda/grandaSlice'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
 export function ProposalConfirm() {
   const dispatch = useAppDispatch()
 
   const onClickBack = () => {
-    dispatch(setSubpage(GrandaSubpage.List))
+    dispatch(setFormValues(null))
   }
 
   return (

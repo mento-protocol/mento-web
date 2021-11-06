@@ -7,8 +7,7 @@ import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { BackButton } from 'src/components/buttons/BackButton'
 import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
-import { TextLink } from 'src/components/buttons/TextLink'
-import { config } from 'src/config/config'
+import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import {
   MAX_EXCHANGE_RATE,
   MAX_EXCHANGE_TOKEN_SIZE,
@@ -109,7 +108,7 @@ export function SwapConfirm(props: Props) {
         exchangeOpWithTimeout
       )) as string[]
       if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
-      toast.success(<SuccessToast txHash={txHashes[1]} />, { autoClose: 15000 })
+      toastToYourSuccess('Swap Complete!', txHashes[1])
       dispatch(setFormValues(null))
     } catch (err: any) {
       if (err.message === PROMISE_TIMEOUT) {
@@ -203,17 +202,6 @@ function RightCircleArrow() {
           d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
         />
       </svg>
-    </div>
-  )
-}
-
-function SuccessToast({ txHash }: { txHash: string }) {
-  return (
-    <div>
-      Swap Complete!{' '}
-      <TextLink className="underline" href={`${config.blockscoutUrl}/tx/${txHash}`}>
-        See Details
-      </TextLink>
     </div>
   )
 }

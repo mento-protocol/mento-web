@@ -1,24 +1,22 @@
 import { Connector, useContractKit } from '@celo-tools/use-contractkit'
 import { Field, Form, Formik, FormikErrors, useFormikContext } from 'formik'
 import { useCallback } from 'react'
-import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
-import { SwitchButton } from 'src/components/buttons/SwitchButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
-import { MIN_ROUNDED_VALUE } from 'src/config/consts'
 import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
-import { setFormValues, setShowSlippage } from 'src/features/swap/swapSlice'
+import { SettingsMenu } from 'src/features/swap/SettingsMenu'
+import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues, ToCeloRates } from 'src/features/swap/types'
+import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useExchangeValues } from 'src/features/swap/utils'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
-import Sliders from 'src/images/icons/sliders.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { areAmountsNearlyEqual, fromWeiRounded, parseAmount, toWei } from 'src/utils/amount'
+import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
 
 const initialValues: SwapFormValues = {
@@ -35,8 +33,6 @@ const tokens = [
 ]
 
 export function SwapForm() {
-  const { connect, address } = useContractKit()
-
   const balances = useAppSelector((s) => s.account.balances)
   const { toCeloRates, showSlippage } = useAppSelector((s) => s.swap)
 
@@ -44,21 +40,7 @@ export function SwapForm() {
   const onSubmit = (values: SwapFormValues) => {
     dispatch(setFormValues(values))
   }
-
-  const validateForm = (values?: SwapFormValues): FormikErrors<SwapFormValues> => {
-    if (!values || !values.fromAmount) return { fromAmount: 'Amount Required' }
-    const parsedAmount = parseAmount(values.fromAmount)
-    if (!parsedAmount) return { fromAmount: 'Amount is Invalid' }
-    if (parsedAmount.lt(0)) return { fromAmount: 'Amount cannot be negative' }
-    if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { fromAmount: 'Amount too small' }
-    const tokenId = values.fromTokenId
-    const tokenBalance = balances[tokenId]
-    const weiAmount = toWei(parsedAmount)
-    if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
-      return { fromAmount: 'Amount exceeds balance' }
-    }
-    return {}
-  }
+  const validateForm = useFormValidator(balances)
 
   return (
     <FloatingBox width="w-96" classes="overflow-visible">
@@ -66,22 +48,50 @@ export function SwapForm() {
         <h2 className="text-lg font-medium pl-1">Swap</h2>
         <SettingsMenu />
       </div>
-      <Formik<SwapFormValues>
-        initialValues={initialValues}
+      <SwapFormInner
+        balances={balances}
+        toCeloRates={toCeloRates}
+        showSlippage={showSlippage}
         onSubmit={onSubmit}
-        validate={validateForm}
-        validateOnChange={false}
-        validateOnBlur={false}
-      >
-        <Form>
-          <SwapFormInputs balances={balances} toCeloRates={toCeloRates} isConnected={!!address} />
-          {showSlippage && <SlippageRow />}
-          <div className="flex justify-center mt-5 mb-1">
-            <SubmitButton address={address} connect={connect} />
-          </div>
-        </Form>
-      </Formik>
+        validateForm={validateForm}
+      />
     </FloatingBox>
+  )
+}
+
+interface SwapFormInnerProps {
+  balances: AccountBalances
+  toCeloRates: ToCeloRates
+  showSlippage: boolean
+  onSubmit: (values: SwapFormValues) => void
+  validateForm: (values?: SwapFormValues) => FormikErrors<SwapFormValues>
+}
+
+export function SwapFormInner({
+  balances,
+  toCeloRates,
+  showSlippage,
+  onSubmit,
+  validateForm,
+}: SwapFormInnerProps) {
+  const { connect, address } = useContractKit()
+
+  return (
+    <Formik<SwapFormValues>
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validate={validateForm}
+      validateOnChange={false}
+      validateOnBlur={false}
+    >
+      <Form>
+        <SwapFormInputs balances={balances} toCeloRates={toCeloRates} isConnected={!!address} />
+        {showSlippage && <SlippageRow />}
+        <div className="flex justify-center mt-5 mb-1">
+          <SubmitButton address={address} connect={connect} />
+        </div>
+      </Form>
+    </Formik>
   )
 }
 
@@ -243,36 +253,5 @@ function SubmitButton({ address, connect }: ButtonProps) {
     <SolidButton dark={true} size="m" type={type} onClick={onClick} classes={classes}>
       {text}
     </SolidButton>
-  )
-}
-
-function SettingsMenu() {
-  const showSlippage = useAppSelector((s) => s.swap.showSlippage)
-  const dispatch = useAppDispatch()
-  const onToggleSlippage = (checked: boolean) => {
-    dispatch(setShowSlippage(checked))
-  }
-
-  const { buttonProps, itemProps, isOpen } = useDropdownMenu(1)
-
-  return (
-    <div className="relative mt-1 mr-1.5">
-      <IconButton
-        imgSrc={Sliders}
-        width={18}
-        height={18}
-        title="Settings"
-        passThruProps={buttonProps}
-      />
-      <div
-        className={`dropdown-menu w-46 mt-3 -right-1 bg-gray-50 ${isOpen ? '' : 'hidden'}`}
-        role="menu"
-      >
-        <a {...itemProps[0]} className="text-sm flex items-center justify-between">
-          <div>Toggle Slippage</div>
-          <SwitchButton checked={showSlippage} onChange={onToggleSlippage} />
-        </a>
-      </div>
-    </div>
   )
 }

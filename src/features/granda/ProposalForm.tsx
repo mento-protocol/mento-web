@@ -1,24 +1,43 @@
-import { useAppDispatch } from 'src/app/hooks'
-import { BackButton } from 'src/components/buttons/BackButton'
-import { setSubpage } from 'src/features/granda/grandaSlice'
-import { GrandaSubpage } from 'src/features/granda/types'
+import { useAppDispatch, useAppSelector } from 'src/app/hooks'
+import { setFormValues } from 'src/features/granda/grandaSlice'
+import { SwapFormInner } from 'src/features/swap/SwapForm'
+import { SwapFormValues } from 'src/features/swap/types'
+import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
 export function ProposalForm() {
-  const dispatch = useAppDispatch()
+  const balances = useAppSelector((s) => s.account.balances)
+  const { toCeloRates, showSlippage } = useAppSelector((s) => s.swap)
+  const sizeLimits = useAppSelector((s) => s.granda.sizeLimits)
 
-  const onClickBack = () => {
-    dispatch(setSubpage(GrandaSubpage.List))
+  const dispatch = useAppDispatch()
+  const onSubmit = (values: SwapFormValues) => {
+    dispatch(setFormValues(values))
   }
 
+  const validateForm = useFormValidator(balances, sizeLimits)
+  // const onClickBack = () => {
+  //   dispatch(setSubpage(GrandaSubpage.List))
+  // }
+
   return (
-    <FloatingBox width="w-96" classes="mb-12 mx-10">
-      <div className="flex justify-between">
-        <BackButton width={26} height={26} onClick={onClickBack} />
-        <h2 className="text-lg font-medium">Create Proposal</h2>
-        <div style={{ width: '26px' }}></div>
+    <FloatingBox width="w-96" classes="overflow-visible">
+      <div className="flex items-center justify-center">
+        {/* <BackButton width={26} height={26} onClick={onClickBack} /> */}
+        <h2 className="text-lg font-medium">Propose Granda Exchange</h2>
+        {/* <div style={{ width: '26px' }}></div> */}
       </div>
-      <div>TODO show form</div>
+      <div className="flex items-center py-2 px-3 my-3 bg-greengray-lightest rounded-md">
+        <div>TODO icon</div>
+        <div>TODO info</div>
+      </div>
+      <SwapFormInner
+        balances={balances}
+        toCeloRates={toCeloRates}
+        showSlippage={showSlippage}
+        onSubmit={onSubmit}
+        validateForm={validateForm}
+      />
     </FloatingBox>
   )
 }

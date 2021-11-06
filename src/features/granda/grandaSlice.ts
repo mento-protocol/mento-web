@@ -20,7 +20,7 @@ export interface GrandaState {
 
 const initialState: GrandaState = {
   isActive: false,
-  subpage: GrandaSubpage.List,
+  subpage: GrandaSubpage.Form,
   proposals: {},
   proposalsLastUpdated: null,
   viewProposalId: null,
@@ -39,7 +39,14 @@ export const grandaSlice = createSlice({
       state.subpage = action.payload
     },
     setFormValues: (state, action: PayloadAction<GrandaFormValues | null>) => {
-      state.formValues = action.payload
+      const values = action.payload
+      if (values) {
+        state.subpage = GrandaSubpage.Confirm
+        state.formValues = values
+      } else {
+        state.subpage = GrandaSubpage.Form
+        state.formValues = null
+      }
     },
     viewProposal: (state, action: PayloadAction<string>) => {
       state.viewProposalId = action.payload
