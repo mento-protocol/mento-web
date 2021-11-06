@@ -24,7 +24,7 @@ import { getMinBuyAmount, useExchangeValues } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
-import { fromWeiRounded } from 'src/utils/amount'
+import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { asyncTimeout, PROMISE_TIMEOUT } from 'src/utils/timeout'
 
@@ -35,6 +35,7 @@ interface Props {
 export function SwapConfirm(props: Props) {
   const { fromAmount, fromTokenId, toTokenId, slippage } = props.formValues
   const toCeloRates = useAppSelector((s) => s.swap.toCeloRates)
+  const balances = useAppSelector((s) => s.account.balances)
   const dispatch = useAppDispatch()
   const { address, kit, initialised, performActions } = useContractKit()
 
@@ -52,7 +53,11 @@ export function SwapConfirm(props: Props) {
     toTokenId,
     toCeloRates
   )
-  const minBuyAmountWei = getMinBuyAmount(from.weiAmount, slippage, rate.value)
+  const tokenBalance = balances[fromTokenId]
+  // Check if amount is almost equal to balance max, in which case use max
+  // Helps handle problems from imprecision in non-wei amount display
+  const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance)
+  const minBuyAmountWei = getMinBuyAmount(finalFromAmount, slippage, rate.value)
   const minBuyAmount = fromWeiRounded(minBuyAmountWei, true)
   const fromToken = NativeTokens[fromTokenId]
   const toToken = NativeTokens[toTokenId]
@@ -62,8 +67,8 @@ export function SwapConfirm(props: Props) {
       toast.error('Kit not connected')
       return
     }
-    if (new BigNumber(from.weiAmount).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
-      toast.error('Amount too large')
+    if (new BigNumber(finalFromAmount).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
+      toast.error('Amount seems too large')
       return
     }
     if (rate.value < MIN_EXCHANGE_RATE || rate.value > MAX_EXCHANGE_RATE) {
@@ -71,15 +76,13 @@ export function SwapConfirm(props: Props) {
       return
     }
 
-    // TODO get adjusted amount?
-
     const approvalOperation = async (k: ContractKit) => {
       const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
       const tokenContract = await getTokenContract(k, fromTokenId)
       const exchangeContract = await getExchangeContract(k, stableTokenId)
       const approveTx = await tokenContract.increaseAllowance(
         exchangeContract.address,
-        from.weiAmount
+        finalFromAmount
       )
       // Gas price must be set manually because contractkit pre-populate it and
       // its helpers for getting gas price are only meant for stable token prices
@@ -93,7 +96,7 @@ export function SwapConfirm(props: Props) {
     const exchangeOperation = async (k: ContractKit) => {
       const sellGold = fromTokenId === NativeTokenId.CELO
       const exchangeContract = await getExchangeContract(k, stableTokenId)
-      const exchangeTx = await exchangeContract.sell(from.weiAmount, minBuyAmountWei, sellGold)
+      const exchangeTx = await exchangeContract.sell(finalFromAmount, minBuyAmountWei, sellGold)
       const gasPrice = await k.web3.eth.getGasPrice()
       const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt({ gasPrice })
       logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
