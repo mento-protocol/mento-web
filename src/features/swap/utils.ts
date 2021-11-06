@@ -15,7 +15,13 @@ import {
 } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
-interface ExchangeValues {
+export type ExchangeValueFormatter = (
+  fromAmount: NumberT | null | undefined,
+  fromTokenId: NativeTokenId | null | undefined,
+  toTokenId: NativeTokenId | null | undefined
+) => ExchangeValues
+
+export interface ExchangeValues {
   from: {
     amount: string
     weiAmount: string
@@ -38,12 +44,12 @@ interface ExchangeValues {
   stableTokenId: NativeTokenId
 }
 
-export function useExchangeValues(
+// Takes raw input and rates info and computes/formats to convenient form
+export function getExchangeValues(
   fromAmount: NumberT | null | undefined,
   fromTokenId: NativeTokenId | null | undefined,
   toTokenId: NativeTokenId | null | undefined,
-  toCeloRates: ToCeloRates,
-  isFromAmountWei = false
+  toCeloRates: ToCeloRates
 ): ExchangeValues {
   // Return some defaults when values are missing
   if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
@@ -56,7 +62,7 @@ export function useExchangeValues(
   const { stableBucket, celoBucket, spread } = toCeloRate
   const [buyBucket, sellBucket] = sellCelo ? [stableBucket, celoBucket] : [celoBucket, stableBucket]
 
-  const fromAmountWei = parseInputExchangeAmount(fromAmount, isFromAmountWei)
+  const fromAmountWei = parseInputExchangeAmount(fromAmount, false)
   const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } = calcSimpleExchangeRate(
     fromAmountWei,
     buyBucket,

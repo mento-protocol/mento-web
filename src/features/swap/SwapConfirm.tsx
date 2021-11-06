@@ -20,7 +20,7 @@ import { getExchangeContract, getTokenContract } from 'src/features/swap/contrac
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
-import { getMinBuyAmount, useExchangeValues } from 'src/features/swap/utils'
+import { getExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
@@ -47,7 +47,7 @@ export function SwapConfirm(props: Props) {
     }
   }, [isConfirmValid, dispatch])
 
-  const { from, to, rate, stableTokenId } = useExchangeValues(
+  const { from, to, rate, stableTokenId } = getExchangeValues(
     fromAmount,
     fromTokenId,
     toTokenId,

@@ -11,9 +11,9 @@ import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/token
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
 import { setFormValues } from 'src/features/swap/swapSlice'
-import { SwapFormValues, ToCeloRates } from 'src/features/swap/types'
+import { SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
-import { useExchangeValues } from 'src/features/swap/utils'
+import { ExchangeValueFormatter, getExchangeValues } from 'src/features/swap/utils'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
@@ -42,6 +42,9 @@ export function SwapForm() {
   }
   const validateForm = useFormValidator(balances)
 
+  const valueFormatter: ExchangeValueFormatter = (fromAmount, fromTokenId, toTokenId) =>
+    getExchangeValues(fromAmount, fromTokenId, toTokenId, toCeloRates)
+
   return (
     <FloatingBox width="w-96" classes="overflow-visible">
       <div className="flex justify-between mb-5">
@@ -50,7 +53,7 @@ export function SwapForm() {
       </div>
       <SwapFormInner
         balances={balances}
-        toCeloRates={toCeloRates}
+        valueFormatter={valueFormatter}
         showSlippage={showSlippage}
         onSubmit={onSubmit}
         validateForm={validateForm}
@@ -61,18 +64,18 @@ export function SwapForm() {
 
 interface SwapFormInnerProps {
   balances: AccountBalances
-  toCeloRates: ToCeloRates
   showSlippage: boolean
   onSubmit: (values: SwapFormValues) => void
   validateForm: (values?: SwapFormValues) => FormikErrors<SwapFormValues>
+  valueFormatter: ExchangeValueFormatter
 }
 
 export function SwapFormInner({
   balances,
-  toCeloRates,
   showSlippage,
   onSubmit,
   validateForm,
+  valueFormatter,
 }: SwapFormInnerProps) {
   const { connect, address } = useContractKit()
 
@@ -85,7 +88,11 @@ export function SwapFormInner({
       validateOnBlur={false}
     >
       <Form>
-        <SwapFormInputs balances={balances} toCeloRates={toCeloRates} isConnected={!!address} />
+        <SwapFormInputs
+          balances={balances}
+          valueFormatter={valueFormatter}
+          isConnected={!!address}
+        />
         {showSlippage && <SlippageRow />}
         <div className="flex justify-center mt-5 mb-1">
           <SubmitButton address={address} connect={connect} />
@@ -97,19 +104,18 @@ export function SwapFormInner({
 
 interface FormInputProps {
   balances: AccountBalances
-  toCeloRates: ToCeloRates
   isConnected: boolean
+  valueFormatter: ExchangeValueFormatter
 }
 
 function SwapFormInputs(props: FormInputProps) {
-  const { balances, toCeloRates, isConnected } = props
+  const { balances, isConnected, valueFormatter } = props
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
-  const { to, rate, stableTokenId } = useExchangeValues(
+  const { to, rate, stableTokenId } = valueFormatter(
     values.fromAmount,
     values.fromTokenId,
-    values.toTokenId,
-    toCeloRates
+    values.toTokenId
   )
 
   const roundedBalance = fromWeiRounded(balances[values.fromTokenId])

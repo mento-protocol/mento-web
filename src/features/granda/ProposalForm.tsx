@@ -6,6 +6,7 @@ import { GrandaSubpage } from 'src/features/granda/types'
 import { SwapFormInner } from 'src/features/swap/SwapForm'
 import { SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
+import { ExchangeValueFormatter, getExchangeValues } from 'src/features/swap/utils'
 import InfoCircle from 'src/images/icons/info-circle.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
@@ -20,13 +21,14 @@ export function ProposalForm() {
   }
 
   const validateForm = useFormValidator(balances, sizeLimits)
+
+  // TODO use diff getExchangeValues
+  const valueFormatter: ExchangeValueFormatter = (fromAmount, fromTokenId, toTokenId) =>
+    getExchangeValues(fromAmount, fromTokenId, toTokenId, toCeloRates)
+
   // const onClickBack = () => {
   //   dispatch(setSubpage(GrandaSubpage.List))
   // }
-
-  const onClickSeeHistory = () => {
-    dispatch(setSubpage(GrandaSubpage.List))
-  }
 
   return (
     <FloatingBox width="w-100" classes="overflow-visible">
@@ -35,32 +37,42 @@ export function ProposalForm() {
         <h2 className="text-lg font-medium">Propose Granda Exchange</h2>
         {/* <div style={{ width: '26px' }}></div> */}
       </div>
-      <div className="py-2 px-4 my-3 bg-greengray-lightest rounded-md">
-        <div className=" flex items-center opacity-80">
-          <Image src={InfoCircle} alt="info" width={42} height={42} />
-          <div className="text-sm ml-3">
-            Granda Mento is a{' '}
-            <TextLink
-              href="https://docs.celo.org/celo-codebase/protocol/stability/granda-mento"
-              className="underline"
-            >
-              special process
-            </TextLink>{' '}
-            for very large exchanges (cUSD 500,000+). See{' '}
-            <button onClick={onClickSeeHistory} type="button" className="underline">
-              exchange history
-            </button>
-            .
-          </div>
-        </div>
-      </div>
+      <InfoTip />
       <SwapFormInner
         balances={balances}
-        toCeloRates={toCeloRates}
+        valueFormatter={valueFormatter}
         showSlippage={showSlippage}
         onSubmit={onSubmit}
         validateForm={validateForm}
       />
     </FloatingBox>
+  )
+}
+
+function InfoTip() {
+  const dispatch = useAppDispatch()
+  const onClickSeeHistory = () => {
+    dispatch(setSubpage(GrandaSubpage.List))
+  }
+  return (
+    <div className="py-2 px-4 my-3 bg-greengray-lightest rounded-md">
+      <div className=" flex items-center opacity-70">
+        <Image src={InfoCircle} alt="info" width={42} height={42} />
+        <div className="text-sm font-light ml-3">
+          Granda Mento is a{' '}
+          <TextLink
+            href="https://docs.celo.org/celo-codebase/protocol/stability/granda-mento"
+            className="underline font-normal"
+          >
+            special process
+          </TextLink>{' '}
+          for very large exchanges (cUSD 500,000+). See{' '}
+          <button onClick={onClickSeeHistory} type="button" className="underline font-normal">
+            exchange history
+          </button>
+          .
+        </div>
+      </div>
+    </div>
   )
 }
