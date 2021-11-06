@@ -5,8 +5,8 @@ import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { STATUS_POLLER_DELAY } from 'src/config/consts'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
+import { fetchConfig } from 'src/features/granda/fetchConfig'
 import { fetchProposals } from 'src/features/granda/fetchProposals'
-import { fetchSizeLimits } from 'src/features/granda/fetchSizeLimits'
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { logger } from 'src/utils/logger'
 import { useInterval } from 'src/utils/timeout'
@@ -31,9 +31,9 @@ export function PollingWorker() {
         toast.warn('Error retrieving Granda proposals')
         logger.error('Failed to retrieve granda proposals', err)
       })
-      dispatch(fetchSizeLimits({ kit })).catch((err) => {
-        toast.warn('Error retrieving Granda size limits')
-        logger.error('Failed to retrieve granda size limits', err)
+      dispatch(fetchConfig({ kit })).catch((err) => {
+        toast.warn('Error retrieving Granda config')
+        logger.error('Failed to retrieve granda config', err)
       })
     }
     if (address) {

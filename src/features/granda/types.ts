@@ -32,4 +32,12 @@ export interface GrandaProposal {
   approvalTimestamp: number
 }
 
+export interface GrandaConfig {
+  approver: string
+  spread: number
+  vetoPeriodSeconds: number
+  maxApprovalExchangeRateChange: number
+  exchangeLimits: SizeLimits
+}
+
 export type SizeLimits = Partial<Record<NativeTokenId, { min: string; max: string }>>

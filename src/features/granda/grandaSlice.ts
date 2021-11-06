@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { fetchConfig } from 'src/features/granda/fetchConfig'
 import { fetchProposals } from 'src/features/granda/fetchProposals'
-import { fetchSizeLimits } from 'src/features/granda/fetchSizeLimits'
 import {
+  GrandaConfig,
   GrandaFormValues,
   GrandaProposal,
   GrandaSubpage,
-  SizeLimits,
 } from 'src/features/granda/types'
 
 export interface GrandaState {
@@ -15,7 +15,7 @@ export interface GrandaState {
   proposalsLastUpdated: number | null
   viewProposalId: string | null // id of proposal for details view subpage
   formValues: GrandaFormValues | null
-  sizeLimits: SizeLimits | null
+  config: GrandaConfig | null
 }
 
 const initialState: GrandaState = {
@@ -25,7 +25,7 @@ const initialState: GrandaState = {
   proposalsLastUpdated: null,
   viewProposalId: null,
   formValues: null,
-  sizeLimits: null,
+  config: null,
 }
 
 export const grandaSlice = createSlice({
@@ -56,8 +56,8 @@ export const grandaSlice = createSlice({
       state.viewProposalId = null
       state.subpage = GrandaSubpage.List
     },
-    setSizeLimits: (state, action: PayloadAction<SizeLimits>) => {
-      state.sizeLimits = action.payload
+    setConfig: (state, action: PayloadAction<GrandaConfig>) => {
+      state.config = action.payload
     },
     reset: () => initialState,
   },
@@ -68,10 +68,10 @@ export const grandaSlice = createSlice({
       state.proposals = proposals
       state.proposalsLastUpdated = Date.now()
     })
-    builder.addCase(fetchSizeLimits.fulfilled, (state, action) => {
-      const limits = action.payload
-      if (!limits) return
-      state.sizeLimits = limits
+    builder.addCase(fetchConfig.fulfilled, (state, action) => {
+      const config = action.payload
+      if (!config) return
+      state.config = config
     })
   },
 })
@@ -82,7 +82,7 @@ export const {
   setSubpage,
   viewProposal,
   clearProposal,
-  setSizeLimits,
+  setConfig: setSizeLimits,
   reset,
 } = grandaSlice.actions
 export const grandaReducer = grandaSlice.reducer

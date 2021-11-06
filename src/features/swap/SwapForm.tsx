@@ -44,7 +44,7 @@ export function SwapForm() {
 
   return (
     <FloatingBox width="w-96" classes="overflow-visible">
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-5">
         <h2 className="text-lg font-medium pl-1">Swap</h2>
         <SettingsMenu />
       </div>
@@ -138,7 +138,7 @@ function SwapFormInputs(props: FormInputProps) {
 
   return (
     <div className="relative">
-      <div className="flex justify-between items-center py-2 px-3 mt-5 bg-greengray-lightest rounded-md">
+      <div className="flex justify-between items-center py-2 px-3 mt-3 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
           <TokenSelectField
             id="fromTokenSelect"
