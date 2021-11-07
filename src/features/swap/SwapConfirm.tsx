@@ -20,7 +20,7 @@ import { getExchangeContract, getTokenContract } from 'src/features/swap/contrac
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
-import { getExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
+import { ExchangeValues, getExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
@@ -59,8 +59,6 @@ export function SwapConfirm(props: Props) {
   const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance)
   const minBuyAmountWei = getMinBuyAmount(finalFromAmount, slippage, rate.value)
   const minBuyAmount = fromWeiRounded(minBuyAmountWei, true)
-  const fromToken = NativeTokens[fromTokenId]
-  const toToken = NativeTokens[toTokenId]
 
   const onSubmit = async () => {
     if (!address || !kit) {
@@ -142,35 +140,7 @@ export function SwapConfirm(props: Props) {
         <h2 className="text-lg font-medium">Confirm Swap</h2>
         <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
-      <div className="mt-6 bg-greengray-lightest rounded-md">
-        <div className="relative flex items-center justify-between">
-          <div className="flex flex-1 items-center px-2.5 py-3 border-r border-gray-400">
-            <TokenIcon size="l" token={fromToken} />
-            <div className="flex flex-col flex-1 items-center px-2">
-              <div className="text-sm text-center">{fromToken.symbol}</div>
-              <div className="text-lg text-center font-mono leading-6">{from.amount}</div>
-            </div>
-          </div>
-          <div className="flex flex-1 items-center justify-end px-2.5 py-3">
-            <div className="flex flex-col flex-1 items-center px-2">
-              <div className="text-sm text-center">{toToken.symbol}</div>
-              <div className="text-lg text-center font-mono leading-6">{to.amount}</div>
-            </div>
-            <TokenIcon size="l" token={toToken} />
-          </div>
-          <div
-            style={{ top: '42%' }}
-            className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/4"
-          >
-            <RightCircleArrow />
-          </div>
-        </div>
-        <div className="flex items-end justify-center">
-          <div className="py-0.5 px-3 border border-b-0 border-black50 text-black50 text-sm rounded-t">
-            {rate.isReady ? `${rate.fromCeloValue} ${stableTokenId} : 1 CELO` : 'Loading...'}
-          </div>
-        </div>
-      </div>
+      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} />
       <div className="flex flex-col items-center text-sm">
         <div className="flex items-center mt-6">
           <div className="w-32 text-right mr-6">Max Slippage:</div>
@@ -187,6 +157,50 @@ export function SwapConfirm(props: Props) {
         </SolidButton>
       </div>
     </FloatingBox>
+  )
+}
+
+interface SwapConfirmSummaryProps {
+  from: ExchangeValues['from']
+  to: ExchangeValues['to']
+  rate: ExchangeValues['rate']
+  stableTokenId: NativeTokenId
+}
+
+export function SwapConfirmSummary({ from, to, rate, stableTokenId }: SwapConfirmSummaryProps) {
+  const fromToken = NativeTokens[from.token]
+  const toToken = NativeTokens[to.token]
+
+  return (
+    <div className="mt-6 bg-greengray-lightest rounded-md">
+      <div className="relative flex items-center justify-between">
+        <div className="flex flex-1 items-center px-2.5 py-3 border-r border-gray-400">
+          <TokenIcon size="l" token={fromToken} />
+          <div className="flex flex-col flex-1 items-center px-2">
+            <div className="text-sm text-center">{fromToken.symbol}</div>
+            <div className="text-lg text-center font-mono leading-6">{from.amount}</div>
+          </div>
+        </div>
+        <div className="flex flex-1 items-center justify-end px-2.5 py-3">
+          <div className="flex flex-col flex-1 items-center px-2">
+            <div className="text-sm text-center">{toToken.symbol}</div>
+            <div className="text-lg text-center font-mono leading-6">{to.amount}</div>
+          </div>
+          <TokenIcon size="l" token={toToken} />
+        </div>
+        <div
+          style={{ top: '42%' }}
+          className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/4"
+        >
+          <RightCircleArrow />
+        </div>
+      </div>
+      <div className="flex items-end justify-center">
+        <div className="py-0.5 px-3 border border-b-0 border-black50 text-black50 text-sm rounded-t">
+          {rate.isReady ? `${rate.fromCeloValue} ${stableTokenId} : 1 CELO` : 'Loading...'}
+        </div>
+      </div>
+    </div>
   )
 }
 

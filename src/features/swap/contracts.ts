@@ -33,7 +33,7 @@ export function getNativeTokenId(name: CeloContract): NativeTokenId {
   throw new Error(`Unsupported token contract name ${name}`)
 }
 
-export function getContractKitToken(tokenId: NativeTokenId): CeloTokenType {
+export function getKitToken(tokenId: NativeTokenId): CeloTokenType {
   switch (tokenId) {
     case NativeTokenId.cUSD:
       return StableToken.cUSD

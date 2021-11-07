@@ -4,7 +4,7 @@ import type { AppDispatch, AppState } from 'src/app/store'
 import { MAX_EXCHANGE_RATE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { NativeTokenId, StableTokenIds } from 'src/config/tokens'
 import { OracleRates } from 'src/features/granda/types'
-import { getContractKitToken } from 'src/features/swap/contracts'
+import { getKitToken } from 'src/features/swap/contracts'
 import { SimpleExchangeRate } from 'src/features/swap/types'
 import { logger } from 'src/utils/logger'
 import { areRatesStale } from 'src/utils/time'
@@ -37,7 +37,7 @@ async function _fetchOracleRates(
   tokenId: NativeTokenId
 ): Promise<SimpleExchangeRate> {
   logger.debug('Fetching oracle rate for:', tokenId)
-  const token = getContractKitToken(tokenId)
+  const token = getKitToken(tokenId)
   const stableTokenAddress = await kit.celoTokens.getAddress(token)
   const sortedOracles = await kit.contracts.getSortedOracles()
   const { rate } = await sortedOracles.medianRate(stableTokenAddress)
