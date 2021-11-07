@@ -1,4 +1,5 @@
 import { NativeTokenId } from 'src/config/tokens'
+import { SimpleExchangeRate } from 'src/features/swap/types'
 
 export enum GrandaSubpage {
   List = 'list',
@@ -31,6 +32,8 @@ export interface GrandaProposal {
   vetoPeriodSeconds: number
   approvalTimestamp: number
 }
+
+export type OracleRates = Partial<Record<NativeTokenId, SimpleExchangeRate>>
 
 export interface GrandaConfig {
   approver: string

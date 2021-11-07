@@ -1,30 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { fetchConfig } from 'src/features/granda/fetchConfig'
+import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
 import { fetchProposals } from 'src/features/granda/fetchProposals'
 import {
   GrandaConfig,
   GrandaFormValues,
   GrandaProposal,
   GrandaSubpage,
+  OracleRates,
 } from 'src/features/granda/types'
 
 export interface GrandaState {
   isActive: boolean // tracks if granda page was loaded to lazily fetch granda info
   subpage: GrandaSubpage
-  proposals: Record<string, GrandaProposal>
-  proposalsLastUpdated: number | null
   viewProposalId: string | null // id of proposal for details view subpage
   formValues: GrandaFormValues | null
+  proposals: Record<string, GrandaProposal>
+  proposalsLastUpdated: number | null
+  oracleRates: OracleRates
   config: GrandaConfig | null
 }
 
 const initialState: GrandaState = {
   isActive: false,
   subpage: GrandaSubpage.Form,
-  proposals: {},
-  proposalsLastUpdated: null,
   viewProposalId: null,
   formValues: null,
+  proposals: {},
+  proposalsLastUpdated: null,
+  oracleRates: {},
   config: null,
 }
 
@@ -56,9 +60,6 @@ export const grandaSlice = createSlice({
       state.viewProposalId = null
       state.subpage = GrandaSubpage.List
     },
-    setConfig: (state, action: PayloadAction<GrandaConfig>) => {
-      state.config = action.payload
-    },
     reset: () => initialState,
   },
   extraReducers: (builder) => {
@@ -68,6 +69,11 @@ export const grandaSlice = createSlice({
       state.proposals = proposals
       state.proposalsLastUpdated = Date.now()
     })
+    builder.addCase(fetchOracleRates.fulfilled, (state, action) => {
+      const rates = action.payload
+      if (!rates) return
+      state.oracleRates = rates
+    })
     builder.addCase(fetchConfig.fulfilled, (state, action) => {
       const config = action.payload
       if (!config) return
@@ -76,13 +82,6 @@ export const grandaSlice = createSlice({
   },
 })
 
-export const {
-  activateGranda,
-  setFormValues,
-  setSubpage,
-  viewProposal,
-  clearProposal,
-  setConfig: setSizeLimits,
-  reset,
-} = grandaSlice.actions
+export const { activateGranda, setFormValues, setSubpage, viewProposal, clearProposal, reset } =
+  grandaSlice.actions
 export const grandaReducer = grandaSlice.reducer

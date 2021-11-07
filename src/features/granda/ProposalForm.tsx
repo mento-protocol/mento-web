@@ -3,28 +3,29 @@ import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { setFormValues, setSubpage } from 'src/features/granda/grandaSlice'
 import { GrandaSubpage } from 'src/features/granda/types'
+import { getExchangeValues } from 'src/features/granda/utils'
 import { SwapFormInner } from 'src/features/swap/SwapForm'
 import { SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
-import { ExchangeValueFormatter, getExchangeValues } from 'src/features/swap/utils'
+import { ExchangeValueFormatter } from 'src/features/swap/utils'
 import InfoCircle from 'src/images/icons/info-circle.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 
 export function ProposalForm() {
   const balances = useAppSelector((s) => s.account.balances)
-  const { toCeloRates, showSlippage } = useAppSelector((s) => s.swap)
-  const sizeLimits = useAppSelector((s) => s.granda.config?.exchangeLimits)
+  const { config, oracleRates } = useAppSelector((s) => s.granda)
+  const exchangeLimits = config?.exchangeLimits
+  const spread = config?.spread
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
     dispatch(setFormValues(values))
   }
 
-  const validateForm = useFormValidator(balances, sizeLimits)
+  const validateForm = useFormValidator(balances, exchangeLimits)
 
-  // TODO use diff getExchangeValues
   const valueFormatter: ExchangeValueFormatter = (fromAmount, fromTokenId, toTokenId) =>
-    getExchangeValues(fromAmount, fromTokenId, toTokenId, toCeloRates)
+    getExchangeValues(fromAmount, fromTokenId, toTokenId, spread, oracleRates)
 
   // const onClickBack = () => {
   //   dispatch(setSubpage(GrandaSubpage.List))
@@ -41,7 +42,7 @@ export function ProposalForm() {
       <SwapFormInner
         balances={balances}
         valueFormatter={valueFormatter}
-        showSlippage={showSlippage}
+        showSlippage={false}
         onSubmit={onSubmit}
         validateForm={validateForm}
       />

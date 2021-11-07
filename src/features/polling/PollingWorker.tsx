@@ -6,6 +6,7 @@ import { STATUS_POLLER_DELAY } from 'src/config/consts'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
 import { fetchConfig } from 'src/features/granda/fetchConfig'
+import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
 import { fetchProposals } from 'src/features/granda/fetchProposals'
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { logger } from 'src/utils/logger'
@@ -34,6 +35,10 @@ export function PollingWorker() {
       dispatch(fetchConfig({ kit })).catch((err) => {
         toast.warn('Error retrieving Granda config')
         logger.error('Failed to retrieve granda config', err)
+      })
+      dispatch(fetchOracleRates({ kit })).catch((err) => {
+        toast.warn('Error retrieving oracle rates')
+        logger.error('Failed to retrieve oracle rates', err)
       })
     }
     if (address) {

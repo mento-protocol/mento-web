@@ -16,7 +16,7 @@ export const fetchProposals = createAsyncThunk<
   { dispatch: AppDispatch; state: AppState }
 >('granda/fetchProposals', async (params, thunkAPI) => {
   const { kit } = params
-  const { proposalsLastUpdated } = thunkAPI.getState().granda
+  const proposalsLastUpdated = thunkAPI.getState().granda.proposalsLastUpdated
   if (isStale(proposalsLastUpdated, GRANDA_PROPOSAL_STALE_TIME)) {
     return _fetchProposals(kit)
   } else {

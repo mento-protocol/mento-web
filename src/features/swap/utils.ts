@@ -1,7 +1,3 @@
-// import { WEI_PER_UNIT } from 'src/config/consts'
-// import { toWei } from 'src/utils/amount'
-// import { logger } from 'src/utils/logger'
-
 import BigNumber from 'bignumber.js'
 import { WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
@@ -95,7 +91,7 @@ export function getExchangeValues(
   }
 }
 
-function parseInputExchangeAmount(amount: NumberT | null | undefined, isWei: boolean) {
+export function parseInputExchangeAmount(amount: NumberT | null | undefined, isWei: boolean) {
   const parsed = parseAmountWithDefault(amount, 0)
   const parsedWei = isWei ? parsed : toWei(parsed)
   return BigNumber.max(parsedWei, 0)
@@ -132,12 +128,12 @@ export function calcSimpleExchangeRate(
 
     return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
   } catch (error) {
-    logger.warn('Error computing exchange values')
+    logger.warn('Error computing exchange values', error)
     return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
   }
 }
 
-function getDefaultExchangeValues(
+export function getDefaultExchangeValues(
   _fromToken?: NativeTokenId | null,
   _toToken?: NativeTokenId | null
 ): ExchangeValues {
