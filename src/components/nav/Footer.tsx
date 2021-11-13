@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js'
 import Image from 'next/image'
+import { useState } from 'react'
 import { useAppSelector } from 'src/app/hooks'
+import { NetworkModal } from 'src/components/nav/NetworkModal'
 import { config } from 'src/config/config'
 import { STALE_BLOCK_TIME } from 'src/config/consts'
 import Discord from 'src/images/logos/discord.svg'
@@ -64,16 +66,24 @@ function BlockIndicator() {
     classColor = 'red-600'
   }
 
+  const [showNetworkModal, setShowNetworkModal] = useState(false)
+
   return (
-    <div className="flex items-center">
-      <div className="mr-3 text-sm font-medium pt-px">{summary}</div>
-      <div
-        className={`rounded-full w-3.5 h-3.5 ${'bg-' + classColor} border-2 ${
-          'border-' + classColor
-        } border-opacity-50`}
-      ></div>
-      <div className="hidden bg-yellow-300 bg-red-600"></div>
-    </div>
+    <>
+      <button
+        className="flex items-center hover:underline"
+        onClick={() => setShowNetworkModal(true)}
+      >
+        <div className="mr-3 text-sm font-medium pt-px">{summary}</div>
+        <div
+          className={`rounded-full w-3.5 h-3.5 ${'bg-' + classColor} border-2 ${
+            'border-' + classColor
+          } border-opacity-50`}
+        ></div>
+        <div className="hidden bg-yellow-300 bg-red-600"></div>
+      </button>
+      <NetworkModal isOpen={showNetworkModal} close={() => setShowNetworkModal(false)} />
+    </>
   )
 }
 
