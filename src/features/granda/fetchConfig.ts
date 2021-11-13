@@ -37,7 +37,7 @@ async function _fetchConfig(kit: ContractKit): Promise<GrandaConfig> {
   if (spread > 0.05 || spread < 0) throw new Error(`Invalid spread: ${spread}`)
 
   const vetoPeriodSeconds = rawConfig.vetoPeriodSeconds.toNumber()
-  if (vetoPeriodSeconds > 2592000 || vetoPeriodSeconds < 86400)
+  if (vetoPeriodSeconds > 2592000 || vetoPeriodSeconds < 1000)
     throw new Error(`Invalid veto period: ${vetoPeriodSeconds}`)
 
   const maxApprovalExchangeRateChange = rawConfig.maxApprovalExchangeRateChange.toNumber()

@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { GRANDA_PROPOSAL_STALE_TIME } from 'src/config/consts'
 import { GrandaProposal, GrandaProposalState } from 'src/features/granda/types'
+import { isValidAddress } from 'src/utils/addresses'
 import { logger } from 'src/utils/logger'
 import { isStale } from 'src/utils/time'
 
@@ -31,20 +32,37 @@ async function _fetchProposals(kit: ContractKit): Promise<Record<string, GrandaP
   const propCountBN = await contract.exchangeProposalCount()
   const propCount = propCountBN.toNumber()
   const proposals: Record<string, GrandaProposal> = {}
-  for (let i = 0; i < propCount; i++) {
+  for (let i = 1; i <= propCount; i++) {
     const proposal = await contract.getExchangeProposal(i)
     const id = proposal.id.toString()
-    // TODO validate proposal
+    const {
+      state,
+      exchanger,
+      stableToken,
+      sellAmount,
+      buyAmount,
+      sellCelo,
+      vetoPeriodSeconds,
+      approvalTimestamp,
+    } = proposal
+    if (!isValidAddress(exchanger)) throw new Error(`Invalid proposal exchanger ${exchanger}`)
+    if (!isValidAddress(stableToken)) throw new Error(`Invalid proposal stableToken ${stableToken}`)
+    if (!sellAmount || sellAmount.lte(0)) throw new Error(`Invalid sell amount ${sellAmount}`)
+    if (!buyAmount || buyAmount.lte(0)) throw new Error(`Invalid buy amount ${buyAmount}`)
+    if (!vetoPeriodSeconds || vetoPeriodSeconds.lte(0))
+      throw new Error(`Invalid veto period ${vetoPeriodSeconds}`)
+    if (!approvalTimestamp || approvalTimestamp.lte(0))
+      throw new Error(`Invalid approval time ${approvalTimestamp}`)
     proposals[id] = {
       id,
-      state: toGrandaProposalState(proposal.state),
-      exchanger: proposal.exchanger,
-      stableToken: proposal.stableToken,
-      sellAmount: proposal.sellAmount.toString(),
-      buyAmount: proposal.buyAmount.toString(),
-      sellCelo: proposal.sellCelo,
-      vetoPeriodSeconds: proposal.vetoPeriodSeconds.toNumber(),
-      approvalTimestamp: proposal.approvalTimestamp.toNumber(),
+      state: toGrandaProposalState(state),
+      exchanger,
+      stableToken,
+      sellAmount: sellAmount.toFixed(0),
+      buyAmount: buyAmount.toFixed(0),
+      sellCelo,
+      vetoPeriodSeconds: vetoPeriodSeconds.toNumber(),
+      approvalTimestamp: approvalTimestamp.toNumber(),
     }
   }
   return proposals
