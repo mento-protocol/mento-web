@@ -21,6 +21,7 @@ export const fetchOracleRates = createAsyncThunk<
   const { kit } = params
   const oracleRates = thunkAPI.getState().granda.oracleRates
   if (areRatesStale(oracleRates)) {
+    logger.debug('Fetching oracle rates')
     const newRates: OracleRates = {}
     for (const tokenId of StableTokenIds) {
       const rate = await _fetchOracleRates(kit, tokenId)
@@ -36,7 +37,6 @@ async function _fetchOracleRates(
   kit: ContractKit,
   tokenId: NativeTokenId
 ): Promise<SimpleExchangeRate> {
-  logger.debug('Fetching oracle rate for:', tokenId)
   const token = getKitToken(tokenId)
   const stableTokenAddress = await kit.celoTokens.getAddress(token)
   const sortedOracles = await kit.contracts.getSortedOracles()

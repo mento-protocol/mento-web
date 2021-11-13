@@ -22,6 +22,7 @@ export const fetchExchangeRates = createAsyncThunk<
   const { kit } = params
   const toCeloRates = thunkAPI.getState().swap.toCeloRates
   if (areRatesStale(toCeloRates)) {
+    logger.debug('Fetching exchange rates')
     const newRates: ToCeloRates = {}
     for (const tokenId of StableTokenIds) {
       const rate = await _fetchExchangeRates(kit, tokenId)
@@ -37,7 +38,6 @@ async function _fetchExchangeRates(
   kit: ContractKit,
   tokenId: NativeTokenId
 ): Promise<ExchangeRate> {
-  logger.debug('Fetching exchange rate for:', tokenId)
   const contract = await getExchangeContract(kit, tokenId)
   const spread = await contract.spread()
   if (spread.lt(0) || spread.gt(MAX_EXCHANGE_SPREAD))

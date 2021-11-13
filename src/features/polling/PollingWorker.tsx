@@ -19,33 +19,45 @@ export function PollingWorker() {
 
   const onPoll = () => {
     if (!kit || !initialised) return
-    dispatch(fetchExchangeRates({ kit })).catch((err) => {
-      toast.error('Error retrieving exchange rates')
-      logger.error('Failed to retrieve exchange rates', err)
-    })
-    dispatch(fetchLatestBlock({ kit })).catch((err) => {
-      toast.warn('Error retrieving latest block')
-      logger.error('Failed to retrieve latest block', err)
-    })
+    dispatch(fetchExchangeRates({ kit }))
+      .unwrap()
+      .catch((err) => {
+        toast.error('Error retrieving exchange rates')
+        logger.error('Failed to retrieve exchange rates', err)
+      })
+    dispatch(fetchLatestBlock({ kit }))
+      .unwrap()
+      .catch((err) => {
+        toast.warn('Error retrieving latest block')
+        logger.error('Failed to retrieve latest block', err)
+      })
     if (isGrandaActive) {
-      dispatch(fetchProposals({ kit })).catch((err) => {
-        toast.warn('Error retrieving Granda proposals')
-        logger.error('Failed to retrieve granda proposals', err)
-      })
-      dispatch(fetchConfig({ kit })).catch((err) => {
-        toast.warn('Error retrieving Granda config')
-        logger.error('Failed to retrieve granda config', err)
-      })
-      dispatch(fetchOracleRates({ kit })).catch((err) => {
-        toast.warn('Error retrieving oracle rates')
-        logger.error('Failed to retrieve oracle rates', err)
-      })
+      dispatch(fetchProposals({ kit }))
+        .unwrap()
+        .catch((err) => {
+          toast.warn('Error retrieving Granda proposals')
+          logger.error('Failed to retrieve granda proposals', err)
+        })
+      dispatch(fetchConfig({ kit }))
+        .unwrap()
+        .catch((err) => {
+          toast.warn('Error retrieving Granda config')
+          logger.error('Failed to retrieve granda config', err)
+        })
+      dispatch(fetchOracleRates({ kit }))
+        .unwrap()
+        .catch((err) => {
+          toast.warn('Error retrieving oracle rates')
+          logger.error('Failed to retrieve oracle rates', err)
+        })
     }
     if (address) {
-      dispatch(fetchBalances({ address, kit })).catch((err) => {
-        toast.error('Error retrieving account balances')
-        logger.error('Failed to retrieve balances', err)
-      })
+      dispatch(fetchBalances({ address, kit }))
+        .unwrap()
+        .catch((err) => {
+          toast.error('Error retrieving account balances')
+          logger.error('Failed to retrieve balances', err)
+        })
     }
   }
 

@@ -127,10 +127,12 @@ export function SwapConfirm(props: Props) {
 
   const onClickRefresh = () => {
     if (!kit || !initialised) return
-    dispatch(fetchExchangeRates({ kit })).catch((err) => {
-      toast.error('Error retrieving exchange rates')
-      logger.error('Failed to retrieve exchange rates', err)
-    })
+    dispatch(fetchExchangeRates({ kit }))
+      .unwrap()
+      .catch((err) => {
+        toast.error('Error retrieving exchange rates')
+        logger.error('Failed to retrieve exchange rates', err)
+      })
   }
 
   return (

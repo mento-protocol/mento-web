@@ -5,6 +5,7 @@ import { GrandaConfig, SizeLimits } from 'src/features/granda/types'
 import { getNativeTokenId } from 'src/features/swap/contracts'
 import { isValidAddress } from 'src/utils/addresses'
 import { toWei } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
 
 interface FetchConfigParams {
   kit: ContractKit
@@ -18,6 +19,7 @@ export const fetchConfig = createAsyncThunk<
   const { kit } = params
   const config = thunkAPI.getState().granda.config
   if (!config) {
+    logger.debug('Fetching granda config')
     return _fetchConfig(kit)
   } else {
     return null

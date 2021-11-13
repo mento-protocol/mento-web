@@ -116,10 +116,12 @@ export function ProposalConfirm() {
 
   const onClickRefresh = () => {
     if (!kit || !initialised) return
-    dispatch(fetchOracleRates({ kit })).catch((err) => {
-      toast.error('Error retrieving exchange rates')
-      logger.error('Failed to retrieve exchange rates', err)
-    })
+    dispatch(fetchOracleRates({ kit }))
+      .unwrap()
+      .catch((err) => {
+        toast.error('Error retrieving exchange rates')
+        logger.error('Failed to retrieve exchange rates', err)
+      })
   }
 
   return (

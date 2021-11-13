@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { GRANDA_PROPOSAL_STALE_TIME } from 'src/config/consts'
 import { GrandaProposal, GrandaProposalState } from 'src/features/granda/types'
+import { logger } from 'src/utils/logger'
 import { isStale } from 'src/utils/time'
 
 interface FetchProposalsParams {
@@ -18,6 +19,7 @@ export const fetchProposals = createAsyncThunk<
   const { kit } = params
   const proposalsLastUpdated = thunkAPI.getState().granda.proposalsLastUpdated
   if (isStale(proposalsLastUpdated, GRANDA_PROPOSAL_STALE_TIME)) {
+    logger.debug('Fetching granda proposals')
     return _fetchProposals(kit)
   } else {
     return null
