@@ -12,6 +12,7 @@ import { isStale } from 'src/utils/time'
 
 interface FetchProposalsParams {
   kit: ContractKit
+  force?: boolean
 }
 
 export const fetchProposals = createAsyncThunk<
@@ -19,9 +20,9 @@ export const fetchProposals = createAsyncThunk<
   FetchProposalsParams,
   { dispatch: AppDispatch; state: AppState }
 >('granda/fetchProposals', async (params, thunkAPI) => {
-  const { kit } = params
+  const { kit, force } = params
   const proposalsLastUpdated = thunkAPI.getState().granda.proposalsLastUpdated
-  if (isStale(proposalsLastUpdated, GRANDA_PROPOSAL_STALE_TIME)) {
+  if (isStale(proposalsLastUpdated, GRANDA_PROPOSAL_STALE_TIME) || force) {
     logger.debug('Fetching granda proposals')
     return _fetchProposals(kit)
   } else {

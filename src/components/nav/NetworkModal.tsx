@@ -9,6 +9,7 @@ import { reset as grandaReset } from 'src/features/granda/grandaSlice'
 import { reset as swapReset } from 'src/features/swap/swapSlice'
 import XCircle from 'src/images/icons/x-circle.svg'
 import { HrDivider } from 'src/layout/HrDivider'
+import { defaultModalStyles } from 'src/styles/modals'
 import { logger } from 'src/utils/logger'
 
 interface Props {
@@ -87,19 +88,4 @@ function shortenUrl(url: string) {
     logger.error('Error parsing url', error)
     return null
   }
-}
-
-export const defaultModalStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    transform: 'translate(-50%, -50%)',
-    border: 'unset',
-    background: 'unset',
-    padding: 'unset',
-    borderRadius: 10,
-    boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.15)',
-  },
 }

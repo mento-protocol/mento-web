@@ -256,7 +256,7 @@ function SubmitButton({ address, connect }: ButtonProps) {
   useTimeout(clearErrors, 3000)
 
   return (
-    <SolidButton dark={true} size="m" type={type} onClick={onClick} classes={classes}>
+    <SolidButton size="m" type={type} onClick={onClick} classes={classes}>
       {text}
     </SolidButton>
   )

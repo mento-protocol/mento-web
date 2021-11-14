@@ -2,7 +2,6 @@ interface Config {
   debug: boolean
   version: string | null
   url: string
-  blockscoutUrl?: string
   discordUrl: string
   chainId: number
   showPriceChart: boolean
@@ -15,7 +14,6 @@ const configMainnet: Config = {
   debug: isDevMode,
   version,
   url: 'https://mento.finance',
-  blockscoutUrl: 'https://explorer.celo.org',
   discordUrl: 'https://discord.gg/E9AqUQnWQE',
   chainId: 42220,
   showPriceChart: false,

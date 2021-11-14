@@ -48,7 +48,7 @@ function EmptyList({ onClickCreate }: { onClickCreate: () => void }) {
       <h3 className="text-center text-gray-600 leading-loose">
         There are no Granda Mento proposals on this network yet.
       </h3>
-      <SolidButton onClick={onClickCreate} dark={true} size="m" classes="mt-6">
+      <SolidButton onClick={onClickCreate} size="m" classes="mt-6">
         Create New Proposal
       </SolidButton>
     </div>

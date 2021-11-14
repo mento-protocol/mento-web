@@ -25,7 +25,7 @@ export function ProposalConfirm() {
   const balances = useAppSelector((s) => s.account.balances)
   const { config, oracleRates, formValues } = useAppSelector((s) => s.granda)
   const { fromAmount, fromTokenId, toTokenId } = formValues || {}
-  const { address, kit, initialised, performActions } = useContractKit()
+  const { address, kit, initialised, network, performActions } = useContractKit()
 
   // Ensure invariants are met, otherwise return to form
   const isConfirmValid =
@@ -100,7 +100,7 @@ export function ProposalConfirm() {
         proposeOpWithTimeout
       )) as string[]
       if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
-      toastToYourSuccess('Proposal Created!', txHashes[1])
+      toastToYourSuccess('Proposal Created!', txHashes[1], network.explorer)
       dispatch(setFormValues(null))
     } catch (err: any) {
       if (err.message === PROMISE_TIMEOUT) {
@@ -135,7 +135,7 @@ export function ProposalConfirm() {
       </div>
       <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} />
       <div className="flex justify-center mt-5 mb-1">
-        <SolidButton dark={true} size="m" onClick={onSubmit}>
+        <SolidButton size="m" onClick={onSubmit}>
           Swap
         </SolidButton>
       </div>

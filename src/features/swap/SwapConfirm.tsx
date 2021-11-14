@@ -1,5 +1,5 @@
 import { useContractKit } from '@celo-tools/use-contractkit'
-import { ContractKit } from '@celo/contractkit'
+import type { ContractKit } from '@celo/contractkit'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -37,7 +37,7 @@ export function SwapConfirm(props: Props) {
   const toCeloRates = useAppSelector((s) => s.swap.toCeloRates)
   const balances = useAppSelector((s) => s.account.balances)
   const dispatch = useAppDispatch()
-  const { address, kit, initialised, performActions } = useContractKit()
+  const { address, kit, initialised, network, performActions } = useContractKit()
 
   // Ensure invariants are met, otherwise return to swap form
   const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && kit
@@ -109,7 +109,7 @@ export function SwapConfirm(props: Props) {
         exchangeOpWithTimeout
       )) as string[]
       if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
-      toastToYourSuccess('Swap Complete!', txHashes[1])
+      toastToYourSuccess('Swap Complete!', txHashes[1], network.explorer)
       dispatch(setFormValues(null))
     } catch (err: any) {
       if (err.message === PROMISE_TIMEOUT) {
@@ -154,7 +154,7 @@ export function SwapConfirm(props: Props) {
         </div>
       </div>
       <div className="flex justify-center mt-5 mb-1">
-        <SolidButton dark={true} size="m" onClick={onSubmit}>
+        <SolidButton size="m" onClick={onSubmit}>
           Swap
         </SolidButton>
       </div>
