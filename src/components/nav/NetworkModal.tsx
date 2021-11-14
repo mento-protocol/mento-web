@@ -1,5 +1,6 @@
 import { Alfajores, Baklava, Mainnet, Network, useContractKit } from '@celo-tools/use-contractkit'
 import ReactModal from 'react-modal'
+import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { reset as accountReset } from 'src/features/accounts/accountSlice'
@@ -23,14 +24,20 @@ export function NetworkModal({ isOpen, close }: Props) {
   const allNetworks = [Mainnet, Alfajores, Baklava]
 
   const dispatch = useAppDispatch()
-  const switchToNetwork = (n: Network) => {
-    logger.debug('Resetting and switching to network', n.name)
-    updateNetwork(n)
-    dispatch(blockReset())
-    dispatch(accountReset())
-    dispatch(grandaReset())
-    dispatch(swapReset())
-    dispatch(resetTokenPrices())
+  const switchToNetwork = async (n: Network) => {
+    try {
+      logger.debug('Resetting and switching to network', n.name)
+      await updateNetwork(n)
+      dispatch(blockReset())
+      dispatch(accountReset())
+      dispatch(grandaReset())
+      dispatch(swapReset())
+      dispatch(resetTokenPrices())
+    } catch (error) {
+      // TODO fix use-ck so it throws on update fail (i.e due to metamask)
+      logger.error('Error updating network', error)
+      toast.error('Could not switch network, is Metamask using the right network?')
+    }
   }
 
   return (
