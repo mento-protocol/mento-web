@@ -28,12 +28,12 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://mento.finance" />
           <meta property="og:title" content="Mento Fi" />
           <meta property="og:type" content="website" />
-          <meta property="og:image" content="/celo-hero.jpg" />
+          <meta property="og:image" content="https://mento.finance/celo-hero.jpg" />
           <meta property="og:description" content="A simple DApp for Celo Mento exchanges." />
+          <meta name="twitter:card" content="summary" />
           <meta name="twitter:title" content="Mento Fi" />
           <meta name="twitter:description" content="A simple DApp for Celo Mento exchanges." />
-          <meta name="twitter:image" content="/celo-hero.jpg" />
-          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:image" content="https://mento.finance/celo-hero.jpg" />
         </Head>
         <body className="text-black">
           <Main />

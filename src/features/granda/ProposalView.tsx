@@ -86,6 +86,11 @@ export function ProposalView() {
       const txHashes = (await performActions(cancelOpWithTimeout)) as string[]
       if (!txHashes || txHashes.length !== 1) throw new Error('Tx hashes not found')
       toastToYourSuccess('Proposal cancelled', txHashes[1], network.explorer)
+      dispatch(fetchProposals({ kit, force: true }))
+        .unwrap()
+        .catch((err) => {
+          logger.error('Failed to retrieve proposals after cancel', err)
+        })
     } catch (err: any) {
       if (err.message === PROMISE_TIMEOUT) {
         toast.error('Action timed out')

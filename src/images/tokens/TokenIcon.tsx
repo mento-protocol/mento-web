@@ -19,7 +19,15 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   const { actualSize, fontSize } = sizeValues[size]
 
   if (token && imgSrc) {
-    return <Image src={imgSrc} alt={token.symbol} width={actualSize} height={actualSize} />
+    return (
+      <Image
+        src={imgSrc}
+        alt={token.symbol}
+        width={actualSize}
+        height={actualSize}
+        priority={true}
+      />
+    )
   }
 
   if (token) {
