@@ -9,7 +9,7 @@ module.exports = {
       child_process: false,
       readline: false,
     }
-    config.plugins.push(new webpack.IgnorePlugin(/^electron$/))
+    config.plugins.push(new webpack.IgnorePlugin({ resourceRegExp: /^electron$/ }))
     return config
   },
 
