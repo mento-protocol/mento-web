@@ -8,12 +8,12 @@ import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { MAX_EXCHANGE_RATE, MIN_EXCHANGE_RATE, SIGN_OPERATION_TIMEOUT } from 'src/config/consts'
+import { getTokenContract, nativeTokenToKitToken } from 'src/config/tokenMapping'
 import { NativeTokenId } from 'src/config/tokens'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
 import { setFormValues } from 'src/features/granda/grandaSlice'
 import { getExchangeValues } from 'src/features/granda/utils'
-import { getKitToken, getTokenContract } from 'src/features/swap/contracts'
 import { SwapConfirmSummary } from 'src/features/swap/SwapConfirm'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { getAdjustedAmount } from 'src/utils/amount'
@@ -78,7 +78,9 @@ export function ProposalConfirm() {
     const proposeOperation = async (k: ContractKit) => {
       const sellCelo = fromTokenId === NativeTokenId.CELO
       const grandaContract = await k.contracts.getGrandaMento()
-      const contractId = k.celoTokens.getContract(getKitToken(stableTokenId) as StableToken)
+      const contractId = k.celoTokens.getContract(
+        nativeTokenToKitToken(stableTokenId) as StableToken
+      )
       const proposeTx = await grandaContract.createExchangeProposal(
         contractId,
         finalFromAmount,

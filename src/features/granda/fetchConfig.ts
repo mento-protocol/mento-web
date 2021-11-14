@@ -1,8 +1,8 @@
 import type { ContractKit } from '@celo/contractkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
+import { kitContractToNativeToken } from 'src/config/tokenMapping'
 import { GrandaConfig, SizeLimits } from 'src/features/granda/types'
-import { getNativeTokenId } from 'src/features/swap/contracts'
 import { isValidAddress } from 'src/utils/addresses'
 import { toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
@@ -46,7 +46,7 @@ async function _fetchConfig(kit: ContractKit): Promise<GrandaConfig> {
 
   const exchangeLimits: SizeLimits = {}
   for (const [name, limits] of rawConfig.exchangeLimits.entries()) {
-    const tokenId = getNativeTokenId(name)
+    const tokenId = kitContractToNativeToken(name)
     const min = limits.minExchangeAmount
     const max = limits.maxExchangeAmount
     if (min.gt(toWei(1_000_000)) || min.lt(toWei(50_000)))

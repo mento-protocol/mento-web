@@ -1,3 +1,8 @@
+/**
+ * Utilities for converting between kit and local token contracts/models
+ * The kit is a bit of a mess so this DApp uses it's own enums/types
+ */
+
 import type { ContractKit } from '@celo/contractkit'
 import { CeloContract, CeloTokenType, StableToken, Token } from '@celo/contractkit'
 import { NativeTokenId } from 'src/config/tokens'
@@ -26,14 +31,27 @@ export async function getTokenContract(kit: ContractKit, tokenId: NativeTokenId)
   }
 }
 
-export function getNativeTokenId(name: CeloContract): NativeTokenId {
+export function kitContractToNativeToken(name: CeloContract): NativeTokenId {
   if (name === CeloContract.StableToken) return NativeTokenId.cUSD
   if (name === CeloContract.StableTokenEUR) return NativeTokenId.cEUR
   if (name === CeloContract.GoldToken) return NativeTokenId.CELO
   throw new Error(`Unsupported token contract name ${name}`)
 }
 
-export function getKitToken(tokenId: NativeTokenId): CeloTokenType {
+export function kitTokenToNativeToken(tokenId: CeloTokenType): NativeTokenId {
+  switch (tokenId) {
+    case StableToken.cUSD:
+      return NativeTokenId.cUSD
+    case StableToken.cEUR:
+      return NativeTokenId.cEUR
+    case Token.CELO:
+      return NativeTokenId.CELO
+    default:
+      throw new Error(`Unsupported token id ${tokenId}`)
+  }
+}
+
+export function nativeTokenToKitToken(tokenId: NativeTokenId): CeloTokenType {
   switch (tokenId) {
     case NativeTokenId.cUSD:
       return StableToken.cUSD

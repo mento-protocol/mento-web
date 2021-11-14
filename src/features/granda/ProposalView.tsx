@@ -26,10 +26,10 @@ export function ProposalView() {
   }
 
   return (
-    <FloatingBox width="w-128" classes="mb-12 mx-10">
+    <FloatingBox width="w-100" classes="mb-12 mx-10">
       <div className="flex justify-between">
         <BackButton width={26} height={26} onClick={onClickBack} />
-        <h2 className="text-lg font-medium">{`Proposal ${proposalId}`}</h2>
+        <h2 className="text-lg font-medium">{`Granda Proposal ${proposalId}`}</h2>
         <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
       <div>TODO show proposal</div>

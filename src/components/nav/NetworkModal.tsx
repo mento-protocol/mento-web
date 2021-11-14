@@ -1,7 +1,12 @@
-import { Alfajores, Baklava, Mainnet, useContractKit } from '@celo-tools/use-contractkit'
+import { Alfajores, Baklava, Mainnet, Network, useContractKit } from '@celo-tools/use-contractkit'
 import ReactModal from 'react-modal'
-import { useAppSelector } from 'src/app/hooks'
+import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
+import { reset as accountReset } from 'src/features/accounts/accountSlice'
+import { reset as blockReset } from 'src/features/blocks/blockSlice'
+import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
+import { reset as grandaReset } from 'src/features/granda/grandaSlice'
+import { reset as swapReset } from 'src/features/swap/swapSlice'
 import XCircle from 'src/images/icons/x-circle.svg'
 import { HrDivider } from 'src/layout/HrDivider'
 import { logger } from 'src/utils/logger'
@@ -15,6 +20,17 @@ export function NetworkModal({ isOpen, close }: Props) {
   const latestBlock = useAppSelector((s) => s.block.latestBlock)
   const { network, updateNetwork } = useContractKit()
   const allNetworks = [Mainnet, Alfajores, Baklava]
+
+  const dispatch = useAppDispatch()
+  const switchToNetwork = (n: Network) => {
+    logger.debug('Resetting and switching to network', n.name)
+    updateNetwork(n)
+    dispatch(blockReset())
+    dispatch(accountReset())
+    dispatch(grandaReset())
+    dispatch(swapReset())
+    dispatch(resetTokenPrices())
+  }
 
   return (
     <ReactModal
@@ -47,7 +63,7 @@ export function NetworkModal({ isOpen, close }: Props) {
           <div className="flex items-center space-x-6 mt-3">
             {allNetworks.map((n) => (
               <button
-                onClick={() => updateNetwork(n)}
+                onClick={() => switchToNetwork(n)}
                 key={n.chainId}
                 className={`py-1.5 px-2 rounded transition border border-gray-500 hover:border-green-dark hover:text-green-dark active:border-green-darkest ${
                   n.chainId === network.chainId && 'border-green-dark text-green-dark'

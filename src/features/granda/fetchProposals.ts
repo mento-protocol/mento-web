@@ -1,10 +1,12 @@
-import type { ContractKit } from '@celo/contractkit'
+import type { CeloTokenType, ContractKit } from '@celo/contractkit'
 import { ExchangeProposalState } from '@celo/contractkit/lib/wrappers/GrandaMento'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { GRANDA_PROPOSAL_STALE_TIME } from 'src/config/consts'
+import { kitTokenToNativeToken } from 'src/config/tokenMapping'
+import { isStableToken, NativeTokenId } from 'src/config/tokens'
 import { GrandaProposal, GrandaProposalState } from 'src/features/granda/types'
-import { isValidAddress } from 'src/utils/addresses'
+import { areAddressesEqual, isValidAddress } from 'src/utils/addresses'
 import { logger } from 'src/utils/logger'
 import { isStale } from 'src/utils/time'
 
@@ -32,13 +34,19 @@ async function _fetchProposals(kit: ContractKit): Promise<Record<string, GrandaP
   const propCountBN = await contract.exchangeProposalCount()
   const propCount = propCountBN.toNumber()
   const proposals: Record<string, GrandaProposal> = {}
+  if (propCount <= 0) return proposals
+
+  // Get token addresses to map addr in proposal to token id
+  const tokenToAddr = await kit.celoTokens.getAddresses()
+
+  // Validate and transform the proposal data to local models
   for (let i = 1; i <= propCount; i++) {
     const proposal = await contract.getExchangeProposal(i)
     const id = proposal.id.toString()
     const {
       state,
       exchanger,
-      stableToken,
+      stableToken: stableTokenAddr,
       sellAmount,
       buyAmount,
       sellCelo,
@@ -46,18 +54,23 @@ async function _fetchProposals(kit: ContractKit): Promise<Record<string, GrandaP
       approvalTimestamp,
     } = proposal
     if (!isValidAddress(exchanger)) throw new Error(`Invalid proposal exchanger ${exchanger}`)
-    if (!isValidAddress(stableToken)) throw new Error(`Invalid proposal stableToken ${stableToken}`)
+    if (!isValidAddress(stableTokenAddr))
+      throw new Error(`Invalid proposal stableToken ${stableTokenAddr}`)
     if (!sellAmount || sellAmount.lte(0)) throw new Error(`Invalid sell amount ${sellAmount}`)
     if (!buyAmount || buyAmount.lte(0)) throw new Error(`Invalid buy amount ${buyAmount}`)
     if (!vetoPeriodSeconds || vetoPeriodSeconds.lte(0))
       throw new Error(`Invalid veto period ${vetoPeriodSeconds}`)
     if (!approvalTimestamp || approvalTimestamp.lte(0))
       throw new Error(`Invalid approval time ${approvalTimestamp}`)
+
+    const tokenId = findNativeTokenId(stableTokenAddr, tokenToAddr)
+    if (!isStableToken(tokenId)) throw new Error('Token is not known stabletoken')
+
     proposals[id] = {
       id,
       state: toGrandaProposalState(state),
       exchanger,
-      stableToken,
+      stableTokenId: tokenId,
       sellAmount: sellAmount.toFixed(0),
       buyAmount: buyAmount.toFixed(0),
       sellCelo,
@@ -81,4 +94,20 @@ function toGrandaProposalState(state: ExchangeProposalState) {
     default:
       throw new Error(`Invalid proposal state: ${state}`)
   }
+}
+
+function findNativeTokenId(
+  stableTokenAddr: string,
+  tokenToAddr: {
+    [key in CeloTokenType]?: string
+  }
+): NativeTokenId {
+  for (const _token of Object.keys(tokenToAddr)) {
+    const token = _token as CeloTokenType
+    const addr = tokenToAddr[token]
+    if (addr && areAddressesEqual(stableTokenAddr, addr)) {
+      return kitTokenToNativeToken(token)
+    }
+  }
+  throw new Error(`No token found for addr ${stableTokenAddr}`)
 }

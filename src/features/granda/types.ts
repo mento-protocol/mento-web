@@ -25,7 +25,7 @@ export interface GrandaProposal {
   id: string
   state: GrandaProposalState
   exchanger: string
-  stableToken: string
+  stableTokenId: NativeTokenId
   sellAmount: string
   buyAmount: string
   sellCelo: boolean

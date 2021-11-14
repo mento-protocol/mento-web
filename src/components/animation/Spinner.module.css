@@ -3,6 +3,7 @@
   position: relative;
   width: 80px;
   height: 80px;
+  opacity: 0.8;
 }
 
 .spinner div {

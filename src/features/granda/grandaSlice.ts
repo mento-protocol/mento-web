@@ -60,7 +60,7 @@ export const grandaSlice = createSlice({
       state.viewProposalId = null
       state.subpage = GrandaSubpage.List
     },
-    reset: () => initialState,
+    reset: (state) => ({ ...initialState, isActive: state.isActive }),
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProposals.fulfilled, (state, action) => {

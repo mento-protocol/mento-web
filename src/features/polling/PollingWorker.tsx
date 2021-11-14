@@ -17,12 +17,14 @@ export function PollingWorker() {
   const dispatch = useAppDispatch()
   const { address, kit, initialised } = useContractKit()
 
+  // TODO debounce toast errors
+
   const onPoll = () => {
     if (!kit || !initialised) return
     dispatch(fetchExchangeRates({ kit }))
       .unwrap()
       .catch((err) => {
-        toast.error('Error retrieving exchange rates')
+        toast.warn('Error retrieving exchange rates')
         logger.error('Failed to retrieve exchange rates', err)
       })
     dispatch(fetchLatestBlock({ kit }))
@@ -55,7 +57,7 @@ export function PollingWorker() {
       dispatch(fetchBalances({ address, kit }))
         .unwrap()
         .catch((err) => {
-          toast.error('Error retrieving account balances')
+          toast.warn('Error retrieving account balances')
           logger.error('Failed to retrieve balances', err)
         })
     }

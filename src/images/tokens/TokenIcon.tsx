@@ -7,7 +7,7 @@ import cUSDIcon from 'src/images/tokens/cUSD.svg'
 
 interface Props {
   token?: Token | null
-  size?: 's' | 'm' | 'l'
+  size?: 'xs' | 's' | 'm' | 'l'
 }
 
 function _TokenIcon({ token, size = 'm' }: Props) {
@@ -56,6 +56,10 @@ function _TokenIcon({ token, size = 'm' }: Props) {
 }
 
 const sizeValues = {
+  xs: {
+    actualSize: '22px',
+    fontSize: '13px',
+  },
   s: {
     actualSize: '30px',
     fontSize: '15px',

@@ -14,9 +14,9 @@ import {
   MIN_EXCHANGE_RATE,
   SIGN_OPERATION_TIMEOUT,
 } from 'src/config/consts'
+import { getExchangeContract, getTokenContract } from 'src/config/tokenMapping'
 import { NativeTokenId, NativeTokens } from 'src/config/tokens'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
-import { getExchangeContract, getTokenContract } from 'src/features/swap/contracts'
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
