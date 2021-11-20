@@ -86,11 +86,7 @@ export function ProposalView() {
       const txHashes = (await performActions(cancelOpWithTimeout)) as string[]
       if (!txHashes || txHashes.length !== 1) throw new Error('Tx hashes not found')
       toastToYourSuccess('Proposal cancelled', txHashes[1], network.explorer)
-      dispatch(fetchProposals({ kit, force: true }))
-        .unwrap()
-        .catch((err) => {
-          logger.error('Failed to retrieve proposals after cancel', err)
-        })
+      await dispatch(fetchProposals({ kit, force: true }))
     } catch (err: any) {
       if (err.message === PROMISE_TIMEOUT) {
         toast.error('Action timed out')
@@ -226,7 +222,7 @@ function CancelConfirmationModal({ isOpen, close, submit }: Props) {
           <p className="text-center mt-2">This will refund your exchange amount.</p>
           <div className="flex justify-center w-full mt-6">
             <SolidButton color="red" size="m" onClick={submit}>
-              Cancel
+              Cancel Proposal
             </SolidButton>
           </div>
         </div>

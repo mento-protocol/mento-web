@@ -13,6 +13,7 @@ import { getTokenContract, nativeTokenToKitToken } from 'src/config/tokenMapping
 import { NativeTokenId } from 'src/config/tokens'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
+import { fetchProposals } from 'src/features/granda/fetchProposals'
 import { setFormValues } from 'src/features/granda/grandaSlice'
 import { getExchangeValues } from 'src/features/granda/utils'
 import { SwapConfirmSummary } from 'src/features/swap/SwapConfirm'
@@ -103,6 +104,7 @@ export function ProposalConfirm() {
       )) as string[]
       if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
       toastToYourSuccess('Proposal Created!', txHashes[1], network.explorer)
+      await dispatch(fetchProposals({ kit, force: true }))
       dispatch(setFormValues(null))
     } catch (err: any) {
       if (err.message === PROMISE_TIMEOUT) {
