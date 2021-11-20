@@ -1,5 +1,6 @@
 import { useContractKit } from '@celo-tools/use-contractkit'
 import { ContractKit, StableToken } from '@celo/contractkit'
+import Image from 'next/image'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
@@ -15,6 +16,7 @@ import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
 import { setFormValues } from 'src/features/granda/grandaSlice'
 import { getExchangeValues } from 'src/features/granda/utils'
 import { SwapConfirmSummary } from 'src/features/swap/SwapConfirm'
+import InfoCircle from 'src/images/icons/info-circle.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
@@ -41,7 +43,7 @@ export function ProposalConfirm() {
     fromAmount,
     fromTokenId,
     toTokenId,
-    config?.spread,
+    config.spread,
     oracleRates
   )
   const tokenBalance = balances[fromTokenId]
@@ -106,9 +108,9 @@ export function ProposalConfirm() {
       if (err.message === PROMISE_TIMEOUT) {
         toast.error('Action timed out')
       } else {
-        toast.error('Unable to complete swap')
+        toast.error('Unable to complete proposal')
       }
-      logger.error('Failed to execute swap', err)
+      logger.error('Failed to execute proposal', err)
     }
   }
 
@@ -133,12 +135,36 @@ export function ProposalConfirm() {
         <h2 className="text-lg font-medium">Confirm Proposal</h2>
         <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
-      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} />
+      <InfoTip />
+      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} mt="mt-2" />
+      <div className="flex flex-col items-center text-sm">
+        <div className="flex items-center mt-4">
+          <div className="w-32 text-right mr-6">Spread:</div>
+          <div className="w-32">{`${config.spread}%`}</div>
+        </div>
+        <div className="flex items-center mt-2">
+          <div className="w-32 text-right mr-6">Veto Period:</div>
+          <div className="w-32">{(config.vetoPeriodSeconds / 86400).toFixed(2) + ' days'}</div>
+        </div>
+      </div>
       <div className="flex justify-center mt-5 mb-1">
         <SolidButton size="m" onClick={onSubmit}>
-          Swap
+          Propose
         </SolidButton>
       </div>
     </FloatingBox>
+  )
+}
+
+function InfoTip() {
+  return (
+    <div className="py-2 px-4 mt-3 bg-greengray-lightest rounded-md">
+      <div className=" flex items-center opacity-70">
+        <Image src={InfoCircle} alt="info" width={42} height={42} />
+        <div className="text-sm font-light ml-3">
+          Funds will be transferred out of your account until the exchange is executed or cancelled.
+        </div>
+      </div>
+    </div>
   )
 }

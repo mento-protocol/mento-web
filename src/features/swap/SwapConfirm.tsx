@@ -142,7 +142,7 @@ export function SwapConfirm(props: Props) {
         <h2 className="text-lg font-medium">Confirm Swap</h2>
         <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
-      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} />
+      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} mt="mt-6" />
       <div className="flex flex-col items-center text-sm">
         <div className="flex items-center mt-6">
           <div className="w-32 text-right mr-6">Max Slippage:</div>
@@ -167,14 +167,15 @@ interface SwapConfirmSummaryProps {
   to: ExchangeValues['to']
   rate: ExchangeValues['rate']
   stableTokenId: NativeTokenId
+  mt?: string
 }
 
-export function SwapConfirmSummary({ from, to, rate, stableTokenId }: SwapConfirmSummaryProps) {
+export function SwapConfirmSummary({ from, to, rate, stableTokenId, mt }: SwapConfirmSummaryProps) {
   const fromToken = NativeTokens[from.token]
   const toToken = NativeTokens[to.token]
 
   return (
-    <div className="mt-6 bg-greengray-lightest rounded-md">
+    <div className={`bg-greengray-lightest rounded-md ${mt}`}>
       <div className="relative flex items-center justify-between">
         <div className="flex flex-1 items-center px-2.5 py-3 border-r border-gray-400">
           <TokenIcon size="l" token={fromToken} />

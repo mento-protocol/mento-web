@@ -1,6 +1,7 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
+import { NativeTokenId } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { SizeLimits } from 'src/features/granda/types'
 import { SwapFormValues } from 'src/features/swap/types'
@@ -21,8 +22,9 @@ export function useFormValidator(balances: AccountBalances, sizeLimits?: SizeLim
         return { fromAmount: 'Amount exceeds balance' }
       }
       if (sizeLimits) {
-        const fromTokenId = values.fromTokenId
-        const limits = sizeLimits[fromTokenId]
+        const stableTokenId =
+          values.fromTokenId === NativeTokenId.CELO ? values.toTokenId : values.fromTokenId
+        const limits = sizeLimits[stableTokenId]
         if (limits?.min && weiAmount.lt(limits?.min)) return { fromAmount: 'Amount below minimum' }
         if (limits?.max && weiAmount.gt(limits?.max))
           return { fromAmount: 'Amount exceeds maximum' }

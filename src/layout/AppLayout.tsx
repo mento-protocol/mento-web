@@ -1,14 +1,10 @@
 import { useContractKit } from '@celo-tools/use-contractkit'
-import Image from 'next/image'
 import { PropsWithChildren, useEffect } from 'react'
 import Modal from 'react-modal'
 import { Footer } from 'src/components/nav/Footer'
 import { Header } from 'src/components/nav/Header'
 import { NULL_ADDRESS } from 'src/config/consts'
 import { PollingWorker } from 'src/features/polling/PollingWorker'
-import CeloIcon from 'src/images/tokens/CELO.svg'
-import cEURIcon from 'src/images/tokens/cEUR.svg'
-import cUSDIcon from 'src/images/tokens/cUSD.svg'
 import { HeadMeta } from 'src/layout/HeadMeta'
 
 interface Props {
@@ -39,21 +35,9 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
       >
         <Header pathName={pathName} />
         <main className="w-full">{children}</main>
-        <ImagePrefetch />
         <Footer />
         <PollingWorker />
       </div>
     </>
-  )
-}
-
-// A hack to get Next to pre-fetch some images that may not yet be in dom tree
-function ImagePrefetch() {
-  return (
-    <div className="hidden">
-      <Image src={CeloIcon} width={1} height={1} alt="celo" />
-      <Image src={cUSDIcon} width={1} height={1} alt="cUSD" />
-      <Image src={cEURIcon} width={1} height={1} alt="cEUR" />
-    </div>
   )
 }

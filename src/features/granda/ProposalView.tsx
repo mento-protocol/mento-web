@@ -158,8 +158,14 @@ function SwapDetails({
   }
 
   return (
-    <div className="-mt-2">
-      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={p.stableTokenId} />
+    <>
+      <SwapConfirmSummary
+        from={from}
+        to={to}
+        rate={rate}
+        stableTokenId={p.stableTokenId}
+        mt="mt-4"
+      />
       <div className="flex flex-col items-center text-sm">
         <div className="flex items-center mt-6">
           <div className="w-44 text-right mr-6">Proposer:</div>
@@ -181,7 +187,7 @@ function SwapDetails({
           <div className="w-44 font-medium">{p.state.toUpperCase()}</div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

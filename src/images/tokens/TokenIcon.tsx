@@ -22,7 +22,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
     return (
       <Image
         src={imgSrc}
-        alt={token.symbol}
+        alt="" // Not using real alt because it looks strange while loading
         width={actualSize}
         height={actualSize}
         priority={true}

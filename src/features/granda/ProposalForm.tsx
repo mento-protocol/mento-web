@@ -22,7 +22,7 @@ export function ProposalForm() {
     dispatch(setFormValues(values))
   }
 
-  const validateForm = useFormValidator(balances, exchangeLimits)
+  const validateForm = useFormValidator(balances)
 
   const valueFormatter: ExchangeValueFormatter = (fromAmount, fromTokenId, toTokenId) =>
     getExchangeValues(fromAmount, fromTokenId, toTokenId, spread, oracleRates)
