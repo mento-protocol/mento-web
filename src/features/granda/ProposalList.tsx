@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { Spinner } from 'src/components/animation/Spinner'
@@ -24,7 +25,7 @@ export function ProposalList() {
 
   return (
     <FloatingBox width="w-100" classes="mb-12 mx-10 p-4">
-      <div className="flex justify-between pb-6">
+      <div className="flex justify-between pb-4">
         <BackButton width={26} height={26} onClick={onClickCreate} />
         <h2 className="text-lg font-medium pl-1">Granda Mento Proposals</h2>
         <NewButton onClickCreate={onClickCreate} />
@@ -56,7 +57,7 @@ function EmptyList({ onClickCreate }: { onClickCreate: () => void }) {
 }
 
 function ProposalRows({ proposals }: { proposals: GrandaProposal[] }) {
-  const sorted = proposals.sort((a, b) => b.approvalTimestamp - a.approvalTimestamp)
+  const sorted = proposals.sort((a, b) => new BigNumber(b.id).minus(a.id).toNumber())
 
   const dispatch = useAppDispatch()
   const onRowClick = (id: string) => {
@@ -71,16 +72,18 @@ function ProposalRows({ proposals }: { proposals: GrandaProposal[] }) {
         const stateColor = proposalStateToColor(p.state)
         return (
           <button
-            className="flex items-center justify-between w-full p-2.5 rounded transition bg-greengray-lightest hover:bg-greengray-light"
+            className="flex items-center justify-between w-full p-2.5 mt-3 rounded transition bg-greengray-lightest hover:bg-greengray-light"
             onClick={() => onRowClick(p.id)}
             key={p.id}
           >
             <div className="flex flex-col items-start">
               <div className="flex items-center">
                 <div className="">{`Proposal #${p.id}`}</div>
-                <div className="text-gray-500 ml-2">{`(${new Date(
-                  p.approvalTimestamp * 1000
-                ).toLocaleDateString()})`}</div>
+                {!!p.approvalTimestamp && (
+                  <div className="text-gray-500 ml-2">{`(${new Date(
+                    p.approvalTimestamp * 1000
+                  ).toLocaleDateString()})`}</div>
+                )}
               </div>
               <div className="flex items-center mt-2">
                 <div className="flex items-center mr-1.5">

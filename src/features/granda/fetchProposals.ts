@@ -61,7 +61,7 @@ async function _fetchProposals(kit: ContractKit): Promise<Record<string, GrandaP
     if (!buyAmount || buyAmount.lte(0)) throw new Error(`Invalid buy amount ${buyAmount}`)
     if (!vetoPeriodSeconds || vetoPeriodSeconds.lte(0))
       throw new Error(`Invalid veto period ${vetoPeriodSeconds}`)
-    if (!approvalTimestamp || approvalTimestamp.lte(0))
+    if (!approvalTimestamp || approvalTimestamp.lt(0))
       throw new Error(`Invalid approval time ${approvalTimestamp}`)
 
     const tokenId = findNativeTokenId(stableTokenAddr, tokenToAddr)

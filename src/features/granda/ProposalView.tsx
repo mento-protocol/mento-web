@@ -132,8 +132,8 @@ function SwapDetails({
 }) {
   const fromToken = p.sellCelo ? NativeTokenId.CELO : p.stableTokenId
   const toToken = p.sellCelo ? p.stableTokenId : NativeTokenId.CELO
-  const fromAmount = new BigNumber(fromWei(p.sellAmount)).integerValue().toFixed(0)
-  const toAmount = new BigNumber(fromWei(p.buyAmount)).integerValue().toFixed(0)
+  const fromAmount = new BigNumber(fromWei(p.sellAmount)).integerValue().toFixed(2)
+  const toAmount = new BigNumber(fromWei(p.buyAmount)).integerValue().toFixed(2)
   const effectiveRate = new BigNumber(p.buyAmount).div(p.sellAmount).toNumber()
   const fromCeloRate = p.sellCelo ? effectiveRate : 1 / effectiveRate
 
@@ -178,10 +178,18 @@ function SwapDetails({
             </TextLink>
           </div>
         </div>
-        <div className="flex items-center mt-4">
-          <div className="w-44 text-right mr-6">Approval time:</div>
-          <div className="w-44">{new Date(p.approvalTimestamp * 1000).toLocaleString()}</div>
-        </div>
+        {!!p.approvalTimestamp && (
+          <div className="flex items-center mt-4">
+            <div className="w-44 text-right mr-6">Approval time:</div>
+            <div className="w-44">{new Date(p.approvalTimestamp * 1000).toLocaleString()}</div>
+          </div>
+        )}
+        {!p.approvalTimestamp && (
+          <div className="flex items-center mt-4">
+            <div className="w-44 text-right mr-6">Veto Period:</div>
+            <div className="w-44">{(p.vetoPeriodSeconds / 86400).toFixed(2) + ' days'}</div>
+          </div>
+        )}
         <div className="flex items-center mt-4">
           <div className="w-44 text-right mr-6 font-medium">Proposal Status:</div>
           <div className="w-44 font-medium">{p.state.toUpperCase()}</div>

@@ -7,7 +7,7 @@ import {
   getDefaultExchangeValues,
   parseInputExchangeAmount,
 } from 'src/features/swap/utils'
-import { fromWeiRounded, NumberT, toWei } from 'src/utils/amount'
+import { fromWei, fromWeiRounded, NumberT, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
 // Takes raw input and rates info and computes/formats to convenient form
@@ -40,12 +40,12 @@ export function getExchangeValues(
 
     return {
       from: {
-        amount: fromWeiRounded(fromAmountWei, true),
+        amount: fromWei(fromAmountWei).toFixed(2),
         weiAmount: fromAmountWei.toString(),
         token: fromTokenId,
       },
       to: {
-        amount: fromWeiRounded(toAmountWei, true),
+        amount: fromWei(toAmountWei).toFixed(2),
         weiAmount: toAmountWei.toString(),
         token: toTokenId,
       },
