@@ -12,6 +12,7 @@ import { config } from 'src/config/config'
 import { AppLayout } from 'src/layout/AppLayout'
 import 'src/styles/fonts.css'
 import 'src/styles/globals.css'
+import 'src/vendor/inpage-metamask'
 
 const nextPersistConfig = {
   method: 'localStorage',
