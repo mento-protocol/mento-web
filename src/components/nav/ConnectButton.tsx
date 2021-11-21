@@ -22,6 +22,7 @@ export function ConnectButton() {
       {address ? (
         <SolidButton
           size="l"
+          color="white"
           classes="shadow-md pl-2 pr-2 sm:pr-4 sm:pl-2"
           passThruProps={buttonProps}
         >
@@ -35,6 +36,7 @@ export function ConnectButton() {
       ) : (
         <SolidButton
           size="l"
+          color="white"
           classes="shadow-md px-3 sm:px-4"
           icon={<WalletIcon />}
           onClick={connect}

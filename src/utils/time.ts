@@ -1,5 +1,15 @@
+import { EXCHANGE_RATE_STALE_TIME } from 'src/config/consts'
+
 export function isStale(lastUpdated: number | null, staleTime: number) {
   return !lastUpdated || Date.now() - lastUpdated > staleTime
+}
+
+export function areRatesStale(rates: Record<any, { lastUpdated: number }>) {
+  return (
+    !rates ||
+    !Object.keys(rates).length ||
+    Object.values(rates).some((r) => isStale(r.lastUpdated, EXCHANGE_RATE_STALE_TIME))
+  )
 }
 
 export function areDatesSameDay(d1: Date, d2: Date) {

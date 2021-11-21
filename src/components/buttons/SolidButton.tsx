@@ -4,7 +4,7 @@ interface ButtonProps {
   size?: 'xs' | 's' | 'm' | 'l' | 'xl'
   type?: 'submit' | 'reset' | 'button'
   onClick?: () => void
-  dark?: boolean // defaults to false
+  color?: 'white' | 'green' | 'red' // defaults to green
   classes?: string
   bold?: boolean
   disabled?: boolean
@@ -14,16 +14,39 @@ interface ButtonProps {
 }
 
 export function SolidButton(props: PropsWithChildren<ButtonProps>) {
-  const { size, type, onClick, dark, classes, bold, icon, disabled, title, passThruProps } = props
+  const {
+    size,
+    type,
+    onClick,
+    color: _color,
+    classes,
+    bold,
+    icon,
+    disabled,
+    title,
+    passThruProps,
+  } = props
+  const color = _color ?? 'green'
 
   const base = 'flex items-center justify-center rounded-full transition-all duration-300'
   const sizing = sizeToClasses(size)
-  const colors = dark ? 'bg-green text-white' : 'bg-white text-black'
-  const onHover = dark ? 'hover:bg-green-dark' : 'hover:bg-gray-50'
-  const onDisabled = 'disabled:bg-gray-300 disabled:text-gray-300'
-  const onActive = dark ? 'active:bg-green-darkest' : 'active:bg-gray-100'
+  let baseColors, onHover, onActive
+  if (color === 'green') {
+    baseColors = 'bg-green text-white'
+    onHover = 'hover:bg-green-dark'
+    onActive = 'active:bg-green-darkest'
+  } else if (color === 'red') {
+    baseColors = 'bg-red-600 text-white'
+    onHover = 'hover:bg-red-500'
+    onActive = 'active:bg-red-400'
+  } else if (color === 'white') {
+    baseColors = 'bg-white text-black'
+    onHover = 'hover:bg-gray-50'
+    onActive = 'active:bg-gray-100'
+  }
+  const onDisabled = 'disabled:bg-gray-300 disabled:text-gray-500'
   const weight = bold ? 'font-semibold' : ''
-  const allClasses = `${base} ${sizing} ${colors} ${onHover} ${onDisabled} ${onActive} ${weight} ${classes}`
+  const allClasses = `${base} ${sizing} ${baseColors} ${onHover} ${onDisabled} ${onActive} ${weight} ${classes}`
 
   return (
     <button

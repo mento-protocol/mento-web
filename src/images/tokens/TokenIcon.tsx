@@ -7,7 +7,7 @@ import cUSDIcon from 'src/images/tokens/cUSD.svg'
 
 interface Props {
   token?: Token | null
-  size?: 's' | 'm' | 'l'
+  size?: 'xs' | 's' | 'm' | 'l'
 }
 
 function _TokenIcon({ token, size = 'm' }: Props) {
@@ -19,7 +19,15 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   const { actualSize, fontSize } = sizeValues[size]
 
   if (token && imgSrc) {
-    return <Image src={imgSrc} alt={token.symbol} width={actualSize} height={actualSize} />
+    return (
+      <Image
+        src={imgSrc}
+        alt="" // Not using real alt because it looks strange while loading
+        width={actualSize}
+        height={actualSize}
+        priority={true}
+      />
+    )
   }
 
   if (token) {
@@ -56,6 +64,10 @@ function _TokenIcon({ token, size = 'm' }: Props) {
 }
 
 const sizeValues = {
+  xs: {
+    actualSize: '22px',
+    fontSize: '13px',
+  },
   s: {
     actualSize: '30px',
     fontSize: '15px',

@@ -7,7 +7,7 @@ export interface SwapFormValues {
   slippage: string
 }
 
-export type ToCeloRates = Record<string, ExchangeRate> // token id to token<->CELO rate
+export type ToCeloRates = Partial<Record<NativeTokenId, ExchangeRate>>
 
 // Raw Mento chain data from an Exchange contract
 export interface ExchangeRate {

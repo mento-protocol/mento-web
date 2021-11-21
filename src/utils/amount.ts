@@ -71,3 +71,18 @@ export function areAmountsNearlyEqual(amountInWei1: BigNumber, amountInWei2: Num
   // Is difference btwn amount and balance less than min amount shown for token
   return amountInWei1.minus(amountInWei2).abs().lt(minValueWei)
 }
+
+// Get amount that is adjusted when user input is nearly the same as max value
+export function getAdjustedAmount(
+  _amountInWei: BigNumber.Value,
+  _maxAmount: BigNumber.Value
+): BigNumber {
+  const amountInWei = new BigNumber(_amountInWei)
+  const maxAmount = new BigNumber(_maxAmount)
+  if (areAmountsNearlyEqual(amountInWei, maxAmount)) {
+    return maxAmount
+  } else {
+    // Just the amount entered, no adjustment needed
+    return amountInWei
+  }
+}

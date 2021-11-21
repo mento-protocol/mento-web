@@ -1,7 +1,3 @@
-// import { WEI_PER_UNIT } from 'src/config/consts'
-// import { toWei } from 'src/utils/amount'
-// import { logger } from 'src/utils/logger'
-
 import BigNumber from 'bignumber.js'
 import { WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
@@ -15,7 +11,13 @@ import {
 } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
-interface ExchangeValues {
+export type ExchangeValueFormatter = (
+  fromAmount: NumberT | null | undefined,
+  fromTokenId: NativeTokenId | null | undefined,
+  toTokenId: NativeTokenId | null | undefined
+) => ExchangeValues
+
+export interface ExchangeValues {
   from: {
     amount: string
     weiAmount: string
@@ -38,12 +40,12 @@ interface ExchangeValues {
   stableTokenId: NativeTokenId
 }
 
-export function useExchangeValues(
+// Takes raw input and rates info and computes/formats to convenient form
+export function getExchangeValues(
   fromAmount: NumberT | null | undefined,
   fromTokenId: NativeTokenId | null | undefined,
   toTokenId: NativeTokenId | null | undefined,
-  toCeloRates: ToCeloRates,
-  isFromAmountWei = false
+  toCeloRates: ToCeloRates
 ): ExchangeValues {
   // Return some defaults when values are missing
   if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
@@ -56,7 +58,7 @@ export function useExchangeValues(
   const { stableBucket, celoBucket, spread } = toCeloRate
   const [buyBucket, sellBucket] = sellCelo ? [stableBucket, celoBucket] : [celoBucket, stableBucket]
 
-  const fromAmountWei = parseInputExchangeAmount(fromAmount, isFromAmountWei)
+  const fromAmountWei = parseInputExchangeAmount(fromAmount, false)
   const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } = calcSimpleExchangeRate(
     fromAmountWei,
     buyBucket,
@@ -89,7 +91,7 @@ export function useExchangeValues(
   }
 }
 
-function parseInputExchangeAmount(amount: NumberT | null | undefined, isWei: boolean) {
+export function parseInputExchangeAmount(amount: NumberT | null | undefined, isWei: boolean) {
   const parsed = parseAmountWithDefault(amount, 0)
   const parsedWei = isWei ? parsed : toWei(parsed)
   return BigNumber.max(parsedWei, 0)
@@ -126,12 +128,12 @@ export function calcSimpleExchangeRate(
 
     return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
   } catch (error) {
-    logger.warn('Error computing exchange values')
+    logger.warn('Error computing exchange values', error)
     return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
   }
 }
 
-function getDefaultExchangeValues(
+export function getDefaultExchangeValues(
   _fromToken?: NativeTokenId | null,
   _toToken?: NativeTokenId | null
 ): ExchangeValues {
