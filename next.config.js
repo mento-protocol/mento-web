@@ -19,6 +19,7 @@ const securityHeaders = [
     key: 'Referrer-Policy',
     value: 'strict-origin-when-cross-origin',
   },
+  // TODO remove imgsrc githubcontent when use-ck updated with celo terminal icon
   {
     key: 'Content-Security-Policy',
     value: `default-src 'self'; script-src 'self'${
