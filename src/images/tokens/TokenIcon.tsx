@@ -1,8 +1,9 @@
 import Image from 'next/image'
 import { memo } from 'react'
-import { CELO, cEUR, cUSD, Token } from 'src/config/tokens'
+import { CELO, cEUR, cREAL, cUSD, Token } from 'src/config/tokens'
 import CeloIcon from 'src/images/tokens/CELO.svg'
 import cEURIcon from 'src/images/tokens/cEUR.svg'
+import cREALIcon from 'src/images/tokens/cREAL.svg'
 import cUSDIcon from 'src/images/tokens/cUSD.svg'
 
 interface Props {
@@ -15,6 +16,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   if (token?.id === CELO.id) imgSrc = CeloIcon
   else if (token?.id === cUSD.id) imgSrc = cUSDIcon
   else if (token?.id === cEUR.id) imgSrc = cEURIcon
+  else if (token?.id === cREAL.id) imgSrc = cREALIcon
 
   const { actualSize, fontSize } = sizeValues[size]
 

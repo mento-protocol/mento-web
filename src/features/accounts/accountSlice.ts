@@ -12,6 +12,7 @@ const initialState: AccountState = {
     [NativeTokenId.CELO]: '0',
     [NativeTokenId.cUSD]: '0',
     [NativeTokenId.cEUR]: '0',
+    [NativeTokenId.cREAL]: '0',
   },
   lastUpdated: null,
 }
