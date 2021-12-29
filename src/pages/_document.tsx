@@ -18,7 +18,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
 
           <meta name="application-name" content="Mento Fi" />
-          <meta name="keywords" content="Mento Finance Celo Exchange cUSD cEUR" />
+          <meta name="keywords" content="Mento Finance Celo Exchange cUSD cEUR cREAL" />
           <meta name="description" content="A simple DApp for Celo Mento exchanges." />
 
           <meta name="HandheldFriendly" content="true" />

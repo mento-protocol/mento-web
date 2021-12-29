@@ -13,6 +13,8 @@ export async function getExchangeContract(kit: ContractKit, tokenId: NativeToken
       return kit.contracts.getExchange(StableToken.cUSD)
     case NativeTokenId.cEUR:
       return kit.contracts.getExchange(StableToken.cEUR)
+    case NativeTokenId.cREAL:
+      return kit.contracts.getExchange(StableToken.cREAL)
     default:
       throw new Error(`Could not get contract for token ${tokenId}`)
   }
@@ -24,6 +26,8 @@ export async function getTokenContract(kit: ContractKit, tokenId: NativeTokenId)
       return kit.contracts.getStableToken(StableToken.cUSD)
     case NativeTokenId.cEUR:
       return kit.contracts.getStableToken(StableToken.cEUR)
+    case NativeTokenId.cREAL:
+      return kit.contracts.getStableToken(StableToken.cREAL)
     case NativeTokenId.CELO:
       return kit.contracts.getGoldToken()
     default:
@@ -34,6 +38,7 @@ export async function getTokenContract(kit: ContractKit, tokenId: NativeTokenId)
 export function kitContractToNativeToken(name: CeloContract): NativeTokenId {
   if (name === CeloContract.StableToken) return NativeTokenId.cUSD
   if (name === CeloContract.StableTokenEUR) return NativeTokenId.cEUR
+  if (name === CeloContract.StableTokenBRL) return NativeTokenId.cREAL
   if (name === CeloContract.GoldToken) return NativeTokenId.CELO
   throw new Error(`Unsupported token contract name ${name}`)
 }
@@ -44,6 +49,8 @@ export function kitTokenToNativeToken(tokenId: CeloTokenType): NativeTokenId {
       return NativeTokenId.cUSD
     case StableToken.cEUR:
       return NativeTokenId.cEUR
+    case StableToken.cREAL:
+      return NativeTokenId.cREAL
     case Token.CELO:
       return NativeTokenId.CELO
     default:
@@ -57,6 +64,8 @@ export function nativeTokenToKitToken(tokenId: NativeTokenId): CeloTokenType {
       return StableToken.cUSD
     case NativeTokenId.cEUR:
       return StableToken.cEUR
+    case NativeTokenId.cREAL:
+      return StableToken.cREAL
     case NativeTokenId.CELO:
       return Token.CELO
     default:

@@ -49,10 +49,8 @@ async function _fetchConfig(kit: ContractKit): Promise<GrandaConfig> {
     const tokenId = kitContractToNativeToken(name)
     const min = limits.minExchangeAmount
     const max = limits.maxExchangeAmount
-    if (min.gt(toWei(1_000_000)) || min.lt(toWei(50_000)))
-      throw new Error(`Invalid exchange min: ${min}`)
-    if (max.gt(toWei(100_000_000)) || max.lt(toWei(1_000_000)))
-      throw new Error(`Invalid exchange max: ${max}`)
+    if (min.lt(toWei(1))) throw new Error(`Invalid exchange min: ${min}`)
+    if (max.lt(toWei(1_000_000))) throw new Error(`Invalid exchange max: ${max}`)
     exchangeLimits[tokenId] = {
       min: min.toFixed(0),
       max: max.toFixed(0),
