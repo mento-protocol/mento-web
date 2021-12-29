@@ -48,7 +48,7 @@ export function NetworkModal({ isOpen, close }: Props) {
       overlayClassName="fixed bg-gray-100 bg-opacity-75 inset-0"
       contentLabel="Network details"
     >
-      <div className="bg-white dark:bg-gray-800 p-5">
+      <div className="bg-white p-5">
         <div className="relative flex flex-col items-center">
           <div className="absolute -top-1 -right-1">
             <IconButton imgSrc={XCircle} title="Close" width={16} height={16} onClick={close} />
