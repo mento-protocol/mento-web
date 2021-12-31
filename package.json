@@ -25,12 +25,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@celo-tools/use-contractkit": "^2.1.1",
+    "@celo-tools/use-contractkit": "^2.1.2",
     "@ethersproject/address": "^5.5.0",
     "@metamask/inpage-provider": "6.0.1",
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
     "@reduxjs/toolkit": "^1.7.1",
-    "@types/react-modal": "^3.13.1",
     "bignumber.js": "^9.0.2",
     "formik": "^2.2.9",
     "frappe-charts": "^1.6.2",
@@ -40,7 +39,7 @@
     "react": "^17.0.2",
     "react-accessible-dropdown-menu-hook": "^3.1.0",
     "react-dom": "^17.0.2",
-    "react-modal": "^3.14.4",
+    "react-modal": "3.14.3",
     "react-redux": "^7.2.6",
     "react-select": "4.3.1",
     "react-toastify": "^8.1.0"
@@ -53,6 +52,7 @@
     "@types/node": "17.0.5",
     "@types/react": "17.0.38",
     "@types/react-dom": "17.0.11",
+    "@types/react-modal": "^3.13.1",
     "@types/react-redux": "7.1.21",
     "@types/react-select": "4.0.18",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
