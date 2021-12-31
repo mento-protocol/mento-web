@@ -3,20 +3,18 @@ interface Config {
   version: string | null
   url: string
   discordUrl: string
-  chainId: number
+  blockscoutUrl: string
   showPriceChart: boolean
 }
 
 const isDevMode = process?.env?.NODE_ENV === 'development'
 const version = process?.env?.NEXT_PUBLIC_VERSION ?? null
 
-const configMainnet: Config = {
+export const config: Config = Object.freeze({
   debug: isDevMode,
   version,
   url: 'https://mento.finance',
   discordUrl: 'https://discord.gg/E9AqUQnWQE',
-  chainId: 42220,
-  showPriceChart: false,
-}
-
-export const config = Object.freeze(configMainnet)
+  blockscoutUrl: 'https://explorer.celo.org',
+  showPriceChart: true,
+})
