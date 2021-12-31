@@ -2,9 +2,7 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-  mode: 'jit',
-  purge: ['src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     colors: {
       transparent: 'transparent',
@@ -54,13 +52,6 @@ module.exports = {
       animation: {
         'spin-slow': 'spin 3s linear infinite',
       },
-    },
-  },
-  variants: {
-    extend: {
-      padding: ['last'],
-      filter: ['hover', 'active', 'disabled'],
-      brightness: ['hover', 'active', 'disabled'],
     },
   },
   plugins: [],

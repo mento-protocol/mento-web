@@ -7,7 +7,7 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
-import { CELO, cEUR, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
+import { CELO, cEUR, cREAL, cUSD, isStableToken, NativeTokenId } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
 import { setFormValues } from 'src/features/swap/swapSlice'
@@ -30,6 +30,7 @@ const tokens = [
   { value: NativeTokenId.CELO, label: CELO.symbol },
   { value: NativeTokenId.cUSD, label: cUSD.symbol },
   { value: NativeTokenId.cEUR, label: cEUR.symbol },
+  { value: NativeTokenId.cREAL, label: cREAL.symbol },
 ]
 
 export function SwapForm() {
