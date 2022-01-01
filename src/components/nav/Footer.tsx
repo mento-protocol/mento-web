@@ -82,7 +82,9 @@ function BlockIndicator() {
         ></div>
         <div className="hidden bg-yellow-300 bg-red-600"></div>
       </button>
-      <NetworkModal isOpen={showNetworkModal} close={() => setShowNetworkModal(false)} />
+      {showNetworkModal && (
+        <NetworkModal isOpen={showNetworkModal} close={() => setShowNetworkModal(false)} />
+      )}
     </>
   )
 }
