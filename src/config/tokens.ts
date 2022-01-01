@@ -1,4 +1,3 @@
-import { config } from 'src/config/config'
 import { Color } from 'src/styles/Color'
 
 export interface Token {
@@ -7,7 +6,6 @@ export interface Token {
   name: string
   color: string
   decimals: number
-  chainId: number
 }
 
 export interface TokenWithBalance extends Token {
@@ -37,7 +35,6 @@ export const NativeTokens: INativeTokens = {
     name: 'Celo Native',
     color: Color.celoGold,
     decimals: 18,
-    chainId: config.chainId,
   },
   cUSD: {
     id: NativeTokenId.cUSD,
@@ -45,7 +42,6 @@ export const NativeTokens: INativeTokens = {
     name: 'Celo Dollar',
     color: Color.celoGreen,
     decimals: 18,
-    chainId: config.chainId,
   },
   cEUR: {
     id: NativeTokenId.cEUR,
@@ -53,7 +49,6 @@ export const NativeTokens: INativeTokens = {
     name: 'Celo Euro',
     color: Color.celoGreen,
     decimals: 18,
-    chainId: config.chainId,
   },
   cREAL: {
     id: NativeTokenId.cREAL,
@@ -61,7 +56,6 @@ export const NativeTokens: INativeTokens = {
     name: 'Celo Real',
     color: Color.celoGreen,
     decimals: 18,
-    chainId: config.chainId,
   },
 }
 

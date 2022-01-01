@@ -41,8 +41,8 @@ export function SolidButton(props: PropsWithChildren<ButtonProps>) {
     onActive = 'active:bg-red-400'
   } else if (color === 'white') {
     baseColors = 'bg-white text-black'
-    onHover = 'hover:bg-gray-50'
-    onActive = 'active:bg-gray-100'
+    onHover = 'hover:bg-gray-100'
+    onActive = 'active:bg-gray-200'
   }
   const onDisabled = 'disabled:bg-gray-300 disabled:text-gray-500'
   const weight = bold ? 'font-semibold' : ''

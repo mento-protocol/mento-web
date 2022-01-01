@@ -86,3 +86,14 @@ export function getAdjustedAmount(
     return amountInWei
   }
 }
+
+export const fixed1 = new BigNumber('1000000000000000000000000')
+
+export const toFixidity = (n: BigNumber.Value) => {
+  return fixed1.times(n).integerValue(BigNumber.ROUND_FLOOR)
+}
+
+// Keeps the decimal portion
+export const fromFixidity = (f: BigNumber.Value) => {
+  return new BigNumber(f).div(fixed1)
+}
