@@ -10,7 +10,7 @@ export function BalancesSummary() {
   return (
     <div className="flex flex-wrap">
       {tokenIds.map((id) => (
-        <div className="flex ml-2 mr-3 my-2" key={id}>
+        <div style={{ minWidth: '35%' }} className="flex mx-2 my-2" key={id}>
           <TokenIcon token={NativeTokens[id]} size="xs" />
           <div className="ml-1">{fromWeiRounded(balances[id])}</div>
         </div>
