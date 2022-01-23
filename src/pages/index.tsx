@@ -13,7 +13,9 @@ export default function SwapPage() {
         {!formValues ? <SwapForm /> : <SwapConfirm formValues={formValues} />}
       </div>
       {config.showPriceChart && showChart && (
-        <PriceChartCelo stableTokenId={NativeTokenId.cUSD} height={265} />
+        <div className="mb-12 md:ml-10">
+          <PriceChartCelo stableTokenId={NativeTokenId.cUSD} height={265} />
+        </div>
       )}
     </div>
   )

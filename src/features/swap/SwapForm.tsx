@@ -169,6 +169,7 @@ function SwapFormInputs(props: FormInputProps) {
             id="fromAmount"
             name="fromAmount"
             type="number"
+            step="any"
             placeholder="0.00"
             className="w-36 pt-1 bg-transparent text-right text-xl font-mono focus:outline-none"
           />
