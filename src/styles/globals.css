@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 /*
+Normalization
+=============
+*/
+a {
+  outline: none;
+}
+
+
+/*
 Responsiveness
 ==============
 */

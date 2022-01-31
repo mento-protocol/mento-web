@@ -47,9 +47,7 @@ export default function AboutPage() {
           </TextLink>
           .
         </p>
-        <p className="mt-4 text-xs text-center">{`Version: ${
-          config.version || 'Unknown'
-        } [BETA]`}</p>
+        <p className="mt-4 text-xs text-center">{`Version: ${config.version || 'Unknown'}`}</p>
       </FloatingBox>
     </div>
   )

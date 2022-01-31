@@ -48,26 +48,24 @@ export function PriceChartCelo(props: PriceChartProps) {
   if (network?.chainId !== Mainnet.chainId) return null
 
   return (
-    <div className="mb-12 ml-10">
-      <FloatingBox width="w-96" classes={`overflow-hidden ${containerClasses}`}>
-        <div className="flex justify-between">
-          <h2 className="text-md font-medium pl-3 py-1">CELO Price (USD)</h2>
-          {/* TODO duration toggle */}
-          <div></div>
-        </div>
-        <div className={`-ml-6 -mr-4 -my-1 ${styles.priceChartContainer}`}>
-          <ReactFrappeChart
-            type="line"
-            colors={chartConfig.colors}
-            height={chartHeight}
-            axisOptions={chartConfig.axis}
-            tooltipOptions={chartConfig.tooltipOptions}
-            // @ts-ignore TODO find issue, works in Celo Wallet
-            data={chartData}
-          />
-        </div>
-      </FloatingBox>
-    </div>
+    <FloatingBox width="w-96" classes={`overflow-hidden ${containerClasses}`}>
+      <div className="flex justify-between">
+        <h2 className="text-md font-medium pl-3 py-1">CELO Price (USD)</h2>
+        {/* TODO duration toggle */}
+        <div></div>
+      </div>
+      <div className={`-ml-6 -mr-4 -my-1 ${styles.priceChartContainer}`}>
+        <ReactFrappeChart
+          type="line"
+          colors={chartConfig.colors}
+          height={chartHeight}
+          axisOptions={chartConfig.axis}
+          tooltipOptions={chartConfig.tooltipOptions}
+          // @ts-ignore TODO find issue, works in Celo Wallet
+          data={chartData}
+        />
+      </div>
+    </FloatingBox>
   )
 }
 

@@ -1,5 +1,4 @@
 import { ContractKitProvider, Mainnet } from '@celo-tools/use-contractkit'
-import { defaultScreens } from '@celo-tools/use-contractkit/lib/screens'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
@@ -20,15 +19,6 @@ const dAppConfig = {
   description: 'Mento Exchange for Celo',
   url: config.url,
   icon: `${config.url}/logo.svg`,
-}
-
-// TODO removing all WalletConnect options until WC v1 / v2 issues are sorted
-const screensWithoutWalletConnect = { ...defaultScreens }
-const keysToRemove = ['Valora', 'Celo Wallet', 'Celo Terminal', 'CeloDance', 'WalletConnect']
-// @ts-ignore
-keysToRemove.forEach((k) => delete screensWithoutWalletConnect[k])
-const connectModalProps = {
-  screens: screensWithoutWalletConnect,
 }
 
 const nextPersistConfig = {
@@ -53,11 +43,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <SafeHydrate>
         <Provider store={store}>
           <PersistWrapperTypeFixed wrapperConfig={nextPersistConfig}>
-            <ContractKitProvider
-              dapp={dAppConfig}
-              network={Mainnet}
-              connectModal={connectModalProps}
-            >
+            <ContractKitProvider dapp={dAppConfig} network={Mainnet}>
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
               </AppLayout>
