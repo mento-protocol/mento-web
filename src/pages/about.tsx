@@ -36,6 +36,26 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
+          How to start swapping:
+          <ol className="list-inside list-decimal">
+            <li>Tap "Connect" and select your wallet</li>
+            <li>
+              Go to the{' '}
+              <a href="/" className="text-green">
+                Swap
+              </a>{' '}
+              tab (or{' '}
+              <a href="/granda" className="text-green">
+                Granda
+              </a>{' '}
+              tab for large exchanges)
+            </li>
+            <li>Select the assets you wish to swap</li>
+            <li>Tap "Continue" and follow the instructions</li>
+          </ol>
+        </p>
+        <HrDivider classes="mt-4" />
+        <p className={pClass}>
           This DApp is a free tool to help the Celo community use Mento. It was funded by the Celo
           Foundation and created by{' '}
           <TextLink href="https://twitter.com/RossyWrote" className="text-green">
