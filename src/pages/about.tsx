@@ -37,10 +37,10 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
-          How to start swapping:
+          How to start swapping Celo native assets:
           <ol className="list-inside list-decimal">
             <li>
-              Tap <q>Connect</q> and select your wallet
+              Tap <q>Connect</q> in the top-right and select your wallet
             </li>
             <li>
               Go to the{' '}
@@ -51,11 +51,10 @@ export default function AboutPage() {
               <Link href="/granda">
                 <a className="text-green">Granda</a>
               </Link>{' '}
-              tab for large exchanges)
+              for large exchanges)
             </li>
-            <li>Select the assets you wish to swap</li>
             <li>
-              Tap <q>Continue</q> and follow the instructions
+              Input the asset and amount. Tap <q>Continue</q> and confirm details
             </li>
           </ol>
         </p>
