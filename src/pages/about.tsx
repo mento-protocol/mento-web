@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { config } from 'src/config/config'
 import { FloatingBox } from 'src/layout/FloatingBox'
@@ -33,6 +34,30 @@ export default function AboutPage() {
             the Granda documentation
           </TextLink>
           .
+        </p>
+        <HrDivider classes="mt-4" />
+        <p className={pClass}>
+          How to start swapping:
+          <ol className="list-inside list-decimal">
+            <li>
+              Tap <q>Connect</q> and select your wallet
+            </li>
+            <li>
+              Go to the{' '}
+              <Link href="/">
+                <a className="text-green">Swap</a>
+              </Link>{' '}
+              tab (or{' '}
+              <Link href="/granda">
+                <a className="text-green">Granda</a>
+              </Link>{' '}
+              tab for large exchanges)
+            </li>
+            <li>Select the assets you wish to swap</li>
+            <li>
+              Tap <q>Continue</q> and follow the instructions
+            </li>
+          </ol>
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
