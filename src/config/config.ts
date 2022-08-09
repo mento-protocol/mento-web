@@ -14,7 +14,7 @@ export const config: Config = Object.freeze({
   debug: isDevMode,
   version,
   url: 'https://mento.finance',
-  discordUrl: 'https://discord.gg/E9AqUQnWQE',
+  discordUrl: 'http://chat.mento.org/',
   blockscoutUrl: 'https://explorer.celo.org',
   showPriceChart: true,
 })
