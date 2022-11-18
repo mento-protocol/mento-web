@@ -1,4 +1,4 @@
-import { Connector, useContractKit } from '@celo-tools/use-contractkit'
+import { Connector, useCelo } from '@celo/react-celo'
 import { Field, Form, Formik, FormikErrors, useFormikContext } from 'formik'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -78,7 +78,7 @@ export function SwapFormInner({
   validateForm,
   valueFormatter,
 }: SwapFormInnerProps) {
-  const { connect, address } = useContractKit()
+  const { connect, address } = useCelo()
 
   return (
     <Formik<SwapFormValues>
@@ -96,7 +96,7 @@ export function SwapFormInner({
         />
         {showSlippage && <SlippageRow />}
         <div className="flex justify-center mt-5 mb-1">
-          <SubmitButton address={address} connect={connect} />
+          <SubmitButton address={address || null} connect={connect} />
         </div>
       </Form>
     </Formik>

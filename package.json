@@ -25,7 +25,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@celo-tools/use-contractkit": "3.0.0-beta",
+    "@celo/contractkit": "^2.3.0",
+    "@celo/react-celo": "^4.2.1",
     "@ethersproject/abi": "^5.5.0",
     "@ethersproject/address": "^5.5.0",
     "@metamask/inpage-provider": "6.0.1",

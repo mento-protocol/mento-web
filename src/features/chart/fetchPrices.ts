@@ -1,4 +1,5 @@
-import type { ContractKit } from '@celo/contractkit'
+import { CeloContract } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { Interface } from '@ethersproject/abi'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js'
@@ -41,7 +42,7 @@ let oracleAddress: string | undefined
 const tokenAddresses: Partial<Record<NativeTokenId, string>> = {}
 
 interface FetchTokenPriceParams {
-  kit: ContractKit
+  kit: MiniContractKit
   baseCurrency: NativeTokenId
   numDays?: number // 7 by default
 }
@@ -60,7 +61,7 @@ export const fetchTokenPrice = createAsyncThunk<
 // Currently this only fetches CELO to stable token prices
 // May eventually expand to fetch other pairs
 async function _fetchTokenPrice(
-  kit: ContractKit,
+  kit: MiniContractKit,
   prices: BaseCurrencyPriceHistory,
   baseCurrency: NativeTokenId,
   numDays = DEFAULT_HISTORY_NUM_DAYS
@@ -78,7 +79,7 @@ async function _fetchTokenPrice(
 
 // Fetches token prices by retrieving and parsing the oracle reporting tx logs
 async function fetchStableTokenPrices(
-  kit: ContractKit,
+  kit: MiniContractKit,
   numDays: number,
   oldPrices?: QuoteCurrencyPriceHistory
 ) {
@@ -119,7 +120,7 @@ async function fetchStableTokenPrices(
 }
 
 async function tryFetchOracleLogs(
-  kit: ContractKit,
+  kit: MiniContractKit,
   fromBlock: number,
   toBlock: number,
   oracleInterface: Interface
@@ -137,7 +138,7 @@ async function tryFetchOracleLogs(
 }
 
 async function parseBlockscoutOracleLogs(
-  kit: ContractKit,
+  kit: MiniContractKit,
   logs: Array<BlockscoutTransactionLog>,
   oracleInterface: Interface,
   minBlock: number
@@ -209,15 +210,14 @@ function getOracleInterface() {
   return oracleInterface
 }
 
-async function getOracleAddress(kit: ContractKit) {
+async function getOracleAddress(kit: MiniContractKit) {
   if (!oracleAddress) {
-    const sortedOracles = await kit.contracts.getSortedOracles()
-    oracleAddress = sortedOracles.address
+    oracleAddress = await kit.registry.addressFor(CeloContract.SortedOracles)
   }
   return oracleAddress
 }
 
-async function getTokenAddress(kit: ContractKit, tokenId: NativeTokenId): Promise<string> {
+async function getTokenAddress(kit: MiniContractKit, tokenId: NativeTokenId): Promise<string> {
   const cachedAddress = tokenAddresses[tokenId]
   if (cachedAddress) return cachedAddress
 

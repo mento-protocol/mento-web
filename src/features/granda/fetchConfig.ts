@@ -1,14 +1,15 @@
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { kitContractToNativeToken } from 'src/config/tokenMapping'
+import { getGrandaMento } from 'src/contract-wrappers/granda-mento'
 import { GrandaConfig, SizeLimits } from 'src/features/granda/types'
 import { isValidAddress } from 'src/utils/addresses'
 import { toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
 interface FetchConfigParams {
-  kit: ContractKit
+  kit: MiniContractKit
 }
 
 export const fetchConfig = createAsyncThunk<
@@ -26,8 +27,8 @@ export const fetchConfig = createAsyncThunk<
   }
 })
 
-async function _fetchConfig(kit: ContractKit): Promise<GrandaConfig> {
-  const contract = await kit.contracts.getGrandaMento()
+async function _fetchConfig(kit: MiniContractKit): Promise<GrandaConfig> {
+  const contract = await getGrandaMento(kit)
   const rawConfig = await contract.getConfig()
 
   const approver = rawConfig.approver

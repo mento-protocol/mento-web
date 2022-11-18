@@ -1,4 +1,4 @@
-import { Alfajores, Baklava, Mainnet, Network, useContractKit } from '@celo-tools/use-contractkit'
+import { Alfajores, Baklava, Mainnet, Network, useCelo } from "@celo/react-celo"
 import ReactModal from 'react-modal'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
@@ -20,7 +20,7 @@ interface Props {
 
 export function NetworkModal({ isOpen, close }: Props) {
   const latestBlock = useAppSelector((s) => s.block.latestBlock)
-  const { network, updateNetwork } = useContractKit()
+  const { network, updateNetwork } = useCelo()
   const allNetworks = [Mainnet, Alfajores, Baklava]
 
   const dispatch = useAppDispatch()

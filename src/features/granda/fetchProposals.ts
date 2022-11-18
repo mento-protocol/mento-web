@@ -1,17 +1,19 @@
-import type { CeloTokenType, ContractKit } from '@celo/contractkit'
+import type { CeloTokenType } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { ExchangeProposalState } from '@celo/contractkit/lib/wrappers/GrandaMento'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { GRANDA_PROPOSAL_STALE_TIME } from 'src/config/consts'
 import { kitTokenToNativeToken } from 'src/config/tokenMapping'
 import { isStableToken, NativeTokenId } from 'src/config/tokens'
+import { getGrandaMento } from 'src/contract-wrappers/granda-mento'
 import { GrandaProposal, GrandaProposalState } from 'src/features/granda/types'
 import { areAddressesEqual, isValidAddress } from 'src/utils/addresses'
 import { logger } from 'src/utils/logger'
 import { isStale } from 'src/utils/time'
 
 interface FetchProposalsParams {
-  kit: ContractKit
+  kit: MiniContractKit
   force?: boolean
 }
 
@@ -30,8 +32,8 @@ export const fetchProposals = createAsyncThunk<
   }
 })
 
-async function _fetchProposals(kit: ContractKit): Promise<Record<string, GrandaProposal>> {
-  const contract = await kit.contracts.getGrandaMento()
+async function _fetchProposals(kit: MiniContractKit): Promise<Record<string, GrandaProposal>> {
+  const contract = await getGrandaMento(kit)
   const propCountBN = await contract.exchangeProposalCount()
   const propCount = propCountBN.toNumber()
   const proposals: Record<string, GrandaProposal> = {}

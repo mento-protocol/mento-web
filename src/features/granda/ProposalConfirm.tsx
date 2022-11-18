@@ -1,5 +1,6 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
-import { ContractKit, StableToken } from '@celo/contractkit'
+import { StableToken } from '@celo/contractkit'
+import { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
+import { useCelo } from '@celo/react-celo'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -11,6 +12,7 @@ import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { MAX_EXCHANGE_RATE, MIN_EXCHANGE_RATE, SIGN_OPERATION_TIMEOUT } from 'src/config/consts'
 import { getTokenContract, nativeTokenToKitToken } from 'src/config/tokenMapping'
 import { NativeTokenId } from 'src/config/tokens'
+import { getGrandaMento } from 'src/contract-wrappers/granda-mento'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
 import { fetchProposals } from 'src/features/granda/fetchProposals'
@@ -28,7 +30,7 @@ export function ProposalConfirm() {
   const balances = useAppSelector((s) => s.account.balances)
   const { config, oracleRates, formValues } = useAppSelector((s) => s.granda)
   const { fromAmount, fromTokenId, toTokenId } = formValues || {}
-  const { address, kit, initialised, network, performActions } = useContractKit()
+  const { address, kit, initialised, network, performActions } = useCelo()
 
   // Ensure invariants are met, otherwise return to form
   const isConfirmValid =
@@ -62,25 +64,25 @@ export function ProposalConfirm() {
       return
     }
 
-    const approvalOperation = async (k: ContractKit) => {
+    const approvalOperation = async (k: MiniContractKit) => {
       const tokenContract = await getTokenContract(k, fromTokenId)
-      const grandaContract = await k.contracts.getGrandaMento()
+      const grandaContract = await getGrandaMento(kit)
       const approveTx = await tokenContract.increaseAllowance(
         grandaContract.address,
         finalFromAmount
       )
       // Gas price must be set manually because contractkit pre-populate it and
       // its helpers for getting gas price are only meant for stable token prices
-      const gasPrice = await k.web3.eth.getGasPrice()
+      const gasPrice = await k.connection.web3.eth.getGasPrice()
       const approveReceipt = await approveTx.sendAndWaitForReceipt({ gasPrice })
       logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
       return approveReceipt.transactionHash
     }
     const approvalOpWithTimeout = asyncTimeout(approvalOperation, SIGN_OPERATION_TIMEOUT)
 
-    const proposeOperation = async (k: ContractKit) => {
+    const proposeOperation = async (k: MiniContractKit) => {
       const sellCelo = fromTokenId === NativeTokenId.CELO
-      const grandaContract = await k.contracts.getGrandaMento()
+      const grandaContract = await getGrandaMento(kit)
       const contractId = k.celoTokens.getContract(
         nativeTokenToKitToken(stableTokenId) as StableToken
       )
@@ -89,7 +91,7 @@ export function ProposalConfirm() {
         finalFromAmount,
         sellCelo
       )
-      const gasPrice = await k.web3.eth.getGasPrice()
+      const gasPrice = await k.connection.web3.eth.getGasPrice()
       const proposeReceipt = await proposeTx.sendAndWaitForReceipt({ gasPrice })
       logger.info(`Tx receipt received for swap: ${proposeReceipt.transactionHash}`)
       await dispatch(fetchBalances({ address, kit: k }))

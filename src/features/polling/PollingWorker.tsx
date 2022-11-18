@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
+import { useCelo } from '@celo/react-celo'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
@@ -15,7 +15,7 @@ import { useInterval } from 'src/utils/timeout'
 export function PollingWorker() {
   const isGrandaActive = useAppSelector((s) => s.granda.isActive)
   const dispatch = useAppDispatch()
-  const { address, kit, initialised } = useContractKit()
+  const { address, kit, initialised } = useCelo()
 
   // TODO debounce toast errors
 
