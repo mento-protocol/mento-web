@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
+import { useCelo } from '@celo/react-celo'
 import { PropsWithChildren, useEffect } from 'react'
 import Modal from 'react-modal'
 import { Footer } from 'src/components/nav/Footer'
@@ -22,9 +22,9 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
   // Error: https://github.com/ChainSafe/web3.js/blob/1.x/packages/web3-eth-ens/src/ENS.js#L526
   // Related: https://github.com/ChainSafe/web3.js/issues/3787
   // Related: https://github.com/ChainSafe/web3.js/issues/3010
-  const { kit } = useContractKit()
+  const { kit } = useCelo()
   useEffect(() => {
-    kit.web3.eth.ens.registryAddress = NULL_ADDRESS
+    kit.connection.web3.eth.ens.registryAddress = NULL_ADDRESS
   }, [kit])
 
   return (

@@ -1,4 +1,4 @@
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { MAX_EXCHANGE_SPREAD } from 'src/config/consts'
@@ -9,7 +9,7 @@ import { logger } from 'src/utils/logger'
 import { areRatesStale } from 'src/utils/time'
 
 interface FetchExchangeRatesParams {
-  kit: ContractKit
+  kit: MiniContractKit
 }
 
 export type AccountBalances = Record<NativeTokenId, string>
@@ -35,7 +35,7 @@ export const fetchExchangeRates = createAsyncThunk<
 })
 
 async function _fetchExchangeRates(
-  kit: ContractKit,
+  kit: MiniContractKit,
   tokenId: NativeTokenId
 ): Promise<ExchangeRate> {
   const contract = await getExchangeContract(kit, tokenId)

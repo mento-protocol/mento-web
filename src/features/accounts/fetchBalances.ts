@@ -1,4 +1,4 @@
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
@@ -8,7 +8,7 @@ import { isStale } from 'src/utils/time'
 
 interface FetchBalancesParams {
   address: string
-  kit: ContractKit
+  kit: MiniContractKit
 }
 
 export type AccountBalances = Record<NativeTokenId, string>
@@ -28,7 +28,7 @@ export const fetchBalances = createAsyncThunk<
   }
 })
 
-async function _fetchBalances(address: string, kit: ContractKit) {
+async function _fetchBalances(address: string, kit: MiniContractKit) {
   validateAddress(address, 'fetchBalances')
   const balances = await kit.getTotalBalance(address)
   const filteredBalances: Partial<Record<NativeTokenId, string>> = {}

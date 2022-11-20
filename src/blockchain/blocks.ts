@@ -1,4 +1,4 @@
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import BigNumber from 'bignumber.js'
 import { AVG_BLOCK_TIMES } from 'src/config/consts'
 import { logger } from 'src/utils/logger'
@@ -8,8 +8,8 @@ export interface LatestBlockDetails {
   timestamp: number
 }
 
-export async function getLatestBlockDetails(kit: ContractKit): Promise<LatestBlockDetails | null> {
-  const block = await kit.web3.eth.getBlock('latest')
+export async function getLatestBlockDetails(kit: MiniContractKit): Promise<LatestBlockDetails | null> {
+  const block = await kit.connection.web3.eth.getBlock('latest')
 
   if (!block || !block.number) {
     logger.warn('Latest block is not valid')

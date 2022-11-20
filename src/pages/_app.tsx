@@ -1,5 +1,5 @@
-import { ContractKitProvider, Mainnet } from '@celo-tools/use-contractkit'
-import '@celo-tools/use-contractkit/lib/styles.css'
+import { CeloProvider, Mainnet } from '@celo/react-celo'
+import '@celo/react-celo/lib/styles.css'
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
 import { PropsWithChildren } from 'react'
@@ -13,6 +13,7 @@ import { AppLayout } from 'src/layout/AppLayout'
 import 'src/styles/fonts.css'
 import 'src/styles/globals.css'
 import 'src/vendor/inpage-metamask'
+
 
 const dAppConfig = {
   name: 'Mento',
@@ -43,12 +44,12 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <SafeHydrate>
         <Provider store={store}>
           <PersistWrapperTypeFixed wrapperConfig={nextPersistConfig}>
-            <ContractKitProvider dapp={dAppConfig} network={Mainnet}>
+            <CeloProvider dapp={dAppConfig} network={Mainnet}>
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
               </AppLayout>
               <ToastContainer transition={Zoom} position={toast.POSITION.BOTTOM_RIGHT} />
-            </ContractKitProvider>
+            </CeloProvider>
           </PersistWrapperTypeFixed>
         </Provider>
       </SafeHydrate>

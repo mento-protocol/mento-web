@@ -1,5 +1,5 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
+import { useCelo } from '@celo/react-celo'
 import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
@@ -13,6 +13,7 @@ import { TextLink } from 'src/components/buttons/TextLink'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { SIGN_OPERATION_TIMEOUT, WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
+import { getGrandaMento } from 'src/contract-wrappers/granda-mento'
 import { fetchProposals } from 'src/features/granda/fetchProposals'
 import { clearProposal } from 'src/features/granda/grandaSlice'
 import { GrandaProposal, GrandaProposalState } from 'src/features/granda/types'
@@ -38,7 +39,7 @@ export function ProposalView() {
     dispatch(clearProposal())
   }
 
-  const { address, kit, initialised, network, performActions } = useContractKit()
+  const { address, kit, initialised, network, performActions } = useCelo()
 
   const onClickRefresh = () => {
     if (!kit || !initialised) return
@@ -71,12 +72,12 @@ export function ProposalView() {
       toast.error('Kit not connected')
       return
     }
-    const cancelOperation = async (k: ContractKit) => {
-      const grandaContract = await k.contracts.getGrandaMento()
+    const cancelOperation = async (k: MiniContractKit) => {
+      const grandaContract = await getGrandaMento(kit)
       const cancelTx = await grandaContract.cancelExchangeProposal(proposal.id)
       // Gas price must be set manually because contractkit pre-populate it and
       // its helpers for getting gas price are only meant for stable token prices
-      const gasPrice = await k.web3.eth.getGasPrice()
+      const gasPrice = await k.connection.web3.eth.getGasPrice()
       const cancelReceipt = await cancelTx.sendAndWaitForReceipt({ gasPrice })
       logger.info(`Tx receipt received for approval: ${cancelReceipt.transactionHash}`)
       return cancelReceipt.transactionHash

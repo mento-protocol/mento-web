@@ -1,5 +1,5 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
+import { useCelo } from '@celo/react-celo'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -37,7 +37,7 @@ export function SwapConfirm(props: Props) {
   const toCeloRates = useAppSelector((s) => s.swap.toCeloRates)
   const balances = useAppSelector((s) => s.account.balances)
   const dispatch = useAppDispatch()
-  const { address, kit, initialised, network, performActions } = useContractKit()
+  const { address, kit, initialised, network, performActions } = useCelo()
 
   // Ensure invariants are met, otherwise return to swap form
   const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && kit
@@ -74,7 +74,7 @@ export function SwapConfirm(props: Props) {
       return
     }
 
-    const approvalOperation = async (k: ContractKit) => {
+    const approvalOperation = async (k: MiniContractKit) => {
       const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
       const tokenContract = await getTokenContract(k, fromTokenId)
       const exchangeContract = await getExchangeContract(k, stableTokenId)
@@ -84,18 +84,18 @@ export function SwapConfirm(props: Props) {
       )
       // Gas price must be set manually because contractkit pre-populate it and
       // its helpers for getting gas price are only meant for stable token prices
-      const gasPrice = await k.web3.eth.getGasPrice()
+      const gasPrice = await k.connection.web3.eth.getGasPrice()
       const approveReceipt = await approveTx.sendAndWaitForReceipt({ gasPrice })
       logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
       return approveReceipt.transactionHash
     }
     const approvalOpWithTimeout = asyncTimeout(approvalOperation, SIGN_OPERATION_TIMEOUT)
 
-    const exchangeOperation = async (k: ContractKit) => {
+    const exchangeOperation = async (k: MiniContractKit) => {
       const sellGold = fromTokenId === NativeTokenId.CELO
       const exchangeContract = await getExchangeContract(k, stableTokenId)
       const exchangeTx = await exchangeContract.sell(finalFromAmount, minBuyAmountWei, sellGold)
-      const gasPrice = await k.web3.eth.getGasPrice()
+      const gasPrice = await k.connection.web3.eth.getGasPrice()
       const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt({ gasPrice })
       logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
       await dispatch(fetchBalances({ address, kit: k }))

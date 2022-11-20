@@ -1,4 +1,4 @@
-import { useContractKit } from '@celo-tools/use-contractkit'
+import { useCelo } from '@celo/react-celo'
 import Image from 'next/image'
 import { useState } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
@@ -14,7 +14,7 @@ import { shortenAddress } from 'src/utils/addresses'
 import { tryClipboardSet } from 'src/utils/clipboard'
 
 export function ConnectButton() {
-  const { connect, address, destroy } = useContractKit()
+  const { connect, address, destroy } = useCelo()
 
   const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(3)
 

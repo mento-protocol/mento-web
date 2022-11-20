@@ -1,4 +1,4 @@
-import { Mainnet, useContractKit } from '@celo-tools/use-contractkit'
+import { Mainnet, useCelo } from '@celo/react-celo'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
@@ -20,7 +20,7 @@ interface PriceChartProps {
 export function PriceChartCelo(props: PriceChartProps) {
   const { stableTokenId, containerClasses, height } = props
 
-  const { kit, initialised, network } = useContractKit()
+  const { kit, initialised, network } = useCelo()
 
   const dispatch = useAppDispatch()
   useEffect(() => {

@@ -1,10 +1,10 @@
-import type { ContractKit } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import type { AppDispatch, AppState } from 'src/app/store'
 import type { BlockHeader } from 'web3-eth'
 
 interface FetchLatestBlockParams {
-  kit: ContractKit
+  kit: MiniContractKit
 }
 
 export const fetchLatestBlock = createAsyncThunk<
@@ -13,6 +13,6 @@ export const fetchLatestBlock = createAsyncThunk<
   { dispatch: AppDispatch; state: AppState }
 >('blocks/fetchLatestBlock', async (params) => {
   const { kit } = params
-  const latest = await kit.web3.eth.getBlock('latest')
+  const latest = await kit.connection.web3.eth.getBlock('latest')
   return latest
 })

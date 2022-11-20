@@ -3,11 +3,11 @@
  * The kit is a bit of a mess so this DApp uses it's own enums/types
  */
 
-import type { ContractKit } from '@celo/contractkit'
 import { CeloContract, CeloTokenType, StableToken, Token } from '@celo/contractkit'
+import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { NativeTokenId } from 'src/config/tokens'
 
-export async function getExchangeContract(kit: ContractKit, tokenId: NativeTokenId) {
+export async function getExchangeContract(kit: MiniContractKit, tokenId: NativeTokenId) {
   switch (tokenId) {
     case NativeTokenId.cUSD:
       return kit.contracts.getExchange(StableToken.cUSD)
@@ -20,7 +20,7 @@ export async function getExchangeContract(kit: ContractKit, tokenId: NativeToken
   }
 }
 
-export async function getTokenContract(kit: ContractKit, tokenId: NativeTokenId) {
+export async function getTokenContract(kit: MiniContractKit, tokenId: NativeTokenId) {
   switch (tokenId) {
     case NativeTokenId.cUSD:
       return kit.contracts.getStableToken(StableToken.cUSD)
