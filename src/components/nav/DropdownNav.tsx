@@ -25,16 +25,19 @@ export function DropdownNav({ align }: { align: 'l' | 'r' }) {
         <ul className="list-none">
           {navLinks.map((l, i) => (
             <li key={l.label} className="px-8 py-2">
-              <Link href={l.to}>
-                <a className="group text-lg font-medium flex flex-col" {...itemProps[i]}>
-                  <div>{l.label}</div>
-                  <div className="rounded-lg bg-black h-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-all"></div>
-                </a>
+              <Link
+                href={l.to}
+                className="group text-lg font-medium flex flex-col"
+                {...itemProps[i]}>
+
+                <div>{l.label}</div>
+                <div className="rounded-lg bg-black h-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-all"></div>
+
               </Link>
             </li>
           ))}
         </ul>
       </div>
     </div>
-  )
+  );
 }

@@ -44,12 +44,12 @@ export default function AboutPage() {
             </li>
             <li>
               Go to the{' '}
-              <Link href="/">
-                <a className="text-green">Swap</a>
+              <Link href="/" className="text-green">
+                Swap
               </Link>{' '}
               tab (or{' '}
-              <Link href="/granda">
-                <a className="text-green">Granda</a>
+              <Link href="/granda" className="text-green">
+                Granda
               </Link>{' '}
               for large exchanges)
             </li>
@@ -74,5 +74,5 @@ export default function AboutPage() {
         <p className="mt-4 text-xs text-center">{`Version: ${config.version || 'Unknown'}`}</p>
       </FloatingBox>
     </div>
-  )
+  );
 }

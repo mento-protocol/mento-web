@@ -18,8 +18,8 @@ export function NavBar({ pathName }: { pathName: string }) {
           const className = `${padding} ${colors} ${border}`
           return (
             <li key={l.label} className="flex items-center justify-center">
-              <Link href={l.to}>
-                <a className={className}>{l.label}</a>
+              <Link href={l.to} className={className}>
+                {l.label}
               </Link>
             </li>
           )
