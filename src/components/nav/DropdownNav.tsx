@@ -28,16 +28,15 @@ export function DropdownNav({ align }: { align: 'l' | 'r' }) {
               <Link
                 href={l.to}
                 className="group text-lg font-medium flex flex-col"
-                {...itemProps[i]}>
-
+                {...itemProps[i]}
+              >
                 <div>{l.label}</div>
                 <div className="rounded-lg bg-black h-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-all"></div>
-
               </Link>
             </li>
           ))}
         </ul>
       </div>
     </div>
-  );
+  )
 }

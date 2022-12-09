@@ -3,12 +3,13 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { NativeTokenId } from 'src/config/tokens'
-import { fetchTokenPrice } from 'src/features/chart/fetchPrices'
 import styles from 'src/features/chart/PriceChart.module.css'
+import { fetchTokenPrice } from 'src/features/chart/fetchPrices'
 import { tokenPriceHistoryToChartData } from 'src/features/chart/utils'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
 import { logger } from 'src/utils/logger'
+
 import ReactFrappeChart from './ReactFrappeChart'
 
 interface PriceChartProps {

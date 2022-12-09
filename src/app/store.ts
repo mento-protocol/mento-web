@@ -1,4 +1,4 @@
-import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
 import { config } from 'src/config/config'
 import { accountReducer } from 'src/features/accounts/accountSlice'
 import { blockReducer } from 'src/features/blocks/blockSlice'

@@ -14,7 +14,6 @@ export async function getSortedOracles(kit: MiniContractKit): Promise<SortedOrac
     lastChainId = currentChainId
   }
 
-
   const sortedOraclesAddress = await kit.registry.addressFor(CeloContract.SortedOracles)
 
   const contract = newSortedOracles(kit.connection.web3, sortedOraclesAddress)

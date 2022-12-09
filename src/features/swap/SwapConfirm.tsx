@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
+import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { BackButton } from 'src/components/buttons/BackButton'
 import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
-import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import {
   MAX_EXCHANGE_RATE,
   MAX_EXCHANGE_TOKEN_SIZE,
@@ -26,7 +26,7 @@ import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
 import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
-import { asyncTimeout, PROMISE_TIMEOUT } from 'src/utils/timeout'
+import { PROMISE_TIMEOUT, asyncTimeout } from 'src/utils/timeout'
 
 interface Props {
   formValues: SwapFormValues

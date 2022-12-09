@@ -8,7 +8,9 @@ export interface LatestBlockDetails {
   timestamp: number
 }
 
-export async function getLatestBlockDetails(kit: MiniContractKit): Promise<LatestBlockDetails | null> {
+export async function getLatestBlockDetails(
+  kit: MiniContractKit
+): Promise<LatestBlockDetails | null> {
   const block = await kit.connection.web3.eth.getBlock('latest')
 
   if (!block || !block.number) {

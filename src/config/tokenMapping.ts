@@ -2,7 +2,6 @@
  * Utilities for converting between kit and local token contracts/models
  * The kit is a bit of a mess so this DApp uses it's own enums/types
  */
-
 import { CeloContract, CeloTokenType, StableToken, Token } from '@celo/contractkit'
 import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { NativeTokenId } from 'src/config/tokens'

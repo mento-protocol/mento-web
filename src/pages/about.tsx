@@ -74,5 +74,5 @@ export default function AboutPage() {
         <p className="mt-4 text-xs text-center">{`Version: ${config.version || 'Unknown'}`}</p>
       </FloatingBox>
     </div>
-  );
+  )
 }

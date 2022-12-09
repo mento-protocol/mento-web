@@ -3,8 +3,8 @@ import { WEI_PER_UNIT } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
 import { ToCeloRates } from 'src/features/swap/types'
 import {
-  fromWeiRounded,
   NumberT,
+  fromWeiRounded,
   parseAmount,
   parseAmountWithDefault,
   toWei,

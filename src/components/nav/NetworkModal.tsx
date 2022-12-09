@@ -1,4 +1,4 @@
-import { Alfajores, Baklava, Mainnet, Network, useCelo } from "@celo/react-celo"
+import { Alfajores, Baklava, Mainnet, Network, useCelo } from '@celo/react-celo'
 import ReactModal from 'react-modal'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
