@@ -22,9 +22,9 @@ export function NavBar({ pathName }: { pathName: string }) {
                 {l.label}
               </Link>
             </li>
-          );
+          )
         })}
       </ul>
     </nav>
-  );
+  )
 }
