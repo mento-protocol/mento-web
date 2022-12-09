@@ -1,24 +1,24 @@
-import Image from 'next/image'
-import { memo } from 'react'
-import { CELO, cEUR, cREAL, cUSD, Token } from 'src/config/tokens'
-import CeloIcon from 'src/images/tokens/CELO.svg'
-import cEURIcon from 'src/images/tokens/cEUR.svg'
-import cREALIcon from 'src/images/tokens/cREAL.svg'
-import cUSDIcon from 'src/images/tokens/cUSD.svg'
+import Image from 'next/image';
+import { memo } from 'react';
+import { CELO, cEUR, cREAL, cUSD, Token } from 'src/config/tokens';
+import CeloIcon from 'src/images/tokens/CELO.svg';
+import cEURIcon from 'src/images/tokens/cEUR.svg';
+import cREALIcon from 'src/images/tokens/cREAL.svg';
+import cUSDIcon from 'src/images/tokens/cUSD.svg';
 
 interface Props {
-  token?: Token | null
-  size?: 'xs' | 's' | 'm' | 'l'
+  token?: Token | null;
+  size?: 'xs' | 's' | 'm' | 'l';
 }
 
 function _TokenIcon({ token, size = 'm' }: Props) {
-  let imgSrc
-  if (token?.id === CELO.id) imgSrc = CeloIcon
-  else if (token?.id === cUSD.id) imgSrc = cUSDIcon
-  else if (token?.id === cEUR.id) imgSrc = cEURIcon
-  else if (token?.id === cREAL.id) imgSrc = cREALIcon
+  let imgSrc;
+  if (token?.id === CELO.id) imgSrc = CeloIcon;
+  else if (token?.id === cUSD.id) imgSrc = cUSDIcon;
+  else if (token?.id === cEUR.id) imgSrc = cEURIcon;
+  else if (token?.id === cREAL.id) imgSrc = cREALIcon;
 
-  const { actualSize, fontSize } = sizeValues[size]
+  const { actualSize, fontSize } = sizeValues[size];
 
   if (token && imgSrc) {
     return (
@@ -29,7 +29,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
         height={actualSize}
         priority={true}
       />
-    )
+    );
   }
 
   if (token) {
@@ -51,7 +51,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
           {token.symbol[0].toUpperCase()}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -62,26 +62,26 @@ function _TokenIcon({ token, size = 'm' }: Props) {
         height: actualSize,
       }}
     ></div>
-  )
+  );
 }
 
 const sizeValues = {
   xs: {
-    actualSize: '22px',
+    actualSize: 22,
     fontSize: '13px',
   },
   s: {
-    actualSize: '30px',
+    actualSize: 30,
     fontSize: '15px',
   },
   m: {
-    actualSize: '40px',
+    actualSize: 40,
     fontSize: '18px',
   },
   l: {
-    actualSize: '46px',
+    actualSize: 46,
     fontSize: '20px',
   },
-}
+};
 
-export const TokenIcon = memo(_TokenIcon)
+export const TokenIcon = memo(_TokenIcon);
