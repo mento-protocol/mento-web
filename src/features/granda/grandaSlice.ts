@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { fetchConfig } from 'src/features/granda/fetchConfig'
 import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
 import { fetchProposals } from 'src/features/granda/fetchProposals'

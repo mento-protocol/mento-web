@@ -18,5 +18,5 @@ export function NotFoundScreen() {
         </h3>
       </div>
     </Fade>
-  );
+  )
 }

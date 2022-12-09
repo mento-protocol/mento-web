@@ -1,15 +1,15 @@
 import { useField } from 'formik'
 import React, { PropsWithChildren } from 'react'
 import Select, {
-  components,
   OptionProps,
   OptionsType,
   SingleValueProps,
   Styles,
   Theme,
   ValueType,
+  components,
 } from 'react-select'
-import { getTokenById, NativeTokens, Token } from 'src/config/tokens'
+import { NativeTokens, Token, getTokenById } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { Color } from 'src/styles/Color'
 

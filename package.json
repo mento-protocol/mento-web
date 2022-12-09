@@ -22,7 +22,8 @@
     "clean": "rm -rf dist cache .next",
     "type-check": "tsc",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prettier": "prettier --write ./src"
   },
   "dependencies": {
     "@celo/contractkit": "^2.3.0",

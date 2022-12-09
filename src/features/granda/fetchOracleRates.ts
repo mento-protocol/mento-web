@@ -34,7 +34,6 @@ export const fetchOracleRates = createAsyncThunk<
   }
 })
 
-
 async function _fetchOracleRates(
   kit: MiniContractKit,
   tokenId: NativeTokenId
