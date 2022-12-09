@@ -11,12 +11,12 @@ export function NotFoundScreen() {
         <Image src={NotFoundIcon} alt="Not Found" width={150} height={150} />
         <h3 className="text-lg mt-8 text-center">
           Please check the URL or go{' '}
-          <Link href="/">
-            <a className="cursor-pointer underline">back to home</a>
+          <Link href="/" className="cursor-pointer underline">
+            back to home
           </Link>
           .
         </h3>
       </div>
     </Fade>
-  )
+  );
 }
