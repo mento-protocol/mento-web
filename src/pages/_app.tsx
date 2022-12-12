@@ -19,7 +19,7 @@ const dAppConfig = {
   name: 'Mento',
   description: 'Mento Exchange for Celo',
   url: config.url,
-  icon: `${config.url}/logo.svg`,
+  icon: `${config.url}/glyph.png`,
 }
 
 const nextPersistConfig = {

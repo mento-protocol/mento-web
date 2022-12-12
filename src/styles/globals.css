@@ -42,6 +42,11 @@ Backgrounds
   );
 }
 
+.bg-gradient-linear {
+  background: #dff2ea;
+  background: linear-gradient(180deg, #dff2ea 0%, #f1f2e6 100%);
+}
+
 /* 
 Scrollbar Overrides
 ===================

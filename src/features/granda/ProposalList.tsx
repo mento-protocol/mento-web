@@ -129,7 +129,7 @@ function proposalStateToColor(state: GrandaProposalState) {
       return 'border-yellow-500 text-yellow-500'
     case GrandaProposalState.Approved:
     case GrandaProposalState.Executed:
-      return 'border-green-darkest text-green-darkest'
+      return 'border-green-800 text-green-800'
     case GrandaProposalState.Cancelled:
       return 'border-red-600 text-red-600'
     default:

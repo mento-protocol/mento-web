@@ -31,7 +31,7 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
     <>
       <HeadMeta pathName={pathName} />
       <div
-        className={`flex flex-col justify-between h-full min-h-screen w-full min-w-screen bg-gradient-radial`}
+        className={`flex flex-col justify-between h-full min-h-screen w-full min-w-screen bg-gradient-linear`}
       >
         <Header pathName={pathName} />
         <main className="w-full">{children}</main>

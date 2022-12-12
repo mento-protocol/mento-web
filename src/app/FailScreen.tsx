@@ -4,7 +4,7 @@ import { Fade } from 'src/components/animation/Fade'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { config } from 'src/config/config'
 import SadFace from 'src/images/icons/sad_face.svg'
-import Logo from 'src/images/logo.svg'
+import Logo from 'src/images/logos/mento-logo-black.svg'
 import { logger } from 'src/utils/logger'
 
 interface ErrorBoundaryState {
