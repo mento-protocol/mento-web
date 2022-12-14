@@ -47,47 +47,49 @@ export function getExchangeValues(
   toTokenId: NativeTokenId | null | undefined,
   toCeloRates: ToCeloRates
 ): ExchangeValues {
-  // Return some defaults when values are missing
-  if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
+  try {
+    // Return some defaults when values are missing
+    if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
 
-  const sellCelo = fromTokenId === NativeTokenId.CELO
-  const stableTokenId = sellCelo ? toTokenId : fromTokenId
-  const toCeloRate = toCeloRates[stableTokenId]
-  if (!toCeloRate) return getDefaultExchangeValues(fromTokenId, toTokenId)
+    const sellCelo = fromTokenId === NativeTokenId.CELO
+    const stableTokenId = sellCelo ? toTokenId : fromTokenId
+    const toCeloRate = toCeloRates[stableTokenId]
+    if (!toCeloRate) return getDefaultExchangeValues(fromTokenId, toTokenId)
 
-  const { stableBucket, celoBucket, spread } = toCeloRate
-  const [buyBucket, sellBucket] = sellCelo ? [stableBucket, celoBucket] : [celoBucket, stableBucket]
+    const { stableBucket, celoBucket, spread } = toCeloRate
+    const [buyBucket, sellBucket] = sellCelo
+      ? [stableBucket, celoBucket]
+      : [celoBucket, stableBucket]
 
-  const fromAmountWei = parseInputExchangeAmount(fromAmount, false)
-  const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } = calcSimpleExchangeRate(
-    fromAmountWei,
-    buyBucket,
-    sellBucket,
-    spread,
-    sellCelo
-  )
+    const fromAmountWei = parseInputExchangeAmount(fromAmount, false)
+    const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } =
+      calcSimpleExchangeRate(fromAmountWei, buyBucket, sellBucket, spread, sellCelo)
 
-  return {
-    from: {
-      amount: fromWeiRounded(fromAmountWei, true),
-      weiAmount: fromAmountWei.toString(),
-      token: fromTokenId,
-    },
-    to: {
-      amount: fromWeiRounded(toAmountWei, true),
-      weiAmount: toAmountWei.toString(),
-      token: toTokenId,
-    },
-    rate: {
-      value: exchangeRateNum,
-      weiValue: exchangeRateWei.toString(),
-      fromCeloValue: fromWeiRounded(fromCeloRateWei, true),
-      fromCeloWeiValue: fromCeloRateWei.toString(),
-      weiBasis: WEI_PER_UNIT,
-      lastUpdated: toCeloRate.lastUpdated,
-      isReady: true,
-    },
-    stableTokenId,
+    return {
+      from: {
+        amount: fromWeiRounded(fromAmountWei, true),
+        weiAmount: fromAmountWei.toString(),
+        token: fromTokenId,
+      },
+      to: {
+        amount: fromWeiRounded(toAmountWei, true),
+        weiAmount: toAmountWei.toString(),
+        token: toTokenId,
+      },
+      rate: {
+        value: exchangeRateNum,
+        weiValue: exchangeRateWei.toString(),
+        fromCeloValue: fromWeiRounded(fromCeloRateWei, true),
+        fromCeloWeiValue: fromCeloRateWei.toString(),
+        weiBasis: WEI_PER_UNIT,
+        lastUpdated: toCeloRate.lastUpdated,
+        isReady: true,
+      },
+      stableTokenId,
+    }
+  } catch (error) {
+    logger.warn('Error computing exchange values', error)
+    return getDefaultExchangeValues()
   }
 }
 

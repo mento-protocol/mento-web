@@ -3,6 +3,7 @@ import { PropsWithChildren, useEffect } from 'react'
 import Modal from 'react-modal'
 import { Footer } from 'src/components/nav/Footer'
 import { Header } from 'src/components/nav/Header'
+import { InfoBanner } from 'src/components/nav/InfoBanner'
 import { NULL_ADDRESS } from 'src/config/consts'
 import { PollingWorker } from 'src/features/polling/PollingWorker'
 import { HeadMeta } from 'src/layout/HeadMeta'
@@ -30,14 +31,13 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
   return (
     <>
       <HeadMeta pathName={pathName} />
-      <div
-        className={`flex flex-col justify-between h-full min-h-screen w-full min-w-screen bg-gradient-linear`}
-      >
+      <div className="flex flex-col h-full min-h-screen w-full min-w-screen bg-gradient-linear">
+        <InfoBanner />
         <Header pathName={pathName} />
-        <main className="w-full">{children}</main>
+        <main className="grow flex items-center justify-center">{children}</main>
         <Footer />
-        <PollingWorker />
       </div>
+      <PollingWorker />
     </>
   )
 }

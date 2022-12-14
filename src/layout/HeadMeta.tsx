@@ -5,7 +5,7 @@ export function HeadMeta({ pathName }: { pathName: string }) {
   return (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>{`Mento | ${getHeadTitle(pathName)}`}</title>
+      <title>{`Mento Stable Exchange | ${getHeadTitle(pathName)}`}</title>
     </Head>
   )
 }

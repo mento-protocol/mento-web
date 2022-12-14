@@ -7,8 +7,8 @@ import { HrDivider } from 'src/layout/HrDivider'
 export default function AboutPage() {
   const pClass = 'mt-4 text-sm leading-loose'
   return (
-    <div className="flex justify-center items-center flex-grow">
-      <FloatingBox maxWidth="max-w-xl" classes="mb-12 mx-10 p-6">
+    <div className="flex justify-center items-center grow">
+      <FloatingBox maxWidth="max-w-xl" classes="mb-2 mx-10 p-6">
         <h2 className="text-lg text-center font-medium">About Mento</h2>
         <p className={pClass}>
           Celo has stable value assets like the Celo Dollar (cUSD). Mento keeps the value of those
