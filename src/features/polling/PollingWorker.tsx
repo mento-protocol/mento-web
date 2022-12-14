@@ -30,7 +30,7 @@ export function PollingWorker() {
     dispatch(fetchLatestBlock({ kit }))
       .unwrap()
       .catch((err) => {
-        toast.warn('Error retrieving latest block')
+        // toast.warn('Error retrieving latest block')
         logger.error('Failed to retrieve latest block', err)
       })
     if (isGrandaActive) {

@@ -54,7 +54,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
               </AppLayout>
-              <ToastContainer transition={Zoom} position={toast.POSITION.BOTTOM_RIGHT} />
+              <ToastContainer transition={Zoom} position={toast.POSITION.BOTTOM_RIGHT} limit={2} />
             </CeloProvider>
           </PersistWrapperTypeFixed>
         </Provider>

@@ -72,7 +72,7 @@ export function SolidButton(props: PropsWithChildren<ButtonProps>) {
 function sizeToClasses(size?: string) {
   if (size === 'xs') return 'h-7 px-4 py-1'
   if (size === 's') return 'h-7 px-4 py-1'
-  if (size === 'l') return 'h-10 px-5 py-1 text-lg'
-  if (size === 'xl') return 'w-40 h-11 px-5 py-1.5 text-xl'
+  if (size === 'l') return 'h-9 px-5 py-1'
+  if (size === 'xl') return 'w-40 h-11 px-5 py-1.5 text-lg'
   return 'px-5 py-1 h-9'
 }

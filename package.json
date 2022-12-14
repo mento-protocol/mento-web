@@ -30,6 +30,7 @@
     "@celo/react-celo": "^4.2.1",
     "@ethersproject/abi": "^5.5.0",
     "@ethersproject/address": "^5.5.0",
+    "@ethersproject/units": "^5.5.0",
     "@headlessui/react": "^1.7.4",
     "@metamask/inpage-provider": "6.0.1",
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
