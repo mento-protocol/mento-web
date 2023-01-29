@@ -4,8 +4,13 @@
 /node_modules
 /.pnp
 .pnp.js
-.yarn/cache/
-.yarn/install-state.gz
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Typescript build
 tsconfig.tsbuildinfo
