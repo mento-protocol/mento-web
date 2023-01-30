@@ -15,10 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+
+      - name: yarn-cache
+        uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-cache4-${{ hashFiles('./yarn.lock') }}
+          path: |
+            **/node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-cache-${{ hashFiles('./yarn.lock') }}
 
       - name: yarn-install
         # Check out the lockfile from main, reinstall, and then
@@ -37,10 +41,14 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+
+      - name: yarn-cache
+        uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-cache4-${{ hashFiles('./yarn.lock') }}
+          path: |
+            **/node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-cache-${{ hashFiles('./yarn.lock') }}
 
       - name: build
         run: yarn run build
@@ -50,10 +58,14 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+
+      - name: yarn-cache
+        uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-cache4-${{ hashFiles('./yarn.lock') }}
+          path: |
+            **/node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-cache-${{ hashFiles('./yarn.lock') }}
 
       - name: prettier
         run: |
@@ -69,10 +81,14 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+
+      - name: yarn-cache
+        uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-cache4-${{ hashFiles('./yarn.lock') }}
+          path: |
+            **/node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-cache-${{ hashFiles('./yarn.lock') }}
 
       - name: lint 
         run: yarn run lint
@@ -82,10 +98,14 @@ jobs:
     needs: [build]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+
+      - name: yarn-cache
+        uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-cache4-${{ hashFiles('./yarn.lock') }}
+          path: |
+            **/node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-cache-${{ hashFiles('./yarn.lock') }}
 
       - name: test
         run: yarn run test
