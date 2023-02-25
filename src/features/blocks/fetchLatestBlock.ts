@@ -1,6 +1,6 @@
 import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import type { AppDispatch, AppState } from 'src/app/store'
+import type { AppDispatch, AppState } from 'src/features/store/store'
 import type { BlockHeader } from 'web3-eth'
 
 interface FetchLatestBlockParams {

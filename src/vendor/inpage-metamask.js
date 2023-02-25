@@ -1,8 +1,8 @@
-// Copied from https://github.com/MyCryptoHQ/MyCrypto/blob/master/src/vendor/inpage-metamask.js
+// Copied from https://github.com/WalletConnect/web3modal/pull/614/files
 // But updated to use newer packages
 
-import LocalMessageDuplexStream from 'post-message-stream'
-import { initProvider } from '@metamask/inpage-provider'
+import { WindowPostMessageStream } from '@metamask/post-message-stream';
+import { initializeProvider } from '@metamask/providers';
 
 // Firefox Metamask Hack
 // Due to https://github.com/MetaMask/metamask-extension/issues/3133
@@ -14,14 +14,15 @@ import { initProvider } from '@metamask/inpage-provider'
     navigator.userAgent.includes('Firefox')
   ) {
     // setup background connection
-    const metamaskStream = new LocalMessageDuplexStream({
-      name: 'inpage',
-      target: 'contentscript',
-    })
+    const metamaskStream = new WindowPostMessageStream({
+      name: 'metamask-inpage',
+      target: 'metamask-contentscript'
+    });
 
     // this will initialize the provider and set it as window.ethereum
-    initProvider({
+    initializeProvider({
       connectionStream: metamaskStream,
-    })
+      shouldShimWeb3: true
+    });
   }
 })()

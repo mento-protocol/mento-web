@@ -1,7 +1,7 @@
-import { useAppSelector } from 'src/app/hooks'
 import { config } from 'src/config/config'
 import { NativeTokenId } from 'src/config/tokens'
 import { PriceChartCelo } from 'src/features/chart/PriceChartCelo'
+import { useAppSelector } from 'src/features/store/hooks'
 import { SwapConfirm } from 'src/features/swap/SwapConfirm'
 import { SwapForm } from 'src/features/swap/SwapForm'
 

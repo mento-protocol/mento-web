@@ -1,5 +1,5 @@
-import { useAppSelector } from 'src/app/hooks'
 import { NativeTokenId, NativeTokens } from 'src/config/tokens'
+import { useAppSelector } from 'src/features/store/hooks'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { fromWeiRounded } from 'src/utils/amount'
 

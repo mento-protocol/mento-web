@@ -1,4 +1,4 @@
-import { CeloProvider, Mainnet } from '@celo/react-celo'
+import { CeloProvider } from '@celo/react-celo'
 import '@celo/react-celo/lib/styles.css'
 import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
 import type { AppProps } from 'next/app'
@@ -6,9 +6,9 @@ import { PropsWithChildren } from 'react'
 import { Provider } from 'react-redux'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { ErrorBoundary } from 'src/app/FailScreen'
-import { store } from 'src/app/store'
+import { ErrorBoundary } from 'src/components/Errors'
 import { config } from 'src/config/config'
+import { store } from 'src/features/store/store'
 import { AppLayout } from 'src/layout/AppLayout'
 import 'src/styles/fonts.css'
 import 'src/styles/globals.css'
@@ -20,6 +20,7 @@ const dAppConfig = {
   description: 'Mento Exchange for Celo',
   url: config.url,
   icon: `${config.url}/glyph.png`,
+  walletConnectProjectId: config.walletConnectProjectId,
 }
 
 const nextPersistConfig = {
@@ -50,7 +51,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <SafeHydrate>
         <Provider store={store}>
           <PersistWrapperTypeFixed wrapperConfig={nextPersistConfig}>
-            <CeloProvider dapp={dAppConfig} network={Mainnet}>
+            <CeloProvider dapp={dAppConfig}>
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
               </AppLayout>

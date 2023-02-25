@@ -3,7 +3,6 @@ import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { Interface } from '@ethersproject/abi'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js'
-import type { AppDispatch, AppState } from 'src/app/store'
 import { ABI as SortedOraclesAbi } from 'src/blockchain/ABIs/sortedOracles'
 import { getLatestBlockDetails, getNumBlocksPerInterval } from 'src/blockchain/blocks'
 import { config } from 'src/config/config'
@@ -18,6 +17,7 @@ import {
   TokenPricePoint,
 } from 'src/features/chart/types'
 import { findMissingPriceDays, mergePriceHistories } from 'src/features/chart/utils'
+import type { AppDispatch, AppState } from 'src/features/store/store'
 import { areAddressesEqual, ensureLeading0x } from 'src/utils/addresses'
 import { fromFixidity } from 'src/utils/amount'
 import {

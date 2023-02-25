@@ -1,8 +1,8 @@
 import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import type { AppDispatch, AppState } from 'src/app/store'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
+import type { AppDispatch, AppState } from 'src/features/store/store'
 import { validateAddress } from 'src/utils/addresses'
 import { isStale } from 'src/utils/time'
 
