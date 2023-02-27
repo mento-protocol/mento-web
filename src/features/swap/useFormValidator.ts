@@ -3,8 +3,7 @@ import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
 import { NativeTokenId } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
-import { SizeLimits } from 'src/features/granda/types'
-import { SwapFormValues } from 'src/features/swap/types'
+import { SizeLimits, SwapFormValues } from 'src/features/swap/types'
 import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
 
 export function useFormValidator(balances: AccountBalances, sizeLimits?: SizeLimits | null) {

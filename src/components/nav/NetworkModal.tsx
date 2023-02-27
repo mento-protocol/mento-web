@@ -5,7 +5,6 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { reset as accountReset } from 'src/features/accounts/accountSlice'
 import { reset as blockReset } from 'src/features/blocks/blockSlice'
 import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
-import { reset as grandaReset } from 'src/features/granda/grandaSlice'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { reset as swapReset } from 'src/features/swap/swapSlice'
 import XCircle from 'src/images/icons/x-circle.svg'
@@ -30,7 +29,6 @@ export function NetworkModal({ isOpen, close }: Props) {
       await updateNetwork(n)
       dispatch(blockReset())
       dispatch(accountReset())
-      dispatch(grandaReset())
       dispatch(swapReset())
       dispatch(resetTokenPrices())
     } catch (error) {

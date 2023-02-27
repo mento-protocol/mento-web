@@ -2,7 +2,7 @@
 
 This is the home for the Mento web app for Celo!
 
-This DApp lets users make exchanges between Celo's native currencies using the Mento on-chain exchange mechanism. It also supports large exchanges via Granda Mento.
+This DApp lets users make exchanges between Celo's native currencies using the Mento on-chain exchange mechanism. 
 
 For more details about how Mento works, see the [documentation](https://docs.mento.org)
 

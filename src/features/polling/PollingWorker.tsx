@@ -4,16 +4,12 @@ import { toast } from 'react-toastify'
 import { STATUS_POLLER_DELAY } from 'src/config/consts'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
-import { fetchConfig } from 'src/features/granda/fetchConfig'
-import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
-import { fetchProposals } from 'src/features/granda/fetchProposals'
-import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
+import { useAppDispatch } from 'src/features/store/hooks'
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { logger } from 'src/utils/logger'
 import { useInterval } from 'src/utils/timeout'
 
 export function PollingWorker() {
-  const isGrandaActive = useAppSelector((s) => s.granda.isActive)
   const dispatch = useAppDispatch()
   const { address, kit, initialised } = useCelo()
 
@@ -33,26 +29,6 @@ export function PollingWorker() {
         // toast.warn('Error retrieving latest block')
         logger.error('Failed to retrieve latest block', err)
       })
-    if (isGrandaActive) {
-      dispatch(fetchProposals({ kit }))
-        .unwrap()
-        .catch((err) => {
-          toast.warn('Error retrieving Granda proposals')
-          logger.error('Failed to retrieve granda proposals', err)
-        })
-      dispatch(fetchConfig({ kit }))
-        .unwrap()
-        .catch((err) => {
-          toast.warn('Error retrieving Granda config')
-          logger.error('Failed to retrieve granda config', err)
-        })
-      dispatch(fetchOracleRates({ kit }))
-        .unwrap()
-        .catch((err) => {
-          toast.warn('Error retrieving oracle rates')
-          logger.error('Failed to retrieve oracle rates', err)
-        })
-    }
     if (address) {
       dispatch(fetchBalances({ address, kit }))
         .unwrap()
@@ -63,7 +39,7 @@ export function PollingWorker() {
     }
   }
 
-  useEffect(onPoll, [isGrandaActive, address, kit, initialised, dispatch])
+  useEffect(onPoll, [address, kit, initialised, dispatch])
 
   useInterval(onPoll, STATUS_POLLER_DELAY)
 

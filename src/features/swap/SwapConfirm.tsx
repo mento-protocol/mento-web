@@ -82,7 +82,7 @@ export function SwapConfirm(props: Props) {
         exchangeContract.address,
         finalFromAmount
       )
-      // Gas price must be set manually because contractkit pre-populate it and
+      // Gas price must be set manually because contractkit does not pre-populate it and
       // its helpers for getting gas price are only meant for stable token prices
       const gasPrice = await k.connection.web3.eth.getGasPrice()
       const approveReceipt = await approveTx.sendAndWaitForReceipt({ gasPrice })

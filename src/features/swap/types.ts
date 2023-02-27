@@ -22,3 +22,5 @@ export interface SimpleExchangeRate {
   rate: number
   lastUpdated: number
 }
+
+export type SizeLimits = Partial<Record<NativeTokenId, { min: string; max: string }>>
