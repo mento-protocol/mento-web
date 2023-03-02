@@ -1,1 +1,1 @@
-declare type Address = string;
+declare type Address = string
