@@ -2012,14 +2012,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mento-protocol/mento-sdk@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@mento-protocol/mento-sdk@npm:0.1.1"
+"@mento-protocol/mento-sdk@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@mento-protocol/mento-sdk@npm:0.1.3"
   dependencies:
     "@mento-protocol/mento-core-ts": ^0.1.0
   peerDependencies:
     ethers: ^5.7.2
-  checksum: f7b6297c2ad6e820ae6d5b5fbc9f43e37eb74db81ad21bcbbbd5d4f2f3df99de5c21b98060800989e2f5984ae7610d5ef689e7e3e6ec04e43828065fd66bd2dc
+  checksum: cccfb4fa9caed64f66accb9c222a08ef4ce15654e4c6af49dcb892fb53776b450ce06c03c26b1d31e0e875de3031e71b1f47f6650ce36282b2cb4f74d980ce1f
   languageName: node
   linkType: hard
 
@@ -2029,7 +2029,7 @@ __metadata:
   dependencies:
     "@celo/contractkit": ^3.2.0
     "@celo/react-celo": ^5.0.3
-    "@mento-protocol/mento-sdk": ^0.1.1
+    "@mento-protocol/mento-sdk": ^0.1.3
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28"
     "@metamask/post-message-stream": 6.1.0
     "@metamask/providers": 10.2.1
