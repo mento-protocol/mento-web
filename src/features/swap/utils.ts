@@ -1,89 +1,45 @@
 import BigNumber from 'bignumber.js'
-import { WEI_PER_UNIT } from 'src/config/consts'
-import { NativeTokenId } from 'src/config/tokens'
-import { ToCeloRates } from 'src/features/swap/types'
-import {
-  NumberT,
-  fromWeiRounded,
-  parseAmount,
-  parseAmountWithDefault,
-  toWei,
-} from 'src/utils/amount'
+import { TokenId } from 'src/config/tokens'
+import { NumberT, fromWeiRounded, parseAmountWithDefault, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
-
-export type ExchangeValueFormatter = (
-  fromAmount: NumberT | null | undefined,
-  fromTokenId: NativeTokenId | null | undefined,
-  toTokenId: NativeTokenId | null | undefined
-) => ExchangeValues
 
 export interface ExchangeValues {
   from: {
     amount: string
     weiAmount: string
-    token: NativeTokenId
+    token: TokenId
   }
   to: {
-    amount: string
-    weiAmount: string
-    token: NativeTokenId
+    token: TokenId
+    amount?: string
+    weiAmount?: string
   }
-  rate: {
-    value: number
-    weiValue: string
-    fromCeloValue: string
-    fromCeloWeiValue: string
-    weiBasis: string
-    lastUpdated: number
-    isReady: boolean
-  }
-  stableTokenId: NativeTokenId
+  stableTokenId: TokenId
 }
 
 // Takes raw input and rates info and computes/formats to convenient form
-export function getExchangeValues(
+export function formatExchangeValues(
   fromAmount: NumberT | null | undefined,
-  fromTokenId: NativeTokenId | null | undefined,
-  toTokenId: NativeTokenId | null | undefined,
-  toCeloRates: ToCeloRates
+  fromTokenId: TokenId | null | undefined,
+  toTokenId: TokenId | null | undefined
 ): ExchangeValues {
   try {
     // Return some defaults when values are missing
-    if (!fromTokenId || !toTokenId || !toCeloRates) return getDefaultExchangeValues()
+    if (!fromAmount || !fromTokenId || !toTokenId) return getDefaultExchangeValues()
 
-    const sellCelo = fromTokenId === NativeTokenId.CELO
+    const sellCelo = fromTokenId === TokenId.CELO
     const stableTokenId = sellCelo ? toTokenId : fromTokenId
-    const toCeloRate = toCeloRates[stableTokenId]
-    if (!toCeloRate) return getDefaultExchangeValues(fromTokenId, toTokenId)
-
-    const { stableBucket, celoBucket, spread } = toCeloRate
-    const [buyBucket, sellBucket] = sellCelo
-      ? [stableBucket, celoBucket]
-      : [celoBucket, stableBucket]
 
     const fromAmountWei = parseInputExchangeAmount(fromAmount, false)
-    const { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei } =
-      calcSimpleExchangeRate(fromAmountWei, buyBucket, sellBucket, spread, sellCelo)
 
     return {
       from: {
         amount: fromWeiRounded(fromAmountWei, true),
-        weiAmount: fromAmountWei.toString(),
+        weiAmount: fromAmountWei.toFixed(0),
         token: fromTokenId,
       },
       to: {
-        amount: fromWeiRounded(toAmountWei, true),
-        weiAmount: toAmountWei.toString(),
         token: toTokenId,
-      },
-      rate: {
-        value: exchangeRateNum,
-        weiValue: exchangeRateWei.toString(),
-        fromCeloValue: fromWeiRounded(fromCeloRateWei, true),
-        fromCeloWeiValue: fromCeloRateWei.toString(),
-        weiBasis: WEI_PER_UNIT,
-        lastUpdated: toCeloRate.lastUpdated,
-        isReady: true,
       },
       stableTokenId,
     }
@@ -99,49 +55,13 @@ export function parseInputExchangeAmount(amount: NumberT | null | undefined, isW
   return BigNumber.max(parsedWei, 0)
 }
 
-export function calcSimpleExchangeRate(
-  amountInWei: NumberT,
-  buyBucket: string,
-  sellBucket: string,
-  spread: string,
-  sellCelo: boolean
-) {
-  try {
-    const fromAmount = parseAmount(amountInWei)
-    const simulate = !fromAmount || fromAmount.lte(0)
-    // If no valid from amount provided, simulate rate with 1 unit
-    const fromAmountAdjusted = simulate ? new BigNumber(WEI_PER_UNIT) : fromAmount
-
-    const spreadFactor = new BigNumber(1).minus(spread)
-    const reducedSellAmt = fromAmountAdjusted.multipliedBy(spreadFactor)
-
-    const toAmount = reducedSellAmt
-      .multipliedBy(buyBucket)
-      .dividedBy(reducedSellAmt.plus(sellBucket))
-
-    const exchangeRateNum = toAmount.dividedBy(fromAmountAdjusted).toNumber()
-    const exchangeRateWei = toWei(exchangeRateNum)
-    const fromCeloRateWei = sellCelo
-      ? exchangeRateWei
-      : toWei(fromAmountAdjusted.dividedBy(toAmount).toNumber())
-
-    // The FixedNumber interface isn't very friendly, need to strip out the decimal manually for BigNumber
-    const toAmountWei = new BigNumber(simulate ? 0 : toAmount).toFixed(0, BigNumber.ROUND_DOWN)
-
-    return { exchangeRateNum, exchangeRateWei, fromCeloRateWei, toAmountWei }
-  } catch (error) {
-    logger.warn('Error computing exchange values', error)
-    return { exchangeRateNum: 0, exchangeRateWei: '0', fromCeloRateWei: '0', toAmountWei: '0' }
-  }
-}
-
 export function getDefaultExchangeValues(
-  _fromToken?: NativeTokenId | null,
-  _toToken?: NativeTokenId | null
+  _fromToken?: TokenId | null,
+  _toToken?: TokenId | null
 ): ExchangeValues {
-  const fromToken = _fromToken || NativeTokenId.CELO
-  const toToken = _toToken || NativeTokenId.cUSD
-  const stableTokenId = fromToken === NativeTokenId.CELO ? toToken : fromToken
+  const fromToken = _fromToken || TokenId.CELO
+  const toToken = _toToken || TokenId.cUSD
+  const stableTokenId = fromToken === TokenId.CELO ? toToken : fromToken
   return {
     from: {
       amount: '0',
@@ -149,18 +69,7 @@ export function getDefaultExchangeValues(
       token: fromToken,
     },
     to: {
-      amount: '0',
-      weiAmount: '0',
       token: toToken,
-    },
-    rate: {
-      value: 0,
-      weiValue: '0',
-      fromCeloValue: '0',
-      fromCeloWeiValue: '0',
-      weiBasis: WEI_PER_UNIT,
-      lastUpdated: 0,
-      isReady: false,
     },
     stableTokenId,
   }
@@ -168,9 +77,8 @@ export function getDefaultExchangeValues(
 
 export function getMinBuyAmount(
   amountInWei: BigNumber.Value,
-  slippage: BigNumber.Value,
-  exchangeRate: BigNumber.Value
+  slippage: BigNumber.Value
 ): BigNumber {
   const slippageFactor = new BigNumber(slippage).div(100).minus(1).times(-1)
-  return new BigNumber(amountInWei).times(exchangeRate).times(slippageFactor).decimalPlaces(0)
+  return new BigNumber(amountInWei).times(slippageFactor).decimalPlaces(0)
 }

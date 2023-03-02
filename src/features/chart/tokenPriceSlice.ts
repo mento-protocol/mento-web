@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getLocalStore } from 'next-persist'
 import { fetchTokenPrice } from 'src/features/chart/fetchPrices'
 import { BaseCurrencyPriceHistory } from 'src/features/chart/types'
 
@@ -12,11 +11,9 @@ const initialState: TokenPrices = {
   prices: {},
 }
 
-const persistedState = getLocalStore('tokenPrice', initialState)
-
 const tokenPriceSlice = createSlice({
   name: 'tokenPrice',
-  initialState: persistedState,
+  initialState,
   reducers: {
     resetTokenPrices: () => initialState,
   },

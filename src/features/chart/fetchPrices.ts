@@ -8,7 +8,7 @@ import { getLatestBlockDetails, getNumBlocksPerInterval } from 'src/blockchain/b
 import { config } from 'src/config/config'
 import { MAX_TOKEN_PRICE_NUM_DAYS } from 'src/config/consts'
 import { nativeTokenToKitToken } from 'src/config/tokenMapping'
-import { NativeTokenId, StableTokenIds } from 'src/config/tokens'
+import { StableTokenIds, TokenId } from 'src/config/tokens'
 import {
   BaseCurrencyPriceHistory,
   PairPriceUpdate,
@@ -39,11 +39,11 @@ const EXPECTED_MAX_CELO_TO_STABLE = 100
 
 let oracleInterface: Interface | undefined
 let oracleAddress: string | undefined
-const tokenAddresses: Partial<Record<NativeTokenId, string>> = {}
+const tokenAddresses: Partial<Record<TokenId, string>> = {}
 
 interface FetchTokenPriceParams {
   kit: MiniContractKit
-  baseCurrency: NativeTokenId
+  baseCurrency: TokenId
   numDays?: number // 7 by default
 }
 
@@ -63,13 +63,13 @@ export const fetchTokenPrice = createAsyncThunk<
 async function _fetchTokenPrice(
   kit: MiniContractKit,
   prices: BaseCurrencyPriceHistory,
-  baseCurrency: NativeTokenId,
+  baseCurrency: TokenId,
   numDays = DEFAULT_HISTORY_NUM_DAYS
 ) {
   if (numDays > MAX_TOKEN_PRICE_NUM_DAYS) {
     throw new Error(`Cannot retrieve prices for such a wide window: ${numDays}`)
   }
-  if (baseCurrency !== NativeTokenId.CELO) {
+  if (baseCurrency !== TokenId.CELO) {
     throw new Error('Only CELO <-> Native currency is currently supported')
   }
 
@@ -114,7 +114,7 @@ async function fetchStableTokenPrices(
   for (const key of Object.keys(mergedPrices)) {
     const quoteCurrency = key as QuoteCurrency // TS limitation of Object.keys()
     const prices = mergedPrices[quoteCurrency]!
-    pairPriceUpdates.push({ baseCurrency: NativeTokenId.CELO, quoteCurrency, prices })
+    pairPriceUpdates.push({ baseCurrency: TokenId.CELO, quoteCurrency, prices })
   }
   return pairPriceUpdates
 }
@@ -143,7 +143,7 @@ async function parseBlockscoutOracleLogs(
   oracleInterface: Interface,
   minBlock: number
 ) {
-  const tokenToPrice = new Map<NativeTokenId, TokenPricePoint>()
+  const tokenToPrice = new Map<TokenId, TokenPricePoint>()
   for (const id of StableTokenIds) {
     const tokenAddress = await getTokenAddress(kit, id)
     const price = parseBlockscoutOracleLogsForToken(logs, oracleInterface, tokenAddress, minBlock)
@@ -217,7 +217,7 @@ async function getOracleAddress(kit: MiniContractKit) {
   return oracleAddress
 }
 
-async function getTokenAddress(kit: MiniContractKit, tokenId: NativeTokenId): Promise<string> {
+async function getTokenAddress(kit: MiniContractKit, tokenId: TokenId): Promise<string> {
   const cachedAddress = tokenAddresses[tokenId]
   if (cachedAddress) return cachedAddress
 

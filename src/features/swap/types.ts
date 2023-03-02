@@ -1,13 +1,13 @@
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 
 export interface SwapFormValues {
-  fromTokenId: NativeTokenId
-  toTokenId: NativeTokenId
+  fromTokenId: TokenId
+  toTokenId: TokenId
   fromAmount: number | string
   slippage: string
 }
 
-export type ToCeloRates = Partial<Record<NativeTokenId, ExchangeRate>>
+export type ToCeloRates = Partial<Record<TokenId, ExchangeRate>>
 
 // Raw Mento chain data from an Exchange contract
 export interface ExchangeRate {
@@ -23,4 +23,4 @@ export interface SimpleExchangeRate {
   lastUpdated: number
 }
 
-export type SizeLimits = Partial<Record<NativeTokenId, { min: string; max: string }>>
+export type SizeLimits = Partial<Record<TokenId, { min: string; max: string }>>

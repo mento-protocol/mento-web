@@ -1,7 +1,7 @@
 import { Mainnet, useCelo } from '@celo/react-celo'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 import styles from 'src/features/chart/PriceChart.module.css'
 import { fetchTokenPrice } from 'src/features/chart/fetchPrices'
 import { tokenPriceHistoryToChartData } from 'src/features/chart/utils'
@@ -13,7 +13,7 @@ import { logger } from 'src/utils/logger'
 import ReactFrappeChart from './ReactFrappeChart'
 
 interface PriceChartProps {
-  stableTokenId: NativeTokenId
+  stableTokenId: TokenId
   containerClasses?: string
   height?: number
 }
@@ -29,7 +29,7 @@ export function PriceChartCelo(props: PriceChartProps) {
     dispatch(
       fetchTokenPrice({
         kit,
-        baseCurrency: NativeTokenId.CELO,
+        baseCurrency: TokenId.CELO,
       })
     )
       .unwrap()
@@ -40,7 +40,7 @@ export function PriceChartCelo(props: PriceChartProps) {
   }, [dispatch, kit, initialised, network])
 
   const allPrices = useAppSelector((s) => s.tokenPrice.prices)
-  const celoPrices = allPrices[NativeTokenId.CELO]
+  const celoPrices = allPrices[TokenId.CELO]
   const stableTokenPrices = celoPrices ? celoPrices[stableTokenId] : undefined
   const chartData = tokenPriceHistoryToChartData(stableTokenPrices)
   const chartHeight = height || 250

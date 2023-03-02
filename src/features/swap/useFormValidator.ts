@@ -1,7 +1,8 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
+import { config } from 'src/config/config'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { SizeLimits, SwapFormValues } from 'src/features/swap/types'
 import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
@@ -9,6 +10,7 @@ import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
 export function useFormValidator(balances: AccountBalances, sizeLimits?: SizeLimits | null) {
   return useCallback(
     (values?: SwapFormValues): FormikErrors<SwapFormValues> => {
+      if (config.debug) return {} // TODO disable
       if (!values || !values.fromAmount) return { fromAmount: 'Amount Required' }
       const parsedAmount = parseAmount(values.fromAmount)
       if (!parsedAmount) return { fromAmount: 'Amount is Invalid' }
@@ -22,7 +24,7 @@ export function useFormValidator(balances: AccountBalances, sizeLimits?: SizeLim
       }
       if (sizeLimits) {
         const stableTokenId =
-          values.fromTokenId === NativeTokenId.CELO ? values.toTokenId : values.fromTokenId
+          values.fromTokenId === TokenId.CELO ? values.toTokenId : values.fromTokenId
         const limits = sizeLimits[stableTokenId]
         if (limits?.min && weiAmount.lt(limits?.min)) return { fromAmount: 'Amount below minimum' }
         if (limits?.max && weiAmount.gt(limits?.max))

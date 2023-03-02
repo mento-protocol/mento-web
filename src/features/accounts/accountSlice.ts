@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 import { AccountBalances, fetchBalances } from 'src/features/accounts/fetchBalances'
 
 interface AccountState {
@@ -9,10 +9,10 @@ interface AccountState {
 
 const initialState: AccountState = {
   balances: {
-    [NativeTokenId.CELO]: '0',
-    [NativeTokenId.cUSD]: '0',
-    [NativeTokenId.cEUR]: '0',
-    [NativeTokenId.cREAL]: '0',
+    [TokenId.CELO]: '0',
+    [TokenId.cUSD]: '0',
+    [TokenId.cEUR]: '0',
+    [TokenId.cREAL]: '0',
   },
   lastUpdated: null,
 }

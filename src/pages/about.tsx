@@ -44,7 +44,7 @@ export default function AboutPage() {
           <TextLink href="https://twitter.com/RossyWrote" className="text-green-600">
             J M Rossy
           </TextLink>
-          . It was funded by the Celo Foundation and Mento Labs. For more help, join the chat on{' '}
+          , funded by the Celo Foundation and Mento Labs. For more help, join the chat on{' '}
           <TextLink href={config.discordUrl} className="text-green-600">
             Discord
           </TextLink>

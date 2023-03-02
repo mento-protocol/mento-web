@@ -4,68 +4,68 @@
  */
 import { CeloContract, CeloTokenType, StableToken, Token } from '@celo/contractkit'
 import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 
-export async function getExchangeContract(kit: MiniContractKit, tokenId: NativeTokenId) {
+export async function getExchangeContract(kit: MiniContractKit, tokenId: TokenId) {
   switch (tokenId) {
-    case NativeTokenId.cUSD:
+    case TokenId.cUSD:
       return kit.contracts.getExchange(StableToken.cUSD)
-    case NativeTokenId.cEUR:
+    case TokenId.cEUR:
       return kit.contracts.getExchange(StableToken.cEUR)
-    case NativeTokenId.cREAL:
+    case TokenId.cREAL:
       return kit.contracts.getExchange(StableToken.cREAL)
     default:
       throw new Error(`Could not get contract for token ${tokenId}`)
   }
 }
 
-export async function getTokenContract(kit: MiniContractKit, tokenId: NativeTokenId) {
+export async function getTokenContract(kit: MiniContractKit, tokenId: TokenId) {
   switch (tokenId) {
-    case NativeTokenId.cUSD:
+    case TokenId.cUSD:
       return kit.contracts.getStableToken(StableToken.cUSD)
-    case NativeTokenId.cEUR:
+    case TokenId.cEUR:
       return kit.contracts.getStableToken(StableToken.cEUR)
-    case NativeTokenId.cREAL:
+    case TokenId.cREAL:
       return kit.contracts.getStableToken(StableToken.cREAL)
-    case NativeTokenId.CELO:
+    case TokenId.CELO:
       return kit.contracts.getGoldToken()
     default:
       throw new Error(`Could not get contract for token ${tokenId}`)
   }
 }
 
-export function kitContractToNativeToken(name: CeloContract): NativeTokenId {
-  if (name === CeloContract.StableToken) return NativeTokenId.cUSD
-  if (name === CeloContract.StableTokenEUR) return NativeTokenId.cEUR
-  if (name === CeloContract.StableTokenBRL) return NativeTokenId.cREAL
-  if (name === CeloContract.GoldToken) return NativeTokenId.CELO
+export function kitContractToNativeToken(name: CeloContract): TokenId {
+  if (name === CeloContract.StableToken) return TokenId.cUSD
+  if (name === CeloContract.StableTokenEUR) return TokenId.cEUR
+  if (name === CeloContract.StableTokenBRL) return TokenId.cREAL
+  if (name === CeloContract.GoldToken) return TokenId.CELO
   throw new Error(`Unsupported token contract name ${name}`)
 }
 
-export function kitTokenToNativeToken(tokenId: CeloTokenType): NativeTokenId {
+export function kitTokenToNativeToken(tokenId: CeloTokenType): TokenId {
   switch (tokenId) {
     case StableToken.cUSD:
-      return NativeTokenId.cUSD
+      return TokenId.cUSD
     case StableToken.cEUR:
-      return NativeTokenId.cEUR
+      return TokenId.cEUR
     case StableToken.cREAL:
-      return NativeTokenId.cREAL
+      return TokenId.cREAL
     case Token.CELO:
-      return NativeTokenId.CELO
+      return TokenId.CELO
     default:
       throw new Error(`Unsupported token id ${tokenId}`)
   }
 }
 
-export function nativeTokenToKitToken(tokenId: NativeTokenId): CeloTokenType {
+export function nativeTokenToKitToken(tokenId: TokenId): CeloTokenType {
   switch (tokenId) {
-    case NativeTokenId.cUSD:
+    case TokenId.cUSD:
       return StableToken.cUSD
-    case NativeTokenId.cEUR:
+    case TokenId.cEUR:
       return StableToken.cEUR
-    case NativeTokenId.cREAL:
+    case TokenId.cREAL:
       return StableToken.cREAL
-    case NativeTokenId.CELO:
+    case TokenId.CELO:
       return Token.CELO
     default:
       throw new Error(`Unsupported token id ${tokenId}`)

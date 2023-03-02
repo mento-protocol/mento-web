@@ -3,6 +3,7 @@ export enum Color {
   mentoGreen = '#19D88A',
   celoGreen = '#35D07F',
   celoGold = '#FBCC5C',
+  usdcBlue = '#2775CA',
 
   primaryBlack = '#2E3338',
   primaryBlack50 = '#939799',

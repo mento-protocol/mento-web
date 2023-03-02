@@ -1,41 +1,56 @@
 import { Connector, useCelo } from '@celo/react-celo'
-import { Field, Form, Formik, FormikErrors, useFormikContext } from 'formik'
+import { Field, Form, Formik, useFormikContext } from 'formik'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
+import { Spinner } from 'src/components/animation/Spinner'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
-import { CELO, NativeTokenId, cEUR, cREAL, cUSD, isStableToken } from 'src/config/tokens'
+import { CELO, TokenId, cEUR, cREAL, cUSD, isStableToken } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
-import { ExchangeValueFormatter, getExchangeValues } from 'src/features/swap/utils'
+import { formatExchangeValues } from 'src/features/swap/utils'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
 
+import { useSwapOutQuote } from './useSwapOutQuote'
+
 const initialValues: SwapFormValues = {
-  fromTokenId: NativeTokenId.CELO,
-  toTokenId: NativeTokenId.cUSD,
+  fromTokenId: TokenId.CELO,
+  toTokenId: TokenId.cUSD,
   fromAmount: '',
   slippage: '1.0',
 }
 
 const tokens = [
-  { value: NativeTokenId.CELO, label: CELO.symbol },
-  { value: NativeTokenId.cUSD, label: cUSD.symbol },
-  { value: NativeTokenId.cEUR, label: cEUR.symbol },
-  { value: NativeTokenId.cREAL, label: cREAL.symbol },
+  { value: TokenId.CELO, label: CELO.symbol },
+  { value: TokenId.cUSD, label: cUSD.symbol },
+  { value: TokenId.cEUR, label: cEUR.symbol },
+  { value: TokenId.cREAL, label: cREAL.symbol },
 ]
 
-export function SwapForm() {
+export function SwapFormCard() {
+  return (
+    <FloatingBox width="w-96" classes="overflow-visible">
+      <div className="flex justify-between mb-5">
+        <h2 className="text-lg font-medium pl-1">Swap</h2>
+        <SettingsMenu />
+      </div>
+      <SwapForm />
+    </FloatingBox>
+  )
+}
+
+function SwapForm() {
   const balances = useAppSelector((s) => s.account.balances)
-  const { toCeloRates, showSlippage } = useAppSelector((s) => s.swap)
+  const { showSlippage } = useAppSelector((s) => s.swap)
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
@@ -43,41 +58,6 @@ export function SwapForm() {
   }
   const validateForm = useFormValidator(balances)
 
-  const valueFormatter: ExchangeValueFormatter = (fromAmount, fromTokenId, toTokenId) =>
-    getExchangeValues(fromAmount, fromTokenId, toTokenId, toCeloRates)
-
-  return (
-    <FloatingBox width="w-96" classes="overflow-visible">
-      <div className="flex justify-between mb-5">
-        <h2 className="text-lg font-medium pl-1">Swap</h2>
-        <SettingsMenu />
-      </div>
-      <SwapFormInner
-        balances={balances}
-        valueFormatter={valueFormatter}
-        showSlippage={showSlippage}
-        onSubmit={onSubmit}
-        validateForm={validateForm}
-      />
-    </FloatingBox>
-  )
-}
-
-interface SwapFormInnerProps {
-  balances: AccountBalances
-  showSlippage: boolean
-  onSubmit: (values: SwapFormValues) => void
-  validateForm: (values?: SwapFormValues) => FormikErrors<SwapFormValues>
-  valueFormatter: ExchangeValueFormatter
-}
-
-export function SwapFormInner({
-  balances,
-  showSlippage,
-  onSubmit,
-  validateForm,
-  valueFormatter,
-}: SwapFormInnerProps) {
   const { connect, address } = useCelo()
 
   return (
@@ -89,11 +69,7 @@ export function SwapFormInner({
       validateOnBlur={false}
     >
       <Form>
-        <SwapFormInputs
-          balances={balances}
-          valueFormatter={valueFormatter}
-          isConnected={!!address}
-        />
+        <SwapFormInputs balances={balances} isConnected={!!address} />
         {showSlippage && <SlippageRow />}
         <div className="flex justify-center mt-5 mb-1">
           <SubmitButton address={address || null} connect={connect} />
@@ -106,38 +82,32 @@ export function SwapFormInner({
 interface FormInputProps {
   balances: AccountBalances
   isConnected: boolean
-  valueFormatter: ExchangeValueFormatter
 }
 
 function SwapFormInputs(props: FormInputProps) {
-  const { balances, isConnected, valueFormatter } = props
+  const { balances, isConnected } = props
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
-  const { to, rate, stableTokenId } = valueFormatter(
-    values.fromAmount,
-    values.fromTokenId,
-    values.toTokenId
-  )
+  const { from, to } = formatExchangeValues(values.fromAmount, values.fromTokenId, values.toTokenId)
+  const { isLoading, toAmount, rate } = useSwapOutQuote(from.weiAmount, from.token, to.token)
 
   const roundedBalance = fromWeiRounded(balances[values.fromTokenId])
   const onClickUseMax = () => {
     setFieldValue('fromAmount', roundedBalance)
-    if (values.fromTokenId === NativeTokenId.CELO) {
+    if (values.fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
   }
 
   const onChangeToken = (isFromToken: boolean) => (option: TokenOption | null | undefined) => {
-    const tokenId = option?.value || NativeTokenId.CELO
+    const tokenId = option?.value || TokenId.CELO
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
     const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
     if (isStableToken(tokenId)) {
       setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, NativeTokenId.CELO)
+      setFieldValue(otherField, TokenId.CELO)
     } else {
-      const stableTokenId = isStableToken(values[targetField])
-        ? values[targetField]
-        : NativeTokenId.cUSD
+      const stableTokenId = isStableToken(values[targetField]) ? values[targetField] : TokenId.cUSD
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, stableTokenId)
     }
@@ -179,7 +149,11 @@ function SwapFormInputs(props: FormInputProps) {
         <ReverseTokenButton />
       </div>
       <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
-        {rate.isReady ? `${rate.fromCeloValue} ${stableTokenId} ~ 1 CELO` : 'Loading...'}
+        {rate
+          ? `${rate} ${from.token} ~ 1 ${to.token}`
+          : from.amount !== '0'
+          ? 'Loading...'
+          : '...'}
       </div>
       <div className="flex justify-between items-center py-2 px-3 mb-1 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
@@ -192,7 +166,15 @@ function SwapFormInputs(props: FormInputProps) {
           />
           <FieldDividerLine />
         </div>
-        <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{to.amount}</div>
+        {!isLoading ? (
+          <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{toAmount}</div>
+        ) : (
+          <div className="w-8 h-8 pt-1 flex items-center justify-center">
+            <div className="scale-[0.3] opacity-80">
+              <Spinner />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

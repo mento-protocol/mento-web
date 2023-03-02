@@ -6,6 +6,7 @@ import { SortedOraclesWrapper } from '@celo/contractkit/lib/wrappers/SortedOracl
 let oracles: SortedOraclesWrapper
 let lastChainId: number
 
+// TODO remove
 export async function getSortedOracles(kit: MiniContractKit): Promise<SortedOraclesWrapper> {
   const currentChainId = await kit.connection.chainId()
   if (oracles && lastChainId === currentChainId) {

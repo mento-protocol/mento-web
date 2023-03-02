@@ -1,6 +1,6 @@
 import { CeloProvider } from '@celo/react-celo'
 import '@celo/react-celo/lib/styles.css'
-import PersistWrapper from 'next-persist/lib/NextPersistWrapper'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { PropsWithChildren } from 'react'
 import { Provider } from 'react-redux'
@@ -23,15 +23,7 @@ const dAppConfig = {
   walletConnectProjectId: config.walletConnectProjectId,
 }
 
-const nextPersistConfig = {
-  method: 'localStorage',
-  allowList: {
-    tokenPrice: ['prices'],
-  },
-}
-
-// https://github.com/oslabs-beta/next-persist/issues/24
-const PersistWrapperTypeFixed = PersistWrapper as any
+const reactQueryClient = new QueryClient({})
 
 function SafeHydrate({ children }: PropsWithChildren<any>) {
   // Disable app SSR for now as it's not needed and
@@ -50,14 +42,14 @@ export default function App({ Component, pageProps, router }: AppProps) {
     <ErrorBoundary>
       <SafeHydrate>
         <Provider store={store}>
-          <PersistWrapperTypeFixed wrapperConfig={nextPersistConfig}>
-            <CeloProvider dapp={dAppConfig}>
+          <QueryClientProvider client={reactQueryClient}>
+            <CeloProvider dapp={dAppConfig} defaultNetwork="Baklava">
               <AppLayout pathName={pathName}>
                 <Component {...pageProps} />
               </AppLayout>
               <ToastContainer transition={Zoom} position={toast.POSITION.BOTTOM_RIGHT} limit={2} />
             </CeloProvider>
-          </PersistWrapperTypeFixed>
+          </QueryClientProvider>
         </Provider>
       </SafeHydrate>
     </ErrorBoundary>

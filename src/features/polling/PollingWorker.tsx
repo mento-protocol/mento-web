@@ -5,7 +5,6 @@ import { STATUS_POLLER_DELAY } from 'src/config/consts'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
 import { useAppDispatch } from 'src/features/store/hooks'
-import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { logger } from 'src/utils/logger'
 import { useInterval } from 'src/utils/timeout'
 
@@ -17,12 +16,6 @@ export function PollingWorker() {
 
   const onPoll = () => {
     if (!kit || !initialised) return
-    dispatch(fetchExchangeRates({ kit }))
-      .unwrap()
-      .catch((err) => {
-        toast.warn('Error retrieving exchange rates')
-        logger.error('Failed to retrieve exchange rates', err)
-      })
     dispatch(fetchLatestBlock({ kit }))
       .unwrap()
       .catch((err) => {

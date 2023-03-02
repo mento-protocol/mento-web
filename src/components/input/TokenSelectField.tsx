@@ -1,5 +1,5 @@
 import { useField } from 'formik'
-import React, { PropsWithChildren } from 'react'
+import { PropsWithChildren } from 'react'
 import Select, {
   OptionProps,
   OptionsType,
@@ -9,7 +9,7 @@ import Select, {
   ValueType,
   components,
 } from 'react-select'
-import { NativeTokens, Token, getTokenById } from 'src/config/tokens'
+import { Token, getTokenById } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { Color } from 'src/styles/Color'
 
@@ -103,7 +103,7 @@ function getTokenForValue(value: OptionsType<TokenOption>): Token | null {
     id = value.value
   }
   if (!id) return null
-  return getTokenById(id, { ...NativeTokens })
+  return getTokenById(id)
 }
 
 const customStyles: Styles<any, false> = {

@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { SwapFormValues, ToCeloRates } from 'src/features/swap/types'
 
 export interface SwapState {
@@ -30,13 +29,6 @@ export const swapSlice = createSlice({
       state.showChart = action.payload
     },
     reset: () => initialState,
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchExchangeRates.fulfilled, (state, action) => {
-      const rates = action.payload
-      if (!rates) return
-      state.toCeloRates = rates
-    })
   },
 })
 
