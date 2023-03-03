@@ -9,11 +9,11 @@ export default function SwapPage() {
   const { formValues, showChart } = useAppSelector((state) => state.swap)
   return (
     <div className="flex justify-center items-center h-full flex-wrap">
-      <div className="mb-12">
+      <div className="mb-6">
         {!formValues ? <SwapFormCard /> : <SwapConfirmCard formValues={formValues} />}
       </div>
       {config.showPriceChart && showChart && (
-        <div className="mb-12 md:ml-10">
+        <div className="mb-6 md:ml-10">
           <PriceChartCelo stableTokenId={TokenId.cUSD} height={265} />
         </div>
       )}

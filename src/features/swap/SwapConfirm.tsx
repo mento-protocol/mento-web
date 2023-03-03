@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
+import { Spinner } from 'src/components/animation/Spinner'
 import { BackButton } from 'src/components/buttons/BackButton'
 import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
@@ -13,6 +14,7 @@ import { SwapFormValues } from 'src/features/swap/types'
 import { ExchangeValues, formatExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
+import { Modal } from 'src/layout/Modal'
 import { Color } from 'src/styles/Color'
 import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
@@ -28,6 +30,10 @@ interface Props {
 
 export function SwapConfirmCard(props: Props) {
   const { fromAmount, fromTokenId, toTokenId, slippage } = props.formValues
+
+  // Flag for if loading modal is open (visible)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const { address, isConnected } = useAccount()
   const chainId = useChainId()
 
@@ -85,6 +91,8 @@ export function SwapConfirmCard(props: Props) {
       return
     }
 
+    setIsModalOpen(true)
+
     try {
       logger.info('Sending approve tx')
       const approveResult = await sendApproveTx()
@@ -94,6 +102,7 @@ export function SwapConfirmCard(props: Props) {
       logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
     } catch (error) {
       logger.error('Failed to approve token', error)
+      setIsModalOpen(false)
     }
   }
 
@@ -111,6 +120,7 @@ export function SwapConfirmCard(props: Props) {
       .catch((e) => {
         logger.error('Swap failure:', e)
       })
+      .finally(() => setIsModalOpen(false))
   }, [isApproveTxSuccess, isSwapTxLoading, isSwapTxSuccess, sendSwapTx, chainId, dispatch])
 
   const onClickBack = () => {
@@ -150,6 +160,14 @@ export function SwapConfirmCard(props: Props) {
           Swap
         </SolidButton>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        title="Performing Swap"
+        close={() => setIsModalOpen(false)}
+        width="max-w-xs"
+      >
+        <BasicSpinner />
+      </Modal>
     </FloatingBox>
   )
 }
@@ -213,6 +231,21 @@ function RightCircleArrow() {
           d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
         />
       </svg>
+    </div>
+  )
+}
+
+function BasicSpinner() {
+  const { connector } = useAccount()
+  return (
+    <div className="my-6 flex flex-col justify-center items-center">
+      <Spinner />
+      <div className="mt-5 text-sm text-center text-gray-500">
+        Sending two transactions: Approve and Swap
+      </div>
+      <div className="mt-3 text-sm text-center text-gray-500">{`Sign with ${
+        connector?.name || 'wallet'
+      } to proceed`}</div>
     </div>
   )
 }

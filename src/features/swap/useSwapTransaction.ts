@@ -46,24 +46,15 @@ export function useSwapTransaction(
     sendTransactionAsync,
   } = useSendTransaction(config)
 
-  // TODO cleanup
-  // https://github.com/wagmi-dev/wagmi/discussions/1564#discussioncomment-4500558
-  // useEffect(() => {
-  //   if (isApproveConfirmed) refetch().catch((e) => logger.error('Error refetching swap prepare', e))
-  // }, [isApproveConfirmed, refetch])
-
-  // https://github.com/wagmi-dev/wagmi/discussions/1564#discussioncomment-4500558
-  // useInterval(refetch, 500)
-
   useEffect(() => {
-    if (txPrepError || sendPrepError?.message) {
+    if (txPrepError || (sendPrepError?.message && !isLoading && !isSuccess)) {
       toast.error('Unable to prepare swap transaction')
       logger.error(txPrepError || sendPrepError?.message)
     } else if (txSendError) {
       toast.error('Unable to execute swap transaction')
       logger.error(txSendError)
     }
-  }, [txPrepError, sendPrepError, txSendError])
+  }, [txPrepError, sendPrepError, isLoading, isSuccess, txSendError])
 
   return {
     sendSwapTx: sendTransactionAsync,
