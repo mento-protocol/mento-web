@@ -56,10 +56,10 @@ export function useSwapTransaction(
   // useInterval(refetch, 500)
 
   useEffect(() => {
-    if (txPrepError) {
+    if (txPrepError || sendPrepError) {
       toast.error('Unable to prepare swap transaction')
       logger.error(txPrepError)
-    } else if (sendPrepError || txSendError) {
+    } else if (txSendError) {
       toast.error('Unable to execute swap transaction')
       logger.error(txSendError)
     }
