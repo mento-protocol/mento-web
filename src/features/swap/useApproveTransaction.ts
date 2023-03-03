@@ -40,9 +40,9 @@ export function useApproveTransaction(
   } = useSendTransaction(config)
 
   useEffect(() => {
-    if (txPrepError || sendPrepError) {
+    if (txPrepError || sendPrepError?.message) {
       toast.error('Unable to prepare approval transaction')
-      logger.error(txPrepError)
+      logger.error(txPrepError || sendPrepError?.message)
     } else if (txSendError) {
       toast.error('Unable to execute approval transaction')
       logger.error(txSendError)

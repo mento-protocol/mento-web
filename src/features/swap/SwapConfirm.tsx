@@ -87,10 +87,11 @@ export function SwapConfirmCard(props: Props) {
 
     try {
       logger.info('Sending approve tx')
-      const approveReceipt = await sendApproveTx()
-      toastToYourSuccess('Approve complete, starting swap', approveReceipt.hash, chainId)
+      const approveResult = await sendApproveTx()
+      const approveReceipt = await approveResult.wait(1)
+      toastToYourSuccess('Approve complete, starting swap', approveReceipt.transactionHash, chainId)
       setApproveConfirmed(true)
-      logger.info(`Tx receipt received for approve: ${approveReceipt.hash}`)
+      logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
     } catch (error) {
       logger.error('Failed to approve token', error)
     }
@@ -101,9 +102,10 @@ export function SwapConfirmCard(props: Props) {
     if (isSwapTxLoading || isSwapTxSuccess || !isApproveTxSuccess || !sendSwapTx) return
     logger.info('Sending swap tx')
     sendSwapTx()
+      .then((swapResult) => swapResult.wait(1))
       .then((swapReceipt) => {
-        logger.info(`Tx receipt received for swap: ${swapReceipt.hash}`)
-        toastToYourSuccess('Swap Complete!', swapReceipt.hash, chainId)
+        logger.info(`Tx receipt received for swap: ${swapReceipt.transactionHash}`)
+        toastToYourSuccess('Swap Complete!', swapReceipt.transactionHash, chainId)
         dispatch(setFormValues(null))
       })
       .catch((e) => {
