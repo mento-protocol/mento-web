@@ -1,4 +1,4 @@
-import { useCelo } from '@celo/react-celo'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Image from 'next/image'
 import { useState } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
@@ -12,9 +12,12 @@ import Logout from 'src/images/icons/logout.svg'
 import Wallet from 'src/images/icons/wallet.svg'
 import { shortenAddress } from 'src/utils/addresses'
 import { tryClipboardSet } from 'src/utils/clipboard'
+import { useAccount, useDisconnect } from 'wagmi'
 
 export function ConnectButton() {
-  const { connect, address, destroy } = useCelo()
+  const { address, isConnected } = useAccount()
+  const { openConnectModal } = useConnectModal()
+  const { disconnect } = useDisconnect()
 
   const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(3)
 
@@ -30,14 +33,14 @@ export function ConnectButton() {
     setShowNetworkModal(true)
   }
 
-  const onClickDisconnect = async () => {
+  const onClickDisconnect = () => {
     setIsOpen(false)
-    await destroy()
+    disconnect()
   }
 
   return (
     <div className="flex justify-end mb-1 relative opacity-90">
-      {address ? (
+      {address && isConnected ? (
         <SolidButton
           size="l"
           color="white"
@@ -55,7 +58,7 @@ export function ConnectButton() {
           color="white"
           classes="shadow-md px-3 sm:px-4"
           icon={<WalletIcon />}
-          onClick={connect}
+          onClick={openConnectModal}
         >
           <div className="hidden sm:block">Connect</div>
         </SolidButton>

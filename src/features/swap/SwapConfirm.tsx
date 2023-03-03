@@ -1,21 +1,12 @@
-import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
-import { useCelo } from '@celo/react-celo'
 import BigNumber from 'bignumber.js'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { BackButton } from 'src/components/buttons/BackButton'
 import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
-import {
-  MAX_EXCHANGE_RATE,
-  MAX_EXCHANGE_TOKEN_SIZE,
-  MIN_EXCHANGE_RATE,
-  SIGN_OPERATION_TIMEOUT,
-} from 'src/config/consts'
-import { getExchangeContract, getTokenContract } from 'src/config/tokenMapping'
-import { TokenId, Tokens } from 'src/config/tokens'
-import { fetchBalances } from 'src/features/accounts/fetchBalances'
+import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
+import { Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
@@ -25,9 +16,11 @@ import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
 import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
-import { PROMISE_TIMEOUT, asyncTimeout } from 'src/utils/timeout'
+import { useAccount, useChainId } from 'wagmi'
 
+import { useApproveTransaction } from './useApproveTransaction'
 import { useSwapOutQuote } from './useSwapOutQuote'
+import { useSwapTransaction } from './useSwapTransaction'
 
 interface Props {
   formValues: SwapFormValues
@@ -35,32 +28,48 @@ interface Props {
 
 export function SwapConfirmCard(props: Props) {
   const { fromAmount, fromTokenId, toTokenId, slippage } = props.formValues
-  const { address, kit, network, performActions } = useCelo()
+  const { address, isConnected } = useAccount()
+  const chainId = useChainId()
+
   const dispatch = useAppDispatch()
   const balances = useAppSelector((s) => s.account.balances)
   const tokenBalance = balances[fromTokenId]
 
   // Ensure invariants are met, otherwise return to swap form
-  const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && kit
+  const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && isConnected
   useEffect(() => {
     if (!isConfirmValid) dispatch(setFormValues(null))
   }, [isConfirmValid, dispatch])
 
-  const { from, to, stableTokenId } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
+  const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
   const { toAmountWei, toAmount, rate } = useSwapOutQuote(from.weiAmount, from.token, to.token)
 
   // Check if amount is almost equal to balance max, in which case use max
   // Helps handle problems from imprecision in non-wei amount display
-  const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance)
-  const minBuyAmountWei = getMinBuyAmount(toAmountWei, slippage)
+  const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance).toFixed(0)
+  const minBuyAmountWei = getMinBuyAmount(toAmountWei, slippage).toFixed(0)
   const minBuyAmount = fromWeiRounded(minBuyAmountWei, true)
 
+  const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading } = useApproveTransaction(
+    chainId,
+    from.token,
+    finalFromAmount,
+    address
+  )
+  const [isApproveConfirmed, setApproveConfirmed] = useState(false)
+
+  const { sendSwapTx, isSwapTxLoading, isSwapTxSuccess } = useSwapTransaction(
+    chainId,
+    from.token,
+    to.token,
+    finalFromAmount,
+    minBuyAmountWei,
+    address,
+    isApproveConfirmed
+  )
+
   const onSubmit = async () => {
-    if (!rate || !toAmount) return // still loading
-    if (!address || !kit) {
-      toast.error('Kit not connected')
-      return
-    }
+    if (!rate || !toAmount || !address || !isConnected) return
     if (new BigNumber(finalFromAmount).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
       toast.error('Amount exceeds limit')
       return
@@ -71,51 +80,36 @@ export function SwapConfirmCard(props: Props) {
       return
     }
 
-    const approvalOperation = async (k: MiniContractKit) => {
-      const tokenContract = await getTokenContract(k, fromTokenId)
-      const exchangeContract = await getExchangeContract(k, stableTokenId)
-      const approveTx = await tokenContract.increaseAllowance(
-        exchangeContract.address,
-        finalFromAmount
-      )
-      // Gas price must be set manually because contractkit does not pre-populate it and
-      // its helpers for getting gas price are only meant for stable token prices
-      const gasPrice = await k.connection.web3.eth.getGasPrice()
-      const approveReceipt = await approveTx.sendAndWaitForReceipt({ gasPrice })
-      logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
-      return approveReceipt.transactionHash
+    if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
+      logger.debug('Approve already started or finished, ignoring submit')
+      return
     }
-    const approvalOpWithTimeout = asyncTimeout(approvalOperation, SIGN_OPERATION_TIMEOUT)
-
-    const exchangeOperation = async (k: MiniContractKit) => {
-      const sellGold = fromTokenId === TokenId.CELO
-      const exchangeContract = await getExchangeContract(k, stableTokenId)
-      const exchangeTx = await exchangeContract.sell(finalFromAmount, minBuyAmountWei, sellGold)
-      const gasPrice = await k.connection.web3.eth.getGasPrice()
-      const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt({ gasPrice })
-      logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
-      await dispatch(fetchBalances({ address, kit: k }))
-      return exchangeReceipt.transactionHash
-    }
-    const exchangeOpWithTimeout = asyncTimeout(exchangeOperation, SIGN_OPERATION_TIMEOUT)
 
     try {
-      const txHashes = (await performActions(
-        approvalOpWithTimeout,
-        exchangeOpWithTimeout
-      )) as string[]
-      if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
-      toastToYourSuccess('Swap Complete!', txHashes[1], network.explorer)
-      dispatch(setFormValues(null))
-    } catch (err: any) {
-      if (err.message === PROMISE_TIMEOUT) {
-        toast.error('Action timed out')
-      } else {
-        toast.error('Unable to complete swap')
-      }
-      logger.error('Failed to execute swap', err)
+      logger.info('Sending approve tx')
+      const approveReceipt = await sendApproveTx()
+      toastToYourSuccess('Approve complete, starting swap', approveReceipt.hash, chainId)
+      setApproveConfirmed(true)
+      logger.info(`Tx receipt received for approve: ${approveReceipt.hash}`)
+    } catch (error) {
+      logger.error('Failed to approve token', error)
     }
   }
+
+  // TODO find a way to have this trigger from the onSubmit
+  useEffect(() => {
+    if (isSwapTxLoading || isSwapTxSuccess || !isApproveTxSuccess || !sendSwapTx) return
+    logger.info('Sending swap tx')
+    sendSwapTx()
+      .then((swapReceipt) => {
+        logger.info(`Tx receipt received for swap: ${swapReceipt.hash}`)
+        toastToYourSuccess('Swap Complete!', swapReceipt.hash, chainId)
+        dispatch(setFormValues(null))
+      })
+      .catch((e) => {
+        logger.error('Swap failure:', e)
+      })
+  }, [isApproveTxSuccess, isSwapTxLoading, isSwapTxSuccess, sendSwapTx, chainId, dispatch])
 
   const onClickBack = () => {
     dispatch(setFormValues(null))

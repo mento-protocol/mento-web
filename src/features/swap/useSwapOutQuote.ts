@@ -1,4 +1,3 @@
-import { useCelo } from '@celo/react-celo'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
@@ -9,11 +8,12 @@ import { TokenId, getTokenAddress } from 'src/config/tokens'
 import { NumberT, fromWeiRounded } from 'src/utils/amount'
 import { useDebounce } from 'src/utils/debounce'
 import { logger } from 'src/utils/logger'
+import { useChainId } from 'wagmi'
 
 import { getMentoSdk } from '../sdk'
 
 export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toTokenId: TokenId) {
-  const { network } = useCelo()
+  const chainId = useChainId()
 
   const debouncedFromAmountWei = useDebounce(fromAmountWei, 350)
 
@@ -22,9 +22,9 @@ export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toT
     async () => {
       const fromAmountBN = ethers.BigNumber.from(debouncedFromAmountWei)
       if (fromAmountBN.lte(0) || !fromTokenId || !toTokenId) return null
-      const mento = await getMentoSdk(network.chainId)
-      const fromTokenAddr = getTokenAddress(fromTokenId, network.chainId)
-      const toTokenAddr = getTokenAddress(toTokenId, network.chainId)
+      const mento = await getMentoSdk(chainId)
+      const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
+      const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const toAmountWei = (
         await mento.getAmountOut(fromTokenAddr, toTokenAddr, fromAmountBN)
       ).toString()
@@ -43,6 +43,7 @@ export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toT
   useEffect(() => {
     if (error) {
       toast.error('Unable to fetch swap out amount')
+      logger.error(error)
     }
   }, [error])
 

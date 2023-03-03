@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import type { providers } from 'ethers'
 import Image from 'next/image'
 import { useState } from 'react'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
@@ -9,7 +10,6 @@ import Discord from 'src/images/logos/discord.svg'
 import Github from 'src/images/logos/github.svg'
 import Twitter from 'src/images/logos/twitter.svg'
 import { isStale } from 'src/utils/time'
-import type { BlockHeader } from 'web3-eth'
 
 export function Footer() {
   return (
@@ -94,7 +94,7 @@ enum ConnStatus {
   Connected = 2,
 }
 
-function getStatusFromBlock(latestBlock: BlockHeader | null | undefined): ConnStatus {
+function getStatusFromBlock(latestBlock: providers.Block | null | undefined): ConnStatus {
   if (latestBlock === undefined) return ConnStatus.Loading
 
   if (latestBlock && latestBlock.number > 0 && latestBlock.timestamp > 0) {

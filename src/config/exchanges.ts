@@ -1,13 +1,14 @@
-import { ChainId } from '@celo/react-celo'
 import { Exchange } from '@mento-protocol/mento-sdk'
 
-export const BROKER_ADDRESSES: Record<number, Address> = {
+import { ChainId } from './chains'
+
+export const BrokerAddresses: Record<ChainId, Address> = {
   [ChainId.Alfajores]: '',
   [ChainId.Baklava]: '0xCa7973db0D6d40b4b375510B3B5c9CB4cce16216',
-  [ChainId.Mainnet]: '',
+  [ChainId.Celo]: '',
 }
 
-export const BAKLAVA_EXCHANGES: Exchange[] = [
+export const BaklavaExchanges: Exchange[] = [
   {
     providerAddr: '0x6596FDc6A19472ff68F751Cf84D8b3574CB4f774',
     id: '0x3135b662c38265d0655177091f1b647b4fef511103d06c016efdf18b46930d2c',
@@ -42,8 +43,8 @@ export const BAKLAVA_EXCHANGES: Exchange[] = [
   },
 ]
 
-export const MENTO_EXCHANGES: Record<number, Array<Exchange> | undefined> = {
+export const MentoExchanges: Record<ChainId, Array<Exchange> | undefined> = {
   [ChainId.Alfajores]: undefined,
-  [ChainId.Baklava]: BAKLAVA_EXCHANGES,
-  [ChainId.Mainnet]: undefined,
+  [ChainId.Baklava]: BaklavaExchanges,
+  [ChainId.Celo]: undefined,
 }

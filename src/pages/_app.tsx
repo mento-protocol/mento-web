@@ -1,5 +1,8 @@
-import { CeloProvider } from '@celo/react-celo'
-import '@celo/react-celo/lib/styles.css'
+import { Alfajores, Baklava, Celo } from '@celo/rainbowkit-celo/chains'
+import { CeloDance, CeloWallet, Valora } from '@celo/rainbowkit-celo/wallets'
+import { RainbowKitProvider, connectorsForWallets, lightTheme } from '@rainbow-me/rainbowkit'
+import '@rainbow-me/rainbowkit/styles.css'
+import { metaMaskWallet, omniWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { PropsWithChildren } from 'react'
@@ -7,23 +10,42 @@ import { Provider } from 'react-redux'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorBoundary } from 'src/components/Errors'
-import { config } from 'src/config/config'
 import { store } from 'src/features/store/store'
 import { AppLayout } from 'src/layout/AppLayout'
+import { Color } from 'src/styles/Color'
 import 'src/styles/fonts.css'
 import 'src/styles/globals.css'
 import { useIsSsr } from 'src/utils/ssr'
 import 'src/vendor/inpage-metamask'
-
-const dAppConfig = {
-  name: 'Mento',
-  description: 'Mento Exchange for Celo',
-  url: config.url,
-  icon: `${config.url}/glyph.png`,
-  walletConnectProjectId: config.walletConnectProjectId,
-}
+import { WagmiConfig, configureChains, createClient } from 'wagmi'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 const reactQueryClient = new QueryClient({})
+
+const { chains, provider } = configureChains(
+  [Baklava, Alfajores, Celo],
+  [jsonRpcProvider({ rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }) })]
+)
+
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended with CELO',
+    wallets: [
+      Valora({ chains }),
+      CeloWallet({ chains }),
+      CeloDance({ chains }),
+      metaMaskWallet({ chains }),
+      omniWallet({ chains }),
+      walletConnectWallet({ chains }),
+    ],
+  },
+])
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  provider,
+  connectors,
+})
 
 function SafeHydrate({ children }: PropsWithChildren<any>) {
   // Disable app SSR for now as it's not needed and
@@ -43,12 +65,25 @@ export default function App({ Component, pageProps, router }: AppProps) {
       <SafeHydrate>
         <Provider store={store}>
           <QueryClientProvider client={reactQueryClient}>
-            <CeloProvider dapp={dAppConfig} defaultNetwork="Baklava">
-              <AppLayout pathName={pathName}>
-                <Component {...pageProps} />
-              </AppLayout>
-              <ToastContainer transition={Zoom} position={toast.POSITION.BOTTOM_RIGHT} limit={2} />
-            </CeloProvider>
+            <WagmiConfig client={wagmiClient}>
+              <RainbowKitProvider
+                chains={chains}
+                theme={lightTheme({
+                  accentColor: Color.mentoGreen600,
+                  borderRadius: 'small',
+                  fontStack: 'system',
+                })}
+              >
+                <AppLayout pathName={pathName}>
+                  <Component {...pageProps} />
+                </AppLayout>
+                <ToastContainer
+                  transition={Zoom}
+                  position={toast.POSITION.BOTTOM_RIGHT}
+                  limit={2}
+                />
+              </RainbowKitProvider>
+            </WagmiConfig>
           </QueryClientProvider>
         </Provider>
       </SafeHydrate>

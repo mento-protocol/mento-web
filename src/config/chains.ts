@@ -1,7 +1,8 @@
+// todo remove?
 export enum ChainId {
   Alfajores = 44787,
   Baklava = 62320,
-  Mainnet = 42220,
+  Celo = 42220,
 }
 
 export interface ChainMetadata {
@@ -28,8 +29,8 @@ export const Baklava: ChainMetadata = {
   explorerApiUrl: 'https://explorer.celo.org/baklava/api',
 }
 
-export const Mainnet: ChainMetadata = {
-  chainId: ChainId.Mainnet,
+export const Celo: ChainMetadata = {
+  chainId: ChainId.Celo,
   name: 'Mainnet',
   rpcUrl: 'https://forno.celo.org',
   explorerUrl: 'https://celoscan.io',
@@ -39,5 +40,5 @@ export const Mainnet: ChainMetadata = {
 export const chainIdToChain: Record<ChainId, ChainMetadata> = {
   [ChainId.Alfajores]: Alfajores,
   [ChainId.Baklava]: Baklava,
-  [ChainId.Mainnet]: Mainnet,
+  [ChainId.Celo]: Celo,
 }

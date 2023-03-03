@@ -1,10 +1,10 @@
-import { ChainId } from '@celo/react-celo'
 import { providers } from 'ethers'
-import { chainIdToChain } from 'src/config/chains'
+import { ChainId, chainIdToChain } from 'src/config/chains'
 
 const cache: Record<number, providers.JsonRpcProvider> = {}
 
-export function getProvider(chainId: ChainId) {
+// TODO remove and replace with useProvider from wagmi
+export function getProvider(chainId: ChainId): providers.JsonRpcProvider {
   if (cache[chainId]) return cache[chainId]
   const chain = chainIdToChain[chainId]
   const provider = new providers.JsonRpcProvider(chain.rpcUrl, chainId)

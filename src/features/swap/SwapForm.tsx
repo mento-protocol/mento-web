@@ -1,4 +1,4 @@
-import { Connector, useCelo } from '@celo/react-celo'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Field, Form, Formik, useFormikContext } from 'formik'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -19,6 +19,7 @@ import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
+import { useAccount } from 'wagmi'
 
 import { useSwapOutQuote } from './useSwapOutQuote'
 
@@ -58,8 +59,6 @@ function SwapForm() {
   }
   const validateForm = useFormValidator(balances)
 
-  const { connect, address } = useCelo()
-
   return (
     <Formik<SwapFormValues>
       initialValues={initialValues}
@@ -69,10 +68,10 @@ function SwapForm() {
       validateOnBlur={false}
     >
       <Form>
-        <SwapFormInputs balances={balances} isConnected={!!address} />
+        <SwapFormInputs balances={balances} />
         {showSlippage && <SlippageRow />}
         <div className="flex justify-center mt-5 mb-1">
-          <SubmitButton address={address || null} connect={connect} />
+          <SubmitButton />
         </div>
       </Form>
     </Formik>
@@ -81,11 +80,11 @@ function SwapForm() {
 
 interface FormInputProps {
   balances: AccountBalances
-  isConnected: boolean
 }
 
-function SwapFormInputs(props: FormInputProps) {
-  const { balances, isConnected } = props
+function SwapFormInputs({ balances }: FormInputProps) {
+  const { address, isConnected } = useAccount()
+
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
   const { from, to } = formatExchangeValues(values.fromAmount, values.fromTokenId, values.toTokenId)
@@ -127,7 +126,7 @@ function SwapFormInputs(props: FormInputProps) {
           <FieldDividerLine />
         </div>
         <div className="flex flex-col items-end">
-          {isConnected && (
+          {address && isConnected && (
             <button
               type="button"
               title="Use full balance"
@@ -216,20 +215,19 @@ function SlippageRow() {
   )
 }
 
-interface ButtonProps {
-  address: string | null
-  connect: () => Promise<Connector>
-}
+function SubmitButton() {
+  const { address, isConnected } = useAccount()
+  const { openConnectModal } = useConnectModal()
+  const isAccountReady = address && isConnected
 
-function SubmitButton({ address, connect }: ButtonProps) {
   const { errors, setErrors, touched, setTouched } = useFormikContext<SwapFormValues>()
   const error =
     touched.fromAmount &&
     (errors.fromAmount || errors.fromTokenId || errors.toTokenId || errors.slippage)
   const classes = error ? 'bg-red-500 hover:bg-red-500 active:bg-red-500' : ''
-  const text = error ? error : address ? 'Continue' : 'Connect Wallet'
-  const type = address ? 'submit' : 'button'
-  const onClick = address ? undefined : connect
+  const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
+  const type = isAccountReady ? 'submit' : 'button'
+  const onClick = isAccountReady ? undefined : openConnectModal
 
   const clearErrors = useCallback(() => {
     setErrors({})

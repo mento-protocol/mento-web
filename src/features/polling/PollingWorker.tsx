@@ -1,4 +1,3 @@
-import { useCelo } from '@celo/react-celo'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { STATUS_POLLER_DELAY } from 'src/config/consts'
@@ -7,23 +6,24 @@ import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
 import { useAppDispatch } from 'src/features/store/hooks'
 import { logger } from 'src/utils/logger'
 import { useInterval } from 'src/utils/timeout'
+import { useAccount, useChainId } from 'wagmi'
 
 export function PollingWorker() {
   const dispatch = useAppDispatch()
-  const { address, kit, initialised } = useCelo()
+  const { address, isConnected } = useAccount()
+  const chainId = useChainId()
 
   // TODO debounce toast errors
 
   const onPoll = () => {
-    if (!kit || !initialised) return
-    dispatch(fetchLatestBlock({ kit }))
+    dispatch(fetchLatestBlock({ chainId }))
       .unwrap()
       .catch((err) => {
         // toast.warn('Error retrieving latest block')
         logger.error('Failed to retrieve latest block', err)
       })
-    if (address) {
-      dispatch(fetchBalances({ address, kit }))
+    if (address && isConnected) {
+      dispatch(fetchBalances({ address, chainId }))
         .unwrap()
         .catch((err) => {
           toast.warn('Error retrieving account balances')
@@ -32,7 +32,7 @@ export function PollingWorker() {
     }
   }
 
-  useEffect(onPoll, [address, kit, initialised, dispatch])
+  useEffect(onPoll, [address, isConnected, chainId, dispatch])
 
   useInterval(onPoll, STATUS_POLLER_DELAY)
 
