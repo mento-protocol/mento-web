@@ -7,7 +7,7 @@ import {
   getDefaultExchangeValues,
   parseInputExchangeAmount,
 } from 'src/features/swap/utils'
-import { fromWei, fromWeiRounded, NumberT, toWei } from 'src/utils/amount'
+import { NumberT, fromWei, fromWeiRounded, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
 // Takes raw input and rates info and computes/formats to convenient form

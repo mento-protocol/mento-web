@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
 import { SwapFormValues, ToCeloRates } from 'src/features/swap/types'
 

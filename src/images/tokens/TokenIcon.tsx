@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { memo } from 'react'
-import { CELO, cEUR, cREAL, cUSD, Token } from 'src/config/tokens'
+import { CELO, Token, cEUR, cREAL, cUSD } from 'src/config/tokens'
 import CeloIcon from 'src/images/tokens/CELO.svg'
 import cEURIcon from 'src/images/tokens/cEUR.svg'
 import cREALIcon from 'src/images/tokens/cREAL.svg'
@@ -67,19 +67,19 @@ function _TokenIcon({ token, size = 'm' }: Props) {
 
 const sizeValues = {
   xs: {
-    actualSize: '22px',
+    actualSize: 22,
     fontSize: '13px',
   },
   s: {
-    actualSize: '30px',
+    actualSize: 30,
     fontSize: '15px',
   },
   m: {
-    actualSize: '40px',
+    actualSize: 40,
     fontSize: '18px',
   },
   l: {
-    actualSize: '46px',
+    actualSize: 46,
     fontSize: '20px',
   },
 }

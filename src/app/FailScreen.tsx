@@ -4,7 +4,7 @@ import { Fade } from 'src/components/animation/Fade'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { config } from 'src/config/config'
 import SadFace from 'src/images/icons/sad_face.svg'
-import Logo from 'src/images/logo.svg'
+import Logo from 'src/images/logos/mento-logo-black.svg'
 import { logger } from 'src/utils/logger'
 
 interface ErrorBoundaryState {
@@ -38,9 +38,9 @@ export class ErrorBoundary extends Component<any, ErrorBoundaryState> {
 
 function FailScreen({ details }: { details?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen bg-gradient-radial">
-      <div className="hidden sm:block fixed top-4 left-4">
-        <Image src={Logo} alt="Mento.fi Logo" quality={100} width={60} height={60} />
+    <div className="flex flex-col items-center justify-center w-screen h-screen bg-gradient-linear">
+      <div className="hidden sm:block fixed top-5 left-5">
+        <Image src={Logo} alt="Mento" quality={100} width={120} />
       </div>
       <FailContent details={details} />
     </div>

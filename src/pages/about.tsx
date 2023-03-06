@@ -7,17 +7,14 @@ import { HrDivider } from 'src/layout/HrDivider'
 export default function AboutPage() {
   const pClass = 'mt-4 text-sm leading-loose'
   return (
-    <div className="flex justify-center items-center flex-grow">
-      <FloatingBox maxWidth="max-w-xl" classes="mb-12 mx-10 p-6">
+    <div className="flex justify-center items-center grow">
+      <FloatingBox maxWidth="max-w-xl" classes="mb-2 mx-10 p-6">
         <h2 className="text-lg text-center font-medium">About Mento</h2>
         <p className={pClass}>
           Celo has stable value assets like the Celo Dollar (cUSD). Mento keeps the value of those
           tokens stable. It also provides an exchange so anyone can trade between the native assets.
           For more details about how Mento works, see{' '}
-          <TextLink
-            href="https://docs.celo.org/celo-codebase/protocol/stability"
-            className="text-green"
-          >
+          <TextLink href="https://docs.mento.org" className="text-green-600">
             the documentation
           </TextLink>
           .
@@ -29,7 +26,7 @@ export default function AboutPage() {
           intervene. For details see{' '}
           <TextLink
             href="https://docs.celo.org/celo-codebase/protocol/stability/granda-mento"
-            className="text-green"
+            className="text-green-600"
           >
             the Granda documentation
           </TextLink>
@@ -44,12 +41,12 @@ export default function AboutPage() {
             </li>
             <li>
               Go to the{' '}
-              <Link href="/">
-                <a className="text-green">Swap</a>
+              <Link href="/" className="text-green-600">
+                Swap
               </Link>{' '}
               tab (or{' '}
-              <Link href="/granda">
-                <a className="text-green">Granda</a>
+              <Link href="/granda" className="text-green-600">
+                Granda
               </Link>{' '}
               for large exchanges)
             </li>
@@ -60,13 +57,12 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
-          This DApp is a free tool to help the Celo community use Mento. It was funded by the Celo
-          Foundation and created by{' '}
-          <TextLink href="https://twitter.com/RossyWrote" className="text-green">
+          This DApp is a free tool to facilitate use of the Mento Protocol. It was created by{' '}
+          <TextLink href="https://twitter.com/RossyWrote" className="text-green-600">
             J M Rossy
           </TextLink>
-          . For help, join the chat on{' '}
-          <TextLink href={config.discordUrl} className="text-green">
+          . It was funded by the Celo Foundation and Mento Labs. For more help, join the chat on{' '}
+          <TextLink href={config.discordUrl} className="text-green-600">
             Discord
           </TextLink>
           .

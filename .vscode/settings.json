@@ -1,29 +1,18 @@
 {
   "search.exclude": {
-    "**/node_modules": false
+    "**/node_modules/**": true
   },
   "files.exclude": {
-    "**/*.js.map": true
+    "**/*.js.map": true,
+    "**/*.js": {"when": "$(basename).ts"},
+    "**/*.map": {"when": "$(basename).map"},
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/*/**": true
   },
-  "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "[javascript]": {
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": false
-    }
-  },
-  "[javascriptreact]": {
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
-  },
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -41,11 +30,12 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "javascript.format.enable": false,
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "typescript.tsdk": "node_modules/typescript/lib",
 }

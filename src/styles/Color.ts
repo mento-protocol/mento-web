@@ -1,7 +1,9 @@
 // Should mostly match tailwind.config.js
 export enum Color {
+  mentoGreen = '#19D88A',
   celoGreen = '#35D07F',
   celoGold = '#FBCC5C',
+
   primaryBlack = '#2E3338',
   primaryBlack50 = '#939799',
   primaryWhite = '#FFFFFF',

@@ -1,4 +1,4 @@
-import { Alfajores, Baklava, Mainnet, Network, useCelo } from "@celo/react-celo"
+import { Alfajores, Baklava, Mainnet, Network, useCelo } from '@celo/react-celo'
 import ReactModal from 'react-modal'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
@@ -73,8 +73,8 @@ export function NetworkModal({ isOpen, close }: Props) {
               <button
                 onClick={() => switchToNetwork(n)}
                 key={n.chainId}
-                className={`py-1.5 px-2 rounded transition border border-gray-500 hover:border-green-dark hover:text-green-dark active:border-green-darkest ${
-                  n.chainId === network.chainId && 'border-green-dark text-green-dark'
+                className={`py-1.5 px-2 rounded transition border border-gray-500 hover:border-green-700 hover:text-green-700 active:border-green-800 ${
+                  n.chainId === network.chainId && 'border-green-700 text-green-700'
                 }`}
               >
                 {n.name}

@@ -32,9 +32,9 @@ export function SolidButton(props: PropsWithChildren<ButtonProps>) {
   const sizing = sizeToClasses(size)
   let baseColors, onHover, onActive
   if (color === 'green') {
-    baseColors = 'bg-green text-white'
-    onHover = 'hover:bg-green-dark'
-    onActive = 'active:bg-green-darkest'
+    baseColors = 'bg-green-600 text-white'
+    onHover = 'hover:bg-green-700'
+    onActive = 'active:bg-green-800'
   } else if (color === 'red') {
     baseColors = 'bg-red-600 text-white'
     onHover = 'hover:bg-red-500'
@@ -72,7 +72,7 @@ export function SolidButton(props: PropsWithChildren<ButtonProps>) {
 function sizeToClasses(size?: string) {
   if (size === 'xs') return 'h-7 px-4 py-1'
   if (size === 's') return 'h-7 px-4 py-1'
-  if (size === 'l') return 'h-10 px-5 py-1 text-lg'
-  if (size === 'xl') return 'w-40 h-11 px-5 py-1.5 text-xl'
+  if (size === 'l') return 'h-9 px-5 py-1'
+  if (size === 'xl') return 'w-40 h-11 px-5 py-1.5 text-lg'
   return 'px-5 py-1 h-9'
 }

@@ -2,14 +2,14 @@ import { useCelo } from '@celo/react-celo'
 import Image from 'next/image'
 import { useState } from 'react'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
-import { SolidButton } from 'src/components/buttons/SolidButton'
 import { Identicon } from 'src/components/Identicon'
+import { SolidButton } from 'src/components/buttons/SolidButton'
 import { BalancesSummary } from 'src/components/nav/BalancesSummary'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
 import Clipboard from 'src/images/icons/clipboard-plus.svg'
 import Cube from 'src/images/icons/cube.svg'
+import Logout from 'src/images/icons/logout.svg'
 import Wallet from 'src/images/icons/wallet.svg'
-import XCircle from 'src/images/icons/x-circle.svg'
 import { shortenAddress } from 'src/utils/addresses'
 import { tryClipboardSet } from 'src/utils/clipboard'
 
@@ -45,10 +45,8 @@ export function ConnectButton() {
           passThruProps={buttonProps}
         >
           <div className="flex items-center">
-            <Identicon address={address} size={30} />
-            <div className="hidden sm:block ml-2.5 text-lg">
-              {shortenAddress(address, false, true)}
-            </div>
+            <Identicon address={address} size={26} />
+            <div className="hidden sm:block ml-2.5">{shortenAddress(address, false, true)}</div>
           </div>
         </SolidButton>
       ) : (
@@ -90,7 +88,7 @@ export function ConnectButton() {
 function WalletIcon() {
   return (
     <div className="flex items-center sm:mr-2">
-      <Image src={Wallet} alt="Wallet" width={18} height={18} />
+      <Image src={Wallet} alt="" width={17} height={17} />
     </div>
   )
 }
@@ -98,7 +96,7 @@ function WalletIcon() {
 function LogoutIcon() {
   return (
     <div className="flex items-center sm:mr-3">
-      <Image src={XCircle} alt="Logout" width={18} height={18} />
+      <Image src={Logout} alt="" width={19} height={19} />
     </div>
   )
 }
@@ -106,7 +104,7 @@ function LogoutIcon() {
 function NetworkIcon() {
   return (
     <div className="flex items-center sm:mr-3">
-      <Image src={Cube} alt="Network" width={18} height={18} />
+      <Image src={Cube} alt="" width={18} height={18} />
     </div>
   )
 }
@@ -114,7 +112,7 @@ function NetworkIcon() {
 function CopyIcon() {
   return (
     <div className="flex items-center sm:mr-3">
-      <Image src={Clipboard} alt="Copy" width={18} height={18} />
+      <Image src={Clipboard} alt="" width={18} height={18} />
     </div>
   )
 }

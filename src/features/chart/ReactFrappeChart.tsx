@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // Copied from https://github.com/sheshbabu/react-frappe-charts/blob/master/src/index.tsx commit 4f909be
 // Not using library directly due to bundling issue with Next
-
 import { Chart } from 'frappe-charts'
 import React, { forwardRef, useImperativeHandle } from 'react'
 
