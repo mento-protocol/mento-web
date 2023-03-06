@@ -1,19 +1,14 @@
-import { Mainnet, useCelo } from '@celo/react-celo'
-import { useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { useAppDispatch, useAppSelector } from 'src/app/hooks'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 import styles from 'src/features/chart/PriceChart.module.css'
-import { fetchTokenPrice } from 'src/features/chart/fetchPrices'
 import { tokenPriceHistoryToChartData } from 'src/features/chart/utils'
+import { useAppSelector } from 'src/features/store/hooks'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
-import { logger } from 'src/utils/logger'
 
 import ReactFrappeChart from './ReactFrappeChart'
 
 interface PriceChartProps {
-  stableTokenId: NativeTokenId
+  stableTokenId: TokenId
   containerClasses?: string
   height?: number
 }
@@ -21,32 +16,29 @@ interface PriceChartProps {
 export function PriceChartCelo(props: PriceChartProps) {
   const { stableTokenId, containerClasses, height } = props
 
-  const { kit, initialised, network } = useCelo()
-
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    if (!kit || !initialised || network?.chainId !== Mainnet.chainId) return
-    dispatch(
-      fetchTokenPrice({
-        kit,
-        baseCurrency: NativeTokenId.CELO,
-      })
-    )
-      .unwrap()
-      .catch((err) => {
-        toast.warn('Error retrieving chart data')
-        logger.error('Failed to token prices', err)
-      })
-  }, [dispatch, kit, initialised, network])
+  // const dispatch = useAppDispatch()
+  // useEffect(() => {
+  //   dispatch(
+  //     fetchTokenPrice({
+  //       kit,
+  //       baseCurrency: TokenId.CELO,
+  //     })
+  //   )
+  //     .unwrap()
+  //     .catch((err) => {
+  //       toast.warn('Error retrieving chart data')
+  //       logger.error('Failed to token prices', err)
+  //     })
+  // }, [dispatch, kit, initialised, network])
 
   const allPrices = useAppSelector((s) => s.tokenPrice.prices)
-  const celoPrices = allPrices[NativeTokenId.CELO]
+  const celoPrices = allPrices[TokenId.CELO]
   const stableTokenPrices = celoPrices ? celoPrices[stableTokenId] : undefined
   const chartData = tokenPriceHistoryToChartData(stableTokenPrices)
   const chartHeight = height || 250
 
   // Only show chart for Mainnet
-  if (network?.chainId !== Mainnet.chainId) return null
+  // if (network?.chainId !== Mainnet.chainId) return null
 
   return (
     <FloatingBox width="w-96" classes={`overflow-hidden ${containerClasses}`}>

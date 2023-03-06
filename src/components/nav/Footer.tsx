@@ -1,15 +1,15 @@
 import BigNumber from 'bignumber.js'
 import Image from 'next/image'
 import { useState } from 'react'
-import { useAppSelector } from 'src/app/hooks'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
 import { config } from 'src/config/config'
 import { STALE_BLOCK_TIME } from 'src/config/consts'
+import { BlockStub } from 'src/features/blocks/types'
+import { useAppSelector } from 'src/features/store/hooks'
 import Discord from 'src/images/logos/discord.svg'
 import Github from 'src/images/logos/github.svg'
 import Twitter from 'src/images/logos/twitter.svg'
 import { isStale } from 'src/utils/time'
-import type { BlockHeader } from 'web3-eth'
 
 export function Footer() {
   return (
@@ -94,7 +94,7 @@ enum ConnStatus {
   Connected = 2,
 }
 
-function getStatusFromBlock(latestBlock: BlockHeader | null | undefined): ConnStatus {
+function getStatusFromBlock(latestBlock: BlockStub | null | undefined): ConnStatus {
   if (latestBlock === undefined) return ConnStatus.Loading
 
   if (latestBlock && latestBlock.number > 0 && latestBlock.timestamp > 0) {

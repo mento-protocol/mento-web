@@ -1,4 +1,4 @@
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 
 export enum ForeignQuoteCurrency {
   BTC = 'BTC',
@@ -6,7 +6,7 @@ export enum ForeignQuoteCurrency {
   USDT = 'USDT',
 }
 
-export type QuoteCurrency = NativeTokenId | ForeignQuoteCurrency
+export type QuoteCurrency = TokenId | ForeignQuoteCurrency
 
 export interface TokenPricePoint {
   timestamp: number
@@ -15,10 +15,10 @@ export interface TokenPricePoint {
 export type TokenPriceHistory = Array<TokenPricePoint>
 
 export type QuoteCurrencyPriceHistory = Partial<Record<QuoteCurrency, TokenPriceHistory>>
-export type BaseCurrencyPriceHistory = Partial<Record<NativeTokenId, QuoteCurrencyPriceHistory>>
+export type BaseCurrencyPriceHistory = Partial<Record<TokenId, QuoteCurrencyPriceHistory>>
 
 export interface PairPriceUpdate {
-  baseCurrency: NativeTokenId
+  baseCurrency: TokenId
   quoteCurrency: QuoteCurrency
   prices: TokenPriceHistory
 }

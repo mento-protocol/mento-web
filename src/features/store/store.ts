@@ -3,7 +3,6 @@ import { config } from 'src/config/config'
 import { accountReducer } from 'src/features/accounts/accountSlice'
 import { blockReducer } from 'src/features/blocks/blockSlice'
 import { tokenPriceReducer } from 'src/features/chart/tokenPriceSlice'
-import { grandaReducer } from 'src/features/granda/grandaSlice'
 import { swapReducer } from 'src/features/swap/swapSlice'
 
 export function createStore() {
@@ -11,7 +10,6 @@ export function createStore() {
     reducer: {
       account: accountReducer,
       block: blockReducer,
-      granda: grandaReducer,
       swap: swapReducer,
       tokenPrice: tokenPriceReducer,
     },

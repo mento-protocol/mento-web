@@ -1,8 +1,8 @@
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
-import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SwitchButton } from 'src/components/buttons/SwitchButton'
 import { config } from 'src/config/config'
+import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setShowChart, setShowSlippage } from 'src/features/swap/swapSlice'
 import Gear from 'src/images/icons/gear.svg'
 

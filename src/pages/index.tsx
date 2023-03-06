@@ -1,20 +1,20 @@
-import { useAppSelector } from 'src/app/hooks'
 import { config } from 'src/config/config'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 import { PriceChartCelo } from 'src/features/chart/PriceChartCelo'
-import { SwapConfirm } from 'src/features/swap/SwapConfirm'
-import { SwapForm } from 'src/features/swap/SwapForm'
+import { useAppSelector } from 'src/features/store/hooks'
+import { SwapConfirmCard } from 'src/features/swap/SwapConfirm'
+import { SwapFormCard } from 'src/features/swap/SwapForm'
 
 export default function SwapPage() {
   const { formValues, showChart } = useAppSelector((state) => state.swap)
   return (
     <div className="flex justify-center items-center h-full flex-wrap">
-      <div className="mb-12">
-        {!formValues ? <SwapForm /> : <SwapConfirm formValues={formValues} />}
+      <div className="mb-6">
+        {!formValues ? <SwapFormCard /> : <SwapConfirmCard formValues={formValues} />}
       </div>
       {config.showPriceChart && showChart && (
-        <div className="mb-12 md:ml-10">
-          <PriceChartCelo stableTokenId={NativeTokenId.cUSD} height={265} />
+        <div className="mb-6 md:ml-10">
+          <PriceChartCelo stableTokenId={TokenId.cUSD} height={265} />
         </div>
       )}
     </div>

@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
-import type { BlockHeader } from 'web3-eth'
+
+import { BlockStub } from './types'
 
 interface BlockState {
-  latestBlock: BlockHeader | null | undefined
+  latestBlock: BlockStub | null | undefined
 }
 
 const initialState: BlockState = {

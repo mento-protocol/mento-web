@@ -1,40 +1,45 @@
-import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import type { AppDispatch, AppState } from 'src/app/store'
+import { BigNumberish, Contract } from 'ethers'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId, getTokenAddress } from 'src/config/tokens'
+import type { AppDispatch, AppState } from 'src/features/store/store'
 import { validateAddress } from 'src/utils/addresses'
 import { isStale } from 'src/utils/time'
+import { erc20ABI } from 'wagmi'
+
+import { getProvider } from '../providers'
 
 interface FetchBalancesParams {
   address: string
-  kit: MiniContractKit
+  chainId: number
 }
 
-export type AccountBalances = Record<NativeTokenId, string>
+export type AccountBalances = Record<TokenId, string>
 
 export const fetchBalances = createAsyncThunk<
   AccountBalances | null,
   FetchBalancesParams,
   { dispatch: AppDispatch; state: AppState }
 >('accounts/fetchBalances', async (params, thunkAPI) => {
-  const { address, kit } = params
+  const { address, chainId } = params
   const lastUpdated = thunkAPI.getState().account.lastUpdated
   if (isStale(lastUpdated, BALANCE_STALE_TIME)) {
-    const balances = await _fetchBalances(address, kit)
+    const balances = await _fetchBalances(address, chainId)
     return balances
   } else {
     return null
   }
 })
 
-async function _fetchBalances(address: string, kit: MiniContractKit) {
+async function _fetchBalances(address: string, chainId: number) {
   validateAddress(address, 'fetchBalances')
-  const balances = await kit.getTotalBalance(address)
-  const filteredBalances: Partial<Record<NativeTokenId, string>> = {}
-  for (const tokenId of Object.keys(NativeTokenId)) {
-    // @ts-ignore
-    filteredBalances[tokenId] = balances[tokenId].toString()
+  const tokenBalances: Partial<Record<TokenId, string>> = {}
+  for (const tokenId of Object.values(TokenId)) {
+    const tokenAddr = getTokenAddress(tokenId, chainId)
+    const provider = getProvider(chainId)
+    const tokenContract = new Contract(tokenAddr, erc20ABI, provider)
+    const balance: BigNumberish = await tokenContract.balanceOf(address)
+    tokenBalances[tokenId] = balance.toString()
   }
-  return filteredBalances as Record<NativeTokenId, string>
+  return tokenBalances as Record<TokenId, string>
 }

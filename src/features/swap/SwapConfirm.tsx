@@ -1,138 +1,135 @@
-import type { MiniContractKit } from '@celo/contractkit/lib/mini-kit'
-import { useCelo } from '@celo/react-celo'
 import BigNumber from 'bignumber.js'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
+import { Spinner } from 'src/components/animation/Spinner'
 import { BackButton } from 'src/components/buttons/BackButton'
 import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
-import {
-  MAX_EXCHANGE_RATE,
-  MAX_EXCHANGE_TOKEN_SIZE,
-  MIN_EXCHANGE_RATE,
-  SIGN_OPERATION_TIMEOUT,
-} from 'src/config/consts'
-import { getExchangeContract, getTokenContract } from 'src/config/tokenMapping'
-import { NativeTokenId, NativeTokens } from 'src/config/tokens'
-import { fetchBalances } from 'src/features/accounts/fetchBalances'
-import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
+import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
+import { Tokens } from 'src/config/tokens'
+import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
-import { ExchangeValues, getExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
+import { ExchangeValues, formatExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
+import { Modal } from 'src/layout/Modal'
 import { Color } from 'src/styles/Color'
 import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
-import { PROMISE_TIMEOUT, asyncTimeout } from 'src/utils/timeout'
+import { useAccount, useChainId } from 'wagmi'
+
+import { useApproveTransaction } from './useApproveTransaction'
+import { useSwapOutQuote } from './useSwapOutQuote'
+import { useSwapTransaction } from './useSwapTransaction'
 
 interface Props {
   formValues: SwapFormValues
 }
 
-export function SwapConfirm(props: Props) {
+export function SwapConfirmCard(props: Props) {
   const { fromAmount, fromTokenId, toTokenId, slippage } = props.formValues
-  const toCeloRates = useAppSelector((s) => s.swap.toCeloRates)
-  const balances = useAppSelector((s) => s.account.balances)
+
+  // Flag for if loading modal is open (visible)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const { address, isConnected } = useAccount()
+  const chainId = useChainId()
+
   const dispatch = useAppDispatch()
-  const { address, kit, initialised, network, performActions } = useCelo()
+  const balances = useAppSelector((s) => s.account.balances)
+  const tokenBalance = balances[fromTokenId]
 
   // Ensure invariants are met, otherwise return to swap form
-  const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && kit
+  const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && isConnected
   useEffect(() => {
-    if (!isConfirmValid) {
-      dispatch(setFormValues(null))
-    }
+    if (!isConfirmValid) dispatch(setFormValues(null))
   }, [isConfirmValid, dispatch])
 
-  const { from, to, rate, stableTokenId } = getExchangeValues(
-    fromAmount,
-    fromTokenId,
-    toTokenId,
-    toCeloRates
-  )
-  const tokenBalance = balances[fromTokenId]
+  const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
+  const { toAmountWei, toAmount, rate } = useSwapOutQuote(from.weiAmount, from.token, to.token)
+
   // Check if amount is almost equal to balance max, in which case use max
   // Helps handle problems from imprecision in non-wei amount display
-  const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance)
-  const minBuyAmountWei = getMinBuyAmount(finalFromAmount, slippage, rate.value)
+  const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance).toFixed(0)
+  const minBuyAmountWei = getMinBuyAmount(toAmountWei, slippage).toFixed(0)
   const minBuyAmount = fromWeiRounded(minBuyAmountWei, true)
 
+  const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading } = useApproveTransaction(
+    chainId,
+    from.token,
+    finalFromAmount,
+    address
+  )
+  const [isApproveConfirmed, setApproveConfirmed] = useState(false)
+
+  const { sendSwapTx, isSwapTxLoading, isSwapTxSuccess } = useSwapTransaction(
+    chainId,
+    from.token,
+    to.token,
+    finalFromAmount,
+    minBuyAmountWei,
+    address,
+    isApproveConfirmed
+  )
+
   const onSubmit = async () => {
-    if (!address || !kit) {
-      toast.error('Kit not connected')
-      return
-    }
+    if (!rate || !toAmount || !address || !isConnected) return
     if (new BigNumber(finalFromAmount).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
-      toast.error('Amount seems too large')
+      toast.error('Amount exceeds limit')
       return
     }
-    if (rate.value < MIN_EXCHANGE_RATE || rate.value > MAX_EXCHANGE_RATE) {
+    const rateBN = new BigNumber(rate)
+    if (rateBN.lt(MIN_EXCHANGE_RATE) || rateBN.gt(MAX_EXCHANGE_RATE)) {
       toast.error('Rate seems incorrect')
       return
     }
 
-    const approvalOperation = async (k: MiniContractKit) => {
-      const stableTokenId = fromTokenId === NativeTokenId.CELO ? toTokenId : fromTokenId
-      const tokenContract = await getTokenContract(k, fromTokenId)
-      const exchangeContract = await getExchangeContract(k, stableTokenId)
-      const approveTx = await tokenContract.increaseAllowance(
-        exchangeContract.address,
-        finalFromAmount
-      )
-      // Gas price must be set manually because contractkit pre-populate it and
-      // its helpers for getting gas price are only meant for stable token prices
-      const gasPrice = await k.connection.web3.eth.getGasPrice()
-      const approveReceipt = await approveTx.sendAndWaitForReceipt({ gasPrice })
-      logger.info(`Tx receipt received for approval: ${approveReceipt.transactionHash}`)
-      return approveReceipt.transactionHash
+    if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
+      logger.debug('Approve already started or finished, ignoring submit')
+      return
     }
-    const approvalOpWithTimeout = asyncTimeout(approvalOperation, SIGN_OPERATION_TIMEOUT)
 
-    const exchangeOperation = async (k: MiniContractKit) => {
-      const sellGold = fromTokenId === NativeTokenId.CELO
-      const exchangeContract = await getExchangeContract(k, stableTokenId)
-      const exchangeTx = await exchangeContract.sell(finalFromAmount, minBuyAmountWei, sellGold)
-      const gasPrice = await k.connection.web3.eth.getGasPrice()
-      const exchangeReceipt = await exchangeTx.sendAndWaitForReceipt({ gasPrice })
-      logger.info(`Tx receipt received for swap: ${exchangeReceipt.transactionHash}`)
-      await dispatch(fetchBalances({ address, kit: k }))
-      return exchangeReceipt.transactionHash
-    }
-    const exchangeOpWithTimeout = asyncTimeout(exchangeOperation, SIGN_OPERATION_TIMEOUT)
+    setIsModalOpen(true)
 
     try {
-      const txHashes = (await performActions(
-        approvalOpWithTimeout,
-        exchangeOpWithTimeout
-      )) as string[]
-      if (!txHashes || txHashes.length !== 2) throw new Error('Tx hashes not found')
-      toastToYourSuccess('Swap Complete!', txHashes[1], network.explorer)
-      dispatch(setFormValues(null))
-    } catch (err: any) {
-      if (err.message === PROMISE_TIMEOUT) {
-        toast.error('Action timed out')
-      } else {
-        toast.error('Unable to complete swap')
-      }
-      logger.error('Failed to execute swap', err)
+      logger.info('Sending approve tx')
+      const approveResult = await sendApproveTx()
+      const approveReceipt = await approveResult.wait(1)
+      toastToYourSuccess('Approve complete, starting swap', approveReceipt.transactionHash, chainId)
+      setApproveConfirmed(true)
+      logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
+    } catch (error) {
+      logger.error('Failed to approve token', error)
+      setIsModalOpen(false)
     }
   }
+
+  // TODO find a way to have this trigger from the onSubmit
+  useEffect(() => {
+    if (isSwapTxLoading || isSwapTxSuccess || !isApproveTxSuccess || !sendSwapTx) return
+    logger.info('Sending swap tx')
+    sendSwapTx()
+      .then((swapResult) => swapResult.wait(1))
+      .then((swapReceipt) => {
+        logger.info(`Tx receipt received for swap: ${swapReceipt.transactionHash}`)
+        toastToYourSuccess('Swap Complete!', swapReceipt.transactionHash, chainId)
+        dispatch(setFormValues(null))
+      })
+      .catch((e) => {
+        logger.error('Swap failure:', e)
+      })
+      .finally(() => setIsModalOpen(false))
+  }, [isApproveTxSuccess, isSwapTxLoading, isSwapTxSuccess, sendSwapTx, chainId, dispatch])
 
   const onClickBack = () => {
     dispatch(setFormValues(null))
   }
 
   const onClickRefresh = () => {
-    if (!kit || !initialised) return
-    dispatch(fetchExchangeRates({ kit }))
-      .unwrap()
-      .catch((err) => {
-        toast.error('Error retrieving exchange rates')
-        logger.error('Failed to retrieve exchange rates', err)
-      })
+    // TODO force refresh
+    // Note, rates automatically re-fetch regularly
   }
 
   return (
@@ -142,7 +139,12 @@ export function SwapConfirm(props: Props) {
         <h2 className="text-lg font-medium">Confirm Swap</h2>
         <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
-      <SwapConfirmSummary from={from} to={to} rate={rate} stableTokenId={stableTokenId} mt="mt-6" />
+      <SwapConfirmSummary
+        from={from}
+        to={{ ...to, weiAmount: toAmountWei, amount: toAmount }}
+        rate={rate}
+        classes="mt-6"
+      />
       <div className="flex flex-col items-center text-sm">
         <div className="flex items-center mt-6">
           <div className="w-32 text-right mr-6">Max Slippage:</div>
@@ -158,6 +160,14 @@ export function SwapConfirm(props: Props) {
           Swap
         </SolidButton>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        title="Performing Swap"
+        close={() => setIsModalOpen(false)}
+        width="max-w-xs"
+      >
+        <BasicSpinner />
+      </Modal>
     </FloatingBox>
   )
 }
@@ -165,17 +175,16 @@ export function SwapConfirm(props: Props) {
 interface SwapConfirmSummaryProps {
   from: ExchangeValues['from']
   to: ExchangeValues['to']
-  rate: ExchangeValues['rate']
-  stableTokenId: NativeTokenId
-  mt?: string
+  rate?: string
+  classes?: string
 }
 
-export function SwapConfirmSummary({ from, to, rate, stableTokenId, mt }: SwapConfirmSummaryProps) {
-  const fromToken = NativeTokens[from.token]
-  const toToken = NativeTokens[to.token]
+export function SwapConfirmSummary({ from, to, rate, classes }: SwapConfirmSummaryProps) {
+  const fromToken = Tokens[from.token]
+  const toToken = Tokens[to.token]
 
   return (
-    <div className={`bg-greengray-lightest rounded-md ${mt}`}>
+    <div className={`bg-greengray-lightest rounded-md ${classes}`}>
       <div className="relative flex items-center justify-between">
         <div className="flex flex-1 items-center px-2.5 py-3 border-r border-gray-400">
           <TokenIcon size="l" token={fromToken} />
@@ -187,7 +196,7 @@ export function SwapConfirmSummary({ from, to, rate, stableTokenId, mt }: SwapCo
         <div className="flex flex-1 items-center justify-end px-2.5 py-3">
           <div className="flex flex-col flex-1 items-center px-2">
             <div className="text-sm text-center">{toToken.symbol}</div>
-            <div className="text-lg text-center font-mono leading-6">{to.amount}</div>
+            <div className="text-lg text-center font-mono leading-6">{to.amount || '0'}</div>
           </div>
           <TokenIcon size="l" token={toToken} />
         </div>
@@ -200,7 +209,7 @@ export function SwapConfirmSummary({ from, to, rate, stableTokenId, mt }: SwapCo
       </div>
       <div className="flex items-end justify-center">
         <div className="py-0.5 px-3 border border-b-0 border-black50 text-black50 text-sm rounded-t">
-          {rate.isReady ? `${rate.fromCeloValue} ${stableTokenId} : 1 CELO` : 'Loading...'}
+          {rate ? `${rate} ${from.token} : 1 ${to.token}` : 'Loading...'}
         </div>
       </div>
     </div>
@@ -222,6 +231,21 @@ function RightCircleArrow() {
           d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
         />
       </svg>
+    </div>
+  )
+}
+
+function BasicSpinner() {
+  const { connector } = useAccount()
+  return (
+    <div className="my-6 flex flex-col justify-center items-center">
+      <Spinner />
+      <div className="mt-5 text-sm text-center text-gray-500">
+        Sending two transactions: Approve and Swap
+      </div>
+      <div className="mt-3 text-sm text-center text-gray-500">{`Sign with ${
+        connector?.name || 'wallet'
+      } to proceed`}</div>
     </div>
   )
 }

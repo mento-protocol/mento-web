@@ -1,5 +1,5 @@
 import { MAX_TOKEN_PRICE_NUM_DAYS, STALE_TOKEN_PRICE_TIME } from 'src/config/consts'
-import { NativeTokenId } from 'src/config/tokens'
+import { TokenId } from 'src/config/tokens'
 import {
   QuoteCurrency,
   QuoteCurrencyPriceHistory,
@@ -52,8 +52,8 @@ export function findMissingPriceDays(numDays: number, prices?: QuoteCurrencyPric
   const daysInData = new Map<number, boolean>()
   // This assumes if day's price for cusd exists, they all do
   // Should be true because all returned in the same blockscout query
-  if (prices && prices[NativeTokenId.cUSD]) {
-    for (const p of prices[NativeTokenId.cUSD]!) {
+  if (prices && prices[TokenId.cUSD]) {
+    for (const p of prices[TokenId.cUSD]!) {
       const pDate = new Date(p.timestamp).getDate()
       // This check is to exclude prices from today that are older than STALE_TOKEN_PRICE_TIME
       // This forces re-fetching of today's prices to keep the data up to date
@@ -81,7 +81,7 @@ export function mergePriceHistories(
 ) {
   const minTimestamp = Date.now() - MAX_TOKEN_PRICE_NUM_DAYS * 86400 * 1000
   const mergedPrices: QuoteCurrencyPriceHistory = {}
-  for (const key of Object.keys(NativeTokenId)) {
+  for (const key of Object.keys(TokenId)) {
     const quoteCurrency = key as QuoteCurrency // TS limitation of Object.keys()
     const newPrices = newCurrencyToPrices[quoteCurrency] || []
     const oldPrices = oldCurrencyToPrices[quoteCurrency] || []

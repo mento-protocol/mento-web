@@ -42,7 +42,7 @@ export function IconButton(props: PropsWithChildren<IconButtonProps>) {
       className={allClasses}
       {...passThruProps}
     >
-      <Image src={imgSrc} alt={title?.substring(0, 4) || ''} width={width} height={height} />
+      <Image src={imgSrc} alt="" width={width} height={height} />
       {children}
     </button>
   )

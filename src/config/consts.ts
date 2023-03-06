@@ -3,9 +3,9 @@ export const NULL_ADDRESS = '0x0000000000000000000000000000000000000000'
 export const AVG_BLOCK_TIMES = 5000 // 5 seconds
 export const STALE_BLOCK_TIME = 25000 // 25 seconds
 export const EXCHANGE_RATE_STALE_TIME = 5000 // 5 second
-export const GRANDA_PROPOSAL_STALE_TIME = 30000 // 30 second
 export const BALANCE_STALE_TIME = 5000 // 5 seconds
 export const STATUS_POLLER_DELAY = 5000 // 5 seconds
+export const SWAP_QUOTE_REFETCH_INTERVAL = 5000 // 5 seconds
 export const SIGN_OPERATION_TIMEOUT = 90000 // 90 seconds
 
 export const STALE_TOKEN_PRICE_TIME = 900000 // 15 minutes

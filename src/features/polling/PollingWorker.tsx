@@ -1,60 +1,29 @@
-import { useCelo } from '@celo/react-celo'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { STATUS_POLLER_DELAY } from 'src/config/consts'
 import { fetchBalances } from 'src/features/accounts/fetchBalances'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
-import { fetchConfig } from 'src/features/granda/fetchConfig'
-import { fetchOracleRates } from 'src/features/granda/fetchOracleRates'
-import { fetchProposals } from 'src/features/granda/fetchProposals'
-import { fetchExchangeRates } from 'src/features/swap/fetchExchangeRates'
+import { useAppDispatch } from 'src/features/store/hooks'
 import { logger } from 'src/utils/logger'
 import { useInterval } from 'src/utils/timeout'
+import { useAccount, useChainId } from 'wagmi'
 
 export function PollingWorker() {
-  const isGrandaActive = useAppSelector((s) => s.granda.isActive)
   const dispatch = useAppDispatch()
-  const { address, kit, initialised } = useCelo()
+  const { address, isConnected } = useAccount()
+  const chainId = useChainId()
 
   // TODO debounce toast errors
 
   const onPoll = () => {
-    if (!kit || !initialised) return
-    dispatch(fetchExchangeRates({ kit }))
-      .unwrap()
-      .catch((err) => {
-        toast.warn('Error retrieving exchange rates')
-        logger.error('Failed to retrieve exchange rates', err)
-      })
-    dispatch(fetchLatestBlock({ kit }))
+    dispatch(fetchLatestBlock({ chainId }))
       .unwrap()
       .catch((err) => {
         // toast.warn('Error retrieving latest block')
         logger.error('Failed to retrieve latest block', err)
       })
-    if (isGrandaActive) {
-      dispatch(fetchProposals({ kit }))
-        .unwrap()
-        .catch((err) => {
-          toast.warn('Error retrieving Granda proposals')
-          logger.error('Failed to retrieve granda proposals', err)
-        })
-      dispatch(fetchConfig({ kit }))
-        .unwrap()
-        .catch((err) => {
-          toast.warn('Error retrieving Granda config')
-          logger.error('Failed to retrieve granda config', err)
-        })
-      dispatch(fetchOracleRates({ kit }))
-        .unwrap()
-        .catch((err) => {
-          toast.warn('Error retrieving oracle rates')
-          logger.error('Failed to retrieve oracle rates', err)
-        })
-    }
-    if (address) {
-      dispatch(fetchBalances({ address, kit }))
+    if (address && isConnected) {
+      dispatch(fetchBalances({ address, chainId }))
         .unwrap()
         .catch((err) => {
           toast.warn('Error retrieving account balances')
@@ -63,7 +32,7 @@ export function PollingWorker() {
     }
   }
 
-  useEffect(onPoll, [isGrandaActive, address, kit, initialised, dispatch])
+  useEffect(onPoll, [address, isConnected, chainId, dispatch])
 
   useInterval(onPoll, STATUS_POLLER_DELAY)
 

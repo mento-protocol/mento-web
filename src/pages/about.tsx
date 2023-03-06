@@ -21,19 +21,6 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
-          Granda Mento is a process for large exchanges. Each exchange requires rough consensus from
-          the Celo community. The funds must be locked for a week, during which the community can
-          intervene. For details see{' '}
-          <TextLink
-            href="https://docs.celo.org/celo-codebase/protocol/stability/granda-mento"
-            className="text-green-600"
-          >
-            the Granda documentation
-          </TextLink>
-          .
-        </p>
-        <HrDivider classes="mt-4" />
-        <p className={pClass}>
           How to start swapping Celo native assets:
           <ol className="list-inside list-decimal">
             <li>
@@ -44,11 +31,7 @@ export default function AboutPage() {
               <Link href="/" className="text-green-600">
                 Swap
               </Link>{' '}
-              tab (or{' '}
-              <Link href="/granda" className="text-green-600">
-                Granda
-              </Link>{' '}
-              for large exchanges)
+              tab
             </li>
             <li>
               Input the asset and amount. Tap <q>Continue</q> and confirm details
@@ -61,7 +44,7 @@ export default function AboutPage() {
           <TextLink href="https://twitter.com/RossyWrote" className="text-green-600">
             J M Rossy
           </TextLink>
-          . It was funded by the Celo Foundation and Mento Labs. For more help, join the chat on{' '}
+          , funded by the Celo Foundation and Mento Labs. For more help, join the chat on{' '}
           <TextLink href={config.discordUrl} className="text-green-600">
             Discord
           </TextLink>
