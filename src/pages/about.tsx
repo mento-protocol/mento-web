@@ -11,9 +11,8 @@ export default function AboutPage() {
       <FloatingBox maxWidth="max-w-xl" classes="mb-2 mx-10 p-6">
         <h2 className="text-lg text-center font-medium">About Mento</h2>
         <p className={pClass}>
-          Celo has stable value assets like the Celo Dollar (cUSD). Mento keeps the value of those
-          tokens stable. It also provides an exchange so anyone can trade between the native assets.
-          For more details about how Mento works, see{' '}
+          Mento is a decentralized and transparent protocol that allows everyone to create and
+          exchange stable value digital assets. For more details about how Mento works, see{' '}
           <TextLink href="https://docs.mento.org" className="text-green-600">
             the documentation
           </TextLink>
@@ -21,7 +20,7 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
-          How to start swapping Celo native assets:
+          How to start exchanging Celo native assets:
           <ol className="list-inside list-decimal">
             <li>
               Tap <q>Connect</q> in the top-right and select your wallet
