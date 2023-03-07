@@ -11,8 +11,8 @@ export default function AboutPage() {
       <FloatingBox maxWidth="max-w-xl" classes="mb-2 mx-10 p-6">
         <h2 className="text-lg text-center font-medium">About Mento</h2>
         <p className={pClass}>
-          Mento is a decentralized and transparent protocol that allows everyone to create and exchange 
-          stable value digital assets. For more details about how Mento works, see{' '}
+          Mento is a decentralized and transparent protocol that allows everyone to create and
+          exchange stable value digital assets. For more details about how Mento works, see{' '}
           <TextLink href="https://docs.mento.org" className="text-green-600">
             the documentation
           </TextLink>
