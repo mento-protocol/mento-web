@@ -1,8 +1,6 @@
 import { Alfajores, Baklava, Celo } from '@celo/rainbowkit-celo/chains'
-import { CeloDance, CeloWallet, Valora } from '@celo/rainbowkit-celo/wallets'
 import { RainbowKitProvider, connectorsForWallets, lightTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
-import { metaMaskWallet, omniWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { PropsWithChildren } from 'react'
@@ -10,6 +8,7 @@ import { Provider } from 'react-redux'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorBoundary } from 'src/components/Errors'
+import { getWalletConnectors } from 'src/config/wallets'
 import { store } from 'src/features/store/store'
 import { AppLayout } from 'src/layout/AppLayout'
 import { Color } from 'src/styles/Color'
@@ -23,21 +22,14 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 const reactQueryClient = new QueryClient({})
 
 const { chains, provider } = configureChains(
-  [Baklava, Alfajores, Celo],
+  [Alfajores, Baklava, Celo],
   [jsonRpcProvider({ rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }) })]
 )
 
 const connectors = connectorsForWallets([
   {
-    groupName: 'Recommended with CELO',
-    wallets: [
-      Valora({ chains }),
-      CeloWallet({ chains }),
-      CeloDance({ chains }),
-      metaMaskWallet({ chains }),
-      omniWallet({ chains }),
-      walletConnectWallet({ chains }),
-    ],
+    groupName: 'Recommended for Celo chains',
+    wallets: getWalletConnectors(chains),
   },
 ])
 

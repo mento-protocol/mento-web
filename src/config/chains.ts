@@ -1,4 +1,3 @@
-// todo remove?
 export enum ChainId {
   Alfajores = 44787,
   Baklava = 62320,
@@ -18,7 +17,7 @@ export const Alfajores: ChainMetadata = {
   name: 'Alfajores',
   rpcUrl: 'https://alfajores-forno.celo-testnet.org',
   explorerUrl: 'https://alfajores.celoscan.io',
-  explorerApiUrl: 'https://api-alfajores.celoscan.io',
+  explorerApiUrl: 'https://api-alfajores.celoscan.io/api',
 }
 
 export const Baklava: ChainMetadata = {
@@ -34,11 +33,13 @@ export const Celo: ChainMetadata = {
   name: 'Mainnet',
   rpcUrl: 'https://forno.celo.org',
   explorerUrl: 'https://celoscan.io',
-  explorerApiUrl: 'https://api.celoscan.io',
+  explorerApiUrl: 'https://api.celoscan.io/api',
 }
 
-export const chainIdToChain: Record<ChainId, ChainMetadata> = {
+export const chainIdToChain: Record<number, ChainMetadata> = {
   [ChainId.Alfajores]: Alfajores,
   [ChainId.Baklava]: Baklava,
   [ChainId.Celo]: Celo,
 }
+
+export const allChains = [Alfajores, Baklava, Celo]
