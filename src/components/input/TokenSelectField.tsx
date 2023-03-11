@@ -11,7 +11,7 @@ const tokenOptions = Object.values(TokenId)
 type Props = {
   name: string
   label: string
-  onChange?: (optionValue: string | null | undefined) => void
+  onChange?: (optionValue: string) => void
 }
 
 const DEFAULT_VALUE = {
@@ -42,7 +42,7 @@ export function TokenSelectField({ name, label, onChange }: Props) {
 function TokenButton(tokenId: string, buttonLabel?: string) {
   const token = getTokenById(tokenId)
   return (
-    <div className="flex items-center p-1 tw-rounded-md">
+    <div className="flex items-center p-1 rounded-md hover:bg-gray-100">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
         <label className="text-xs text-gray-400 cursor-pointer">
@@ -63,12 +63,12 @@ function Option(tokenId: string, selected?: boolean) {
   const token = getTokenById(tokenId)
   return (
     <div
-      className={`py-1.5 px-2 flex items-center cursor-pointer hover:bg-gray-100 ${
+      className={`py-1.5 px-3 flex items-center cursor-pointer hover:bg-gray-100 ${
         selected ? 'bg-gray-50' : ''
       }`}
     >
       <TokenIcon size="xs" token={token} />
-      <div className="ml-2">{token?.symbol || 'Unknown'}</div>
+      <div className="ml-2.5">{token?.symbol || 'Unknown'}</div>
     </div>
   )
 }

@@ -91,12 +91,13 @@ function SwapFormInputs({ balances }: FormInputProps) {
     }
   }
 
-  const onChangeToken = (isFromToken: boolean) => (optionValue: string | null | undefined) => {
-    // TODO fix for USDC
-    const tokenId = optionValue || TokenId.CELO
+  const onChangeToken = (isFromToken: boolean) => (tokenId: string) => {
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
     const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
-    if (isStableToken(tokenId)) {
+    if (tokenId === TokenId.USDC) {
+      setFieldValue(targetField, tokenId)
+      setFieldValue(otherField, TokenId.cUSD)
+    } else if (isStableToken(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.CELO)
     } else {
