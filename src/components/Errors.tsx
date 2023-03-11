@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { Component } from 'react'
 import { Fade } from 'src/components/animation/Fade'
 import { TextLink } from 'src/components/buttons/TextLink'
-import { config } from 'src/config/config'
+import { links } from 'src/config/links'
 import SadFace from 'src/images/icons/sad_face.svg'
 import Logo from 'src/images/logos/mento-logo-black.svg'
 import { logger } from 'src/utils/logger'
@@ -55,7 +55,7 @@ export function FailContent({ details }: { details?: string }) {
         <Image src={SadFace} alt="Sad Face" width={150} height={200} />
         <h3 className="text-lg mt-2 text-center">
           Please refresh the page. If the problem persists, you can{' '}
-          <TextLink href={config.discordUrl} className="underline">
+          <TextLink href={links.discord} className="underline">
             ask for help on Discord
           </TextLink>
           .
