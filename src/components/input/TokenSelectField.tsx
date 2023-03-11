@@ -1,81 +1,57 @@
 import { useField } from 'formik'
-import { PropsWithChildren } from 'react'
-import Select, {
-  OptionProps,
-  OptionsType,
-  SingleValueProps,
-  Styles,
-  Theme,
-  ValueType,
-  components,
-} from 'react-select'
-import { Token, TokenId, Tokens, getTokenById } from 'src/config/tokens'
+import { TokenId, getTokenById } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
-import { Color } from 'src/styles/Color'
 
-export interface TokenOption {
-  value: string
-  label: string
-}
+import { ChevronIcon } from '../Chevron'
 
-const tokenOptions = Object.values(TokenId).map((id) => ({ value: id, label: Tokens[id].symbol }))
+import { Select } from './Select'
 
-// Make the name required
+const tokenOptions = Object.values(TokenId)
+
 type Props = {
-  id?: string
   name: string
-  label?: string
-  onChange?: (option: TokenOption | null | undefined) => void
+  label: string
+  onChange?: (optionValue: string | null | undefined) => void
 }
 
-const DEFAULT_VALUE: TokenOption = {
+const DEFAULT_VALUE = {
   label: 'Select Token',
   value: '',
 }
 
-export function TokenSelectField(props: Props) {
-  const { id, name, label, onChange } = props
+export function TokenSelectField({ name, label, onChange }: Props) {
   const [field, , helpers] = useField<string>(name)
 
-  const handleChange = (option: ValueType<TokenOption, false>) => {
-    helpers.setValue(option?.value || '')
-    if (onChange) onChange(option)
+  const handleChange = (optionValue: string) => {
+    helpers.setValue(optionValue || '')
+    if (onChange) onChange(optionValue)
   }
 
   return (
-    <Select<TokenOption>
-      id={id}
-      instanceId={id}
-      options={tokenOptions}
-      name={field.name}
-      value={tokenOptions.find((o) => o.value === field.value) || DEFAULT_VALUE}
+    <Select
+      value={field.value}
+      optionValues={tokenOptions}
       onChange={handleChange}
-      onBlur={field.onBlur}
-      isLoading={false}
-      isClearable={false}
-      isSearchable={false}
-      singleValueLabel={label}
-      components={{ SingleValue, Option }}
-      styles={customStyles}
-      theme={customTheme}
+      button={TokenButton}
+      option={Option}
+      buttonLabel={label}
     />
   )
 }
 
-function SingleValue({ children, ...props }: PropsWithChildren<SingleValueProps<TokenOption>>) {
-  const { getValue, selectProps } = props
-  const token = getTokenForValue(getValue())
+function TokenButton(tokenId: string, buttonLabel?: string) {
+  const token = getTokenById(tokenId)
   return (
     <div className="flex items-center p-1 tw-rounded-md">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
-        <label htmlFor={selectProps.name} className="text-xs text-gray-400 cursor-pointer">
-          {selectProps.singleValueLabel || 'Token'}
+        <label className="text-xs text-gray-400 cursor-pointer">
+          {buttonLabel || DEFAULT_VALUE.label}
         </label>
         <div className="flex items-center">
-          <components.SingleValue {...props}>{children}</components.SingleValue>
+          <div>{token?.symbol || DEFAULT_VALUE.value}</div>
           <div className="ml-1">
-            <components.DownChevron />
+            <ChevronIcon direction="s" width={12} height={6} />
           </div>
         </div>
       </div>
@@ -83,70 +59,16 @@ function SingleValue({ children, ...props }: PropsWithChildren<SingleValueProps<
   )
 }
 
-function Option(props: OptionProps<TokenOption, false>) {
-  const token = getTokenForValue(props.data)
+function Option(tokenId: string, selected?: boolean) {
+  const token = getTokenById(tokenId)
   return (
-    <components.Option {...props}>
-      <div className="flex items-center">
-        <TokenIcon size="s" token={token} />
-        <div className="ml-3">{props.label}</div>
-      </div>
-    </components.Option>
+    <div
+      className={`py-1.5 px-2 flex items-center cursor-pointer hover:bg-gray-100 ${
+        selected ? 'bg-gray-50' : ''
+      }`}
+    >
+      <TokenIcon size="xs" token={token} />
+      <div className="ml-2">{token?.symbol || 'Unknown'}</div>
+    </div>
   )
 }
-
-function getTokenForValue(value: OptionsType<TokenOption>): Token | null {
-  let id: string | null = null
-  if (Array.isArray(value)) {
-    id = value[0].value
-  } else {
-    // @ts-ignore
-    id = value.value
-  }
-  if (!id) return null
-  return getTokenById(id)
-}
-
-const customStyles: Styles<any, false> = {
-  control: (provided) => ({
-    ...provided,
-    cursor: 'pointer',
-    border: 'none',
-    outline: 'none',
-    boxShadow: 'none',
-    background: 'transparent',
-    ':hover': {
-      background: 'rgba(255,255,255,0.9)',
-    },
-  }),
-  indicatorsContainer: () => ({
-    display: 'none',
-  }),
-  valueContainer: (provided) => ({
-    ...provided,
-    padding: 0,
-  }),
-  option: (provided) => ({
-    ...provided,
-    padding: '7px 12px',
-    color: `${Color.primaryBlack} !important`,
-    cursor: 'pointer',
-  }),
-  singleValue: () => ({
-    margin: 0,
-    fontSize: '16px',
-    fontWeight: 500,
-    color: Color.primaryBlack,
-  }),
-}
-
-const customTheme = (theme: Theme) => ({
-  ...theme,
-  colors: {
-    ...theme.colors,
-    primary: Color.greengrayLight,
-    primary75: Color.greengrayLight,
-    primary50: Color.greengrayLighter,
-    primary25: Color.greengrayLighter,
-  },
-})
