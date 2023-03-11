@@ -41,7 +41,7 @@ const wagmiClient = createClient({
 
 function SafeHydrate({ children }: PropsWithChildren<any>) {
   // Disable app SSR for now as it's not needed and
-  // complicates redux integration
+  // complicates redux and wagmi integration
   const isSsr = useIsSsr()
   if (isSsr) {
     return <div></div>

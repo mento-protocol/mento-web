@@ -9,7 +9,7 @@ import Select, {
   ValueType,
   components,
 } from 'react-select'
-import { Token, getTokenById } from 'src/config/tokens'
+import { Token, TokenId, Tokens, getTokenById } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { Color } from 'src/styles/Color'
 
@@ -18,11 +18,12 @@ export interface TokenOption {
   label: string
 }
 
+const tokenOptions = Object.values(TokenId).map((id) => ({ value: id, label: Tokens[id].symbol }))
+
 // Make the name required
 type Props = {
   id?: string
   name: string
-  options: TokenOption[]
   label?: string
   onChange?: (option: TokenOption | null | undefined) => void
 }
@@ -32,8 +33,8 @@ const DEFAULT_VALUE: TokenOption = {
   value: '',
 }
 
-export default function TokenSelectField(props: Props) {
-  const { id, name, label, options, onChange } = props
+export function TokenSelectField(props: Props) {
+  const { id, name, label, onChange } = props
   const [field, , helpers] = useField<string>(name)
 
   const handleChange = (option: ValueType<TokenOption, false>) => {
@@ -45,9 +46,9 @@ export default function TokenSelectField(props: Props) {
     <Select<TokenOption>
       id={id}
       instanceId={id}
-      options={options}
+      options={tokenOptions}
       name={field.name}
-      value={options.find((option) => option.value === field.value) || DEFAULT_VALUE}
+      value={tokenOptions.find((o) => o.value === field.value) || DEFAULT_VALUE}
       onChange={handleChange}
       onBlur={field.onBlur}
       isLoading={false}

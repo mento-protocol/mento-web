@@ -6,8 +6,8 @@ import { Spinner } from 'src/components/animation/Spinner'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
-import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
-import { CELO, TokenId, cEUR, cREAL, cUSD, isStableToken } from 'src/config/tokens'
+import { TokenOption, TokenSelectField } from 'src/components/input/TokenSelectField'
+import { TokenId, isStableToken } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
@@ -29,13 +29,6 @@ const initialValues: SwapFormValues = {
   fromAmount: '',
   slippage: '1.0',
 }
-
-const tokens = [
-  { value: TokenId.CELO, label: CELO.symbol },
-  { value: TokenId.cUSD, label: cUSD.symbol },
-  { value: TokenId.cEUR, label: cEUR.symbol },
-  { value: TokenId.cREAL, label: cREAL.symbol },
-]
 
 export function SwapFormCard() {
   return (
@@ -99,6 +92,7 @@ function SwapFormInputs({ balances }: FormInputProps) {
   }
 
   const onChangeToken = (isFromToken: boolean) => (option: TokenOption | null | undefined) => {
+    // TODO fix for USDC
     const tokenId = option?.value || TokenId.CELO
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
     const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
@@ -119,7 +113,6 @@ function SwapFormInputs({ balances }: FormInputProps) {
           <TokenSelectField
             id="fromTokenSelect"
             name="fromTokenId"
-            options={tokens}
             label="From Token"
             onChange={onChangeToken(true)}
           />
@@ -159,7 +152,6 @@ function SwapFormInputs({ balances }: FormInputProps) {
           <TokenSelectField
             id="toTokenSelect"
             name="toTokenId"
-            options={tokens}
             label="To Token"
             onChange={onChangeToken(false)}
           />

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { TextLink } from 'src/components/buttons/TextLink'
 import { config } from 'src/config/config'
+import { links } from 'src/config/links'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { HrDivider } from 'src/layout/HrDivider'
 
@@ -13,7 +14,7 @@ export default function AboutPage() {
         <p className={pClass}>
           Mento is a decentralized and transparent protocol that allows everyone to create and
           exchange stable value digital assets. For more details about how Mento works, see{' '}
-          <TextLink href="https://docs.mento.org" className="text-green-600">
+          <TextLink href={links.docs} className="text-green-600">
             the documentation
           </TextLink>
           .
@@ -39,13 +40,14 @@ export default function AboutPage() {
         </p>
         <HrDivider classes="mt-4" />
         <p className={pClass}>
-          This DApp is a free tool to facilitate use of the Mento Protocol. It was created by{' '}
-          <TextLink href="https://twitter.com/RossyWrote" className="text-green-600">
-            J M Rossy
-          </TextLink>
-          , funded by the Celo Foundation and Mento Labs. For more help, join the chat on{' '}
-          <TextLink href={config.discordUrl} className="text-green-600">
+          This app is a free tool to facilitate use of the Mento Protocol. It was funded by the Celo
+          Foundation and Mento Labs. For help, join the chat on{' '}
+          <TextLink href={links.discord} className="text-green-600">
             Discord
+          </TextLink>{' '}
+          or view the source on{' '}
+          <TextLink href={links.github} className="text-green-600">
+            Github
           </TextLink>
           .
         </p>

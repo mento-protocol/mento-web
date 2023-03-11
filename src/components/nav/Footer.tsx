@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js'
 import Image from 'next/image'
 import { useState } from 'react'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
-import { config } from 'src/config/config'
 import { STALE_BLOCK_TIME } from 'src/config/consts'
+import { links } from 'src/config/links'
 import { BlockStub } from 'src/features/blocks/types'
 import { useAppSelector } from 'src/features/store/hooks'
 import Discord from 'src/images/logos/discord.svg'
@@ -16,13 +16,9 @@ export function Footer() {
     <footer className="w-screen py-4 px-7">
       <div className="flex justify-between items-center">
         <div className="flex items-center opacity-90">
-          <FooterIconLink to="https://twitter.com/MentoProtocol" imgSrc={Twitter} alt="Twitter" />
-          <FooterIconLink
-            to="https://github.com/mento-protocol/mento-web"
-            imgSrc={Github}
-            alt="Github"
-          />
-          <FooterIconLink to={config.discordUrl} imgSrc={Discord} alt="Discord" />
+          <FooterIconLink to={links.twitter} imgSrc={Twitter} alt="Twitter" />
+          <FooterIconLink to={links.github} imgSrc={Github} alt="Github" />
+          <FooterIconLink to={links.discord} imgSrc={Discord} alt="Discord" />
         </div>
         <BlockIndicator />
       </div>
