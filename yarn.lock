@@ -1666,7 +1666,6 @@ __metadata:
     postcss: ^8.4.21
     prettier: ^2.8.4
     react: ^18.2.0
-    react-accessible-dropdown-menu-hook: ^4.0.0
     react-dom: ^18.2.0
     react-redux: ^8.0.5
     react-toastify: ^9.1.1
@@ -9346,13 +9345,6 @@ __metadata:
   dependencies:
     safe-buffer: ^5.1.0
   checksum: d779499376bd4cbb435ef3ab9a957006c8682f343f14089ed5f27764e4645114196e75b7f6abf1cbd84fd247c0cb0651698444df8c9bf30e62120fbbc52269d6
-  languageName: node
-  linkType: hard
-
-"react-accessible-dropdown-menu-hook@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "react-accessible-dropdown-menu-hook@npm:4.0.0"
-  checksum: 5a9673e32ada6f71f0d8627b8354c0ab84f1d2dce5b48f37f047b7a1d9ce3c85064c8c00b22d6c55748b2c500ad1df120c14761ff3d9232397f6811c2f278048
   languageName: node
   linkType: hard
 

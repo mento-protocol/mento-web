@@ -1,7 +1,7 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Image from 'next/image'
 import { useState } from 'react'
-import useDropdownMenu from 'react-accessible-dropdown-menu-hook'
+import { toast } from 'react-toastify'
 import { Identicon } from 'src/components/Identicon'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { BalancesSummary } from 'src/components/nav/BalancesSummary'
@@ -10,6 +10,7 @@ import Clipboard from 'src/images/icons/clipboard-plus.svg'
 import Cube from 'src/images/icons/cube.svg'
 import Logout from 'src/images/icons/logout.svg'
 import Wallet from 'src/images/icons/wallet.svg'
+import { DropdownModal } from 'src/layout/Dropdown'
 import { shortenAddress } from 'src/utils/addresses'
 import { tryClipboardSet } from 'src/utils/clipboard'
 import { useAccount, useDisconnect } from 'wagmi'
@@ -19,39 +20,51 @@ export function ConnectButton() {
   const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
 
-  const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(3)
-
   const onClickCopy = async () => {
-    setIsOpen(false)
     if (!address) return
     await tryClipboardSet(address)
+    toast.success('Address copied to clipboard', { autoClose: 1200 })
   }
 
   const [showNetworkModal, setShowNetworkModal] = useState(false)
   const onClickChangeNetwork = () => {
-    setIsOpen(false)
     setShowNetworkModal(true)
   }
 
   const onClickDisconnect = () => {
-    setIsOpen(false)
     disconnect()
   }
 
   return (
     <div className="flex justify-end mb-1 relative opacity-90">
       {address && isConnected ? (
-        <SolidButton
-          size="l"
-          color="white"
-          classes="shadow-md pl-2 pr-2 sm:pr-4 sm:pl-2"
-          passThruProps={buttonProps}
-        >
-          <div className="flex items-center">
-            <Identicon address={address} size={26} />
-            <div className="hidden sm:block ml-2.5">{shortenAddress(address, false, true)}</div>
-          </div>
-        </SolidButton>
+        <DropdownModal
+          buttonContent={
+            <div className="flex items-center">
+              <Identicon address={address} size={26} />
+              <div className="hidden sm:block ml-2.5">{shortenAddress(address, false, true)}</div>
+            </div>
+          }
+          buttonClasses={styles.walletButton}
+          modalContent={() => (
+            <div className="p-3">
+              <BalancesSummary />
+              <div className={styles.menuOption} onClick={onClickCopy}>
+                <CopyIcon />
+                <div>Copy Address</div>
+              </div>
+              <div className={styles.menuOption} onClick={onClickChangeNetwork}>
+                <NetworkIcon />
+                <div>Change Network</div>
+              </div>
+              <div className={styles.menuOption} onClick={onClickDisconnect}>
+                <LogoutIcon />
+                <div>Disconnect</div>
+              </div>
+            </div>
+          )}
+          modalClasses="w-60 right-px"
+        />
       ) : (
         <SolidButton
           size="l"
@@ -63,24 +76,6 @@ export function ConnectButton() {
           <div className="hidden sm:block">Connect</div>
         </SolidButton>
       )}
-      <div
-        className={`dropdown-menu w-60 mt-12 mr-px bg-white ${isOpen ? '' : 'hidden'}`}
-        role="menu"
-      >
-        <BalancesSummary />
-        <a {...itemProps[0]} className={menuOptionClasses} onClick={onClickCopy}>
-          <CopyIcon />
-          <div>Copy Address</div>
-        </a>
-        <a {...itemProps[1]} className={menuOptionClasses} onClick={onClickChangeNetwork}>
-          <NetworkIcon />
-          <div>Change Network</div>
-        </a>
-        <a {...itemProps[2]} className={menuOptionClasses} onClick={onClickDisconnect}>
-          <LogoutIcon />
-          <div>Disconnect</div>
-        </a>
-      </div>
       {showNetworkModal && (
         <NetworkModal isOpen={showNetworkModal} close={() => setShowNetworkModal(false)} />
       )}
@@ -120,4 +115,10 @@ function CopyIcon() {
   )
 }
 
-const menuOptionClasses = 'flex items-center cursor-pointer p-2 mt-1 rounded hover:bg-gray-100'
+const styles = {
+  // TODO DRY up with SolidButton styles
+  walletButton:
+    'flex items-center justify-center h-9 py-1 pl-2 pr-2 sm:pr-4 sm:pl-2 bg-white text-black hover:bg-gray-100 active:bg-gray-200 rounded-full shadow-md transition-all duration-300',
+  menuOption:
+    'flex items-center cursor-pointer p-2 mt-1 rounded hover:bg-gray-100 active:bg-gray-200',
+}
