@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { Color } from 'src/styles/Color'
 import { areAddressesEqual } from 'src/utils/addresses'
 
@@ -20,10 +21,10 @@ export enum TokenId {
   cUSD = 'cUSD',
   cEUR = 'cEUR',
   cREAL = 'cREAL',
-  // USDC = 'USDC',
+  USDC = 'USDC',
 }
 
-export const StableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL /*TokenId.USDC*/]
+export const StableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL, TokenId.USDC]
 
 export const CELO: Token = {
   id: TokenId.CELO,
@@ -53,20 +54,20 @@ export const cREAL: Token = {
   color: Color.celoGreen,
   decimals: 18,
 }
-// export const USDC: Token = {
-//   id: TokenId.USDC,
-//   symbol: TokenId.USDC,
-//   name: 'BridgedUSDC',
-//   color: Color.usdcBlue,
-//   decimals: 18,
-// }
+export const USDC: Token = {
+  id: TokenId.USDC,
+  symbol: TokenId.USDC,
+  name: 'BridgedUSDC',
+  color: Color.usdcBlue,
+  decimals: 18,
+}
 
 export const Tokens: Record<TokenId, Token> = {
   CELO,
   cUSD,
   cEUR,
   cREAL,
-  // USDC,
+  USDC,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = {
@@ -75,21 +76,21 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = {
     [TokenId.cUSD]: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
     [TokenId.cEUR]: '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
     [TokenId.cREAL]: '0xE4D517785D091D3c54818832dB6094bcc2744545',
-    // [TokenId.USDC]: ethers.constants.AddressZero,
+    [TokenId.USDC]: '0x2C4B568DfbA1fBDBB4E7DAD3F4186B68BCE40Db3',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
     [TokenId.cUSD]: '0x62492A644A588FD904270BeD06ad52B9abfEA1aE',
     [TokenId.cEUR]: '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
     [TokenId.cREAL]: '0x6a0EEf2bed4C30Dc2CB42fe6c5f01F80f7EF16d1',
-    // [TokenId.USDC]: '0x4c6B046750F9aBF6F0f3B511217438451bc6Aa02',
+    [TokenId.USDC]: '0x4c6B046750F9aBF6F0f3B511217438451bc6Aa02',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
     [TokenId.cUSD]: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
     [TokenId.cEUR]: '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
     [TokenId.cREAL]: '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
-    // [TokenId.USDC]: ethers.constants.AddressZero,
+    [TokenId.USDC]: ethers.constants.AddressZero,
   },
 }
 

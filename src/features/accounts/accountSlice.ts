@@ -8,12 +8,10 @@ interface AccountState {
 }
 
 const initialState: AccountState = {
-  balances: {
-    [TokenId.CELO]: '0',
-    [TokenId.cUSD]: '0',
-    [TokenId.cEUR]: '0',
-    [TokenId.cREAL]: '0',
-  },
+  balances: Object.values(TokenId).reduce((result, id) => {
+    result[id] = '0'
+    return result
+  }, {} as AccountBalances),
   lastUpdated: null,
 }
 

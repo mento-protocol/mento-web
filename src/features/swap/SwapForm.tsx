@@ -6,8 +6,8 @@ import { Spinner } from 'src/components/animation/Spinner'
 import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
-import TokenSelectField, { TokenOption } from 'src/components/input/TokenSelectField'
-import { CELO, TokenId, cEUR, cREAL, cUSD, isStableToken } from 'src/config/tokens'
+import { TokenSelectField } from 'src/components/input/TokenSelectField'
+import { TokenId, isStableToken } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
@@ -29,13 +29,6 @@ const initialValues: SwapFormValues = {
   fromAmount: '',
   slippage: '1.0',
 }
-
-const tokens = [
-  { value: TokenId.CELO, label: CELO.symbol },
-  { value: TokenId.cUSD, label: cUSD.symbol },
-  { value: TokenId.cEUR, label: cEUR.symbol },
-  { value: TokenId.cREAL, label: cREAL.symbol },
-]
 
 export function SwapFormCard() {
   return (
@@ -98,11 +91,13 @@ function SwapFormInputs({ balances }: FormInputProps) {
     }
   }
 
-  const onChangeToken = (isFromToken: boolean) => (option: TokenOption | null | undefined) => {
-    const tokenId = option?.value || TokenId.CELO
+  const onChangeToken = (isFromToken: boolean) => (tokenId: string) => {
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
     const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
-    if (isStableToken(tokenId)) {
+    if (tokenId === TokenId.USDC) {
+      setFieldValue(targetField, tokenId)
+      setFieldValue(otherField, TokenId.cUSD)
+    } else if (isStableToken(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.CELO)
     } else {
@@ -116,13 +111,7 @@ function SwapFormInputs({ balances }: FormInputProps) {
     <div className="relative">
       <div className="flex justify-between items-center py-2 px-3 mt-3 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
-          <TokenSelectField
-            id="fromTokenSelect"
-            name="fromTokenId"
-            options={tokens}
-            label="From Token"
-            onChange={onChangeToken(true)}
-          />
+          <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
           <FieldDividerLine />
         </div>
         <div className="flex flex-col items-end">
@@ -156,13 +145,7 @@ function SwapFormInputs({ balances }: FormInputProps) {
       </div>
       <div className="flex justify-between items-center py-2 px-3 mb-1 bg-greengray-lightest rounded-md">
         <div className="flex items-center">
-          <TokenSelectField
-            id="toTokenSelect"
-            name="toTokenId"
-            options={tokens}
-            label="To Token"
-            onChange={onChangeToken(false)}
-          />
+          <TokenSelectField name="toTokenId" label="To Token" onChange={onChangeToken(false)} />
           <FieldDividerLine />
         </div>
         {!isLoading ? (

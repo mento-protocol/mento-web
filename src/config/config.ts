@@ -1,9 +1,6 @@
 interface Config {
   debug: boolean
   version: string | null
-  url: string
-  discordUrl: string
-  blockscoutUrl: string
   showPriceChart: boolean
   walletConnectProjectId?: string
 }
@@ -15,9 +12,6 @@ const walletConnectProjectId = process?.env?.WALLET_CONNECT_ID
 export const config: Config = Object.freeze({
   debug: isDevMode,
   version,
-  url: 'https://mento.finance',
-  discordUrl: 'https://discord.com/invite/Zszgng9NdF',
-  blockscoutUrl: 'https://explorer.celo.org',
   showPriceChart: false,
   walletConnectProjectId,
 })
