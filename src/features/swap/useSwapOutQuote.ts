@@ -18,7 +18,7 @@ export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toT
   const debouncedFromAmountWei = useDebounce(fromAmountWei, 350)
 
   const { isLoading, isError, error, data } = useQuery(
-    [debouncedFromAmountWei, fromTokenId, toTokenId],
+    ['useSwapOutQuote', debouncedFromAmountWei, fromTokenId, toTokenId],
     async () => {
       const fromAmountBN = ethers.BigNumber.from(debouncedFromAmountWei)
       if (fromAmountBN.lte(0) || !fromTokenId || !toTokenId) return null

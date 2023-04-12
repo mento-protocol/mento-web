@@ -15,7 +15,7 @@ export function useApproveTransaction(
   address?: Address
 ) {
   const { error: txPrepError, data: txRequest } = useQuery(
-    [tokenId, amountInWei, address],
+    ['useApproveTransaction', tokenId, amountInWei, address],
     async () => {
       if (!address || new BigNumber(amountInWei).lte(0)) return null
       const sdk = await getMentoSdk(chainId)
