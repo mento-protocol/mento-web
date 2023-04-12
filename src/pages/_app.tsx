@@ -22,7 +22,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 const reactQueryClient = new QueryClient({})
 
 const { chains, provider } = configureChains(
-  [Alfajores, Baklava, Celo],
+  [Celo, Alfajores, Baklava],
   [jsonRpcProvider({ rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }) })]
 )
 

@@ -5,7 +5,7 @@ import { ChainId } from './chains'
 export const BrokerAddresses: Record<ChainId, Address> = {
   [ChainId.Alfajores]: '0xD3Dff18E465bCa6241A244144765b4421Ac14D09',
   [ChainId.Baklava]: '0x6723749339e320E1EFcd9f1B0D997ecb45587208',
-  [ChainId.Celo]: '',
+  [ChainId.Celo]: '0x777A8255cA72412f0d706dc03C9D1987306B4CaD',
 }
 
 export const AlfajoresExchanges: Exchange[] = [
@@ -78,8 +78,43 @@ export const BaklavaExchanges: Exchange[] = [
   },
 ]
 
-export const MentoExchanges: Record<ChainId, Array<Exchange> | undefined> = {
+export const CeloExchanges: Exchange[] = [
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x3135b662c38265d0655177091f1b647b4fef511103d06c016efdf18b46930d2c',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xb73ffc6b5123de3c8e460490543ab93a3be7d70824f1666343df49e219199b8c',
+    assets: [
+      '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
+      '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xed0528e42b9ecae538aab34b93813e08de03f8ac4a894b277ef193e67275bbae',
+    assets: [
+      '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
+      '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x0d739efbfc30f303e8d1976c213b4040850d1af40f174f4169b846f6fd3d2f20',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+    ],
+  },
+]
+
+export const MentoExchanges: Record<ChainId, Array<Exchange>> = {
   [ChainId.Alfajores]: AlfajoresExchanges,
   [ChainId.Baklava]: BaklavaExchanges,
-  [ChainId.Celo]: undefined,
+  [ChainId.Celo]: CeloExchanges,
 }

@@ -18,7 +18,15 @@ export function useSwapTransaction(
   isApproveConfirmed?: boolean
 ) {
   const { error: txPrepError, data: txRequest } = useQuery(
-    [fromToken, toToken, fromAmountInWei, minOutInWei, address, isApproveConfirmed],
+    [
+      'useSwapTransaction',
+      fromToken,
+      toToken,
+      fromAmountInWei,
+      minOutInWei,
+      address,
+      isApproveConfirmed,
+    ],
     async () => {
       if (
         !address ||
