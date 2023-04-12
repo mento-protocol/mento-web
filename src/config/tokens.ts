@@ -1,4 +1,3 @@
-import { ethers } from 'ethers'
 import { Color } from 'src/styles/Color'
 import { areAddressesEqual } from 'src/utils/addresses'
 
@@ -26,41 +25,41 @@ export enum TokenId {
 
 export const StableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL, TokenId.USDC]
 
-export const CELO: Token = {
+export const CELO: Token = Object.freeze({
   id: TokenId.CELO,
   symbol: TokenId.CELO,
   name: 'Celo Native',
   color: Color.celoGold,
   decimals: 18,
-}
-export const cUSD: Token = {
+})
+export const cUSD: Token = Object.freeze({
   id: TokenId.cUSD,
   symbol: TokenId.cUSD,
   name: 'Celo Dollar',
   color: Color.celoGreen,
   decimals: 18,
-}
-export const cEUR: Token = {
+})
+export const cEUR: Token = Object.freeze({
   id: TokenId.cEUR,
   symbol: TokenId.cEUR,
   name: 'Celo Euro',
   color: Color.celoGreen,
   decimals: 18,
-}
-export const cREAL: Token = {
+})
+export const cREAL: Token = Object.freeze({
   id: TokenId.cREAL,
   symbol: TokenId.cREAL,
   name: 'Celo Real',
   color: Color.celoGreen,
   decimals: 18,
-}
-export const USDC: Token = {
+})
+export const USDC: Token = Object.freeze({
   id: TokenId.USDC,
   symbol: TokenId.USDC,
   name: 'BridgedUSDC',
   color: Color.usdcBlue,
   decimals: 18,
-}
+})
 
 export const Tokens: Record<TokenId, Token> = {
   CELO,
@@ -70,7 +69,7 @@ export const Tokens: Record<TokenId, Token> = {
   USDC,
 }
 
-export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = {
+export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
   [ChainId.Alfajores]: {
     [TokenId.CELO]: '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9',
     [TokenId.cUSD]: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
@@ -90,9 +89,9 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = {
     [TokenId.cUSD]: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
     [TokenId.cEUR]: '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
     [TokenId.cREAL]: '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
-    [TokenId.USDC]: ethers.constants.AddressZero,
+    [TokenId.USDC]: '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
   },
-}
+})
 
 export function isNativeToken(tokenId: string) {
   return Object.keys(Tokens).includes(tokenId)

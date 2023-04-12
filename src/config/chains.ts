@@ -30,7 +30,7 @@ export const Baklava: ChainMetadata = {
 
 export const Celo: ChainMetadata = {
   chainId: ChainId.Celo,
-  name: 'Mainnet',
+  name: 'Celo',
   rpcUrl: 'https://forno.celo.org',
   explorerUrl: 'https://celoscan.io',
   explorerApiUrl: 'https://api.celoscan.io/api',
@@ -42,4 +42,4 @@ export const chainIdToChain: Record<number, ChainMetadata> = {
   [ChainId.Celo]: Celo,
 }
 
-export const allChains = [Alfajores, Baklava, Celo]
+export const allChains = [Celo, Alfajores, Baklava]
