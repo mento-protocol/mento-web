@@ -1754,6 +1754,7 @@ __metadata:
     "@types/react-redux": ^7.1.25
     "@typescript-eslint/eslint-plugin": ^5.58.0
     "@typescript-eslint/parser": ^5.58.0
+    "@vercel/analytics": ^1.0.0
     autoprefixer: ^10.4.14
     bignumber.js: ^9.1.1
     eslint: ^8.38.0
@@ -3086,6 +3087,15 @@ __metadata:
   peerDependencies:
     "@vanilla-extract/css": ^1.0.0
   checksum: 522b96afe856a72d76072ab41453edc35117772a6ac829c8a5ad09cddd69152e152b1cbda0b4344d50dbde59d0effa39301beb7acf319ef88f485966c89c80fd
+  languageName: node
+  linkType: hard
+
+"@vercel/analytics@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@vercel/analytics@npm:1.0.0"
+  peerDependencies:
+    react: ^16.8||^17||^18
+  checksum: e9badd995ac67ef971250a93f6e03c5628923337a1ea5be821becb3afa3f4ceda13e9cc989b4a5432039851c82bd0695fd7e690c0373e31eb555ee30ce0384a7
   languageName: node
   linkType: hard
 

@@ -2,6 +2,7 @@ import { Alfajores, Baklava, Celo } from '@celo/rainbowkit-celo/chains'
 import { RainbowKitProvider, connectorsForWallets, lightTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Analytics } from '@vercel/analytics/react'
 import type { AppProps } from 'next/app'
 import { PropsWithChildren } from 'react'
 import { Provider } from 'react-redux'
@@ -79,6 +80,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
           </QueryClientProvider>
         </Provider>
       </SafeHydrate>
+      <Analytics />
     </ErrorBoundary>
   )
 }
