@@ -34,6 +34,7 @@
     "@rainbow-me/rainbowkit": "^0.12.7",
     "@reduxjs/toolkit": "^1.9.3",
     "@tanstack/react-query": "^4.29.1",
+    "@vercel/analytics": "^1.0.0",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
     "formik": "^2.2.9",
