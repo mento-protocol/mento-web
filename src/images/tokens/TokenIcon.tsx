@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { memo } from 'react'
-import { Token, TokenId, isUSDCToken } from 'src/config/tokens'
+import { Token, TokenId, isUSDCVariant } from 'src/config/tokens'
 import CeloIcon from 'src/images/tokens/CELO.svg'
 import USDCIcon from 'src/images/tokens/USDC.svg'
 import cEURIcon from 'src/images/tokens/cEUR.svg'
@@ -32,7 +32,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   else if (token?.id === TokenId.cUSD) imgSrc = cUSDIcon
   else if (token?.id === TokenId.cEUR) imgSrc = cEURIcon
   else if (token?.id === TokenId.cREAL) imgSrc = cREALIcon
-  else if (isUSDCToken(token?.id)) imgSrc = USDCIcon
+  else if (isUSDCVariant(token?.id)) imgSrc = USDCIcon
 
   if (imgSrc) {
     return (

@@ -32,7 +32,7 @@ export const StableTokenIds = [
   TokenId.axlUSDC,
 ]
 
-export const USDCTokenIds = [TokenId.USDC, TokenId.axlUSDC]
+export const USDCVariantIds = [TokenId.USDC, TokenId.axlUSDC]
 
 export const CELO: Token = Object.freeze({
   id: TokenId.CELO,
@@ -110,8 +110,8 @@ export const TokenAddresses: Record<ChainId, Partial<Record<TokenId, Address>>> 
   },
 })
 
-export function isUSDCToken(tokenId: string) {
-  return USDCTokenIds.includes(tokenId as TokenId)
+export function isUSDCVariant(tokenId: string) {
+  return USDCVariantIds.includes(tokenId as TokenId)
 }
 
 export function isNativeToken(tokenId: string) {

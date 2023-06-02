@@ -7,7 +7,7 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, isStableToken } from 'src/config/tokens'
+import { TokenId, isStableToken, isUSDCVariant } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
@@ -34,7 +34,7 @@ export function SwapFormCard() {
   return (
     <FloatingBox width="w-96" classes="overflow-visible">
       <div className="flex justify-between mb-5">
-        <h2 className="text-lg font-medium pl-1">Swap</h2>
+        <h2 className="pl-1 text-lg font-medium">Swap</h2>
         <SettingsMenu />
       </div>
       <SwapForm />
@@ -94,7 +94,7 @@ function SwapFormInputs({ balances }: FormInputProps) {
   const onChangeToken = (isFromToken: boolean) => (tokenId: string) => {
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
     const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
-    if (tokenId === TokenId.USDC) {
+    if (isUSDCVariant(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.cUSD)
     } else if (isStableToken(tokenId)) {
@@ -109,7 +109,7 @@ function SwapFormInputs({ balances }: FormInputProps) {
 
   return (
     <div className="relative">
-      <div className="flex justify-between items-center py-2 px-3 mt-3 bg-greengray-lightest rounded-md">
+      <div className="flex items-center justify-between px-3 py-2 mt-3 rounded-md bg-greengray-lightest">
         <div className="flex items-center">
           <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
           <FieldDividerLine />
@@ -129,11 +129,11 @@ function SwapFormInputs({ balances }: FormInputProps) {
             type="number"
             step="any"
             placeholder="0.00"
-            className="w-36 pt-1 bg-transparent text-right text-xl font-mono focus:outline-none"
+            className="pt-1 font-mono text-xl text-right bg-transparent w-36 focus:outline-none"
           />
         </div>
       </div>
-      <div className="bg-white rounded-full absolute left-4 top-2/4 -translate-y-1/2 hover:rotate-180 transition-all">
+      <div className="absolute transition-all -translate-y-1/2 bg-white rounded-full left-4 top-2/4 hover:rotate-180">
         <ReverseTokenButton />
       </div>
       <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
@@ -143,15 +143,15 @@ function SwapFormInputs({ balances }: FormInputProps) {
           ? 'Loading...'
           : '...'}
       </div>
-      <div className="flex justify-between items-center py-2 px-3 mb-1 bg-greengray-lightest rounded-md">
+      <div className="flex items-center justify-between px-3 py-2 mb-1 rounded-md bg-greengray-lightest">
         <div className="flex items-center">
           <TokenSelectField name="toTokenId" label="To Token" onChange={onChangeToken(false)} />
           <FieldDividerLine />
         </div>
         {!isLoading ? (
-          <div className="text-xl text-right font-mono w-36 pt-2 overflow-hidden">{toAmount}</div>
+          <div className="pt-2 overflow-hidden font-mono text-xl text-right w-36">{toAmount}</div>
         ) : (
-          <div className="w-8 h-8 pt-1 flex items-center justify-center">
+          <div className="flex items-center justify-center w-8 h-8 pt-1">
             <div className="scale-[0.3] opacity-80">
               <Spinner />
             </div>
@@ -189,7 +189,7 @@ function FieldDividerLine() {
 
 function SlippageRow() {
   return (
-    <div className="flex items-center justify-center mt-5 space-x-7 text-sm" role="group">
+    <div className="flex items-center justify-center mt-5 text-sm space-x-7" role="group">
       <div>Max Slippage:</div>
       <RadioInput name="slippage" value="0.5" label="0.5%" />
       <RadioInput name="slippage" value="1.0" label="1.0%" />
