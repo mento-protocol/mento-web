@@ -1,12 +1,11 @@
 import { useField } from 'formik'
-import { TokenId, getTokenById } from 'src/config/tokens'
+import { TokenId, getTokenById, getTokenOptionsByChainId } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
+import { useNetwork } from 'wagmi'
 
 import { ChevronIcon } from '../Chevron'
 
 import { Select } from './Select'
-
-const tokenOptions = Object.values(TokenId)
 
 type Props = {
   name: string
@@ -21,6 +20,9 @@ const DEFAULT_VALUE = {
 
 export function TokenSelectField({ name, label, onChange }: Props) {
   const [field, , helpers] = useField<string>(name)
+
+  const { chain } = useNetwork()
+  const tokenOptions = chain ? getTokenOptionsByChainId(chain?.id) : Object.values(TokenId)
 
   const handleChange = (optionValue: string) => {
     helpers.setValue(optionValue || '')

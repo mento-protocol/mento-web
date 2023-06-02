@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { BigNumberish, Contract } from 'ethers'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
-import { TokenId, getTokenAddress } from 'src/config/tokens'
+import { TokenId, getTokenAddress, getTokenOptionsByChainId } from 'src/config/tokens'
 import type { AppDispatch, AppState } from 'src/features/store/store'
 import { validateAddress } from 'src/utils/addresses'
 import { isStale } from 'src/utils/time'
@@ -34,7 +34,7 @@ export const fetchBalances = createAsyncThunk<
 async function _fetchBalances(address: string, chainId: number) {
   validateAddress(address, 'fetchBalances')
   const tokenBalances: Partial<Record<TokenId, string>> = {}
-  for (const tokenId of Object.values(TokenId)) {
+  for (const tokenId of getTokenOptionsByChainId(chainId)) {
     const tokenAddr = getTokenAddress(tokenId, chainId)
     const provider = getProvider(chainId)
     const tokenContract = new Contract(tokenAddr, erc20ABI, provider)

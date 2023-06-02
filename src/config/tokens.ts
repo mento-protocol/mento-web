@@ -122,6 +122,10 @@ export function isStableToken(tokenId: string) {
   return StableTokenIds.includes(tokenId as TokenId)
 }
 
+export function getTokenOptionsByChainId(chainId: ChainId) {
+  return Object.keys(TokenAddresses[chainId]) as TokenId[]
+}
+
 export function getTokenById(id: string): Token | null {
   return Tokens[id as TokenId] || null
 }
