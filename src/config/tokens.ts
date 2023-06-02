@@ -110,6 +110,10 @@ export const TokenAddresses: Record<ChainId, Partial<Record<TokenId, Address>>> 
   },
 })
 
+export function isUSDCToken(tokenId: string) {
+  return USDCTokenIds.includes(tokenId as TokenId)
+}
+
 export function isNativeToken(tokenId: string) {
   return Object.keys(Tokens).includes(tokenId)
 }
