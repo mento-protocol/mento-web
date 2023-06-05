@@ -48,7 +48,12 @@ export function SwapConfirmCard(props: Props) {
   }, [isConfirmValid, dispatch])
 
   const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
-  const { toAmountWei, toAmount, rate } = useSwapOutQuote(fromAmount,from.weiAmount, from.token, to.token)
+  const { toAmountWei, toAmount, rate } = useSwapOutQuote(
+    fromAmount,
+    from.weiAmount,
+    from.token,
+    to.token
+  )
 
   // Check if amount is almost equal to balance max, in which case use max
   // Helps handle problems from imprecision in non-wei amount display

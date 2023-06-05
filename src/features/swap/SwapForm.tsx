@@ -79,10 +79,15 @@ function SwapFormInputs({ balances }: FormInputProps) {
   const { address, isConnected } = useAccount()
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
-  const {fromAmount,fromTokenId,toTokenId} = values
+  const { fromAmount, fromTokenId, toTokenId } = values
 
   const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
-  const { isLoading, toAmount, rate } = useSwapOutQuote(fromAmount,from.weiAmount, from.token, to.token)
+  const { isLoading, toAmount, rate } = useSwapOutQuote(
+    fromAmount,
+    from.weiAmount,
+    from.token,
+    to.token
+  )
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {

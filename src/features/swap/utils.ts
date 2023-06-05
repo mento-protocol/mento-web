@@ -35,7 +35,7 @@ export function formatExchangeValues(
 
     return {
       from: {
-        amount: fromWeiRounded(fromAmountWei, Tokens[fromTokenId].decimals ,true),
+        amount: fromWeiRounded(fromAmountWei, Tokens[fromTokenId].decimals, true),
         weiAmount: fromAmountWei.toFixed(0),
         token: fromTokenId,
       },
@@ -50,7 +50,11 @@ export function formatExchangeValues(
   }
 }
 
-export function parseInputExchangeAmount(amount: NumberT | null | undefined, tokenId:TokenId, isWei: boolean) {
+export function parseInputExchangeAmount(
+  amount: NumberT | null | undefined,
+  tokenId: TokenId,
+  isWei: boolean
+) {
   const parsed = parseAmountWithDefault(amount, 0)
   const parsedWei = isWei ? parsed : toWei(parsed, Tokens[tokenId].decimals)
   return BigNumber.max(parsedWei, 0)

@@ -12,7 +12,12 @@ import { useDebounce } from 'src/utils/debounce'
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-export function useSwapOutQuote(fromAmount: string|number, fromAmountWei: string, fromTokenId: TokenId, toTokenId: TokenId) {
+export function useSwapOutQuote(
+  fromAmount: string | number,
+  fromAmountWei: string,
+  fromTokenId: TokenId,
+  toTokenId: TokenId
+) {
   const chainId = useChainId()
 
   const debouncedFromAmountWei = useDebounce(fromAmountWei, 350)
