@@ -12,7 +12,7 @@ export function BalancesSummary() {
       {tokenIds.map((id) => (
         <div style={{ minWidth: '35%' }} className="flex mx-2 my-2" key={id}>
           <TokenIcon token={Tokens[id]} size="xs" />
-          <div className="ml-1">{fromWeiRounded(balances[id])}</div>
+          <div className="ml-1">{fromWeiRounded(balances[id], Tokens[id].decimals)}</div>
         </div>
       ))}
     </div>
