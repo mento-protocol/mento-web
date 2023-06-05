@@ -1,6 +1,7 @@
-import BigNumber from 'bignumber.js'
-import { TokenId } from 'src/config/tokens'
 import { NumberT, fromWeiRounded, parseAmountWithDefault, toWei } from 'src/utils/amount'
+import { TokenId, Tokens } from 'src/config/tokens'
+
+import BigNumber from 'bignumber.js'
 import { logger } from 'src/utils/logger'
 
 export interface ExchangeValues {
@@ -30,11 +31,11 @@ export function formatExchangeValues(
     const sellCelo = fromTokenId === TokenId.CELO
     const stableTokenId = sellCelo ? toTokenId : fromTokenId
 
-    const fromAmountWei = parseInputExchangeAmount(fromAmount, false)
+    const fromAmountWei = parseInputExchangeAmount(fromAmount, fromTokenId, false)
 
     return {
       from: {
-        amount: fromWeiRounded(fromAmountWei, true),
+        amount: fromWeiRounded(fromAmountWei, Tokens[fromTokenId].decimals ,true),
         weiAmount: fromAmountWei.toFixed(0),
         token: fromTokenId,
       },
@@ -49,9 +50,9 @@ export function formatExchangeValues(
   }
 }
 
-export function parseInputExchangeAmount(amount: NumberT | null | undefined, isWei: boolean) {
+export function parseInputExchangeAmount(amount: NumberT | null | undefined, tokenId:TokenId, isWei: boolean) {
   const parsed = parseAmountWithDefault(amount, 0)
-  const parsedWei = isWei ? parsed : toWei(parsed)
+  const parsedWei = isWei ? parsed : toWei(parsed, Tokens[tokenId].decimals)
   return BigNumber.max(parsedWei, 0)
 }
 

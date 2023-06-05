@@ -1,27 +1,27 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Field, Form, Formik, useFormikContext } from 'formik'
-import { useCallback } from 'react'
-import { toast } from 'react-toastify'
-import { Spinner } from 'src/components/animation/Spinner'
-import { IconButton } from 'src/components/buttons/IconButton'
-import { SolidButton } from 'src/components/buttons/SolidButton'
-import { RadioInput } from 'src/components/input/RadioInput'
-import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, isStableToken } from 'src/config/tokens'
-import { AccountBalances } from 'src/features/accounts/fetchBalances'
+import { TokenId, Tokens, isStableToken } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
-import { SettingsMenu } from 'src/features/swap/SettingsMenu'
-import { setFormValues } from 'src/features/swap/swapSlice'
-import { SwapFormValues } from 'src/features/swap/types'
-import { useFormValidator } from 'src/features/swap/useFormValidator'
-import { formatExchangeValues } from 'src/features/swap/utils'
+
+import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
+import { IconButton } from 'src/components/buttons/IconButton'
+import { RadioInput } from 'src/components/input/RadioInput'
+import { SettingsMenu } from 'src/features/swap/SettingsMenu'
+import { SolidButton } from 'src/components/buttons/SolidButton'
+import { Spinner } from 'src/components/animation/Spinner'
+import { SwapFormValues } from 'src/features/swap/types'
+import { TokenSelectField } from 'src/components/input/TokenSelectField'
+import { formatExchangeValues } from 'src/features/swap/utils'
 import { fromWeiRounded } from 'src/utils/amount'
-import { useTimeout } from 'src/utils/timeout'
+import { setFormValues } from 'src/features/swap/swapSlice'
+import { toast } from 'react-toastify'
 import { useAccount } from 'wagmi'
-
+import { useCallback } from 'react'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapOutQuote } from './useSwapOutQuote'
+import { useTimeout } from 'src/utils/timeout'
 
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
@@ -79,14 +79,15 @@ function SwapFormInputs({ balances }: FormInputProps) {
   const { address, isConnected } = useAccount()
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const {fromAmount,fromTokenId,toTokenId} = values
 
-  const { from, to } = formatExchangeValues(values.fromAmount, values.fromTokenId, values.toTokenId)
-  const { isLoading, toAmount, rate } = useSwapOutQuote(from.weiAmount, from.token, to.token)
+  const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
+  const { isLoading, toAmount, rate } = useSwapOutQuote(fromAmount,from.weiAmount, from.token, to.token)
 
-  const roundedBalance = fromWeiRounded(balances[values.fromTokenId])
+  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
     setFieldValue('fromAmount', roundedBalance)
-    if (values.fromTokenId === TokenId.CELO) {
+    if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
   }

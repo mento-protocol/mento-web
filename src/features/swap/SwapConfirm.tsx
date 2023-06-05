@@ -1,25 +1,25 @@
-import BigNumber from 'bignumber.js'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import { toastToYourSuccess } from 'src/components/TxSuccessToast'
-import { Spinner } from 'src/components/animation/Spinner'
-import { BackButton } from 'src/components/buttons/BackButton'
-import { RefreshButton } from 'src/components/buttons/RefreshButton'
-import { SolidButton } from 'src/components/buttons/SolidButton'
-import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
-import { Tokens } from 'src/config/tokens'
-import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
-import { setFormValues } from 'src/features/swap/swapSlice'
-import { SwapFormValues } from 'src/features/swap/types'
 import { ExchangeValues, formatExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
-import { TokenIcon } from 'src/images/tokens/TokenIcon'
+import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
+import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
+import { useAccount, useChainId } from 'wagmi'
+import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
+import { useEffect, useState } from 'react'
+
+import { BackButton } from 'src/components/buttons/BackButton'
+import BigNumber from 'bignumber.js'
+import { Color } from 'src/styles/Color'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
-import { Color } from 'src/styles/Color'
-import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
+import { RefreshButton } from 'src/components/buttons/RefreshButton'
+import { SolidButton } from 'src/components/buttons/SolidButton'
+import { Spinner } from 'src/components/animation/Spinner'
+import { SwapFormValues } from 'src/features/swap/types'
+import { TokenIcon } from 'src/images/tokens/TokenIcon'
+import { Tokens } from 'src/config/tokens'
 import { logger } from 'src/utils/logger'
-import { useAccount, useChainId } from 'wagmi'
-
+import { setFormValues } from 'src/features/swap/swapSlice'
+import { toast } from 'react-toastify'
+import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { useApproveTransaction } from './useApproveTransaction'
 import { useSwapOutQuote } from './useSwapOutQuote'
 import { useSwapTransaction } from './useSwapTransaction'
@@ -48,13 +48,13 @@ export function SwapConfirmCard(props: Props) {
   }, [isConfirmValid, dispatch])
 
   const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
-  const { toAmountWei, toAmount, rate } = useSwapOutQuote(from.weiAmount, from.token, to.token)
+  const { toAmountWei, toAmount, rate } = useSwapOutQuote(fromAmount,from.weiAmount, from.token, to.token)
 
   // Check if amount is almost equal to balance max, in which case use max
   // Helps handle problems from imprecision in non-wei amount display
   const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance).toFixed(0)
   const minBuyAmountWei = getMinBuyAmount(toAmountWei, slippage).toFixed(0)
-  const minBuyAmount = fromWeiRounded(minBuyAmountWei, true)
+  const minBuyAmount = fromWeiRounded(minBuyAmountWei, Tokens[toTokenId].decimals, true)
 
   const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading } = useApproveTransaction(
     chainId,
