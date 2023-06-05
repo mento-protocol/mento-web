@@ -1,8 +1,7 @@
 import { TokenId, Tokens } from 'src/config/tokens'
-
+import { useAppSelector } from 'src/features/store/hooks'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { fromWeiRounded } from 'src/utils/amount'
-import { useAppSelector } from 'src/features/store/hooks'
 
 export function BalancesSummary() {
   const balances = useAppSelector((s) => s.account.balances)

@@ -1,7 +1,6 @@
-import { NumberT, fromWeiRounded, parseAmountWithDefault, toWei } from 'src/utils/amount'
-import { TokenId, Tokens } from 'src/config/tokens'
-
 import BigNumber from 'bignumber.js'
+import { TokenId, Tokens } from 'src/config/tokens'
+import { NumberT, fromWeiRounded, parseAmountWithDefault, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 
 export interface ExchangeValues {
