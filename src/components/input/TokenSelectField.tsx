@@ -1,4 +1,5 @@
 import { useField } from 'formik'
+import { useMemo } from 'react'
 import { TokenId, getTokenById, getTokenOptionsByChainId } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { useNetwork } from 'wagmi'
@@ -22,7 +23,10 @@ export function TokenSelectField({ name, label, onChange }: Props) {
   const [field, , helpers] = useField<string>(name)
 
   const { chain } = useNetwork()
-  const tokenOptions = chain ? getTokenOptionsByChainId(chain?.id) : Object.values(TokenId)
+  const tokenOptions = useMemo(() => {
+    return chain ? getTokenOptionsByChainId(chain.id) : Object.values(TokenId);
+  }, [chain]);
+  
 
   const handleChange = (optionValue: string) => {
     helpers.setValue(optionValue || '')
