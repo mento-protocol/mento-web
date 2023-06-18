@@ -17,6 +17,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "typecheck": "tsc",
     "start": "next start",
     "clean": "rm -rf dist cache .next",
     "type-check": "tsc",
@@ -37,7 +38,7 @@
     "@vercel/analytics": "^1.0.1",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
-    "formik": "^2.4.2",
+    "formik": "2.2.9",
     "frappe-charts": "^1.6.2",
     "next": "13.4.6",
     "react": "^18.2.0",
