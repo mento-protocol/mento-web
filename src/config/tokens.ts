@@ -21,9 +21,18 @@ export enum TokenId {
   cEUR = 'cEUR',
   cREAL = 'cREAL',
   USDC = 'USDC',
+  axlUSDC = 'axlUSDC',
 }
 
-export const StableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL, TokenId.USDC]
+export const StableTokenIds = [
+  TokenId.cUSD,
+  TokenId.cEUR,
+  TokenId.cREAL,
+  TokenId.USDC,
+  TokenId.axlUSDC,
+]
+
+export const USDCVariantIds = [TokenId.USDC, TokenId.axlUSDC]
 
 export const CELO: Token = Object.freeze({
   id: TokenId.CELO,
@@ -60,6 +69,13 @@ export const USDC: Token = Object.freeze({
   color: Color.usdcBlue,
   decimals: 18,
 })
+export const axlUSDC: Token = Object.freeze({
+  id: TokenId.axlUSDC,
+  symbol: TokenId.axlUSDC,
+  name: 'Axelar Wrapped USDC',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
 
 export const Tokens: Record<TokenId, Token> = {
   CELO,
@@ -67,9 +83,10 @@ export const Tokens: Record<TokenId, Token> = {
   cEUR,
   cREAL,
   USDC,
+  axlUSDC,
 }
 
-export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
+export const TokenAddresses: Record<ChainId, Partial<Record<TokenId, Address>>> = Object.freeze({
   [ChainId.Alfajores]: {
     [TokenId.CELO]: '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9',
     [TokenId.cUSD]: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
@@ -89,9 +106,13 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cUSD]: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
     [TokenId.cEUR]: '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
     [TokenId.cREAL]: '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
-    [TokenId.USDC]: '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+    [TokenId.axlUSDC]: '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
   },
 })
+
+export function isUSDCVariant(tokenId: string) {
+  return USDCVariantIds.includes(tokenId as TokenId)
+}
 
 export function isNativeToken(tokenId: string) {
   return Object.keys(Tokens).includes(tokenId)
@@ -99,6 +120,10 @@ export function isNativeToken(tokenId: string) {
 
 export function isStableToken(tokenId: string) {
   return StableTokenIds.includes(tokenId as TokenId)
+}
+
+export function getTokenOptionsByChainId(chainId: ChainId) {
+  return Object.keys(TokenAddresses[chainId]) as TokenId[]
 }
 
 export function getTokenById(id: string): Token | null {

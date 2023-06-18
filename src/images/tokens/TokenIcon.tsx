@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { memo } from 'react'
-import { Token, TokenId } from 'src/config/tokens'
+import { Token, TokenId, isUSDCVariant } from 'src/config/tokens'
 import CeloIcon from 'src/images/tokens/CELO.svg'
 import USDCIcon from 'src/images/tokens/USDC.svg'
 import cEURIcon from 'src/images/tokens/cEUR.svg'
@@ -13,16 +13,28 @@ interface Props {
 }
 
 function _TokenIcon({ token, size = 'm' }: Props) {
+  const { actualSize, fontSize } = sizeValues[size]
+
+  if (!token) {
+    return (
+      <div
+        className="flex items-center justify-center bg-white border border-gray-200 rounded-full"
+        style={{
+          width: actualSize,
+          height: actualSize,
+        }}
+      ></div>
+    )
+  }
+
   let imgSrc
   if (token?.id === TokenId.CELO) imgSrc = CeloIcon
   else if (token?.id === TokenId.cUSD) imgSrc = cUSDIcon
   else if (token?.id === TokenId.cEUR) imgSrc = cEURIcon
   else if (token?.id === TokenId.cREAL) imgSrc = cREALIcon
-  else if (token?.id === TokenId.USDC) imgSrc = USDCIcon
+  else if (isUSDCVariant(token?.id)) imgSrc = USDCIcon
 
-  const { actualSize, fontSize } = sizeValues[size]
-
-  if (token && imgSrc) {
+  if (imgSrc) {
     return (
       <Image
         src={imgSrc}
@@ -34,36 +46,24 @@ function _TokenIcon({ token, size = 'm' }: Props) {
     )
   }
 
-  if (token) {
-    return (
-      <div
-        className="flex items-center justify-center rounded-full"
-        style={{
-          width: actualSize,
-          height: actualSize,
-          backgroundColor: token.color || '#9CA4A9',
-        }}
-      >
-        <div
-          className="font-semibold text-white"
-          style={{
-            fontSize,
-          }}
-        >
-          {token.symbol[0].toUpperCase()}
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div
-      className="flex items-center justify-center rounded-full bg-white border border-gray-200"
+      className="flex items-center justify-center rounded-full"
       style={{
         width: actualSize,
         height: actualSize,
+        backgroundColor: token.color || '#9CA4A9',
       }}
-    ></div>
+    >
+      <div
+        className="font-semibold text-white"
+        style={{
+          fontSize,
+        }}
+      >
+        {token.symbol[0].toUpperCase()}
+      </div>
+    </div>
   )
 }
 
