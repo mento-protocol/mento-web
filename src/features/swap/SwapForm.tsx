@@ -7,7 +7,7 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, isStableToken, isUSDCVariant } from 'src/config/tokens'
+import { TokenId, Tokens, isStableToken, isUSDCVariant } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
@@ -79,14 +79,20 @@ function SwapFormInputs({ balances }: FormInputProps) {
   const { address, isConnected } = useAccount()
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const { fromAmount, fromTokenId, toTokenId } = values
 
-  const { from, to } = formatExchangeValues(values.fromAmount, values.fromTokenId, values.toTokenId)
-  const { isLoading, toAmount, rate } = useSwapOutQuote(from.weiAmount, from.token, to.token)
+  const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
+  const { isLoading, toAmount, rate } = useSwapOutQuote(
+    fromAmount,
+    from.weiAmount,
+    from.token,
+    to.token
+  )
 
-  const roundedBalance = fromWeiRounded(balances[values.fromTokenId])
+  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
     setFieldValue('fromAmount', roundedBalance)
-    if (values.fromTokenId === TokenId.CELO) {
+    if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
   }

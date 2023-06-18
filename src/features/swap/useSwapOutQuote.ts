@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { SWAP_QUOTE_REFETCH_INTERVAL } from 'src/config/consts'
-import { TokenId, getTokenAddress } from 'src/config/tokens'
+import { TokenId, Tokens, getTokenAddress } from 'src/config/tokens'
 import { NumberT, fromWeiRounded } from 'src/utils/amount'
 import { useDebounce } from 'src/utils/debounce'
 import { logger } from 'src/utils/logger'
@@ -12,7 +12,12 @@ import { useChainId } from 'wagmi'
 
 import { getMentoSdk } from '../sdk'
 
-export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toTokenId: TokenId) {
+export function useSwapOutQuote(
+  fromAmount: string | number,
+  fromAmountWei: string,
+  fromTokenId: TokenId,
+  toTokenId: TokenId
+) {
   const chainId = useChainId()
 
   const debouncedFromAmountWei = useDebounce(fromAmountWei, 350)
@@ -28,10 +33,11 @@ export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toT
       const toAmountWei = (
         await mento.getAmountOut(fromTokenAddr, toTokenAddr, fromAmountBN)
       ).toString()
+      const toAmount = fromWeiRounded(toAmountWei, Tokens[toTokenId].decimals)
       return {
-        toAmountWei: toAmountWei,
-        toAmount: fromWeiRounded(toAmountWei),
-        rate: calcExchangeRate(debouncedFromAmountWei, toAmountWei),
+        toAmountWei,
+        toAmount,
+        rate: calcExchangeRate(fromAmount, toAmount),
       }
     },
     {
@@ -56,9 +62,10 @@ export function useSwapOutQuote(fromAmountWei: string, fromTokenId: TokenId, toT
   }
 }
 
+// TODO properly account for token decimal values
 function calcExchangeRate(fromAmount: NumberT, toAmount: NumberT) {
   try {
-    return new BigNumber(fromAmount).dividedBy(toAmount).toFixed(2, BigNumber.ROUND_DOWN)
+    return new BigNumber(fromAmount).dividedBy(toAmount).toFixed(4, BigNumber.ROUND_DOWN)
   } catch (error) {
     logger.warn('Error computing exchange values', error)
     return '0'

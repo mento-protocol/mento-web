@@ -65,9 +65,9 @@ export const cREAL: Token = Object.freeze({
 export const USDC: Token = Object.freeze({
   id: TokenId.USDC,
   symbol: TokenId.USDC,
-  name: 'BridgedUSDC',
+  name: 'axlUSDC',
   color: Color.usdcBlue,
-  decimals: 18,
+  decimals: 6,
 })
 export const axlUSDC: Token = Object.freeze({
   id: TokenId.axlUSDC,
