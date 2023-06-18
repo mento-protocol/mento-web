@@ -71,7 +71,7 @@ export const Tokens: Record<TokenId, Token> = {
   axlUSDC,
 }
 
-export const TokenAddresses: Record<ChainId, Partial<Record<TokenId, Address>>> = Object.freeze({
+export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
   [ChainId.Alfajores]: {
     [TokenId.CELO]: '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9',
     [TokenId.cUSD]: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',

@@ -24,9 +24,8 @@ export function TokenSelectField({ name, label, onChange }: Props) {
 
   const { chain } = useNetwork()
   const tokenOptions = useMemo(() => {
-    return chain ? getTokenOptionsByChainId(chain.id) : Object.values(TokenId);
-  }, [chain]);
-  
+    return chain ? getTokenOptionsByChainId(chain.id) : Object.values(TokenId)
+  }, [chain])
 
   const handleChange = (optionValue: string) => {
     helpers.setValue(optionValue || '')
