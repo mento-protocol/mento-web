@@ -1,5 +1,4 @@
-import { CeloTerminal, CeloWallet, Valora } from '@celo/rainbowkit-celo/wallets'
-import type { Chain, Wallet } from '@rainbow-me/rainbowkit'
+import type { Chain } from '@rainbow-me/rainbowkit'
 import {
   metaMaskWallet,
   omniWallet,
@@ -7,13 +6,11 @@ import {
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 
+import {
+  /*CeloTerminal, CeloWallet,*/
+  Valora,
+} from './celoWallets'
 import { config } from './config'
-
-type WalletConnector = (p: { chains: Chain[] }) => Wallet
-
-function withLocalIconUrl(connector: WalletConnector, iconUrl: string, connectorConfig: any) {
-  return { ...connector(connectorConfig), iconUrl }
-}
 
 export function getWalletConnectors(chains: Chain[]) {
   const connectorConfig = {
@@ -24,9 +21,9 @@ export function getWalletConnectors(chains: Chain[]) {
   return [
     metaMaskWallet(connectorConfig),
     walletConnectWallet(connectorConfig),
-    withLocalIconUrl(Valora, './wallets/valora.svg', connectorConfig),
-    withLocalIconUrl(CeloWallet, './wallets/celo-wallet.svg', connectorConfig),
-    withLocalIconUrl(CeloTerminal, './wallets/celo-terminal.svg', connectorConfig),
+    Valora(connectorConfig),
+    // CeloTerminal(connectorConfig),
+    // CeloWallet(connectorConfig),
     omniWallet(connectorConfig),
     trustWallet(connectorConfig),
   ]
