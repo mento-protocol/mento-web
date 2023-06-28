@@ -6,7 +6,10 @@ import {
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 
-import { CeloTerminal, CeloWallet, Valora } from './celoWallets'
+import {
+  /*CeloTerminal, CeloWallet,*/
+  Valora,
+} from './celoWallets'
 import { config } from './config'
 
 export function getWalletConnectors(chains: Chain[]) {
@@ -19,8 +22,8 @@ export function getWalletConnectors(chains: Chain[]) {
     metaMaskWallet(connectorConfig),
     walletConnectWallet(connectorConfig),
     Valora(connectorConfig),
-    CeloTerminal(connectorConfig),
-    CeloWallet(connectorConfig),
+    // CeloTerminal(connectorConfig),
+    // CeloWallet(connectorConfig),
     omniWallet(connectorConfig),
     trustWallet(connectorConfig),
   ]
