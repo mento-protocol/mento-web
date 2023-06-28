@@ -24,7 +24,7 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: `default-src 'self'; script-src 'self'${
       isDev ? " 'unsafe-eval'" : ''
-    }; connect-src 'self' https://*.celo.org https://*.celo-testnet.org https://*.walletconnect.com wss://walletconnect.celo.org wss://*.walletconnect.com wss://*.walletconnect.org https://raw.githubusercontent.com; img-src 'self' data: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; base-uri 'self'; form-action 'self'; frame-src 'self https://*.walletconnect.com`,
+    }; connect-src 'self' https://*.celo.org https://*.celo-testnet.org https://*.walletconnect.com wss://walletconnect.celo.org wss://*.walletconnect.com wss://*.walletconnect.org https://raw.githubusercontent.com; img-src 'self' data: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; base-uri 'self'; form-action 'self'; frame-src 'self' https://*.walletconnect.com`,
   },
 ]
 
