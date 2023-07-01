@@ -13,7 +13,7 @@ import { isStale } from 'src/utils/time'
 
 export function Footer() {
   return (
-    <footer className="w-screen py-4 px-7">
+    <footer className="relative z-10 w-screen py-4 px-7">
       <div className="flex justify-between items-center">
         <div className="flex items-center opacity-90">
           <FooterIconLink to={links.twitter} imgSrc={Twitter} alt="Twitter" />

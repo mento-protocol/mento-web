@@ -36,7 +36,7 @@ export function ConnectButton() {
   }
 
   return (
-    <div className="flex justify-end mb-1 relative opacity-90">
+    <div className="relative flex justify-end mb-1 opacity-90">
       {address && isConnected ? (
         <DropdownModal
           buttonContent={

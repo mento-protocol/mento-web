@@ -13,10 +13,10 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
   return (
     <>
       <HeadMeta pathName={pathName} />
-      <div className="flex flex-col h-full min-h-screen w-full min-w-screen bg-gradient-linear">
+      <div className="relative z-10 flex flex-col h-full min-h-screen w-full min-w-screen bg-gradient-linear">
         <InfoBanner />
         <Header pathName={pathName} />
-        <main className="grow flex items-center justify-center">{children}</main>
+        <main className="relative z-0 grow flex items-center justify-center">{children}</main>
         <Footer />
       </div>
       <PollingWorker />

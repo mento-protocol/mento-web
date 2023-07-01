@@ -32,7 +32,7 @@ export function DropdownMenu({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className={`z-50 absolute -right-1.5 mt-3 origin-top-right rounded-md bg-white shadow-md drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${menuClasses}`}
+          className={`z-40 absolute -right-1.5 mt-3 origin-top-right rounded-md bg-white shadow-md drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${menuClasses}`}
         >
           {menuItems.map((mi, i) => (
             <Menu.Item key={`menu-item-${i}`}>{mi}</Menu.Item>
@@ -74,7 +74,7 @@ export function DropdownModal({
         leaveTo="transform opacity-0 scale-95"
       >
         <Popover.Panel
-          className={`z-50 absolute mt-2 origin-top-right rounded-md bg-white shadow-sm drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${modalClasses}`}
+          className={`z-40 absolute mt-2 origin-top-right rounded-md bg-white shadow-sm drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${modalClasses}`}
         >
           {({ close }) => modalContent(close)}
         </Popover.Panel>
