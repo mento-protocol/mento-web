@@ -1,12 +1,10 @@
 import { useField } from 'formik'
 import { useMemo } from 'react'
+import { ChevronIcon } from 'src/components/Chevron'
+import { Select } from 'src/components/input/Select'
 import { TokenId, getTokenById, getTokenOptionsByChainId } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { useNetwork } from 'wagmi'
-
-import { ChevronIcon } from '../Chevron'
-
-import { Select } from './Select'
 
 type Props = {
   name: string
@@ -47,7 +45,7 @@ export function TokenSelectField({ name, label, onChange }: Props) {
 function TokenButton(tokenId: string, buttonLabel?: string) {
   const token = getTokenById(tokenId)
   return (
-    <div className="flex items-center p-1 rounded-md hover:bg-gray-100">
+    <div className="flex items-center p-1 rounded-md hover:bg-greengray-light transition-all">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
         <label className="text-xs text-gray-400 cursor-pointer">

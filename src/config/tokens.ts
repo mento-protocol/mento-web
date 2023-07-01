@@ -1,7 +1,6 @@
+import { ChainId } from 'src/config/chains'
 import { Color } from 'src/styles/Color'
 import { areAddressesEqual } from 'src/utils/addresses'
-
-import { ChainId } from './chains'
 
 export interface Token {
   id: string

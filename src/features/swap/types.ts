@@ -1,9 +1,12 @@
 import { TokenId } from 'src/config/tokens'
 
+export type SwapDirection = 'in' | 'out'
+
 export interface SwapFormValues {
   fromTokenId: TokenId
   toTokenId: TokenId
-  fromAmount: number | string
+  amount: number | string
+  direction: SwapDirection
   slippage: string
 }
 

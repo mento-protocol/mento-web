@@ -1,5 +1,5 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { Field, Form, Formik, useFormikContext } from 'formik'
+import { Form, Formik, useFormikContext } from 'formik'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
@@ -12,21 +12,21 @@ import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
 import { setFormValues } from 'src/features/swap/swapSlice'
-import { SwapFormValues } from 'src/features/swap/types'
+import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
-import { formatExchangeValues } from 'src/features/swap/utils'
+import { useSwapQuote } from 'src/features/swap/useSwapQuote'
+import { parseInputExchangeAmount } from 'src/features/swap/utils'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
 import { useAccount } from 'wagmi'
 
-import { useSwapOutQuote } from './useSwapOutQuote'
-
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
   toTokenId: TokenId.cUSD,
-  fromAmount: '',
+  amount: '',
+  direction: 'in',
   slippage: '1.0',
 }
 
@@ -71,27 +71,18 @@ function SwapForm() {
   )
 }
 
-interface FormInputProps {
-  balances: AccountBalances
-}
-
-function SwapFormInputs({ balances }: FormInputProps) {
+function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { address, isConnected } = useAccount()
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
-  const { fromAmount, fromTokenId, toTokenId } = values
+  const { amount, direction, fromTokenId, toTokenId } = values
 
-  const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
-  const { isLoading, toAmount, rate } = useSwapOutQuote(
-    fromAmount,
-    from.weiAmount,
-    from.token,
-    to.token
-  )
+  const amountWei = parseInputExchangeAmount(amount, direction === 'in' ? fromTokenId : toTokenId)
+  const { isLoading, quote, rate } = useSwapQuote(amountWei, direction, fromTokenId, toTokenId)
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
-    setFieldValue('fromAmount', roundedBalance)
+    setFieldValue('amount', roundedBalance)
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
@@ -129,42 +120,64 @@ function SwapFormInputs({ balances }: FormInputProps) {
               onClick={onClickUseMax}
             >{`Use Max (${roundedBalance})`}</button>
           )}
-          <Field
-            id="fromAmount"
-            name="fromAmount"
-            type="number"
-            step="any"
-            placeholder="0.00"
-            className="pt-1 font-mono text-xl text-right bg-transparent w-36 focus:outline-none"
-          />
+          <AmountField quote={quote} isQuoteLoading={isLoading} direction="in" />
         </div>
       </div>
       <div className="absolute transition-all -translate-y-1/2 bg-white rounded-full left-4 top-2/4 hover:rotate-180">
         <ReverseTokenButton />
       </div>
       <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
-        {rate
-          ? `${rate} ${from.token} ~ 1 ${to.token}`
-          : from.amount !== '0'
-          ? 'Loading...'
-          : '...'}
+        {rate ? `${rate} ${fromTokenId} ~ 1 ${toTokenId}` : '...'}
       </div>
       <div className="flex items-center justify-between px-3 py-2 mb-1 rounded-md bg-greengray-lightest">
         <div className="flex items-center">
           <TokenSelectField name="toTokenId" label="To Token" onChange={onChangeToken(false)} />
           <FieldDividerLine />
         </div>
-        {!isLoading ? (
-          <div className="pt-2 overflow-hidden font-mono text-xl text-right w-36">{toAmount}</div>
-        ) : (
-          <div className="flex items-center justify-center w-8 h-8 pt-1">
-            <div className="scale-[0.3] opacity-80">
-              <Spinner />
-            </div>
-          </div>
-        )}
+        <AmountField quote={quote} isQuoteLoading={isLoading} direction="out" />
       </div>
     </div>
+  )
+}
+
+function AmountField({
+  direction,
+  quote,
+  isQuoteLoading,
+}: {
+  direction: SwapDirection
+  quote: string
+  isQuoteLoading: boolean
+}) {
+  const { values, setValues } = useFormikContext<SwapFormValues>()
+
+  const isCurrentInput = values.direction == direction
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setValues({ ...values, amount: value, direction })
+  }
+
+  if (!isCurrentInput && isQuoteLoading) {
+    return (
+      <div className="flex items-center justify-center w-8 h-8 pt-1">
+        <div className="scale-[0.3] opacity-80">
+          <Spinner />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <input
+      value={isCurrentInput ? values.amount : quote}
+      name={`amount-${direction}`}
+      type="number"
+      step="any"
+      placeholder="0.00"
+      className="pt-1 font-mono text-xl text-right bg-transparent w-36 focus:outline-none"
+      onChange={onChange}
+    />
   )
 }
 
@@ -211,8 +224,7 @@ function SubmitButton() {
 
   const { errors, setErrors, touched, setTouched } = useFormikContext<SwapFormValues>()
   const error =
-    touched.fromAmount &&
-    (errors.fromAmount || errors.fromTokenId || errors.toTokenId || errors.slippage)
+    touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
   const classes = error ? 'bg-red-500 hover:bg-red-500 active:bg-red-500' : ''
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
