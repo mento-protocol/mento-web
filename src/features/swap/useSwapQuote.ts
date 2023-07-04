@@ -27,7 +27,7 @@ export function useSwapQuote(
     async () => {
       const amountBN = ethers.BigNumber.from(debouncedAmountWei)
       const fromToken = Tokens[fromTokenId]
-      const toToken = Tokens[fromTokenId]
+      const toToken = Tokens[toTokenId]
       if (amountBN.lte(0) || !fromToken || !toToken) return null
       const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
       const toTokenAddr = getTokenAddress(toTokenId, chainId)

@@ -8,6 +8,7 @@ import {
 } from 'src/features/swap/utils'
 
 const ONE_ETH_WEI = ethers.constants.WeiPerEther.toString()
+const HALF_ETH_WEI = BigNumber.from(ONE_ETH_WEI).div(2).toString()
 
 describe('swap utilities', () => {
   describe('parseInputExchangeAmount', () => {
@@ -46,17 +47,11 @@ describe('swap utilities', () => {
 
   describe('calcExchangeRate', () => {
     it('Calculates rate for tokens with equal decimals', () => {
-      expect(
-        calcExchangeRate(
-          ONE_ETH_WEI,
-          18,
-          BigNumber.from(ethers.constants.WeiPerEther).div(2).toString(),
-          18
-        )
-      ).toEqual('2.0000')
+      expect(calcExchangeRate(ONE_ETH_WEI, 18, HALF_ETH_WEI, 18)).toEqual('2.0000')
     })
     it('Calculates rate for tokens with different decimals', () => {
       expect(calcExchangeRate(ONE_ETH_WEI, 18, ONE_ETH_WEI, 17)).toEqual('0.1000')
+      expect(calcExchangeRate(ONE_ETH_WEI, 18, '1000000', 6)).toEqual('1.0000')
     })
     it('Rounds correctly', () => {
       expect(calcExchangeRate(100000, 18, 100000, 6)).toEqual('0.0000')
