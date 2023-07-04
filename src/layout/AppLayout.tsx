@@ -16,7 +16,7 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
       <div className="flex flex-col h-full min-h-screen w-full min-w-screen bg-gradient-linear">
         <InfoBanner />
         <Header pathName={pathName} />
-        <main className="grow flex items-center justify-center">{children}</main>
+        <main className="relative z-0 grow flex items-center justify-center">{children}</main>
         <Footer />
       </div>
       <PollingWorker />

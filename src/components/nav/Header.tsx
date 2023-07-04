@@ -7,7 +7,7 @@ import Logo from 'src/images/logos/mento-logo-black.svg'
 
 export function Header({ pathName }: { pathName: string }) {
   return (
-    <header className="w-screen pt-4 pb-5 px-3 sm:pl-5 sm:pr-6">
+    <header className="relative z-10 w-screen pt-4 pb-5 px-3 sm:pl-5 sm:pr-6">
       <div className="flex items-center justify-between">
         <Link href="/" className="flex items-center sm:hidden">
           <Image src={Glyph} alt="" quality={100} width={40} />
