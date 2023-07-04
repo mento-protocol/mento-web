@@ -44,6 +44,9 @@ module.exports = {
       serif: ['serif'],
       mono: ['Roboto Mono', 'Courier New', 'monospace'],
     },
+    fontSize: {
+      sm: ['15px', '20px'],
+    },
     extend: {
       spacing: {
         46: '11.5rem',
