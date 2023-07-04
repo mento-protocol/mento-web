@@ -42,10 +42,10 @@ export function ConnectButton() {
           buttonContent={
             <div className="flex items-center">
               <Identicon address={address} size={26} />
-              <div className="hidden sm:block ml-2.5">{shortenAddress(address, false, true)}</div>
+              <div className="hidden sm:block ml-[12px]">{shortenAddress(address)}</div>
             </div>
           }
-          buttonClasses={styles.walletButton}
+          buttonClasses={styles.walletButtonConnected + ' ' + styles.walletButtonDefault}
           modalContent={() => (
             <div className="p-3">
               <BalancesSummary />
@@ -67,9 +67,8 @@ export function ConnectButton() {
         />
       ) : (
         <SolidButton
-          size="l"
           color="white"
-          classes="shadow-md px-3 sm:px-4"
+          classes={styles.walletButtonDefault}
           icon={<WalletIcon />}
           onClick={openConnectModal}
         >
@@ -85,8 +84,8 @@ export function ConnectButton() {
 
 function WalletIcon() {
   return (
-    <div className="flex items-center sm:mr-2">
-      <Image src={Wallet} alt="" width={17} height={17} />
+    <div className="flex items-center sm:mr-[12px]">
+      <Image src={Wallet} alt="" width={20} height={20} />
     </div>
   )
 }
@@ -117,8 +116,10 @@ function CopyIcon() {
 
 const styles = {
   // TODO DRY up with SolidButton styles
-  walletButton:
-    'flex items-center justify-center h-9 py-1 pl-2 pr-2 sm:pr-4 sm:pl-2 bg-white text-black hover:bg-gray-100 active:bg-gray-200 rounded-full shadow-md transition-all duration-300',
+  walletButtonDefault:
+    'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border-[1px] border-solid border-black font-medium leading-5',
+  walletButtonConnected:
+    'flex items-center justify-center bg-white text-black hover:bg-gray-100 active:bg-gray-200 rounded-full shadow-md transition-all duration-300',
   menuOption:
     'flex items-center cursor-pointer p-2 mt-1 rounded hover:bg-gray-100 active:bg-gray-200',
 }
