@@ -23,7 +23,7 @@ export function Footer() {
           <FooterIconLink to={links.discord} imgSrc={Discord} alt="Discord" />
         </div>
         <div className="flex items-center opacity-90">
-          Theme:
+          Dark Mode:
           <input type="checkbox" checked={isDarkMode} onChange={() => setDarkMode(!isDarkMode)} />
         </div>
         <BlockIndicator />
