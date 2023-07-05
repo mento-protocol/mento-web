@@ -14,11 +14,7 @@ import { SwapFormValues } from 'src/features/swap/types'
 import { useApproveTransaction } from 'src/features/swap/useApproveTransaction'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { useSwapTransaction } from 'src/features/swap/useSwapTransaction'
-import {
-  getMaxSellAmount,
-  getMinBuyAmount,
-  parseInputExchangeAmount,
-} from 'src/features/swap/utils'
+import { getMaxSellAmount, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
@@ -49,9 +45,8 @@ export function SwapConfirmCard({ formValues }: Props) {
     if (!isConfirmValid) dispatch(setFormValues(null))
   }, [isConfirmValid, dispatch])
 
-  const amountWei = parseInputExchangeAmount(amount, direction === 'in' ? fromTokenId : toTokenId)
-  const { quote, quoteWei, rate, refetch } = useSwapQuote(
-    amountWei,
+  const { amountWei, quote, quoteWei, rate, refetch } = useSwapQuote(
+    amount,
     direction,
     fromTokenId,
     toTokenId

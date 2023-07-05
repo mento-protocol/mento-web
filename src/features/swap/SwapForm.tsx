@@ -15,7 +15,6 @@ import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
-import { parseInputExchangeAmount } from 'src/features/swap/utils'
 import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
@@ -77,8 +76,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
   const { amount, direction, fromTokenId, toTokenId } = values
 
-  const amountWei = parseInputExchangeAmount(amount, direction === 'in' ? fromTokenId : toTokenId)
-  const { isLoading, quote, rate } = useSwapQuote(amountWei, direction, fromTokenId, toTokenId)
+  const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
