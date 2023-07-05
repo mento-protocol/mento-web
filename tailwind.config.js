@@ -16,6 +16,7 @@ module.exports = {
       red: colors.red,
       yellow: colors.amber,
       teal: colors.teal,
+      neutral: colors.neutral,
       green: {
         50: '#e8fbf3',
         100: '#baf3db',
@@ -68,6 +69,11 @@ module.exports = {
       boxShadow: {
         lg2: '0 8px 24px 0px rgba(2, 1, 10, 0.08)',
       },
+    },
+  },
+  variants: {
+    extend: {
+      display: ['dark'],
     },
   },
   plugins: [],
