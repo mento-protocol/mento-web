@@ -51,6 +51,7 @@ module.exports = {
       serif: ['serif'],
       mono: ['Roboto Mono', 'Courier New', 'monospace'],
       fg: ['Founders Grotesk', 'sans-serif'],
+      inter: ['Inter', 'sans-serif'],
     },
     fontSize: {
       sm: ['15px', '20px'],

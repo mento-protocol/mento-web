@@ -136,6 +136,6 @@ const styles = {
   walletButtonDefault:
     'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border-[1px] border-solid border-black dark:border-clean-white font-medium leading-5 dark:text-white dark:bg-primary-dark',
   walletButtonConnected:
-    'flex items-center justify-center bg-white text-black rounded-full shadow-md transition-all duration-300', //TODO: @bayo hover shadow needs to be adjusted for padding
+    'flex items-center justify-center bg-white text-black rounded-full shadow-md transition-all duration-300',
   menuOption: 'flex items-center cursor-pointer rounded pl-4 pt-4 dark:text-white',
 }
