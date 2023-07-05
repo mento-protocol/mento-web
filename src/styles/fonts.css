@@ -77,3 +77,16 @@
        url('/fonts/roboto-mono-v13-latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
        url('/fonts/roboto-mono-v13-latin-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
+
+
+/* Need to add  woff, check w/ team for purchased version of Founders Groutesk */
+/* victor-mono-500 */
+@font-face {
+  font-family: 'Founders Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  src: local(''),
+     url('/fonts/FoundersGrotesk-Medium.otf') format('otf'),   /*   Chrome 26+, Opera 23+, Firefox 39+  */
+       /* url('/fonts/VictorMono-Medium.woff') format('woff'); Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
