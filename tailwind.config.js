@@ -2,6 +2,7 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
+
   content: ['src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     colors: {
@@ -38,11 +39,14 @@ module.exports = {
       bluegray: {
         DEFAULT: '#EAEFF0',
       },
+      'primary-dark': '#02010A',
+      'clean-white': '#FFFFFF',
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
       serif: ['serif'],
       mono: ['Roboto Mono', 'Courier New', 'monospace'],
+      fg: ['Founders Grotesk', 'sans-serif'],
     },
     fontSize: {
       sm: ['15px', '20px'],
