@@ -6,7 +6,7 @@ import { SWAP_QUOTE_REFETCH_INTERVAL } from 'src/config/consts'
 import { TokenId, Tokens, getTokenAddress } from 'src/config/tokens'
 import { getMentoSdk } from 'src/features/sdk'
 import { SwapDirection } from 'src/features/swap/types'
-import { calcExchangeRate } from 'src/features/swap/utils'
+import { calcExchangeRate, invertExchangeRate } from 'src/features/swap/utils'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useDebounce } from 'src/utils/debounce'
 import { logger } from 'src/utils/logger'
@@ -25,27 +25,29 @@ export function useSwapQuote(
   const { isLoading, isError, error, data, refetch } = useQuery(
     ['useSwapQuote', debouncedAmountWei, fromTokenId, toTokenId, direction],
     async () => {
+      const isSwapIn = direction === 'in'
       const amountBN = ethers.BigNumber.from(debouncedAmountWei)
       const fromToken = Tokens[fromTokenId]
       const toToken = Tokens[toTokenId]
       if (amountBN.lte(0) || !fromToken || !toToken) return null
+
       const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
       const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const mento = await getMentoSdk(chainId)
 
       let quoteWei: string
-      if (direction === 'in') {
+      if (isSwapIn) {
         quoteWei = (await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountBN)).toString()
       } else {
         quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountBN)).toString()
       }
 
-      const quote = fromWeiRounded(quoteWei, Tokens[toTokenId].decimals)
-      const fromAmount = direction === 'in' ? amountWei : quoteWei
-      const fromDecimals = direction === 'in' ? fromToken.decimals : toToken.decimals
-      const toAmount = direction === 'in' ? quoteWei : amountWei
-      const toDecimals = direction === 'in' ? toToken.decimals : fromToken.decimals
-      const rate = calcExchangeRate(fromAmount, fromDecimals, toAmount, toDecimals)
+      const amountDecimals = isSwapIn ? fromToken.decimals : toToken.decimals
+      const quoteDecimals = isSwapIn ? toToken.decimals : fromToken.decimals
+      const quote = fromWeiRounded(quoteWei, quoteDecimals)
+      const rateIn = calcExchangeRate(amountWei, amountDecimals, quoteWei, quoteDecimals)
+      const rate = isSwapIn ? rateIn : invertExchangeRate(rateIn)
+
       return {
         quoteWei,
         quote,
