@@ -28,26 +28,6 @@ Responsiveness
 }
 
 /* 
-Backgrounds
-============
-*/
-
-.bg-gradient-radial {
-  background: #deede5;
-  background: radial-gradient(
-    circle,
-    rgb(239, 243, 241) 0%,
-    rgba(222, 237, 229, 1) 33%,
-    rgba(222, 237, 229, 1) 100%
-  );
-}
-
-.bg-gradient-linear {
-  background: #dff2ea;
-  background: linear-gradient(180deg, #dff2ea 0%, #f1f2e6 100%);
-}
-
-/* 
 Scrollbar Overrides
 ===================
 */

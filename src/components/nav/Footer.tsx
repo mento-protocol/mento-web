@@ -17,8 +17,8 @@ import { isStale } from 'src/utils/time'
 
 export function Footer() {
   return (
-    <div className="w-full inline-flex justify-between p-3 sm:px-5 sm:py-7">
-      <div className="justify-start items-start gap-4 inline-flex">
+    <div className="z-20 inline-flex justify-between w-full p-3 sm:px-5 sm:py-7">
+      <div className="inline-flex items-start justify-start gap-4">
         <div className="p-2 justify-start items-start gap-2.5 flex">
           <FooterIconLink to={links.twitter} imgSrc={Twitter} alt="Twitter" />
         </div>
@@ -39,17 +39,17 @@ function ThemeToggle() {
   const { isDarkMode, setDarkMode } = useDarkMode()
   return (
     <div
-      className="justify-start items-center gap-3 inline-flex cursor-pointer"
+      className="inline-flex items-center justify-start gap-3 cursor-pointer"
       onClick={() => setDarkMode(!isDarkMode)}
     >
       <div className="text-gray-950 dark:text-neutral-400 text-[15px] font-normal leading-tight">
         Theme
       </div>
       <div className="trainsition-color relative px-0.5 py-[1px] dark:bg-fuchsia-200 rounded-[32px] border border border border border-gray-950 justify-center items-center gap-[5px] flex">
-        <div className="w-4 h-5 p-1 pr-0 relative flex-col justify-start items-start flex">
+        <div className="relative flex flex-col items-start justify-start w-4 h-5 p-1 pr-0">
           <Image src={Sun} alt="light theme icon" width={14} height={14} />
         </div>
-        <div className="w-4 h-5 py-1 pr-1 relative flex-col justify-start items-start flex">
+        <div className="relative flex flex-col items-start justify-start w-4 h-5 py-1 pr-1">
           <Image src={Moon} alt="dark theme icon" width={14} height={14} />
         </div>
         <div
@@ -69,7 +69,7 @@ function ThemeToggle() {
 
 function FooterIconLink({ to, imgSrc, alt }: { to: string; imgSrc: any; alt: string }) {
   return (
-    <a className="w-6 h-6 relative dark:invert" href={to} target="_blank" rel="noopener noreferrer">
+    <a className="relative w-6 h-6 dark:invert" href={to} target="_blank" rel="noopener noreferrer">
       <Image src={imgSrc} alt={alt} width={25} height={25} />
     </a>
   )
