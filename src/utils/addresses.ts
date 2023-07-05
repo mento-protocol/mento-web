@@ -32,7 +32,7 @@ export function shortenAddress(address: string, capitalize = true) {
   const start = normalizedAddress.substring(0, 6)
   const end = normalizedAddress.substring(address.length - 4)
 
-  const shortened = `${start}••••${end}`
+  const shortened = `${start}...${end}`
   return capitalize ? capitalizeAddress(shortened) : shortened
 }
 
