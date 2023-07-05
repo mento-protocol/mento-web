@@ -47,8 +47,9 @@ export function ConnectButton() {
           }
           buttonClasses={styles.walletButtonConnected + ' ' + styles.walletButtonDefault}
           modalContent={() => (
-            <div className="p-3">
+            <div className="py-5 font-medium leading-5">
               <BalancesSummary />
+
               <div className={styles.menuOption} onClick={onClickCopy}>
                 <CopyIcon />
                 <div>Copy Address</div>
@@ -57,13 +58,14 @@ export function ConnectButton() {
                 <NetworkIcon />
                 <div>Change Network</div>
               </div>
+              <hr className="mx-5 mt-4" />
               <div className={styles.menuOption} onClick={onClickDisconnect}>
                 <LogoutIcon />
                 <div>Disconnect</div>
               </div>
             </div>
           )}
-          modalClasses="w-60 right-px"
+          modalClasses="right-px min-w-[272px] border-[1px] border-solid border-black text-sm !rounded-[16px] !shadow-lg2"
         />
       ) : (
         <SolidButton
@@ -92,24 +94,24 @@ function WalletIcon() {
 
 function LogoutIcon() {
   return (
-    <div className="flex items-center sm:mr-3">
-      <Image src={Logout} alt="" width={19} height={19} />
+    <div className="flex items-center sm:mr-1.5">
+      <Image src={Logout} alt="" width={32} height={32} />
     </div>
   )
 }
 
 function NetworkIcon() {
   return (
-    <div className="flex items-center sm:mr-3">
-      <Image src={Cube} alt="" width={18} height={18} />
+    <div className="flex items-center sm:mr-1.5">
+      <Image src={Cube} alt="" width={32} height={32} />
     </div>
   )
 }
 
 function CopyIcon() {
   return (
-    <div className="flex items-center sm:mr-3">
-      <Image src={Clipboard} alt="" width={18} height={18} />
+    <div className="flex items-center sm:mr-1.5">
+      <Image src={Clipboard} alt="" width={32} height={32} />
     </div>
   )
 }
@@ -119,7 +121,7 @@ const styles = {
   walletButtonDefault:
     'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border-[1px] border-solid border-black font-medium leading-5',
   walletButtonConnected:
-    'flex items-center justify-center bg-white text-black hover:bg-gray-100 active:bg-gray-200 rounded-full shadow-md transition-all duration-300',
+    'flex items-center justify-center bg-white text-black hover:bg-gray-100 active:bg-gray-200 rounded-full shadow-md transition-all duration-300', //TODO: @bayo hover shadow needs to be adjusted for padding
   menuOption:
-    'flex items-center cursor-pointer p-2 mt-1 rounded hover:bg-gray-100 active:bg-gray-200',
+    'flex items-center cursor-pointer rounded hover:bg-gray-100 active:bg-gray-200 pl-4 pt-4',
 }

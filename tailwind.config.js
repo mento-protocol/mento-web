@@ -61,6 +61,9 @@ module.exports = {
       animation: {
         'spin-slow': 'spin 3s linear infinite',
       },
+      boxShadow: {
+        lg2: '0 8px 24px 0px rgba(2, 1, 10, 0.08)',
+      },
     },
   },
   plugins: [],

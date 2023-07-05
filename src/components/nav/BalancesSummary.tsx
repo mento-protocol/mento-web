@@ -8,13 +8,23 @@ export function BalancesSummary() {
   const tokenIds = Object.keys(balances) as TokenId[]
 
   return (
-    <div className="flex flex-wrap">
-      {tokenIds.map((id) => (
-        <div style={{ minWidth: '35%' }} className="flex mx-2 my-2" key={id}>
-          <TokenIcon token={Tokens[id]} size="xs" />
-          <div className="ml-1">{fromWeiRounded(balances[id], Tokens[id].decimals)}</div>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="flex flex-col pl-5">
+        {tokenIds.map((id) => {
+          const balance = fromWeiRounded(balances[id], Tokens[id].decimals)
+          if (balance !== '0') {
+            // TODO: @bayo Either revert this !== 0 check or add some animation for when balances are loading
+            return (
+              <div style={{ minWidth: '35%' }} className="flex pb-4" key={id}>
+                <TokenIcon token={Tokens[id]} size="xs" />
+                <div className="ml-3">{balance}</div>
+              </div>
+            )
+          }
+          return null
+        })}
+      </div>
+      <hr />
+    </>
   )
 }
