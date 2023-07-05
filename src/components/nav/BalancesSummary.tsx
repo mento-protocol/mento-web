@@ -15,7 +15,7 @@ export function BalancesSummary() {
           if (balance !== '0') {
             // TODO: @bayo Either revert this !== 0 check or add some animation for when balances are loading
             return (
-              <div style={{ minWidth: '35%' }} className="flex pb-4" key={id}>
+              <div style={{ minWidth: '35%' }} className="flex pb-4 dark:text-white" key={id}>
                 <TokenIcon token={Tokens[id]} size="xs" />
                 <div className="ml-3">{balance}</div>
               </div>
@@ -24,7 +24,7 @@ export function BalancesSummary() {
           return null
         })}
       </div>
-      <hr />
+      <hr className="dark:border-[#333336]" />
     </>
   )
 }

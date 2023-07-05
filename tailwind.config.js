@@ -44,6 +44,7 @@ module.exports = {
       },
       'primary-dark': '#02010A',
       'clean-white': '#FFFFFF',
+      'primary-blush': '#FCD7FC',
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
