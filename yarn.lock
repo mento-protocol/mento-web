@@ -1676,6 +1676,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.29.14
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
+    "@types/classnames": ^2.3.1
     "@types/jest": ^29.5.2
     "@types/node": ^18.15.11
     "@types/react": ^18.2.12
@@ -1686,6 +1687,7 @@ __metadata:
     "@vercel/analytics": ^1.0.1
     autoprefixer: ^10.4.14
     bignumber.js: ^9.1.1
+    classnames: ^2.3.2
     eslint: ^8.43.0
     eslint-config-next: ^13.4.6
     eslint-config-prettier: ^8.8.0
@@ -2577,6 +2579,15 @@ __metadata:
     "@types/filesystem": "*"
     "@types/har-format": "*"
   checksum: af96fdc79fb019d827fdb6269f831921f8f36215ee05a2624436dd2ad4d84d7be12333cc6f54912fb8bae0ca49cbfde5a78de94723bfbd20d309d2e71e274a1b
+  languageName: node
+  linkType: hard
+
+"@types/classnames@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@types/classnames@npm:2.3.1"
+  dependencies:
+    classnames: "*"
+  checksum: 09a17ea08fcb83380921efdfdac94cfa162f87025cae0bf6f4ba508c2fa5f436459ce7612905a3f968fdddb68c03b8e6ff08e762ed2d0c110c5c4fceb244dc55
   languageName: node
   linkType: hard
 
@@ -4490,6 +4501,13 @@ __metadata:
   version: 1.2.1
   resolution: "cjs-module-lexer@npm:1.2.1"
   checksum: 9e9905e3f5b8b1f262d10ebb0d33407d25a48d0341acd3215ed402f9284188183f14d577340a171f75fd137b7654a780bcb6008dee9e9bd12957174f6c0e4661
+  languageName: node
+  linkType: hard
+
+"classnames@npm:*, classnames@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
   languageName: node
   linkType: hard
 

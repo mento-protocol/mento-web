@@ -17,6 +17,8 @@ module.exports = {
       yellow: colors.amber,
       teal: colors.teal,
       neutral: colors.neutral,
+      fuchsia: colors.fuchsia,
+      emerald: colors.emerald,
       green: {
         50: '#e8fbf3',
         100: '#baf3db',
