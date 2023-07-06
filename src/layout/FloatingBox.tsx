@@ -4,14 +4,15 @@ interface Props {
   width?: string
   maxWidth?: string
   classes?: string
+  padding?: string
 }
 
 export function FloatingBox(props: PropsWithChildren<Props>) {
-  const { width, maxWidth, classes } = props
+  const { width, maxWidth, classes, padding = 'p-3' } = props
   return (
     <div
       style={{ maxHeight: '80%' }}
-      className={`${width} ${maxWidth} p-3 bg-white shadow-md rounded-lg overflow-auto ${classes}`}
+      className={`${width} ${maxWidth} ${padding}  bg-white shadow-md rounded-lg overflow-auto ${classes}`}
     >
       {props.children}
     </div>

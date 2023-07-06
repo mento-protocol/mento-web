@@ -1,9 +1,8 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { useCallback } from 'react'
+import { ReactNode, SVGProps, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
-import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
@@ -16,7 +15,6 @@ import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { parseInputExchangeAmount } from 'src/features/swap/utils'
-import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
@@ -32,12 +30,20 @@ const initialValues: SwapFormValues = {
 
 export function SwapFormCard() {
   return (
-    <FloatingBox width="w-96" classes="overflow-visible">
-      <div className="flex justify-between mb-5">
-        <h2 className="pl-1 text-lg font-medium">Swap</h2>
+    <FloatingBox
+      width="w-[432px]"
+      padding="p-0"
+      classes="overflow-visible border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
+    >
+      <div className="flex justify-between border-b border-primary-dark dark:border-[#333336] p-6">
+        <h2 className=" text-[32px] leading-10 font-fg font-medium text-primary-dark dark:text-clean-white ">
+          Swap
+        </h2>
         <SettingsMenu />
       </div>
-      <SwapForm />
+      <div className="p-6">
+        <SwapForm />
+      </div>
     </FloatingBox>
   )
 }
@@ -105,11 +111,10 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }
 
   return (
-    <div className="relative">
-      <div className="flex items-center justify-between px-3 py-2 mt-3 rounded-md bg-greengray-lightest">
-        <div className="flex items-center">
+    <div className="flex flex-col gap-3">
+      <TokenSelectFieldWrapper>
+        <div className="flex items-center ">
           <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
-          <FieldDividerLine />
         </div>
         <div className="flex flex-col items-end">
           {address && isConnected && (
@@ -122,20 +127,29 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
           )}
           <AmountField quote={quote} isQuoteLoading={isLoading} direction="in" />
         </div>
+      </TokenSelectFieldWrapper>
+      <div className="flex items-center justify-between">
+        <div className="transition-all ml-[70px] bg-white rounded-full hover:rotate-180">
+          <ReverseTokenButton />
+        </div>
+        <div className="flex items-center justify-end px-1.5 text-xs dark:text-[#AAB3B6]">
+          {rate ? `${rate} ${fromTokenId} ~ 1 ${toTokenId}` : '...'}
+        </div>
       </div>
-      <div className="absolute transition-all -translate-y-1/2 bg-white rounded-full left-4 top-2/4 hover:rotate-180">
-        <ReverseTokenButton />
-      </div>
-      <div className="flex items-center justify-end my-2.5 px-1.5 text-xs text-gray-400">
-        {rate ? `${rate} ${fromTokenId} ~ 1 ${toTokenId}` : '...'}
-      </div>
-      <div className="flex items-center justify-between px-3 py-2 mb-1 rounded-md bg-greengray-lightest">
+      <TokenSelectFieldWrapper>
         <div className="flex items-center">
           <TokenSelectField name="toTokenId" label="To Token" onChange={onChangeToken(false)} />
-          <FieldDividerLine />
         </div>
         <AmountField quote={quote} isQuoteLoading={isLoading} direction="out" />
-      </div>
+      </TokenSelectFieldWrapper>
+    </div>
+  )
+}
+
+const TokenSelectFieldWrapper = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="flex items-center justify-between px-3 py-2 rounded-md bg-clean-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
+      {children}
     </div>
   )
 }
@@ -191,20 +205,19 @@ function ReverseTokenButton() {
   }
 
   return (
-    <IconButton
-      imgSrc={DownArrow}
-      width={32}
-      height={32}
-      classes="p-1.5"
+    <button
       title="Swap inputs"
       onClick={onClickReverse}
-    />
+      className="flex items-center justify-center rounded-full border h-[36px] w-[36px] border-primary-dark dark:border-none  dark:bg-[#545457] text-primary-dark dark:text-clean-white"
+    >
+      <DownArrow />
+    </button>
   )
 }
 
-function FieldDividerLine() {
-  return <div className="w-px h-12 ml-3 bg-gray-300"></div>
-}
+// function FieldDividerLine() {
+//   return <div className="w-px h-12 ml-3 bg-gray-300"></div>
+// }
 
 function SlippageRow() {
   return (
@@ -244,3 +257,14 @@ function SubmitButton() {
     </SolidButton>
   )
 }
+
+const DownArrow = (props: SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={14} height={15} fill="none" {...props}>
+    <path
+      stroke="currentColor"
+      strokeLinecap="square"
+      strokeWidth={1.33}
+      d="M7 .75v12.5m0 0 5.625-5.625M7 13.25 1.375 7.625"
+    />
+  </svg>
+)
