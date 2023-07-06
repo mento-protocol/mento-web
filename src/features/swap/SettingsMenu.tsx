@@ -22,8 +22,9 @@ export function SettingsMenu() {
 
   return (
     <DropdownModal
-      placement="top-start"
+      placement="left"
       placementOffset={8}
+      
       buttonContent={(open) => (
         <span
           className={`${
@@ -53,8 +54,8 @@ export function SettingsMenu() {
       // buttonClasses="p-1 flex items-center justify-center hover:opacity-70 active:opacity-60 transition-all"
       modalContent={() => (
         <div className="p-3">
-          <div className="text-sm flex items-center justify-between">
-            <div>Show Slippage</div>
+          <div className="text-sm flex items-center gap-3 justify-between ">
+            <div className='whitespace-nowrap' >Show Slippage</div >
             <SwitchButton checked={showSlippage} onChange={onToggleSlippage} />
           </div>
           {config.showPriceChart && (
@@ -65,7 +66,7 @@ export function SettingsMenu() {
           )}
         </div>
       )}
-      modalClasses="w-44 right-0 rounded-xl border border-primary-dark dark:border-none dark:bg-[#404043] dark:text-clean-white"
+      modalClasses="rounded-xl border border-primary-dark dark:border-none dark:bg-[#404043] dark:text-clean-white"
     />
   )
 }

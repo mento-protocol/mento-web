@@ -86,7 +86,7 @@ export function DropdownModal({
             leaveTo="transform opacity-0 scale-95"
           >
             <Popover.Panel
-              className={`z-40 absolute mt-2  rounded-md bg-white shadow-sm drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${modalClasses}`}
+              className={`mt-2 rounded-md bg-white shadow-sm drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${modalClasses}`}
             >
               {({ close }) => modalContent(close)}
             </Popover.Panel>
