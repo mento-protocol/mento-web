@@ -43,12 +43,12 @@ export function ConnectButton() {
     <div className="relative flex justify-end mb-1 opacity-90">
       {address && isConnected ? (
         <DropdownModal
-          buttonContent={
+          buttonContent={() => (
             <div className="flex items-center">
               <Identicon address={address} size={26} />
               <div className="hidden sm:block ml-[12px]">{shortenAddress(address)}</div>
             </div>
-          }
+          )}
           buttonClasses={styles.walletButtonConnected + ' ' + styles.walletButtonDefault}
           modalContent={() => (
             <div className="py-5 font-medium leading-5">
