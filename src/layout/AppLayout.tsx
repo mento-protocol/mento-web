@@ -15,7 +15,7 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
   return (
     <>
       <HeadMeta pathName={pathName} />
-      <div className="flex flex-col w-full h-full min-h-screen min-w-screen bg-clean-white dark:bg-primary-dark font-fg">
+      <div className="flex flex-col w-full h-full min-h-screen min-w-screen bg-clean-white dark:bg-primary-dark font-inter">
         <InfoBanner />
         <TopBlur />
         <Header />

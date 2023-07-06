@@ -90,3 +90,11 @@
        /* url('/fonts/VictorMono-Medium.woff') format('woff'); Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
+/* inter-variable */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  src: local(''),
+       url('/fonts/inter-variable.ttf') format('ttf'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+}
