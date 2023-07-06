@@ -1,4 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
+import cx from 'classnames'
 import { Fragment, PropsWithChildren } from 'react'
 import { IconButton } from 'src/components/buttons/IconButton'
 import X from 'src/images/icons/x.svg'
@@ -37,20 +38,27 @@ export function Modal({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`w-full ${width || 'max-w-xs'
-                  } max-h-[90vh] transform overflow-auto rounded-2xl bg-white text-left shadow-lg transition-all`}
+                className={cx(
+                  'w-full',
+                  width || 'max-w-xs',
+                  'max-h-[90vh]',
+                  'transform overflow-auto rounded-2xl',
+                  'bg-white',
+                  'dark:bg-zinc-900 dark:border dark:border-zinc-800',
+                  'text-left shadow-lg transition-all'
+                )}
               >
                 <div className="h-20 w-full justify-between items-center inline-flex px-6 py-4 sm:py-6">
-                  <div className="text-gray-950 sm:text-[32px] text-[26px] font-medium font-fg leading-10">
+                  <div className="text-gray-950 dark:text-white sm:text-[32px] text-[26px] font-medium font-fg leading-10">
                     {title}
                   </div>
-                  <div className="p-1 rounded-[32px] border border border border border-gray-950 justify-start items-start flex">
+                  <div className="p-1 rounded-[32px] border border-gray-950 dark:border-zinc-600 dark:bg-zinc-600 justify-start items-start flex">
                     <div className="w-6 h-6 relative">
                       <IconButton
                         imgSrc={X}
                         onClick={close}
                         title="Close"
-                        classes="hover:rotate-90 w-full h-full"
+                        classes="hover:rotate-90 w-full h-full dark:invert"
                         width={24}
                         height={24}
                       />
