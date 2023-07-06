@@ -1,7 +1,7 @@
 export function InfoBanner() {
   return (
     <div className="w-full h-6 py-1 bg-gray-950 dark:bg-neutral-800 justify-center items-center inline-flex">
-      <div className="justify-start items-start gap-1 inline-flex">
+      <div className="justify-start items-start gap-1 inline-flex font-inter">
         <div className="text-gray-400 dark:text-neutral-400 text-[12px] font-normal leading-none">
           This app uses Mento version 2.
         </div>

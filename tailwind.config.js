@@ -19,6 +19,7 @@ module.exports = {
       neutral: colors.neutral,
       fuchsia: colors.fuchsia,
       emerald: colors.emerald,
+      cyan: colors.cyan,
       green: {
         50: '#e8fbf3',
         100: '#baf3db',
@@ -73,11 +74,6 @@ module.exports = {
       boxShadow: {
         lg2: '0 8px 24px 0px rgba(2, 1, 10, 0.08)',
       },
-    },
-  },
-  variants: {
-    extend: {
-      display: ['dark'],
     },
   },
   plugins: [],
