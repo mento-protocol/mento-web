@@ -31,7 +31,7 @@ const initialValues: SwapFormValues = {
 export function SwapFormCard() {
   return (
     <FloatingBox
-      width="w-[432px]"
+      width="max-w-md w-full"
       padding="p-0"
       classes="overflow-visible border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
     >

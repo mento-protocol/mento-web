@@ -8,8 +8,8 @@ import { SwapFormCard } from 'src/features/swap/SwapForm'
 export default function SwapPage() {
   const { formValues, showChart } = useAppSelector((state) => state.swap)
   return (
-    <div className="flex justify-center items-center h-full flex-wrap">
-      <div className="mb-6">
+    <div className="flex justify-center items-center h-full flex-wrap w-full">
+      <div className="mb-6 w-full">
         {!formValues ? <SwapFormCard /> : <SwapConfirmCard formValues={formValues} />}
       </div>
       {config.showPriceChart && showChart && (
