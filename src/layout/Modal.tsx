@@ -1,9 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react'
 import cx from 'classnames'
+import localFont from 'next/font/local'
 import { Fragment, PropsWithChildren } from 'react'
 import { IconButton } from 'src/components/buttons/IconButton'
 import X from 'src/images/icons/x.svg'
 
+const foundersGrotesk = localFont({
+  src: '../../public/fonts/founders-grotesk-medium.woff2',
+  variable: '--font-founders-grotesk',
+})
 export function Modal({
   isOpen,
   title,
@@ -49,8 +54,10 @@ export function Modal({
                 )}
               >
                 <div className="h-20 w-full justify-between items-center inline-flex px-6 py-4 sm:py-6">
-                  <div className="text-gray-950 dark:text-white sm:text-[32px] text-[26px] font-medium font-fg leading-10">
+                  <div className="text-gray-950 dark:text-white sm:text-[32px] text-[26px] font-medium leading-10">
+                    <span className={`${foundersGrotesk.className}`} >
                     {title}
+                    </span>
                   </div>
                   <div className="p-1 rounded-[32px] border border-gray-950 dark:border-zinc-600 dark:bg-zinc-600 justify-start items-start flex">
                     <div className="w-6 h-6 relative">
