@@ -3,7 +3,7 @@ import { SVGProps, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { Spinner } from 'src/components/animation/Spinner'
-import { Blue3DButton } from 'src/components/buttons/3DButton'
+import { Button3D } from 'src/components/buttons/3DButton'
 import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
@@ -20,7 +20,6 @@ import {
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
-import { Color } from 'src/styles/Color'
 import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useAccount, useChainId } from 'wagmi'
@@ -177,7 +176,7 @@ export function SwapConfirmCard({ formValues }: Props) {
           onClick={onClickBack}
           className="group h-[36px] w-[36px] flex items-center justify-center dark:bg-[#545457]  dark:text-clean-white rounded-full border border-primary-dark dark:border-transparent"
         >
-          <BackArrow className='transform transition-all duration-300 ease-in-out group-hover:-translate-x-[2px]' />
+          <BackArrow className="transform transition-all duration-300 ease-in-out group-hover:-translate-x-[2px]" />
         </button>
 
         <h2 className="text-[32px] dark:text-clean-white leading-[40px] font-medium">
@@ -197,25 +196,25 @@ export function SwapConfirmCard({ formValues }: Props) {
       />
       {/* Slippage Info */}
       <div className="flex flex-col mx-6 items-center rounded-xl text-sm mt-6 border border-[#E5E7E9] dark:border-[#303033] dark:bg-[#18181B] ">
-        <div className="flex items-center mx-6 py-4 justify-between w-full">
+        <div className="flex items-center justify-between w-full py-4 mx-6">
           <div className="w-32 text-right text-[#636768] dark:text-[#AAB3B6] mr-6">
             Max Slippage:
           </div>
-          <div className="w-32 text-right pr-4 dark:text-clean-white">{`${slippage}%`}</div>
+          <div className="w-32 pr-4 text-right dark:text-clean-white">{`${slippage}%`}</div>
         </div>
         <div className="w-full border-b border-[#E5E7E9]  dark:border-[#303033]" />
-        <div className="flex items-center mx-6 py-4 justify-between w-full">
+        <div className="flex items-center justify-between w-full py-4 mx-6">
           <div className="w-32 text-[#636768] dark:text-[#AAB3B6] text-right mr-6">
             {direction === 'in' ? 'Min Received:' : 'Max Sold'}
           </div>
-          <div className="w-32 text-right pr-4 dark:text-clean-white">{thresholdAmount}</div>
+          <div className="w-32 pr-4 text-right dark:text-clean-white">{thresholdAmount}</div>
         </div>
       </div>
 
-      <div className="flex mt-6 pb-6 px-6 w-full">
-        <Blue3DButton fullWidth onClick={onSubmit}>
+      <div className="flex w-full px-6 pb-6 mt-6">
+        <Button3D fullWidth onClick={onSubmit}>
           Swap
-        </Blue3DButton>
+        </Button3D>
       </div>
       <Modal
         isOpen={isModalOpen}
@@ -246,9 +245,9 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
           <div className="my-[15px]">
             <TokenIcon size="l" token={fromToken} />
           </div>
-          <div className="flex flex-col flex-1 items-center px-2">
+          <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{fromToken.symbol}</div>
-            <div className="text-lg text-center font-semibold leading-6 dark:text-clean-white">
+            <div className="text-lg font-semibold leading-6 text-center dark:text-clean-white">
               {from.amount}
             </div>
           </div>
@@ -257,9 +256,9 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
           <ChevronRight />
         </div>
         <div className="flex flex-1 items-center pr-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-xl">
-          <div className="flex flex-col flex-1 items-center px-2">
+          <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{toToken.symbol}</div>
-            <div className="text-lg text-center font-semibold leading-6 dark:text-clean-white">
+            <div className="text-lg font-semibold leading-6 text-center dark:text-clean-white">
               {to.amount || '0'}
             </div>
           </div>
@@ -287,12 +286,10 @@ const ChevronRight = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
-
-
 function BasicSpinner() {
   const { connector } = useAccount()
   return (
-    <div className="my-6 flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center justify-center my-6">
       <Spinner />
       <div className="mt-5 text-sm text-center text-gray-500">
         Sending two transactions: Approve and Swap

@@ -3,7 +3,7 @@ import { Form, Formik, useFormikContext } from 'formik'
 import { ReactNode, SVGProps, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
-import { SolidButton } from 'src/components/buttons/SolidButton'
+import { Button3D } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
 import { TokenId, Tokens, isStableToken, isUSDCVariant } from 'src/config/tokens'
@@ -69,7 +69,7 @@ function SwapForm() {
       <Form>
         <SwapFormInputs balances={balances} />
         {showSlippage && <SlippageRow />}
-        <div className="flex justify-center mt-5 mb-1">
+        <div className="flex justify-center w-full my-6 mb-0">
           <SubmitButton />
         </div>
       </Form>
@@ -241,7 +241,6 @@ function SubmitButton() {
   const { errors, setErrors, touched, setTouched } = useFormikContext<SwapFormValues>()
   const error =
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
-  const classes = error ? 'bg-red-500 hover:bg-red-500 active:bg-red-500' : ''
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
   const onClick = isAccountReady ? undefined : openConnectModal
@@ -255,9 +254,9 @@ function SubmitButton() {
   useTimeout(clearErrors, 3000)
 
   return (
-    <SolidButton size="m" type={type} onClick={onClick} classes={classes}>
+    <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
       {text}
-    </SolidButton>
+    </Button3D>
   )
 }
 
