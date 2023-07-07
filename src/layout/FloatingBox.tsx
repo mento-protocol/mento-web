@@ -12,7 +12,7 @@ export function FloatingBox(props: PropsWithChildren<Props>) {
   return (
     <div
       style={{ maxHeight: '80%' }}
-      className={`${width} ${maxWidth} ${padding}  bg-white shadow-md rounded-lg overflow-auto ${classes}`}
+      className={`${width} ${maxWidth} ${padding}  bg-white shadow-md rounded-2xl overflow-auto ${classes}`}
     >
       {props.children}
     </div>
