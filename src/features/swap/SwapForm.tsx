@@ -36,7 +36,7 @@ export function SwapFormCard() {
       classes="overflow-visible border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
     >
       <div className="flex justify-between border-b border-primary-dark dark:border-[#333336] p-6">
-        <h2 className=" text-[32px] leading-10 font-fg font-semibold text-primary-dark dark:text-clean-white ">
+        <h2 className=" text-[32px] leading-10 font-fg font-medium text-primary-dark dark:text-clean-white ">
           Swap
         </h2>
         <SettingsMenu />
