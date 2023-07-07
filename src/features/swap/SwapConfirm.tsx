@@ -317,20 +317,20 @@ const MentoLogoLoader = () => {
   )
 }
 
-function BasicSpinner() {
-  const { connector } = useAccount()
-  return (
-    <div className="flex flex-col items-center justify-center my-6">
-      <Spinner />
-      <div className="mt-5 text-sm text-center text-gray-500">
-        Sending two transactions: Approve and Swap
-      </div>
-      <div className="mt-3 text-sm text-center text-gray-500">{`Sign with ${
-        connector?.name || 'wallet'
-      } to proceed`}</div>
-    </div>
-  )
-}
+// function BasicSpinner() {
+//   const { connector } = useAccount()
+//   return (
+//     <div className="flex flex-col items-center justify-center my-6">
+//       <Spinner />
+//       <div className="mt-5 text-sm text-center text-gray-500">
+//         Sending two transactions: Approve and Swap
+//       </div>
+//       <div className="mt-3 text-sm text-center text-gray-500">{`Sign with ${
+//         connector?.name || 'wallet'
+//       } to proceed`}</div>
+//     </div>
+//   )
+// }
 
 const BackArrow = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={7} height={12} fill="none" {...props}>
