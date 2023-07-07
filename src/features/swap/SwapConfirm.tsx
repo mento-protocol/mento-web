@@ -294,7 +294,9 @@ const MentoLogoLoader = () => {
 
   return (
     <>
-      <div className="border-y border-[#333336]">
+      <div
+        className="border-y border-[#E5E7E9] dark:border-[#333336]"
+      >
         <div className="w-[124px] h-[124px] mx-auto my-6 dark:hidden">
           <Lottie animationData={mentoLoaderBlue} />
         </div>
