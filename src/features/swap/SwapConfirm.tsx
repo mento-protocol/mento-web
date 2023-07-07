@@ -1,6 +1,9 @@
 import BigNumber from 'bignumber.js'
+import Lottie from 'lottie-react'
 import { SVGProps, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
+import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
@@ -179,7 +182,7 @@ export function SwapConfirmCard({ formValues }: Props) {
           <BackArrow className="transform transition-all duration-300 ease-in-out group-hover:-translate-x-[2px]" />
         </button>
 
-        <h2 className="text-[32px] dark:text-clean-white leading-[40px] font-medium">
+        <h2 className="text-[32px] dark:text-clean-white leading-[40px] font-fg font-medium">
           Confirm Swap
         </h2>
         <button
@@ -220,9 +223,9 @@ export function SwapConfirmCard({ formValues }: Props) {
         isOpen={isModalOpen}
         title="Performing Swap"
         close={() => setIsModalOpen(false)}
-        width="max-w-xs"
+        width="max-w-[432px]"
       >
-        <BasicSpinner />
+        <MentoLogoLoader />
       </Modal>
     </FloatingBox>
   )
@@ -285,6 +288,32 @@ const ChevronRight = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 )
+
+const MentoLogoLoader = () => {
+  const { connector } = useAccount()
+
+  return (
+    <>
+      <div className="border-y border-[#333336]">
+        <div className="w-[124px] h-[124px] mx-auto my-6 dark:hidden">
+          <Lottie animationData={mentoLoaderBlue} />
+        </div>
+        <div className="w-[124px] h-[124px] mx-auto my-6 hidden dark:block ">
+          <Lottie animationData={mentoLoaderGreen} />
+        </div>
+      </div>
+
+      <div className="my-6">
+        <div className=" text-sm text-center text-[#636768]  dark:text-[#AAB3B6]">
+          Sending two transactions: Approve and Swap
+        </div>
+        <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">{`Sign with ${
+          connector?.name || 'wallet'
+        } to proceed`}</div>
+      </div>
+    </>
+  )
+}
 
 function BasicSpinner() {
   const { connector } = useAccount()
