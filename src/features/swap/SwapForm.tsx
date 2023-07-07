@@ -221,7 +221,10 @@ function ReverseTokenButton() {
 
 function SlippageRow() {
   return (
-    <div className="flex items-center justify-center mt-5 text-sm space-x-7" role="group">
+    <div
+      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-clean-white px-[5px]"
+      role="group"
+    >
       <div>Max Slippage:</div>
       <RadioInput name="slippage" value="0.5" label="0.5%" />
       <RadioInput name="slippage" value="1.0" label="1.0%" />
