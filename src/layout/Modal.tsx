@@ -32,7 +32,7 @@ export function Modal({
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full items-center justify-center p-4 text-center ">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -49,15 +49,13 @@ export function Modal({
                   'max-h-[90vh]',
                   'transform overflow-auto rounded-2xl',
                   'bg-white',
-                  'dark:bg-zinc-900 dark:border dark:border-zinc-800',
+                  'dark:bg-zinc-900 border border-primary-dark dark:border-zinc-800',
                   'text-left shadow-lg transition-all'
                 )}
               >
                 <div className="h-20 w-full justify-between items-center inline-flex px-6 py-4 sm:py-6">
                   <div className="text-gray-950 dark:text-white sm:text-[32px] text-[26px] font-medium leading-10">
-                    <span className={`${foundersGrotesk.className}`} >
-                    {title}
-                    </span>
+                    <span className={`${foundersGrotesk.className}`}>{title}</span>
                   </div>
                   <div className="p-1 rounded-[32px] border border-gray-950 dark:border-zinc-600 dark:bg-zinc-600 justify-start items-start flex">
                     <div className="w-6 h-6 relative">
