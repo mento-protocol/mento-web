@@ -7,11 +7,14 @@ import { BackButton } from 'src/components/buttons/BackButton'
 import { RefreshButton } from 'src/components/buttons/RefreshButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
-import { Tokens } from 'src/config/tokens'
+import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
-import { ExchangeValues, formatExchangeValues, getMinBuyAmount } from 'src/features/swap/utils'
+import { useApproveTransaction } from 'src/features/swap/useApproveTransaction'
+import { useSwapQuote } from 'src/features/swap/useSwapQuote'
+import { useSwapTransaction } from 'src/features/swap/useSwapTransaction'
+import { getMaxSellAmount, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
@@ -20,16 +23,12 @@ import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useAccount, useChainId } from 'wagmi'
 
-import { useApproveTransaction } from './useApproveTransaction'
-import { useSwapOutQuote } from './useSwapOutQuote'
-import { useSwapTransaction } from './useSwapTransaction'
-
 interface Props {
   formValues: SwapFormValues
 }
 
-export function SwapConfirmCard(props: Props) {
-  const { fromAmount, fromTokenId, toTokenId, slippage } = props.formValues
+export function SwapConfirmCard({ formValues }: Props) {
+  const { amount, direction, fromTokenId, toTokenId, slippage } = formValues
 
   // Flag for if loading modal is open (visible)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -39,49 +38,76 @@ export function SwapConfirmCard(props: Props) {
 
   const dispatch = useAppDispatch()
   const balances = useAppSelector((s) => s.account.balances)
-  const tokenBalance = balances[fromTokenId]
 
   // Ensure invariants are met, otherwise return to swap form
-  const isConfirmValid = fromAmount && fromTokenId && toTokenId && address && isConnected
+  const isConfirmValid = amount && fromTokenId && toTokenId && address && isConnected
   useEffect(() => {
     if (!isConfirmValid) dispatch(setFormValues(null))
   }, [isConfirmValid, dispatch])
 
-  const { from, to } = formatExchangeValues(fromAmount, fromTokenId, toTokenId)
-  const { toAmountWei, toAmount, rate } = useSwapOutQuote(
-    fromAmount,
-    from.weiAmount,
-    from.token,
-    to.token
+  const { amountWei, quote, quoteWei, rate, refetch } = useSwapQuote(
+    amount,
+    direction,
+    fromTokenId,
+    toTokenId
   )
 
-  // Check if amount is almost equal to balance max, in which case use max
-  // Helps handle problems from imprecision in non-wei amount display
-  const finalFromAmount = getAdjustedAmount(from.weiAmount, tokenBalance).toFixed(0)
-  const minBuyAmountWei = getMinBuyAmount(toAmountWei, slippage).toFixed(0)
-  const minBuyAmount = fromWeiRounded(minBuyAmountWei, Tokens[toTokenId].decimals, true)
+  // Assemble values based on swap direction
+  let fromAmount: string,
+    fromAmountWei: string,
+    toAmount: string,
+    toAmountWei: string,
+    thresholdAmount: string,
+    thresholdAmountWei: string,
+    approveAmount: string
+
+  if (direction === 'in') {
+    fromAmount = amount.toString()
+    fromAmountWei = amountWei
+    toAmount = quote
+    toAmountWei = quoteWei
+    // Check if amount is almost equal to balance max, in which case use max
+    // Helps handle problems from imprecision in non-wei amount display
+    fromAmountWei = getAdjustedAmount(fromAmountWei, balances[fromTokenId]).toFixed(0)
+    // Compute min buy amount based on slippage
+    thresholdAmountWei = getMinBuyAmount(toAmountWei, slippage).toFixed(0)
+    thresholdAmount = fromWeiRounded(thresholdAmountWei, Tokens[toTokenId].decimals, true)
+    // Approve amount is equal to amount being sold
+    approveAmount = fromAmountWei
+  } else {
+    fromAmount = quote
+    fromAmountWei = quoteWei
+    toAmount = amount.toString()
+    toAmountWei = amountWei
+    // Compute max sell amount based on slippage
+    thresholdAmountWei = getMaxSellAmount(fromAmountWei, slippage).toFixed(0)
+    thresholdAmount = fromWeiRounded(thresholdAmountWei, Tokens[fromTokenId].decimals, true)
+    // Approve amount is equal to max sell amount
+    approveAmount = thresholdAmountWei
+  }
 
   const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading } = useApproveTransaction(
     chainId,
-    from.token,
-    finalFromAmount,
+    fromTokenId,
+    approveAmount,
     address
   )
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
   const { sendSwapTx, isSwapTxLoading, isSwapTxSuccess } = useSwapTransaction(
     chainId,
-    from.token,
-    to.token,
-    finalFromAmount,
-    minBuyAmountWei,
+    fromTokenId,
+    toTokenId,
+    amountWei,
+    thresholdAmountWei,
+    direction,
     address,
     isApproveConfirmed
   )
 
   const onSubmit = async () => {
-    if (!rate || !toAmount || !address || !isConnected) return
-    if (new BigNumber(finalFromAmount).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
+    if (!rate || !amountWei || !address || !isConnected) return
+    if (new BigNumber(amountWei).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
       toast.error('Amount exceeds limit')
       return
     }
@@ -133,8 +159,8 @@ export function SwapConfirmCard(props: Props) {
   }
 
   const onClickRefresh = () => {
-    // TODO force refresh
     // Note, rates automatically re-fetch regularly
+    refetch().catch((e) => logger.error('Failed to refetch quote:', e))
   }
 
   return (
@@ -145,10 +171,9 @@ export function SwapConfirmCard(props: Props) {
         <RefreshButton width={24} height={24} onClick={onClickRefresh} />
       </div>
       <SwapConfirmSummary
-        from={from}
-        to={{ ...to, weiAmount: toAmountWei, amount: toAmount }}
+        from={{ amount: fromAmount, weiAmount: fromAmountWei, token: fromTokenId }}
+        to={{ amount: toAmount, weiAmount: toAmountWei, token: toTokenId }}
         rate={rate}
-        classes="mt-6"
       />
       <div className="flex flex-col items-center text-sm">
         <div className="flex items-center mt-6">
@@ -156,8 +181,10 @@ export function SwapConfirmCard(props: Props) {
           <div className="w-32 font-mono">{`${slippage}%`}</div>
         </div>
         <div className="flex items-center mt-4">
-          <div className="w-32 text-right mr-6">Min Received:</div>
-          <div className="w-32 font-mono">{minBuyAmount}</div>
+          <div className="w-32 text-right mr-6">
+            {direction === 'in' ? 'Min Received:' : 'Max Sold'}
+          </div>
+          <div className="w-32 font-mono">{thresholdAmount}</div>
         </div>
       </div>
       <div className="flex justify-center mt-5 mb-1">
@@ -178,18 +205,17 @@ export function SwapConfirmCard(props: Props) {
 }
 
 interface SwapConfirmSummaryProps {
-  from: ExchangeValues['from']
-  to: ExchangeValues['to']
+  from: { amount: string; weiAmount: string; token: TokenId }
+  to: { amount: string; weiAmount: string; token: TokenId }
   rate?: string
-  classes?: string
 }
 
-export function SwapConfirmSummary({ from, to, rate, classes }: SwapConfirmSummaryProps) {
+export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) {
   const fromToken = Tokens[from.token]
   const toToken = Tokens[to.token]
 
   return (
-    <div className={`bg-greengray-lightest rounded-md ${classes}`}>
+    <div className="bg-greengray-lightest rounded-md mt-6">
       <div className="relative flex items-center justify-between">
         <div className="flex flex-1 items-center px-2.5 py-3 border-r border-gray-400">
           <TokenIcon size="l" token={fromToken} />

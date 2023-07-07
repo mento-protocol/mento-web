@@ -1,8 +1,7 @@
 import { Mento } from '@mento-protocol/mento-sdk'
 import { ChainId } from 'src/config/chains'
 import { BrokerAddresses, MentoExchanges } from 'src/config/exchanges'
-
-import { getProvider } from './providers'
+import { getProvider } from 'src/features/providers'
 
 const cache: Record<number, Mento> = {}
 

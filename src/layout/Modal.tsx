@@ -1,8 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, PropsWithChildren } from 'react'
-
-import { IconButton } from '../components/buttons/IconButton'
-import XCircle from '../images/icons/x-circle.svg'
+import { IconButton } from 'src/components/buttons/IconButton'
+import XCircle from 'src/images/icons/x-circle.svg'
 
 export function Modal({
   isOpen,

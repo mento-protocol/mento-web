@@ -1,6 +1,5 @@
 import { Exchange } from '@mento-protocol/mento-sdk'
-
-import { ChainId } from './chains'
+import { ChainId } from 'src/config/chains'
 
 export const BrokerAddresses: Record<ChainId, Address> = {
   [ChainId.Alfajores]: '0xD3Dff18E465bCa6241A244144765b4421Ac14D09',
@@ -38,7 +37,7 @@ export const AlfajoresExchanges: Exchange[] = [
     id: '0xf77561650ba043a244ae9c58f778c141532c4afdb7cae5e6fd623b565c5584a0',
     assets: [
       '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
-      '0x2C4B568DfbA1fBDBB4E7DAD3F4186B68BCE40Db3',
+      '0x87D61dA3d668797786D73BC674F053f87111570d',
     ],
   },
 ]
@@ -73,7 +72,7 @@ export const BaklavaExchanges: Exchange[] = [
     id: '0xf77561650ba043a244ae9c58f778c141532c4afdb7cae5e6fd623b565c5584a0',
     assets: [
       '0x62492A644A588FD904270BeD06ad52B9abfEA1aE',
-      '0x4c6B046750F9aBF6F0f3B511217438451bc6Aa02',
+      '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
     ],
   },
 ]

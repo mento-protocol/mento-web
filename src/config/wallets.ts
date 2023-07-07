@@ -5,12 +5,8 @@ import {
   trustWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
-
-import {
-  /*CeloTerminal, CeloWallet,*/
-  Valora,
-} from './celoWallets'
-import { config } from './config'
+import { Valora } from 'src/config/celoWallets'
+import { config } from 'src/config/config'
 
 export function getWalletConnectors(chains: Chain[]) {
   const connectorConfig = {

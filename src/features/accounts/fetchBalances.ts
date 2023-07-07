@@ -2,12 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { BigNumberish, Contract } from 'ethers'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
 import { TokenId, getTokenAddress, getTokenOptionsByChainId } from 'src/config/tokens'
+import { getProvider } from 'src/features/providers'
 import type { AppDispatch, AppState } from 'src/features/store/store'
 import { validateAddress } from 'src/utils/addresses'
 import { isStale } from 'src/utils/time'
 import { erc20ABI } from 'wagmi'
-
-import { getProvider } from '../providers'
 
 interface FetchBalancesParams {
   address: string

@@ -1,6 +1,5 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
-import { config } from 'src/config/config'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
@@ -10,25 +9,23 @@ import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
 export function useFormValidator(balances: AccountBalances, sizeLimits?: SizeLimits | null) {
   return useCallback(
     (values?: SwapFormValues): FormikErrors<SwapFormValues> => {
-      if (config.debug) return {} // TODO disable
-      if (!values || !values.fromAmount) return { fromAmount: 'Amount Required' }
-      const parsedAmount = parseAmount(values.fromAmount)
-      if (!parsedAmount) return { fromAmount: 'Amount is Invalid' }
-      if (parsedAmount.lt(0)) return { fromAmount: 'Amount cannot be negative' }
-      if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { fromAmount: 'Amount too small' }
+      if (!values || !values.amount) return { amount: 'Amount Required' }
+      const parsedAmount = parseAmount(values.amount)
+      if (!parsedAmount) return { amount: 'Amount is Invalid' }
+      if (parsedAmount.lt(0)) return { amount: 'Amount cannot be negative' }
+      if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { amount: 'Amount too small' }
       const tokenId = values.fromTokenId
       const tokenBalance = balances[tokenId]
       const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
       if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
-        return { fromAmount: 'Amount exceeds balance' }
+        return { amount: 'Amount exceeds balance' }
       }
       if (sizeLimits) {
         const stableTokenId =
           values.fromTokenId === TokenId.CELO ? values.toTokenId : values.fromTokenId
         const limits = sizeLimits[stableTokenId]
-        if (limits?.min && weiAmount.lt(limits?.min)) return { fromAmount: 'Amount below minimum' }
-        if (limits?.max && weiAmount.gt(limits?.max))
-          return { fromAmount: 'Amount exceeds maximum' }
+        if (limits?.min && weiAmount.lt(limits?.min)) return { amount: 'Amount below minimum' }
+        if (limits?.max && weiAmount.gt(limits?.max)) return { amount: 'Amount exceeds maximum' }
       }
       return {}
     },

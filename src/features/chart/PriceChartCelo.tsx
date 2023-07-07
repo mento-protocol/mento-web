@@ -1,11 +1,10 @@
 import { TokenId } from 'src/config/tokens'
 import styles from 'src/features/chart/PriceChart.module.css'
+import { ReactFrappeChart } from 'src/features/chart/ReactFrappeChart'
 import { tokenPriceHistoryToChartData } from 'src/features/chart/utils'
 import { useAppSelector } from 'src/features/store/hooks'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Color } from 'src/styles/Color'
-
-import ReactFrappeChart from './ReactFrappeChart'
 
 interface PriceChartProps {
   stableTokenId: TokenId

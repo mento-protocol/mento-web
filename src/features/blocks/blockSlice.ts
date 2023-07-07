@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchLatestBlock } from 'src/features/blocks/fetchLatestBlock'
-
-import { BlockStub } from './types'
+import { BlockStub } from 'src/features/blocks/types'
 
 interface BlockState {
   latestBlock: BlockStub | null | undefined

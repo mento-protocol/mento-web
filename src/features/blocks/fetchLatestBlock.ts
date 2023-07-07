@@ -1,9 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import type { BlockStub } from 'src/features/blocks/types'
+import { getProvider } from 'src/features/providers'
 import type { AppDispatch, AppState } from 'src/features/store/store'
-
-import { getProvider } from '../providers'
-
-import { BlockStub } from './types'
 
 interface FetchLatestBlockParams {
   chainId: number

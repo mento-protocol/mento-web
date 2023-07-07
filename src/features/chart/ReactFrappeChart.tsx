@@ -67,7 +67,7 @@ type Props = {
 }
 
 // eslint-disable-next-line react/display-name
-const ReactFrappeChart = forwardRef((props: Props, parentRef) => {
+export const ReactFrappeChart = forwardRef((props: Props, parentRef) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const chart = React.useRef<any>(null)
   const initialRender = React.useRef<boolean>(true)
@@ -107,5 +107,3 @@ const ReactFrappeChart = forwardRef((props: Props, parentRef) => {
 
   return <div ref={ref} />
 })
-
-export default ReactFrappeChart
