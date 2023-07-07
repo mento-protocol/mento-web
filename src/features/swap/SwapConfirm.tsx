@@ -244,7 +244,7 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
   return (
     <div className="dark:bg-[#18181B] bg-[#EFF1F3] rounded-xl mt-6 mx-6 ">
       <div className="relative flex items-center gap-3 rounded-xl justify-between bg-clean-white border border-[#E5E7E9] dark:border-transparent dark:bg-[#303033]  p-[5px]">
-        <div className="flex flex-1 items-center pl-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-xl">
+        <div className="flex flex-1 items-center pl-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="my-[15px]">
             <TokenIcon size="l" token={fromToken} />
           </div>
@@ -258,7 +258,7 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
         <div className=" dark:text-[#AAB3B6]">
           <ChevronRight />
         </div>
-        <div className="flex flex-1 items-center pr-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-xl">
+        <div className="flex flex-1 items-center pr-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{toToken.symbol}</div>
             <div className="text-lg font-semibold leading-6 text-center dark:text-clean-white">
