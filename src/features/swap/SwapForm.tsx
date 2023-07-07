@@ -222,7 +222,7 @@ function ReverseTokenButton() {
 function SlippageRow() {
   return (
     <div
-      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-clean-white px-[5px]"
+      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-clean-white px-[5px] font-medium"
       role="group"
     >
       <div>Max Slippage:</div>

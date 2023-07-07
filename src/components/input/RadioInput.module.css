@@ -29,16 +29,6 @@
   border-radius: 50%;
 }
 
-/* On mouse-over, add a grey background color */
-html.dark .checkmarkContainer:hover input ~ .checkmark {
-  border-color: #fcd7fc !important;
-}
-
-/* When the radio button is checked, add a blue background */
-html.dark .checkmarkContainer input:checked ~ .checkmark {
-  border-color: #fcd7fc !important;
-}
-
 /* Create the indicator (the dot/circle - hidden when not checked) */
 .checkmark:after {
   content: '';
@@ -51,11 +41,6 @@ html.dark .checkmarkContainer input:checked ~ .checkmark {
   display: block;
 }
 
-/* Style the indicator (dot/circle) for dark mode */
-html.dark .checkmarkContainer input:checked ~ .checkmark:after {
-  background: #fcd7fc !important;
-}
-
 /* Style the indicator (dot/circle) */
 .checkmarkContainer .checkmark:after {
   top: 3px;
@@ -64,4 +49,28 @@ html.dark .checkmarkContainer input:checked ~ .checkmark:after {
   height: 8px;
   border-radius: 50%;
   background: #02010a;
+}
+
+/* Dark mode styles */
+/* TODO: @bayo these need to be modified, currently not able to select radio buttons in dark mode */
+
+/* Style the background of the circle for dark mode */
+html.dark .checkmark {
+  background-color: black;
+  border: 1px solid #636366;
+}
+
+/* Style the outer circle on mouse-over for dark mode */
+html.dark .checkmarkContainer:hover input ~ .checkmark {
+  border-color: #fcd7fc !important;
+}
+
+/* Style the outer circle when checked for dark mode */
+html.dark .checkmarkContainer input:checked ~ .checkmark {
+  border-color: #fcd7fc !important;
+}
+
+/* Style the indicator (dot/circle) for dark mode */
+html.dark .checkmarkContainer input:checked ~ .checkmark:after {
+  background: #fcd7fc !important;
 }
