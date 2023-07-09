@@ -7,7 +7,7 @@ import { IconButton } from 'src/components/buttons/IconButton'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, Tokens, isStableToken, isUSDCVariant } from 'src/config/tokens'
+import { TokenId, Tokens, isNativeStableToken, isUSDCVariant } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
@@ -92,11 +92,14 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
     if (isUSDCVariant(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.cUSD)
-    } else if (isStableToken(tokenId)) {
+    } else if (isNativeStableToken(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.CELO)
     } else {
-      const stableTokenId = isStableToken(values[targetField]) ? values[targetField] : TokenId.cUSD
+      const currentTargetTokenId = values[targetField]
+      const stableTokenId = isNativeStableToken(currentTargetTokenId)
+        ? currentTargetTokenId
+        : TokenId.cUSD
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, stableTokenId)
     }

@@ -22,7 +22,7 @@ export enum TokenId {
   axlUSDC = 'axlUSDC',
 }
 
-export const StableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL, TokenId.axlUSDC]
+export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
 
 export const USDCVariantIds = [TokenId.axlUSDC]
 
@@ -102,8 +102,8 @@ export function isNativeToken(tokenId: string) {
   return Object.keys(Tokens).includes(tokenId)
 }
 
-export function isStableToken(tokenId: string) {
-  return StableTokenIds.includes(tokenId as TokenId)
+export function isNativeStableToken(tokenId: string) {
+  return NativeStableTokenIds.includes(tokenId as TokenId)
 }
 
 export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
