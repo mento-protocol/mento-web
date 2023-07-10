@@ -43,6 +43,7 @@ export function ConnectButton() {
     <div className="relative flex justify-end mb-1 opacity-90">
       {address && isConnected ? (
         <DropdownModal
+          placement="bottom-end"
           buttonContent={() => (
             <div className="flex items-center">
               <Identicon address={address} size={26} />
