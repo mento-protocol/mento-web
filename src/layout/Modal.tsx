@@ -9,6 +9,7 @@ const foundersGrotesk = localFont({
   src: '../../public/fonts/founders-grotesk-medium.woff2',
   variable: '--font-founders-grotesk',
 })
+
 export function Modal({
   isOpen,
   title,

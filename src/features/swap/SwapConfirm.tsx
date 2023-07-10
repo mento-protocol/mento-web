@@ -15,11 +15,7 @@ import { SwapFormValues } from 'src/features/swap/types'
 import { useApproveTransaction } from 'src/features/swap/useApproveTransaction'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { useSwapTransaction } from 'src/features/swap/useSwapTransaction'
-import {
-  getMaxSellAmount,
-  getMinBuyAmount,
-  parseInputExchangeAmount,
-} from 'src/features/swap/utils'
+import { getMaxSellAmount, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
@@ -49,9 +45,8 @@ export function SwapConfirmCard({ formValues }: Props) {
     if (!isConfirmValid) dispatch(setFormValues(null))
   }, [isConfirmValid, dispatch])
 
-  const amountWei = parseInputExchangeAmount(amount, direction === 'in' ? fromTokenId : toTokenId)
-  const { quote, quoteWei, rate, refetch } = useSwapQuote(
-    amountWei,
+  const { amountWei, quote, quoteWei, rate, refetch } = useSwapQuote(
+    amount,
     direction,
     fromTokenId,
     toTokenId
@@ -247,6 +242,7 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
         <div className="flex flex-1 items-center pl-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="my-[15px]">
             <TokenIcon size="l" token={fromToken} />
+    
           </div>
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{fromToken.symbol}</div>

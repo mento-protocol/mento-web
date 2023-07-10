@@ -6,7 +6,7 @@ import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, Tokens, isStableToken, isUSDCVariant } from 'src/config/tokens'
+import { TokenId, Tokens, isNativeStableToken, isUSDCVariant } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
@@ -14,7 +14,7 @@ import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
-import { parseInputExchangeAmount } from 'src/features/swap/utils'
+import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
@@ -83,8 +83,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
   const { amount, direction, fromTokenId, toTokenId } = values
 
-  const amountWei = parseInputExchangeAmount(amount, direction === 'in' ? fromTokenId : toTokenId)
-  const { isLoading, quote, rate } = useSwapQuote(amountWei, direction, fromTokenId, toTokenId)
+  const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
@@ -100,11 +99,14 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
     if (isUSDCVariant(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.cUSD)
-    } else if (isStableToken(tokenId)) {
+    } else if (isNativeStableToken(tokenId)) {
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, TokenId.CELO)
     } else {
-      const stableTokenId = isStableToken(values[targetField]) ? values[targetField] : TokenId.cUSD
+      const currentTargetTokenId = values[targetField]
+      const stableTokenId = isNativeStableToken(currentTargetTokenId)
+        ? currentTargetTokenId
+        : TokenId.cUSD
       setFieldValue(targetField, tokenId)
       setFieldValue(otherField, stableTokenId)
     }
@@ -190,6 +192,7 @@ function AmountField({
       step="any"
       placeholder="0.00"
       className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+
       onChange={onChange}
     />
   )
