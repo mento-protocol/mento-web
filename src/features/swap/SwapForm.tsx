@@ -14,7 +14,6 @@ import { setFormValues } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
-import DownArrow from 'src/images/icons/arrow-down-short.svg'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
 import { useTimeout } from 'src/utils/timeout'
@@ -192,7 +191,6 @@ function AmountField({
       step="any"
       placeholder="0.00"
       className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
-
       onChange={onChange}
     />
   )
