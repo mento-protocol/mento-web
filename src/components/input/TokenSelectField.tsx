@@ -66,8 +66,8 @@ function Option(tokenId: string, selected?: boolean) {
   const token = getTokenById(tokenId)
   return (
     <div
-      className={`py-1.5 px-3 flex items-center cursor-pointer hover:bg-gray-100 ${
-        selected ? 'bg-gray-50' : ''
+      className={`py-1.5 px-3 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#4E4E55] ${
+        selected ? 'bg-gray-50 dark:bg-[#36363B]' : ''
       }`}
     >
       <TokenIcon size="xs" token={token} />
