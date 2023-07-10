@@ -189,7 +189,7 @@ function AmountField({
       type="number"
       step="any"
       placeholder="0.00"
-      className="pt-1 font-mono text-xl text-right bg-transparent w-36 focus:outline-none"
+      className="pt-1 text-[20px] font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
