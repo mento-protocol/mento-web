@@ -242,7 +242,6 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
         <div className="flex flex-1 items-center pl-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="my-[15px]">
             <TokenIcon size="l" token={fromToken} />
-    
           </div>
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{fromToken.symbol}</div>
@@ -290,9 +289,7 @@ const MentoLogoLoader = () => {
 
   return (
     <>
-      <div
-        className="border-y border-[#E5E7E9] dark:border-[#333336]"
-      >
+      <div className="border-y border-[#E5E7E9] dark:border-[#333336]">
         <div className="w-[124px] h-[124px] mx-auto my-6 dark:hidden">
           <Lottie animationData={mentoLoaderBlue} />
         </div>

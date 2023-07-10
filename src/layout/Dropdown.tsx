@@ -67,7 +67,7 @@ export function DropdownModal({
   modalContent,
   modalClasses,
   placement = 'bottom-start',
-  placementOffset = 0
+  placementOffset = 0,
 }: ModalProps) {
   return (
     <Popover className="relative">

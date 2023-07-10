@@ -24,7 +24,6 @@ export function SettingsMenu() {
     <DropdownModal
       placement="left"
       placementOffset={8}
-      
       buttonContent={(open) => (
         <span
           className={`${
@@ -55,7 +54,7 @@ export function SettingsMenu() {
       modalContent={() => (
         <div className="p-3">
           <div className="text-sm flex items-center gap-3 justify-between ">
-            <div className='whitespace-nowrap' >Show Slippage</div >
+            <div className="whitespace-nowrap">Show Slippage</div>
             <SwitchButton checked={showSlippage} onChange={onToggleSlippage} />
           </div>
           {config.showPriceChart && (
