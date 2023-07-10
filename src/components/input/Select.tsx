@@ -13,7 +13,7 @@ interface Props {
 export function Select({ value, optionValues, onChange, button, option, buttonLabel }: Props) {
   return (
     <Listbox value={value} onChange={onChange}>
-      <div className="relative mt-1 ">
+      <div className="relative">
         <Listbox.Button className="relative w-full cursor-pointer focus:outline-none">
           {button(value, buttonLabel)}
         </Listbox.Button>
@@ -23,9 +23,13 @@ export function Select({ value, optionValues, onChange, button, option, buttonLa
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto bg-white rounded-[8px] shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none border-[1px] border-solid border-black">
+          <Listbox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto dark:bg-[#3F3F46] bg-white rounded-[8px] shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none border-[1px] border-solid border-black">
             {optionValues.map((optionValue) => (
-              <Listbox.Option key={optionValue} value={optionValue} className="p-[4px]">
+              <Listbox.Option
+                key={optionValue}
+                value={optionValue}
+                className="p-[4px] dark:text-clean-white"
+              >
                 {({ selected }) => option(optionValue, selected)}
               </Listbox.Option>
             ))}

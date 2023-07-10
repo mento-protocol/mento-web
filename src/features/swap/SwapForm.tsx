@@ -121,7 +121,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
             <button
               type="button"
               title="Use full balance"
-              className="text-xs text-gray-500 hover:underline"
+              className="text-xs text-gray-500 hover:underline dark:text-[#AAB3B6]"
               onClick={onClickUseMax}
             >{`Use Max (${roundedBalance})`}</button>
           )}
@@ -129,7 +129,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
         </div>
       </TokenSelectFieldWrapper>
       <div className="flex items-center justify-between">
-        <div className="transition-all ml-[70px] bg-white rounded-full hover:rotate-180">
+        <div className="transition-all ml-[70px] bg-white dark:bg-[#545457] rounded-full hover:rotate-180">
           <ReverseTokenButton />
         </div>
         <div className="flex items-center justify-end px-1.5 text-xs dark:text-[#AAB3B6]">
@@ -148,7 +148,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
 const TokenSelectFieldWrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex items-center justify-between px-3 py-2 rounded-md bg-clean-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
+    <div className="flex items-center justify-between pl-[5px] py-[5px] pr-[20px] rounded-xl bg-clean-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
       {children}
     </div>
   )
@@ -189,7 +189,7 @@ function AmountField({
       type="number"
       step="any"
       placeholder="0.00"
-      className="pt-1 text-[20px] font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
