@@ -45,13 +45,13 @@ export function TokenSelectField({ name, label, onChange }: Props) {
 function TokenButton(tokenId: string, buttonLabel?: string) {
   const token = getTokenById(tokenId)
   return (
-    <div className="flex items-center p-1 rounded-md hover:bg-greengray-light transition-all">
+    <div className="flex items-center p-1 transition-all rounded-md border-[1px] min-w-[180px] border-solid border-black py-3 pl-3 pr-4">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
         <label className="text-xs text-gray-400 cursor-pointer">
           {buttonLabel || DEFAULT_VALUE.label}
         </label>
-        <div className="flex items-center">
+        <div className="flex items-center font-semibold">
           <div>{token?.symbol || DEFAULT_VALUE.value}</div>
           <div className="ml-1">
             <ChevronIcon direction="s" width={12} height={6} />
