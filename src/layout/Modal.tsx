@@ -1,7 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react'
+import cx from 'classnames'
+import localFont from 'next/font/local'
 import { Fragment, PropsWithChildren } from 'react'
 import { IconButton } from 'src/components/buttons/IconButton'
-import XCircle from 'src/images/icons/x-circle.svg'
+import X from 'src/images/icons/x.svg'
+
+const foundersGrotesk = localFont({
+  src: '../../public/fonts/founders-grotesk-medium.woff2',
+  variable: '--font-founders-grotesk',
+})
 
 export function Modal({
   isOpen,
@@ -22,11 +29,11 @@ export function Modal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-gray-950 bg-opacity-60" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full items-center justify-center p-4 text-center ">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -37,22 +44,34 @@ export function Modal({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`w-full ${
-                  width || 'max-w-xs'
-                } max-h-[90vh] transform overflow-auto rounded-md bg-white px-4 py-4 text-left shadow-lg transition-all`}
+                className={cx(
+                  'w-full',
+                  width || 'max-w-xs',
+                  'max-h-[90vh]',
+                  'transform overflow-auto rounded-2xl',
+                  'bg-white',
+                  'dark:bg-zinc-900 border border-primary-dark dark:border-zinc-800',
+                  'text-left shadow-lg transition-all'
+                )}
               >
-                <Dialog.Title as="h3" className="text text-gray-700">
-                  {title}
-                </Dialog.Title>
-                {children}
-                <div className="absolute right-3 top-3">
-                  <IconButton
-                    imgSrc={XCircle}
-                    onClick={close}
-                    title="Close"
-                    classes="hover:rotate-90"
-                  />
+                <div className="h-20 w-full justify-between items-center inline-flex px-6 py-4 sm:py-6">
+                  <div className="text-gray-950 dark:text-white sm:text-[32px] text-[26px] font-medium leading-10">
+                    <span className={`${foundersGrotesk.className}`}>{title}</span>
+                  </div>
+                  <div className="p-1 rounded-[32px] border border-gray-950 dark:border-zinc-600 dark:bg-zinc-600 justify-start items-start flex">
+                    <div className="w-6 h-6 relative">
+                      <IconButton
+                        imgSrc={X}
+                        onClick={close}
+                        title="Close"
+                        classes="hover:rotate-90 w-full h-full dark:invert"
+                        width={24}
+                        height={24}
+                      />
+                    </div>
+                  </div>
                 </div>
+                {children}
               </Dialog.Panel>
             </Transition.Child>
           </div>

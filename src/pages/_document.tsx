@@ -1,9 +1,11 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
+import { getDarkMode } from 'src/styles/mediaQueries'
 
 class MyDocument extends Document {
   render() {
+    const isDarkMode = getDarkMode()
     return (
-      <Html>
+      <Html className={isDarkMode ? 'dark' : ''}>
         <Head>
           <meta charSet="utf-8" />
 

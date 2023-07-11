@@ -2,6 +2,7 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
+  darkMode: 'class',
   content: ['src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     colors: {
@@ -15,6 +16,11 @@ module.exports = {
       red: colors.red,
       yellow: colors.amber,
       teal: colors.teal,
+      neutral: colors.neutral,
+      fuchsia: colors.fuchsia,
+      emerald: colors.emerald,
+      cyan: colors.cyan,
+      zinc: colors.zinc,
       green: {
         50: '#e8fbf3',
         100: '#baf3db',
@@ -38,11 +44,19 @@ module.exports = {
       bluegray: {
         DEFAULT: '#EAEFF0',
       },
+      'primary-dark': '#02010A',
+      'clean-white': '#FFFFFF',
+      'primary-blush': '#FCD7FC',
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
       serif: ['serif'],
       mono: ['Roboto Mono', 'Courier New', 'monospace'],
+      fg: ['var(--font-founders-grotesk)'],   
+      inter: ['Inter', 'sans-serif'],
+    },
+    fontSize: {
+      sm: ['15px', '20px'],
     },
     extend: {
       spacing: {
@@ -57,6 +71,9 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',
+      },
+      boxShadow: {
+        lg2: '0 8px 24px 0px rgba(2, 1, 10, 0.08)',
       },
     },
   },

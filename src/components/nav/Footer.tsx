@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import cx from 'classnames'
 import Image from 'next/image'
 import { useState } from 'react'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
@@ -6,39 +7,69 @@ import { STALE_BLOCK_TIME } from 'src/config/consts'
 import { links } from 'src/config/links'
 import { BlockStub } from 'src/features/blocks/types'
 import { useAppSelector } from 'src/features/store/hooks'
+import Moon from 'src/images/icons/moon.svg'
+import Sun from 'src/images/icons/sun.svg'
 import Discord from 'src/images/logos/discord.svg'
 import Github from 'src/images/logos/github.svg'
 import Twitter from 'src/images/logos/twitter.svg'
+import { useDarkMode } from 'src/styles/mediaQueries'
 import { isStale } from 'src/utils/time'
 
 export function Footer() {
   return (
-    <footer className="relative z-10 w-screen py-4 px-7">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center opacity-90">
+    <div className="z-20 inline-flex justify-between w-full p-3 sm:px-5 sm:py-7">
+      <div className="inline-flex items-start justify-start gap-4">
+        <div className="p-2 justify-start items-start gap-2.5 flex">
           <FooterIconLink to={links.twitter} imgSrc={Twitter} alt="Twitter" />
+        </div>
+        <div className="p-2 justify-start items-start gap-2.5 flex">
           <FooterIconLink to={links.github} imgSrc={Github} alt="Github" />
+        </div>
+        <div className="p-2 justify-start items-start gap-2.5 flex">
           <FooterIconLink to={links.discord} imgSrc={Discord} alt="Discord" />
         </div>
-        <BlockIndicator />
       </div>
-    </footer>
+      <ThemeToggle />
+      <BlockIndicator />
+    </div>
   )
 }
 
-function FooterIconLink({
-  to,
-  imgSrc,
-  alt,
-  last,
-}: {
-  to: string
-  imgSrc: any
-  alt: string
-  last?: boolean
-}) {
+function ThemeToggle() {
+  const { isDarkMode, setDarkMode } = useDarkMode()
   return (
-    <a href={to} target="_blank" rel="noopener noreferrer" className={last ? '' : 'mr-5'}>
+    <div
+      className="inline-flex items-center justify-start gap-3 cursor-pointer"
+      onClick={() => setDarkMode(!isDarkMode)}
+    >
+      <div className="text-gray-950 dark:text-neutral-400 text-[15px] font-normal leading-tight">
+        Theme
+      </div>
+      <div className="trainsition-color relative px-0.5 py-[1px] dark:bg-fuchsia-200 rounded-[32px] border border border border border-gray-950 justify-center items-center gap-[5px] flex">
+        <div className="relative flex flex-col items-start justify-start w-4 h-5 p-1 pr-0">
+          <Image src={Sun} alt="light theme icon" width={14} height={14} />
+        </div>
+        <div className="relative flex flex-col items-start justify-start w-4 h-5 py-1 pr-1">
+          <Image src={Moon} alt="dark theme icon" width={14} height={14} />
+        </div>
+        <div
+          className={cx(
+            'absolute transition transform',
+            'left-[2px] w-[18px] h-[18px]',
+            'bg-gray-950 rounded-full border border-gray-950',
+            {
+              ['translate-x-[19px]']: !isDarkMode,
+            }
+          )}
+        />
+      </div>
+    </div>
+  )
+}
+
+function FooterIconLink({ to, imgSrc, alt }: { to: string; imgSrc: any; alt: string }) {
+  return (
+    <a className="relative w-6 h-6 dark:invert" href={to} target="_blank" rel="noopener noreferrer">
       <Image src={imgSrc} alt={alt} width={25} height={25} />
     </a>
   )
@@ -49,15 +80,15 @@ function BlockIndicator() {
 
   const status = getStatusFromBlock(latestBlock)
   let summary = 'Connecting'
-  let classColor = 'yellow-300'
+  let classColor = 'bg-yellow-300'
   if (status === ConnStatus.Connected) {
     summary = latestBlock!.number.toString()
-    classColor = 'green-600'
+    classColor = 'bg-emerald-500'
   } else if (status === ConnStatus.Stale) {
     summary = latestBlock!.number.toString()
   } else if (status === ConnStatus.NotConnected) {
     summary = 'Not Connected'
-    classColor = 'red-600'
+    classColor = 'bg-red-600'
   }
 
   const [showNetworkModal, setShowNetworkModal] = useState(false)
@@ -65,16 +96,13 @@ function BlockIndicator() {
   return (
     <>
       <button
-        className="flex items-center hover:underline"
         onClick={() => setShowNetworkModal(true)}
+        className="px-2.5 h-7 mt-2 bg-gray-100 dark:bg-neutral-800 rounded-[100px] justify-end items-center gap-1.5 inline-flex"
       >
-        <div className="mr-3 text-sm font-medium pt-px">{summary}</div>
-        <div
-          className={`rounded-full w-3.5 h-3.5 ${'bg-' + classColor} border-2 ${
-            'border-' + classColor
-          } border-opacity-50`}
-        ></div>
-        <div className="hidden bg-yellow-300 bg-red-600"></div>
+        <div className="text-right text-gray-950 dark:text-white text-[15px] font-normal leading-tight">
+          {summary}
+        </div>
+        <div className={cx('w-2 h-2 relative bg-emerald-500 rounded-[100px]', classColor)} />
       </button>
       {showNetworkModal && (
         <NetworkModal isOpen={showNetworkModal} close={() => setShowNetworkModal(false)} />

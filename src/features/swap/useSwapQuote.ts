@@ -37,7 +37,6 @@ export function useSwapQuote(
       const amountDecimals = isSwapIn ? fromToken.decimals : toToken.decimals
       const quoteDecimals = isSwapIn ? toToken.decimals : fromToken.decimals
       if (amountWeiBN.lte(0) || !fromToken || !toToken) return null
-
       const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
       const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const mento = await getMentoSdk(chainId)

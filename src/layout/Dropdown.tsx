@@ -1,3 +1,4 @@
+import { Float } from '@headlessui-float/react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { Fragment, ReactElement, ReactNode } from 'react'
 
@@ -43,12 +44,19 @@ export function DropdownMenu({
   )
 }
 
+export type Alignment = 'start' | 'end'
+export type Side = 'top' | 'right' | 'bottom' | 'left'
+export type AlignedPlacement = `${Side}-${Alignment}`
+export type Placement = Side | AlignedPlacement
+
 interface ModalProps {
-  buttonContent: ReactNode
+  buttonContent: (open: boolean) => React.ReactElement
   buttonClasses?: string
   buttonTitle?: string
   modalContent: (close: () => void) => ReactElement
   modalClasses?: string
+  placement?: Placement
+  placementOffset?: number
 }
 
 // Uses Headless Popover, which is a more general purpose dropdown box
@@ -58,27 +66,33 @@ export function DropdownModal({
   buttonTitle,
   modalContent,
   modalClasses,
+  placement = 'bottom-start',
+  placementOffset = 0,
 }: ModalProps) {
   return (
     <Popover className="relative">
-      <Popover.Button title={buttonTitle} className={`flex outline-none ${buttonClasses}`}>
-        {buttonContent}
-      </Popover.Button>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-200"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-100"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Popover.Panel
-          className={`z-40 absolute mt-2 origin-top-right rounded-md bg-white shadow-sm drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${modalClasses}`}
-        >
-          {({ close }) => modalContent(close)}
-        </Popover.Panel>
-      </Transition>
+      {({ open }) => (
+        <Float offset={placementOffset} placement={placement}>
+          <Popover.Button title={buttonTitle} className={`flex outline-none ${buttonClasses}`}>
+            {buttonContent(open)}
+          </Popover.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-100"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Popover.Panel
+              className={`mt-2 rounded-md bg-white shadow-sm drop-shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none ${modalClasses}`}
+            >
+              {({ close }) => modalContent(close)}
+            </Popover.Panel>
+          </Transition>
+        </Float>
+      )}
     </Popover>
   )
 }

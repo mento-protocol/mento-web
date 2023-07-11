@@ -43,3 +43,39 @@ export function useIsMobile() {
   const windowSize = useWindowSize()
   return isWindowSizeMobile(windowSize.width)
 }
+
+enum ThemeVariant {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
+
+export function getDarkMode() {
+  if (typeof window === 'undefined') {
+    return false
+  }
+  const isDarkLocally = localStorage.theme === ThemeVariant.DARK
+  const isThemeConfiguredLocally = 'theme' in localStorage
+  const isDarkSystem = window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (isDarkLocally || (!isThemeConfiguredLocally && isDarkSystem)) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export function useDarkMode() {
+  const [isDarkMode, setDarkMode] = useState(getDarkMode())
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+      localStorage.theme = ThemeVariant.DARK
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.theme = ThemeVariant.LIGHT
+    }
+  }, [isDarkMode])
+  return {
+    isDarkMode,
+    setDarkMode,
+  }
+}
