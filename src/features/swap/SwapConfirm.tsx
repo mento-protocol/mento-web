@@ -165,7 +165,7 @@ export function SwapConfirmCard({ formValues }: Props) {
 
   return (
     <FloatingBox
-      width="w-[432px]"
+      width="w-screen md:w-[432px] "
       padding="p-0"
       classes="border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
     >
