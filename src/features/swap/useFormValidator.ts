@@ -1,7 +1,7 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
-import { Tokens, getTokenAddress, isNativeStableToken } from 'src/config/tokens'
+import { Tokens, getTokenAddress, getTokenByAddress } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { getMentoSdk } from 'src/features/sdk'
 import { SwapFormValues } from 'src/features/swap/types'
@@ -41,11 +41,6 @@ async function CheckTradingLimits(
   values: SwapFormValues,
   chainId: number
 ): Promise<{ exceeds: boolean; errorMsg: string }> {
-  const tokenToCheck = isNativeStableToken(values.fromTokenId)
-    ? values.fromTokenId
-    : values.toTokenId
-  const isSwapIn = values.direction === 'in'
-
   const token0 = getTokenAddress(values.fromTokenId, chainId)
   const token1 = getTokenAddress(values.toTokenId, chainId)
   const mento = await getMentoSdk(chainId)
@@ -67,6 +62,8 @@ async function CheckTradingLimits(
       timestampOut = limit.until
     }
   }
+  const isSwapIn = values.direction === 'in'
+  const tokenToCheck = getTokenByAddress(tradingLimits[0].asset).symbol
 
   let amountToCheck: number
   let exceeds = false
