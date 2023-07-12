@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { ReactNode, SVGProps, useCallback } from 'react'
+import { ReactNode, SVGProps, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
@@ -16,13 +16,14 @@ import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
-import { useTimeout } from 'src/utils/timeout'
+import { logger } from 'src/utils/logger'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
   toTokenId: TokenId.cUSD,
   amount: '',
+  quote: '',
   direction: 'in',
   slippage: '1.0',
 }
@@ -79,10 +80,29 @@ function SwapForm() {
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { address, isConnected } = useAccount()
 
-  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const { values, errors, setFieldValue, setErrors, validateForm, setFieldTouched } =
+    useFormikContext<SwapFormValues>()
   const { amount, direction, fromTokenId, toTokenId } = values
 
+  useEffect(() => {
+    setErrors({})
+  }, [setErrors, values])
+
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
+
+  useEffect(() => {
+    ;(async () => {
+      if (Object.keys(errors).length !== 0) {
+        await validateForm()
+      }
+    })().catch((e) => {
+      logger.error(e)
+    })
+  }, [validateForm, errors, quote])
+
+  useEffect(() => {
+    setFieldValue('quote', quote)
+  }, [quote, setFieldValue, setFieldTouched])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
@@ -239,25 +259,24 @@ function SubmitButton() {
   const { openConnectModal } = useConnectModal()
   const isAccountReady = address && isConnected
 
-  const { errors, setErrors, touched, setTouched } = useFormikContext<SwapFormValues>()
+  const { errors, touched } = useFormikContext<SwapFormValues>()
   const error =
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
   const onClick = isAccountReady ? undefined : openConnectModal
 
-  const clearErrors = useCallback(() => {
-    setErrors({})
-    setTouched({})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setErrors, setTouched, errors, touched])
-
-  useTimeout(clearErrors, 3000)
+  const showLongError = typeof error === 'string' && error?.length > 50
 
   return (
-    <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
-      {text}
-    </Button3D>
+    <div className="flex flex-col w-full items-center justify-center">
+      {showLongError ? (
+        <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{error}</div>
+      ) : null}
+      <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
+        {showLongError ? 'Error' : text}
+      </Button3D>
+    </div>
   )
 }
 

@@ -1,34 +1,105 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
-import { TokenId, Tokens } from 'src/config/tokens'
+import { Tokens, getTokenAddress, isNativeStableToken } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
-import { SizeLimits, SwapFormValues } from 'src/features/swap/types'
+import { getMentoSdk } from 'src/features/sdk'
+import { SwapFormValues } from 'src/features/swap/types'
 import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
+import { useChainId } from 'wagmi'
 
-export function useFormValidator(balances: AccountBalances, sizeLimits?: SizeLimits | null) {
+export function useFormValidator(balances: AccountBalances) {
+  const chainId = useChainId()
   return useCallback(
-    (values?: SwapFormValues): FormikErrors<SwapFormValues> => {
-      if (!values || !values.amount) return { amount: 'Amount Required' }
-      const parsedAmount = parseAmount(values.amount)
-      if (!parsedAmount) return { amount: 'Amount is Invalid' }
-      if (parsedAmount.lt(0)) return { amount: 'Amount cannot be negative' }
-      if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { amount: 'Amount too small' }
-      const tokenId = values.fromTokenId
-      const tokenBalance = balances[tokenId]
-      const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
-      if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
-        return { amount: 'Amount exceeds balance' }
-      }
-      if (sizeLimits) {
-        const stableTokenId =
-          values.fromTokenId === TokenId.CELO ? values.toTokenId : values.fromTokenId
-        const limits = sizeLimits[stableTokenId]
-        if (limits?.min && weiAmount.lt(limits?.min)) return { amount: 'Amount below minimum' }
-        if (limits?.max && weiAmount.gt(limits?.max)) return { amount: 'Amount exceeds maximum' }
-      }
-      return {}
+    (values?: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
+      return (async () => {
+        if (!values || !values.amount) return { amount: 'Amount Required' }
+        const parsedAmount = parseAmount(values.amount)
+        if (!parsedAmount) return { amount: 'Amount is Invalid' }
+        if (parsedAmount.lt(0)) return { amount: 'Amount cannot be negative' }
+        if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { amount: 'Amount too small' }
+        const tokenId = values.fromTokenId
+        const tokenBalance = balances[tokenId]
+        const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
+        if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
+          //return { amount: 'Amount exceeds balance' }
+        }
+        const { exceeds, errorMsg } = await CheckTradingLimits(values, chainId)
+        if (exceeds) return { amount: errorMsg }
+        return {}
+      })().catch((error) => {
+        logger.error(error)
+        return {}
+      })
     },
-    [balances, sizeLimits]
+    [balances, chainId]
   )
+}
+
+async function CheckTradingLimits(
+  values: SwapFormValues,
+  chainId: number
+): Promise<{ exceeds: boolean; errorMsg: string }> {
+  const tokenToCheck = isNativeStableToken(values.fromTokenId)
+    ? values.fromTokenId
+    : values.toTokenId
+  const isSwapIn = values.direction === 'in'
+
+  const token0 = getTokenAddress(values.fromTokenId, chainId)
+  const token1 = getTokenAddress(values.toTokenId, chainId)
+  const mento = await getMentoSdk(chainId)
+  const exchangeId = (await mento.getExchangeForTokens(token0, token1)).id
+  const tradingLimits = await mento.getTradingLimits(exchangeId)
+
+  let timestampIn = 0
+  let timestampOut = 0
+  let minMaxIn = Infinity
+  let minMaxOut = Infinity
+
+  for (const limit of tradingLimits) {
+    if (limit.maxIn < minMaxIn) {
+      minMaxIn = limit.maxIn
+      timestampIn = limit.until
+    }
+    if (limit.maxOut < minMaxOut) {
+      minMaxOut = limit.maxOut
+      timestampOut = limit.until
+    }
+  }
+
+  let amountToCheck: number
+  let exceeds = false
+  let limit = 0
+  let timestamp = 0
+
+  if (tokenToCheck === values.fromTokenId) {
+    amountToCheck = isSwapIn ? +values.amount : +values.quote
+    if (amountToCheck > minMaxIn) {
+      exceeds = true
+      limit = minMaxIn
+      timestamp = timestampIn
+    }
+  } else {
+    amountToCheck = isSwapIn ? +values.quote : +values.amount
+    if (amountToCheck > minMaxOut) {
+      exceeds = true
+      limit = minMaxOut
+      timestamp = timestampOut
+    }
+  }
+
+  const date = new Date(timestamp * 1000).toLocaleString()
+
+  if (exceeds) {
+    const errorMsg = `The ${tokenToCheck} amount exceeds the current trading limits. The current ${
+      tokenToCheck === values.fromTokenId ? 'sell' : 'buy'
+    }  limit is ${new Intl.NumberFormat('de-DE').format(limit)} ${tokenToCheck} until ${date}`
+    return {
+      exceeds,
+      errorMsg,
+    }
+  }
+
+  return { exceeds, errorMsg: '' }
 }
