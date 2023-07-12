@@ -23,7 +23,7 @@ export function useFormValidator(balances: AccountBalances) {
         const tokenBalance = balances[tokenId]
         const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
         if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
-          //return { amount: 'Amount exceeds balance' }
+          return { amount: 'Amount exceeds balance' }
         }
         const { exceeds, errorMsg } = await CheckTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
