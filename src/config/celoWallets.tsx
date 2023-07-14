@@ -28,7 +28,8 @@ export const Valora = ({
 }: WalletOptions): Wallet => ({
   id: 'valora',
   name: 'Valora',
-  iconUrl: './wallets/valora.svg',
+  iconUrl:
+    'https://registry.walletconnect.com/api/v1/logo/md/d01c7758d741b363e637a817a09bcf579feae4db9f5bb16f599fdd1f66e2f974',
   iconBackground: '#FFF',
   downloadUrls: {
     android: 'https://play.google.com/store/apps/details?id=co.clabs.valora',
