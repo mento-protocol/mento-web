@@ -25,7 +25,7 @@ export function useFormValidator(balances: AccountBalances) {
         if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
           return { amount: 'Amount exceeds balance' }
         }
-        const { exceeds, errorMsg } = await CheckTradingLimits(values, chainId)
+        const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
         return {}
       })().catch((error) => {
@@ -37,7 +37,7 @@ export function useFormValidator(balances: AccountBalances) {
   )
 }
 
-async function CheckTradingLimits(
+async function checkTradingLimits(
   values: SwapFormValues,
   chainId: number
 ): Promise<{ exceeds: boolean; errorMsg: string }> {
@@ -91,7 +91,7 @@ async function CheckTradingLimits(
   if (exceeds) {
     const errorMsg = `The ${tokenToCheck} amount exceeds the current trading limits. The current ${
       tokenToCheck === values.fromTokenId ? 'sell' : 'buy'
-    }  limit is ${new Intl.NumberFormat('de-DE').format(limit)} ${tokenToCheck} until ${date}`
+    }  limit is ${limit} ${tokenToCheck} until ${date}`
     return {
       exceeds,
       errorMsg,
