@@ -6,6 +6,7 @@ export interface SwapFormValues {
   fromTokenId: TokenId
   toTokenId: TokenId
   amount: number | string
+  quote: number | string
   direction: SwapDirection
   slippage: string
 }
