@@ -16,7 +16,7 @@ import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
-import { logger } from 'src/utils/logger'
+//import { logger } from 'src/utils/logger'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
@@ -63,7 +63,7 @@ function SwapForm() {
       initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validateForm}
-      validateOnChange={false}
+      validateOnChange={true}
       validateOnBlur={false}
     >
       <Form>
@@ -80,29 +80,15 @@ function SwapForm() {
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { address, isConnected } = useAccount()
 
-  const { values, errors, setFieldValue, setErrors, validateForm, setFieldTouched } =
-    useFormikContext<SwapFormValues>()
-  const { amount, direction, fromTokenId, toTokenId } = values
+  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
-  useEffect(() => {
-    setErrors({})
-  }, [setErrors, values])
+  const { amount, direction, fromTokenId, toTokenId } = values
 
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   useEffect(() => {
-    ;(async () => {
-      if (Object.keys(errors).length !== 0) {
-        await validateForm()
-      }
-    })().catch((e) => {
-      logger.error(e)
-    })
-  }, [validateForm, errors, quote])
-
-  useEffect(() => {
     setFieldValue('quote', quote)
-  }, [quote, setFieldValue, setFieldTouched])
+  }, [quote, setFieldValue])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
