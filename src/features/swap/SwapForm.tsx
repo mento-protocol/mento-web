@@ -16,7 +16,6 @@ import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
-//import { logger } from 'src/utils/logger'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
