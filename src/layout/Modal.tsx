@@ -1,5 +1,4 @@
 import { Dialog, Transition } from '@headlessui/react'
-import cx from 'classnames'
 import localFont from 'next/font/local'
 import { Fragment, PropsWithChildren } from 'react'
 import { IconButton } from 'src/components/buttons/IconButton'
@@ -44,15 +43,11 @@ export function Modal({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={cx(
-                  'w-full',
-                  width || 'max-w-xs',
-                  'max-h-[90vh]',
-                  'transform overflow-auto rounded-2xl',
-                  'bg-white',
-                  'dark:bg-zinc-900 border border-primary-dark dark:border-zinc-800',
-                  'text-left shadow-lg transition-all'
-                )}
+                className={`
+                  w-full ${
+                    width || 'max-w-xs'
+                  } max-h-[90vh] transform overflow-auto rounded-2xl bg-white dark:bg-zinc-900 border border-primary-dark dark:border-zinc-800 text-left shadow-lg transition-all
+                `}
               >
                 <div className="h-20 w-full justify-between items-center inline-flex px-6 py-4 sm:py-6">
                   <div className="text-gray-950 dark:text-white sm:text-[32px] text-[26px] font-medium leading-10">

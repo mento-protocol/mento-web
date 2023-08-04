@@ -1,4 +1,3 @@
-import cx from 'classnames'
 import { toast } from 'react-toastify'
 import { ChainMetadata, allChains, chainIdToChain } from 'src/config/chains'
 import { reset as accountReset } from 'src/features/accounts/accountSlice'
@@ -75,17 +74,19 @@ export function NetworkModal({ isOpen, close }: Props) {
           <button
             onClick={() => switchToNetwork(c)}
             key={c.chainId}
-            className={cx(
-              'grow shrink basis-0 h-[42px] sm:h-[50px] px-4 py-3',
-              'rounded-lg border border-gray-950',
-              'text-[14px] sm:text-[16px] font-semibold leading-relaxed',
-              'justify-center items-center flex',
-              c.chainId === currentChain.chainId
-                ? 'bg-cyan-200 border-gray-950 text-gray-950 dark:border-cyan-200 dark:bg-transparent dark:text-cyan-200'
-                : 'dark:bg-zinc-600 dark:border-zinc-600 dark:text-white',
-              'active:bg-cyan-200 hover:bg-cyan-200 active:border-cyan-200',
-              'dark:active:border-zinc-800 dark:hover:border-cyan-200'
-            )}
+            className={`
+              grow shrink basis-0 h-[42px] sm:h-[50px] px-4 py-3
+              rounded-lg border border-gray-950
+              text-[14px] sm:text-[16px] font-semibold leading-relaxed
+              justify-center items-center flex
+             ${
+               c.chainId === currentChain.chainId
+                 ? 'bg-cyan-200 border-gray-950 text-gray-950 dark:border-cyan-200 dark:bg-transparent dark:text-cyan-200'
+                 : 'dark:bg-zinc-600 dark:border-zinc-600 dark:text-white'
+             }
+              active:bg-cyan-200 hover:bg-cyan-200 active:border-cyan-200
+              dark:active:border-zinc-800 dark:hover:border-cyan-200
+            `}
           >
             {c.name}
           </button>
