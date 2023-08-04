@@ -1,18 +1,23 @@
-import { ReactNode } from 'react'
+import { PropsWithChildren } from 'react'
 
 type BaseButtonProps = {
-  children: ReactNode
   onClick?: () => void
   error?: boolean
   fullWidth?: boolean
   type?: 'button' | 'submit' | 'reset'
 }
 
-export const Button3D = ({ children, ...restProps }: BaseButtonProps) => {
+export const Button3D = ({ children, ...restProps }: PropsWithChildren<BaseButtonProps>) => {
   return <_3DButtonLink {...restProps}>{children}</_3DButtonLink>
 }
 
-const _3DButtonLink = ({ children, error, fullWidth, onClick, type }: BaseButtonProps) => {
+const _3DButtonLink = ({
+  children,
+  error,
+  fullWidth,
+  onClick,
+  type,
+}: PropsWithChildren<BaseButtonProps>) => {
   return (
     <button className={fullWidth ? 'w-full' : ''} onClick={onClick} type={type ?? 'button'}>
       <span
