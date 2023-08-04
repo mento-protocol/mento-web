@@ -28,7 +28,7 @@ export function Select({ value, optionValues, onChange, button, option, buttonLa
               <Listbox.Option
                 key={optionValue}
                 value={optionValue}
-                className="p-[4px] dark:text-clean-white"
+                className="p-[4px] dark:text-white"
               >
                 {({ selected }) => option(optionValue, selected)}
               </Listbox.Option>

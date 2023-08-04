@@ -65,7 +65,7 @@ export function SettingsMenu() {
           )}
         </div>
       )}
-      modalClasses="rounded-xl border border-primary-dark dark:border-none dark:bg-[#404043] dark:text-clean-white"
+      modalClasses="rounded-xl border border-primary-dark dark:border-none dark:bg-[#404043] dark:text-white"
     />
   )
 }

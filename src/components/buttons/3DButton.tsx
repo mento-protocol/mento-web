@@ -29,7 +29,7 @@ const _3DButtonLink = ({
       >
         <span
           className={`${'pr-10'} pl-10 group-active:-translate-y-[2px] block py-[18px] transition-transform delay-[250] hover:-translate-y-[6px] -translate-y-[4px] font-medium text-[15px] border rounded-lg border-primary-dark leading-5 ${
-            error ? 'bg-[#E14F4F] text-clean-white' : 'bg-[#4D62F0] text-clean-white '
+            error ? 'bg-[#E14F4F] text-white' : 'bg-[#4D62F0] text-white '
           } ${fullWidth ? 'w-full flex items-center justify-center' : ''} `}
         >
           <span className={`flex items-center `}>{children}</span>
