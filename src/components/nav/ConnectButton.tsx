@@ -77,7 +77,7 @@ export function ConnectButton() {
               </div>
             </div>
           )}
-          modalClasses="right-px min-w-[272px] border-[1px] border-solid border-black dark:border-[#333336] text-sm !rounded-[16px] !shadow-lg2 dark:bg-[#1D1D20]/[1]"
+          modalClasses="right-px min-w-[272px] border border-solid border-black dark:border-[#333336] text-sm !rounded-[16px] !shadow-lg2 dark:bg-[#1D1D20]/[1]"
         />
       ) : (
         <SolidButton
@@ -135,7 +135,7 @@ function CopyIcon() {
 const styles = {
   // TODO DRY up with SolidButton styles
   walletButtonDefault:
-    'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border-[1px] border-solid border-black dark:border-white font-medium leading-5 dark:text-white dark:bg-primary-dark',
+    'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border border-solid border-black dark:border-white font-medium leading-5 dark:text-white dark:bg-primary-dark',
   walletButtonConnected:
     'flex items-center justify-center bg-white text-black rounded-full shadow-md transition-all duration-300',
   menuOption: 'flex items-center cursor-pointer rounded pl-4 pt-4 dark:text-white',

@@ -45,7 +45,7 @@ export function TokenSelectField({ name, label, onChange }: Props) {
 function TokenButton(tokenId: string, buttonLabel?: string) {
   const token = getTokenById(tokenId)
   return (
-    <div className="flex items-center p-1 transition-all rounded-lg border-[1px] min-w-[180px] border-solid border-black dark:border-[#636366] py-3 pl-3 pr-4 dark:bg-[#404043]">
+    <div className="flex items-center p-1 transition-all rounded-lg border min-w-[180px] border-solid border-black dark:border-[#636366] py-3 pl-3 pr-4 dark:bg-[#404043]">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
         <label className="text-xs text-gray-400 cursor-pointer dark:text-white">
