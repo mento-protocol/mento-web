@@ -32,7 +32,7 @@ const _3DButtonLink = ({
             error ? 'bg-[#E14F4F] text-white' : 'bg-[#4D62F0] text-white '
           } ${fullWidth ? 'w-full flex items-center justify-center' : ''} `}
         >
-          <span className={`flex items-center `}>{children}</span>
+          <span className="flex items-center">{children}</span>
         </span>
       </span>
     </button>

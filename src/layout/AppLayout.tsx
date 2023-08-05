@@ -27,7 +27,7 @@ export function AppLayout({ pathName, children }: PropsWithChildren<Props>) {
         <InfoBanner />
         <TopBlur />
         <Header />
-        <main className={`relative z-20 flex items-center justify-center grow  `}>{children}</main>
+        <main className={`relative z-20 flex items-center justify-center grow`}>{children}</main>
         <Footer />
         <BottomGrid />
       </div>
