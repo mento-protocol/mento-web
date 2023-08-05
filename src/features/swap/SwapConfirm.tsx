@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
-// import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { TokenId, Tokens } from 'src/config/tokens'
@@ -309,21 +308,6 @@ const MentoLogoLoader = () => {
     </>
   )
 }
-
-// function BasicSpinner() {
-//   const { connector } = useAccount()
-//   return (
-//     <div className="flex flex-col items-center justify-center my-6">
-//       <Spinner />
-//       <div className="mt-5 text-sm text-center text-gray-500">
-//         Sending two transactions: Approve and Swap
-//       </div>
-//       <div className="mt-3 text-sm text-center text-gray-500">{`Sign with ${
-//         connector?.name || 'wallet'
-//       } to proceed`}</div>
-//     </div>
-//   )
-// }
 
 const BackArrow = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={7} height={12} fill="none" {...props}>

@@ -221,9 +221,6 @@ function ReverseTokenButton() {
   )
 }
 
-// function FieldDividerLine() {
-//   return <div className="w-px h-12 ml-3 bg-gray-300"></div>
-// }
 
 function SlippageRow() {
   return (
