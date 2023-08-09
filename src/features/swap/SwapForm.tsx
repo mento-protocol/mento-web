@@ -16,6 +16,7 @@ import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWeiRounded } from 'src/utils/amount'
+import { escapeRegExp, inputRegex } from 'src/utils/string'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
@@ -175,7 +176,13 @@ function AmountField({
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setValues({ ...values, amount: value, direction })
+
+    if (typeof value === 'undefined') return
+    const val = `${value}`.replace(/,/g, '.')
+
+    if (inputRegex.test(escapeRegExp(val))) {
+      setValues({ ...values, amount: val, direction })
+    }
   }
 
   if (!isCurrentInput && isQuoteLoading) {
@@ -192,10 +199,9 @@ function AmountField({
     <input
       value={isCurrentInput ? values.amount : quote}
       name={`amount-${direction}`}
-      type="number"
       step="any"
       placeholder="0.00"
-      className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="truncate pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
