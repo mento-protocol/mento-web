@@ -82,7 +82,15 @@ export function ConnectButton() {
         <SolidButton
           color="white"
           classes={styles.walletButtonDefault}
-          icon={<ConnectButtonIcon icon={Wallet} iconDark={WalletDark}  width={20} height={20} styles="sm:mr-3" />}
+          icon={
+            <ConnectButtonIcon
+              icon={Wallet}
+              iconDark={WalletDark}
+              width={20}
+              height={20}
+              styles="sm:mr-3"
+            />
+          }
           onClick={openConnectModal}
         >
           <div className="hidden sm:block">Connect</div>
