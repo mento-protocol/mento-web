@@ -15,7 +15,7 @@ import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { fromWeiRounded } from 'src/utils/amount'
+import { fromWei, fromWeiRounded } from 'src/utils/amount'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
@@ -91,7 +91,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
-    setFieldValue('amount', roundedBalance)
+    setFieldValue('amount', fromWei(balances[fromTokenId]))
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
