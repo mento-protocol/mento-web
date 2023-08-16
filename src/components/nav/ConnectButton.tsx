@@ -56,34 +56,41 @@ export function ConnectButton() {
               <BalancesSummary />
 
               <div className={styles.menuOption} onClick={onClickCopy}>
-                <CopyIcon />
+                <ConnectButtonIcon icon={Clipboard} iconDark={ClipboardDark} styles="sm:mr-3" />
                 <div className="transition-colors duration-200 hover:text-gray-500 active:text-gray-200">
                   Copy Address
                 </div>
               </div>
               <div className={styles.menuOption} onClick={onClickChangeNetwork}>
-                <NetworkIcon />
+                <ConnectButtonIcon icon={Cube} iconDark={CubeDark} styles="sm:mr-1.5" />
                 <div className="transition-colors duration-200 hover:text-gray-500 active:text-gray-200">
-                  {' '}
                   Change Network
                 </div>
               </div>
               <hr className="mx-5 mt-4 dark:border-[#333336]" />
               <div className={styles.menuOption} onClick={onClickDisconnect}>
-                <LogoutIcon />
+                <ConnectButtonIcon icon={Logout} iconDark={LogoutDark} styles="sm:mr-1.5" />
                 <div className="transition-colors duration-200 dark:text-primary-blush hover:text-gray-500 active:text-gray-200">
                   Disconnect
                 </div>
               </div>
             </div>
           )}
-          modalClasses="right-px min-w-[272px] border-[1px] border-solid border-black dark:border-[#333336] text-sm !rounded-[16px] !shadow-lg2 dark:bg-[#1D1D20]/[1]"
+          modalClasses="right-px min-w-[272px] border border-solid border-black dark:border-[#333336] text-sm !rounded-[16px] !shadow-lg2 dark:bg-[#1D1D20]/[1]"
         />
       ) : (
         <SolidButton
           color="white"
           classes={styles.walletButtonDefault}
-          icon={<WalletIcon />}
+          icon={
+            <ConnectButtonIcon
+              icon={Wallet}
+              iconDark={WalletDark}
+              width={20}
+              height={20}
+              styles="sm:mr-3"
+            />
+          }
           onClick={openConnectModal}
         >
           <div className="hidden sm:block">Connect</div>
@@ -96,38 +103,23 @@ export function ConnectButton() {
   )
 }
 
-function WalletIcon() {
+const ConnectButtonIcon = ({
+  icon,
+  iconDark,
+  width = 32,
+  height = 32,
+  styles,
+}: {
+  icon: string
+  iconDark: string
+  width?: number
+  height?: number
+  styles?: string
+}) => {
   return (
-    <div className="flex items-center sm:mr-[12px]">
-      <Image className="inline dark:hidden" src={Wallet} alt="" width={20} height={20} />
-      <Image className="hidden dark:inline" src={WalletDark} alt="" width={20} height={20} />
-    </div>
-  )
-}
-
-function LogoutIcon() {
-  return (
-    <div className="flex items-center sm:mr-1.5">
-      <Image className="inline dark:hidden" src={Logout} alt="" width={32} height={32} />
-      <Image className="hidden dark:inline" src={LogoutDark} alt="" width={32} height={32} />
-    </div>
-  )
-}
-
-function NetworkIcon() {
-  return (
-    <div className="flex items-center sm:mr-1.5">
-      <Image className="inline dark:hidden" src={Cube} alt="" width={32} height={32} />
-      <Image className="hidden dark:inline" src={CubeDark} alt="" width={32} height={32} />
-    </div>
-  )
-}
-
-function CopyIcon() {
-  return (
-    <div className="flex items-center sm:mr-1.5">
-      <Image className="inline dark:hidden" src={Clipboard} alt="" width={32} height={32} />
-      <Image className="hidden dark:inline" src={ClipboardDark} alt="" width={32} height={32} />
+    <div className={`flex items-center ${styles}`}>
+      <Image className="inline dark:hidden" src={icon} alt="" width={width} height={height} />
+      <Image className="hidden dark:inline" src={iconDark} alt="" width={width} height={height} />
     </div>
   )
 }
@@ -135,7 +127,7 @@ function CopyIcon() {
 const styles = {
   // TODO DRY up with SolidButton styles
   walletButtonDefault:
-    'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border-[1px] border-solid border-black dark:border-clean-white font-medium leading-5 dark:text-white dark:bg-primary-dark',
+    'shadow-md h-[52px] min-w-[137px] py-[16px] !pl-[20px] !pr-[24px] sm:px-4 rounded-lg border border-solid border-black dark:border-white font-medium leading-5 dark:text-white dark:bg-primary-dark',
   walletButtonConnected:
     'flex items-center justify-center bg-white text-black rounded-full shadow-md transition-all duration-300',
   menuOption: 'flex items-center cursor-pointer rounded pl-4 pt-4 dark:text-white',
