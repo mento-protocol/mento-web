@@ -201,7 +201,7 @@ function AmountField({
       name={`amount-${direction}`}
       step="any"
       placeholder="0.00"
-      className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="pt-1 text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
