@@ -15,8 +15,7 @@ import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { fromWeiRounded } from 'src/utils/amount'
-import { escapeRegExp, inputRegex } from 'src/utils/string'
+import { fromWei, fromWeiRounded } from 'src/utils/amount'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
@@ -36,7 +35,7 @@ export function SwapFormCard() {
       classes="overflow-visible border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
     >
       <div className="flex justify-between border-b border-primary-dark dark:border-[#333336] p-6">
-        <h2 className=" text-[32px] leading-10 font-fg font-medium text-primary-dark dark:text-clean-white ">
+        <h2 className="text-[32px] leading-10 font-fg font-medium text-primary-dark dark:text-white">
           Swap
         </h2>
         <SettingsMenu />
@@ -92,7 +91,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const onClickUseMax = () => {
-    setFieldValue('amount', roundedBalance)
+    setFieldValue('amount', fromWei(balances[fromTokenId]))
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
@@ -155,7 +154,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
 const TokenSelectFieldWrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex items-center justify-between pl-[5px] py-[5px] pr-[20px] rounded-xl bg-clean-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
+    <div className="flex items-center justify-between pl-[5px] py-[5px] pr-[20px] rounded-xl bg-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
       {children}
     </div>
   )
@@ -201,7 +200,7 @@ function AmountField({
       name={`amount-${direction}`}
       step="any"
       placeholder="0.00"
-      className="truncate pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
@@ -220,21 +219,17 @@ function ReverseTokenButton() {
     <button
       title="Swap inputs"
       onClick={onClickReverse}
-      className="flex items-center justify-center rounded-full border h-[36px] w-[36px] border-primary-dark dark:border-none  dark:bg-[#545457] text-primary-dark dark:text-clean-white"
+      className="flex items-center justify-center rounded-full border h-[36px] w-[36px] border-primary-dark dark:border-none  dark:bg-[#545457] text-primary-dark dark:text-white"
     >
       <DownArrow />
     </button>
   )
 }
 
-// function FieldDividerLine() {
-//   return <div className="w-px h-12 ml-3 bg-gray-300"></div>
-// }
-
 function SlippageRow() {
   return (
     <div
-      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-clean-white px-[5px] font-medium"
+      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-white px-[5px] font-medium"
       role="group"
     >
       <div>Max Slippage:</div>

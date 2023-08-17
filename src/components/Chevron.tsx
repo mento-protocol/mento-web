@@ -21,7 +21,7 @@ function _ChevronIcon({ width, height, direction, color, classes }: Props) {
       className = ''
       break
     case 'w':
-      className = 'rotate-90 '
+      className = 'rotate-90'
       break
     default:
       throw new Error(`Invalid chevron direction ${direction}`)

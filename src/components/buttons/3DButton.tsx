@@ -1,18 +1,23 @@
-import { ReactNode } from 'react'
+import { PropsWithChildren } from 'react'
 
 type BaseButtonProps = {
-  children: ReactNode
   onClick?: () => void
   error?: boolean
   fullWidth?: boolean
   type?: 'button' | 'submit' | 'reset'
 }
 
-export const Button3D = ({ children, ...restProps }: BaseButtonProps) => {
+export const Button3D = ({ children, ...restProps }: PropsWithChildren<BaseButtonProps>) => {
   return <_3DButtonLink {...restProps}>{children}</_3DButtonLink>
 }
 
-const _3DButtonLink = ({ children, error, fullWidth, onClick, type }: BaseButtonProps) => {
+const _3DButtonLink = ({
+  children,
+  error,
+  fullWidth,
+  onClick,
+  type,
+}: PropsWithChildren<BaseButtonProps>) => {
   return (
     <button className={fullWidth ? 'w-full' : ''} onClick={onClick} type={type ?? 'button'}>
       <span
@@ -24,10 +29,10 @@ const _3DButtonLink = ({ children, error, fullWidth, onClick, type }: BaseButton
       >
         <span
           className={`${'pr-10'} pl-10 group-active:-translate-y-[2px] block py-[18px] transition-transform delay-[250] hover:-translate-y-[6px] -translate-y-[4px] font-medium text-[15px] border rounded-lg border-primary-dark leading-5 ${
-            error ? 'bg-[#E14F4F] text-clean-white' : 'bg-[#4D62F0] text-clean-white '
+            error ? 'bg-[#E14F4F] text-white' : 'bg-[#4D62F0] text-white '
           } ${fullWidth ? 'w-full flex items-center justify-center' : ''} `}
         >
-          <span className={`flex items-center `}>{children}</span>
+          <span className="flex items-center">{children}</span>
         </span>
       </span>
     </button>

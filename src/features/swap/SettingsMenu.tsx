@@ -50,7 +50,6 @@ export function SettingsMenu() {
       )}
       buttonTitle="Settings"
       buttonClasses={`p-1 flex items-center justify-center } `}
-      // buttonClasses="p-1 flex items-center justify-center hover:opacity-70 active:opacity-60 transition-all"
       modalContent={() => (
         <div className="p-3">
           <div className="text-sm flex items-center gap-3 justify-between ">
@@ -65,7 +64,7 @@ export function SettingsMenu() {
           )}
         </div>
       )}
-      modalClasses="rounded-xl border border-primary-dark dark:border-none dark:bg-[#404043] dark:text-clean-white"
+      modalClasses="rounded-xl border border-primary-dark dark:border-none dark:bg-[#404043] dark:text-white"
     />
   )
 }

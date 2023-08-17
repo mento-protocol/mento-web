@@ -17,9 +17,7 @@ export function SwitchButton({ checked, onChange }: Props) {
       <span
         aria-hidden="true"
         className={`${
-          checked
-            ? 'bg-primary-dark translate-x-[100%]'
-            : '  translate-x-0 dark:bg-clean-white bg-clean-white'
+          checked ? 'bg-primary-dark translate-x-[100%]' : '  translate-x-0 dark:bg-white bg-white'
         } 
         pointer-events-none inline-block h-[18px] w-[18px] transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
       />

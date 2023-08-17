@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js'
-import cx from 'classnames'
 import Image from 'next/image'
 import { useState } from 'react'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
@@ -45,7 +44,7 @@ function ThemeToggle() {
       <div className="text-gray-950 dark:text-neutral-400 text-[15px] font-normal leading-tight">
         Theme
       </div>
-      <div className="trainsition-color relative px-0.5 py-[1px] dark:bg-fuchsia-200 rounded-[32px] border border border border border-gray-950 justify-center items-center gap-[5px] flex">
+      <div className="trainsition-color relative px-0.5 py-[1px] dark:bg-fuchsia-200 rounded-[32px] border border-gray-950 justify-center items-center gap-[5px] flex">
         <div className="relative flex flex-col items-start justify-start w-4 h-5 p-1 pr-0">
           <Image src={Sun} alt="light theme icon" width={14} height={14} />
         </div>
@@ -53,14 +52,10 @@ function ThemeToggle() {
           <Image src={Moon} alt="dark theme icon" width={14} height={14} />
         </div>
         <div
-          className={cx(
-            'absolute transition transform',
-            'left-[2px] w-[18px] h-[18px]',
-            'bg-gray-950 rounded-full border border-gray-950',
-            {
-              ['translate-x-[19px]']: !isDarkMode,
-            }
-          )}
+          className={`absolute transition transform left-[2px] w-[18px] h-[18px] bg-gray-950 rounded-full border border-gray-950 ${
+            !isDarkMode ? 'translate-x-[19px]' : ''
+          }
+          `}
         />
       </div>
     </div>
@@ -102,7 +97,7 @@ function BlockIndicator() {
         <div className="text-right text-gray-950 dark:text-white text-[15px] font-normal leading-tight">
           {summary}
         </div>
-        <div className={cx('w-2 h-2 relative bg-emerald-500 rounded-[100px]', classColor)} />
+        <div className={`w-2 h-2 relative bg-emerald-500 rounded-[100px] ${classColor}`} />
       </button>
       {showNetworkModal && (
         <NetworkModal isOpen={showNetworkModal} close={() => setShowNetworkModal(false)} />
