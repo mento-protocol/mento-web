@@ -78,7 +78,7 @@ function SwapForm() {
 }
 
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, isConnecting } = useAccount()
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
@@ -91,6 +91,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }, [quote, setFieldValue])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
     setFieldValue('amount', fromWei(balances[fromTokenId]))
     if (fromTokenId === TokenId.CELO) {
@@ -124,7 +125,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
           <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
         </div>
         <div className="flex flex-col items-end">
-          {address && isConnected && (
+          {address && isConnected && isRoundedBalanceGreaterThanZero && (
             <button
               type="button"
               title="Use full balance"
@@ -201,7 +202,7 @@ function AmountField({
       name={`amount-${direction}`}
       step="any"
       placeholder="0.00"
-      className="pt-1 text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="pt-1 truncate text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
