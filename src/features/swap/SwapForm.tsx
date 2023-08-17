@@ -78,7 +78,7 @@ function SwapForm() {
 }
 
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected } = useAccount()
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
