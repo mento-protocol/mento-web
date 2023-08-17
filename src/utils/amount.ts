@@ -118,7 +118,7 @@ export const toSignificant = (
   significantDigits = 6,
   format: object = { groupSeparator: '' }
   // rounding = 0
-) => {
+): string => {
   const Decimal = getDecimal().set({
     precision: significantDigits + 1,
     rounding: 0,
