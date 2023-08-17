@@ -15,7 +15,8 @@ import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { fromWei, fromWeiRounded } from 'src/utils/amount'
+import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { escapeRegExp, inputRegex } from 'src/utils/string'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
@@ -196,7 +197,7 @@ function AmountField({
 
   return (
     <input
-      value={isCurrentInput ? values.amount : quote}
+      value={isCurrentInput ? values.amount : toSignificant(quote)}
       name={`amount-${direction}`}
       step="any"
       placeholder="0.00"

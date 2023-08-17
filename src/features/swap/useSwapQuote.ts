@@ -11,7 +11,7 @@ import {
   invertExchangeRate,
   parseInputExchangeAmount,
 } from 'src/features/swap/utils'
-import { fromWeiRounded } from 'src/utils/amount'
+import { fromWei, fromWeiRounded } from 'src/utils/amount'
 import { useDebounce } from 'src/utils/debounce'
 import { logger } from 'src/utils/logger'
 import { useChainId } from 'wagmi'
@@ -48,7 +48,7 @@ export function useSwapQuote(
         quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
       }
 
-      const quote = fromWeiRounded(quoteWei, quoteDecimals)
+      const quote = fromWei(quoteWei, quoteDecimals).toString()
       const rateIn = calcExchangeRate(amountWei, amountDecimals, quoteWei, quoteDecimals)
       const rate = isSwapIn ? rateIn : invertExchangeRate(rateIn)
 
