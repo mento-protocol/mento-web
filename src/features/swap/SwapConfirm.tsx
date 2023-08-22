@@ -18,7 +18,7 @@ import { getMaxSellAmount, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
-import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
+import { fromWeiRounded, getAdjustedAmount, toSignificant } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useAccount, useChainId } from 'wagmi'
 
@@ -245,7 +245,7 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{fromToken.symbol}</div>
             <div className="text-lg font-semibold leading-6 text-center dark:text-white">
-              {from.amount}
+              {toSignificant(from.amount)}
             </div>
           </div>
         </div>
@@ -256,7 +256,7 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{toToken.symbol}</div>
             <div className="text-lg font-semibold leading-6 text-center dark:text-white">
-              {to.amount || '0'}
+              {toSignificant(to.amount) || '0'}
             </div>
           </div>
           <div className="my-[15px]">

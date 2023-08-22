@@ -15,7 +15,8 @@ import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { fromWei, fromWeiRounded } from 'src/utils/amount'
+import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { escapeRegExp, inputRegex } from 'src/utils/string'
 import { useAccount } from 'wagmi'
 
 const initialValues: SwapFormValues = {
@@ -90,6 +91,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }, [quote, setFieldValue])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
     setFieldValue('amount', fromWei(balances[fromTokenId]))
     if (fromTokenId === TokenId.CELO) {
@@ -123,7 +125,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
           <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
         </div>
         <div className="flex flex-col items-end">
-          {address && isConnected && (
+          {address && isConnected && isRoundedBalanceGreaterThanZero && (
             <button
               type="button"
               title="Use full balance"
@@ -175,7 +177,13 @@ function AmountField({
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setValues({ ...values, amount: value, direction })
+
+    if (typeof value === 'undefined') return
+    const val = `${value}`.replace(/,/g, '.')
+
+    if (inputRegex.test(escapeRegExp(val))) {
+      setValues({ ...values, amount: val, direction })
+    }
   }
 
   if (!isCurrentInput && isQuoteLoading) {
@@ -190,12 +198,11 @@ function AmountField({
 
   return (
     <input
-      value={isCurrentInput ? values.amount : quote}
+      value={isCurrentInput ? values.amount : toSignificant(quote)}
       name={`amount-${direction}`}
-      type="number"
       step="any"
       placeholder="0.00"
-      className="pt-1 text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="pt-1 truncate text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
