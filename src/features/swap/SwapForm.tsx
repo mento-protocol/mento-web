@@ -276,7 +276,7 @@ function SubmitButton() {
   const dispatch = useAppDispatch()
 
   const isAccountReady = address && isConnected
-  const isOnCelo = chains.some((chn) => chn.id === chain.id)
+  const isOnCelo = chains.some((chn) => chn.id === chain?.id)
 
   const switchToNetwork = async () => {
     try {
