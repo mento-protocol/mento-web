@@ -269,15 +269,42 @@ function SlippageRow() {
 
 function SubmitButton() {
   const { address, isConnected } = useAccount()
+  const { chain, chains } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
+  const dispatch = useAppDispatch()
+
   const isAccountReady = address && isConnected
+  const isOnCelo = chains.some((chn) => chn.id === chain.id)
+
+  const switchToNetwork = async () => {
+    try {
+      if (!switchNetworkAsync) throw new Error('switchNetworkAsync undefined')
+      logger.debug('Resetting and switching to Celo')
+      await switchNetworkAsync(42220)
+      dispatch(blockReset())
+      dispatch(accountReset())
+      dispatch(swapReset())
+      dispatch(resetTokenPrices())
+    } catch (error) {
+      logger.error('Error updating network', error)
+      toast.error('Could not switch network, does wallet support switching?')
+    }
+  }
 
   const { errors, touched } = useFormikContext<SwapFormValues>()
   const error =
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
-  const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
+  const text = error
+    ? error
+    : !isAccountReady
+    ? 'Connect Wallet'
+    : !isOnCelo
+    ? 'Switch to Celo Network'
+    : 'Continue'
+
   const type = isAccountReady ? 'submit' : 'button'
-  const onClick = isAccountReady ? undefined : openConnectModal
+  const onClick = isAccountReady ? (isOnCelo ? undefined : switchToNetwork) : openConnectModal
 
   const showLongError = typeof error === 'string' && error?.length > 50
 
