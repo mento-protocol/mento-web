@@ -6,7 +6,6 @@ import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { ChainId } from 'src/config/chains'
 import {
   TokenId,
   Tokens,
@@ -111,7 +110,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }, [quote, setFieldValue])
 
   useEffect(() => {
-    if ( chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id) ) {
+    if (chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id)) {
       setFieldValue(
         'toTokenId',
         swappableTokenOptions.length < 1 ? TokenId.cUSD : swappableTokenOptions[0]
