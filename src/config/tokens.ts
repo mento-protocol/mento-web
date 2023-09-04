@@ -134,8 +134,8 @@ export function isNativeStableToken(tokenId: string) {
   return NativeStableTokenIds.includes(tokenId as TokenId)
 }
 
-export function isSwappable(token_1: string, token_2: string, chainId: ChainId) {
-  const exchanges = MentoExchanges[chainId]
+export function isSwappable(token_1: string, token_2: string, chainId: number) {
+  const exchanges = MentoExchanges[chainId as ChainId]
 
   if (!exchanges) return false
 
