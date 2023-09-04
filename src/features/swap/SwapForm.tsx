@@ -1,23 +1,33 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { ReactNode, SVGProps, useEffect } from 'react'
+import { ReactNode, SVGProps, useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, Tokens, isNativeStableToken, isUSDCVariant } from 'src/config/tokens'
+import {
+  TokenId,
+  Tokens,
+  getSwappableTokenOptions,
+  getTokenOptionsByChainId,
+  isSwappable,
+} from 'src/config/tokens'
+import { reset as accountReset } from 'src/features/accounts/accountSlice'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
+import { reset as blockReset } from 'src/features/blocks/blockSlice'
+import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
-import { setFormValues } from 'src/features/swap/swapSlice'
+import { setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
 import { escapeRegExp, inputRegex } from 'src/utils/string'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
@@ -79,8 +89,17 @@ function SwapForm() {
 
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { address, isConnected } = useAccount()
+  const { chain } = useNetwork()
+
+  const tokensForChain = useMemo(() => {
+    return chain ? getTokenOptionsByChainId(chain?.id) : Object.values(TokenId)
+  }, [chain])
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+
+  const swappableTokenOptions = useMemo(() => {
+    return chain ? getSwappableTokenOptions(values.fromTokenId, chain?.id) : Object.values(TokenId)
+  }, [chain, values])
 
   const { amount, direction, fromTokenId, toTokenId } = values
 
@@ -89,6 +108,15 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   useEffect(() => {
     setFieldValue('quote', quote)
   }, [quote, setFieldValue])
+
+  useEffect(() => {
+    if (!isSwappable(values.fromTokenId, values.toTokenId, chain?.id) && isConnected) {
+      setFieldValue(
+        'toTokenId',
+        swappableTokenOptions.length < 1 ? TokenId.cUSD : swappableTokenOptions[0]
+      )
+    }
+  }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
@@ -101,28 +129,19 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
   const onChangeToken = (isFromToken: boolean) => (tokenId: string) => {
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
-    const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
-    if (isUSDCVariant(tokenId)) {
-      setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, TokenId.cUSD)
-    } else if (isNativeStableToken(tokenId)) {
-      setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, TokenId.CELO)
-    } else {
-      const currentTargetTokenId = values[targetField]
-      const stableTokenId = isNativeStableToken(currentTargetTokenId)
-        ? currentTargetTokenId
-        : TokenId.cUSD
-      setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, stableTokenId)
-    }
+    setFieldValue(targetField, tokenId)
   }
 
   return (
     <div className="flex flex-col gap-3">
       <TokenSelectFieldWrapper>
         <div className="flex items-center ">
-          <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
+          <TokenSelectField
+            name="fromTokenId"
+            label="From Token"
+            tokenOptions={tokensForChain}
+            onChange={onChangeToken(true)}
+          />
         </div>
         <div className="flex flex-col items-end">
           {address && isConnected && isRoundedBalanceGreaterThanZero && (
@@ -146,7 +165,12 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
       </div>
       <TokenSelectFieldWrapper>
         <div className="flex items-center">
-          <TokenSelectField name="toTokenId" label="To Token" onChange={onChangeToken(false)} />
+          <TokenSelectField
+            name="toTokenId"
+            label="To Token"
+            tokenOptions={swappableTokenOptions}
+            onChange={onChangeToken(false)}
+          />
         </div>
         <AmountField quote={quote} isQuoteLoading={isLoading} direction="out" />
       </TokenSelectFieldWrapper>
@@ -198,6 +222,7 @@ function AmountField({
 
   return (
     <input
+      autoComplete="off"
       value={isCurrentInput ? values.amount : toSignificant(quote)}
       name={`amount-${direction}`}
       step="any"
