@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { ReactNode, SVGProps, useEffect } from 'react'
+import { ReactNode, SVGProps, useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
@@ -26,6 +26,7 @@ const initialValues: SwapFormValues = {
   quote: '',
   direction: 'in',
   slippage: '1.0',
+  submitType: '',
 }
 
 export function SwapFormCard() {
@@ -54,8 +55,13 @@ function SwapForm() {
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
-    dispatch(setFormValues(values))
+    if (values.submitType == 'reverse') {
+      setFormValues(values)
+    } else {
+      dispatch(setFormValues(values))
+    }
   }
+
   const validateForm = useFormValidator(balances)
 
   return (
@@ -90,7 +96,10 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
     setFieldValue('quote', quote)
   }, [quote, setFieldValue])
 
-  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  const roundedBalance = useMemo(() => {
+    return fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  }, [balances, fromTokenId])
+
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
     setFieldValue('amount', fromWei(balances[fromTokenId]))
@@ -209,12 +218,16 @@ function AmountField({
 }
 
 function ReverseTokenButton() {
-  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const { values, setValues } = useFormikContext<SwapFormValues>()
   const { fromTokenId, toTokenId } = values
 
   const onClickReverse = () => {
-    setFieldValue('fromTokenId', toTokenId)
-    setFieldValue('toTokenId', fromTokenId)
+    setValues({
+      ...values,
+      toTokenId: fromTokenId,
+      fromTokenId: toTokenId,
+      submitType: 'reverse',
+    })
   }
 
   return (
@@ -252,7 +265,13 @@ function SubmitButton() {
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
-  const onClick = isAccountReady ? undefined : openConnectModal
+  const { setFieldValue } = useFormikContext<SwapFormValues>()
+  const onClick = () => {
+    if (isAccountReady) {
+      openConnectModal;
+      setFieldValue('submitType', 'continue');
+    }
+  };
 
   const showLongError = typeof error === 'string' && error?.length > 50
 

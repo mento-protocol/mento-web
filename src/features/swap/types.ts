@@ -9,6 +9,7 @@ export interface SwapFormValues {
   quote: number | string
   direction: SwapDirection
   slippage: string
+  submitType: string
 }
 
 export type ToCeloRates = Partial<Record<TokenId, ExchangeRate>>
