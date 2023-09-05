@@ -268,10 +268,10 @@ function SubmitButton() {
   const { setFieldValue } = useFormikContext<SwapFormValues>()
   const onClick = () => {
     if (isAccountReady) {
-      openConnectModal;
-      setFieldValue('submitType', 'continue');
+      openConnectModal
+      setFieldValue('submitType', 'continue')
     }
-  };
+  }
 
   const showLongError = typeof error === 'string' && error?.length > 50
 
