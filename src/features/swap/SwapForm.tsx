@@ -50,15 +50,17 @@ export function SwapFormCard() {
 }
 
 function SwapForm() {
+  const { isConnected } = useAccount()
   const balances = useAppSelector((s) => s.account.balances)
   const { showSlippage } = useAppSelector((s) => s.swap)
 
   const dispatch = useAppDispatch()
+
   const onSubmit = (values: SwapFormValues) => {
-    if (values.submitType == 'reverse') {
-      setFormValues(values)
-    } else {
+    if (values.submitType == 'continue' || !isConnected) {
       dispatch(setFormValues(values))
+    } else {
+      setFormValues(values)
     }
   }
 
