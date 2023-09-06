@@ -258,7 +258,7 @@ function SlippageRow() {
 function SubmitButton() {
   const { address, isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
-  console.log(isConnected)
+
   const isAccountReady = address && isConnected
 
   const { errors, touched } = useFormikContext<SwapFormValues>()
