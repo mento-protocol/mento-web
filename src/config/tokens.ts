@@ -64,7 +64,6 @@ export const axlUSDC: Token = Object.freeze({
   decimals: 6,
 })
 
-
 export const axlEUROC: Token = Object.freeze({
   id: TokenId.axlEUROC,
   symbol: TokenId.axlEUROC,
