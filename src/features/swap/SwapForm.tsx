@@ -266,12 +266,8 @@ function SubmitButton() {
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
   const { setFieldValue } = useFormikContext<SwapFormValues>()
-  const onClick = () => {
-    if (isAccountReady) {
-      openConnectModal
-      setFieldValue('submitType', 'continue')
-    }
-  }
+
+  const onClick = isAccountReady ? () => setFieldValue('submitType', 'continue') : openConnectModal
 
   const showLongError = typeof error === 'string' && error?.length > 50
 
