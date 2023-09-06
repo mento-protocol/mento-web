@@ -263,7 +263,9 @@ function SubmitButton() {
 
   const { errors, touched } = useFormikContext<SwapFormValues>()
   const error =
-    touched.amount && isAccountReady && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
+    touched.amount &&
+    isAccountReady &&
+    (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
   const { setFieldValue } = useFormikContext<SwapFormValues>()
