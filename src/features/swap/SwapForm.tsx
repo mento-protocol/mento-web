@@ -50,17 +50,15 @@ export function SwapFormCard() {
 }
 
 function SwapForm() {
-  const { isConnected } = useAccount()
   const balances = useAppSelector((s) => s.account.balances)
   const { showSlippage } = useAppSelector((s) => s.swap)
 
   const dispatch = useAppDispatch()
-
   const onSubmit = (values: SwapFormValues) => {
-    if (values.submitType == 'continue' || !isConnected) {
-      dispatch(setFormValues(values))
-    } else {
+    if (values.submitType == 'reverse') {
       setFormValues(values)
+    } else {
+      dispatch(setFormValues(values))
     }
   }
 
@@ -260,11 +258,12 @@ function SlippageRow() {
 function SubmitButton() {
   const { address, isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
+  console.log(isConnected)
   const isAccountReady = address && isConnected
 
   const { errors, touched } = useFormikContext<SwapFormValues>()
   const error =
-    touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
+    touched.amount && isAccountReady && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
   const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
   const type = isAccountReady ? 'submit' : 'button'
   const { setFieldValue } = useFormikContext<SwapFormValues>()
