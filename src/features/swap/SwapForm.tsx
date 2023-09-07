@@ -55,11 +55,7 @@ function SwapForm() {
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
-    if (values.submitType == 'reverse') {
-      setFormValues(values)
-    } else {
-      dispatch(setFormValues(values))
-    }
+    values.submitType === 'reverse' ? setFormValues(values) : dispatch(setFormValues(values))
   }
 
   const validateForm = useFormValidator(balances)
@@ -96,9 +92,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
     setFieldValue('quote', quote)
   }, [quote, setFieldValue])
 
-  const roundedBalance = useMemo(() => {
-    return fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
-  }, [balances, fromTokenId])
+  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
 
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
