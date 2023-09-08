@@ -295,18 +295,18 @@ function SubmitButton() {
 
   const error =
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
-  let text;
+  let text
 
-    if (error) {
-        text = error;
-    } else if (!isAccountReady) {
-        text = 'Connect Wallet';
-    } else if (!isOnCelo) {
-        text = 'Switch to Celo Network';
-    } else {
-        text = 'Continue';
-    }
-    
+  if (error) {
+    text = error
+  } else if (!isAccountReady) {
+    text = 'Connect Wallet'
+  } else if (!isOnCelo) {
+    text = 'Switch to Celo Network'
+  } else {
+    text = 'Continue'
+  }
+
   const type = isAccountReady ? 'submit' : 'button'
   const onClick = isAccountReady ? (isOnCelo ? undefined : switchToNetwork) : openConnectModal
 
