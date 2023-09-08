@@ -273,6 +273,7 @@ function SubmitButton() {
   const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
   const dispatch = useAppDispatch()
+  const { errors, touched } = useFormikContext<SwapFormValues>()
 
   const isAccountReady = address && isConnected
   const isOnCelo = chains.some((chn) => chn.id === chain?.id)
@@ -292,17 +293,20 @@ function SubmitButton() {
     }
   }
 
-  const { errors, touched } = useFormikContext<SwapFormValues>()
   const error =
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
-  const text = error
-    ? error
-    : !isAccountReady
-    ? 'Connect Wallet'
-    : !isOnCelo
-    ? 'Switch to Celo Network'
-    : 'Continue'
+  let text;
 
+    if (error) {
+        text = error;
+    } else if (!isAccountReady) {
+        text = 'Connect Wallet';
+    } else if (!isOnCelo) {
+        text = 'Switch to Celo Network';
+    } else {
+        text = 'Continue';
+    }
+    
   const type = isAccountReady ? 'submit' : 'button'
   const onClick = isAccountReady ? (isOnCelo ? undefined : switchToNetwork) : openConnectModal
 
