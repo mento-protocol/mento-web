@@ -308,7 +308,13 @@ function SubmitButton() {
   }
 
   const type = isAccountReady ? 'submit' : 'button'
-  const onClick = isAccountReady ? (isOnCelo ? undefined : switchToNetwork) : openConnectModal
+  let onClick
+
+  if (!isAccountReady) {
+    onClick = openConnectModal
+  } else if (!isOnCelo) {
+    onClick = switchToNetwork
+  }
 
   const showLongError = typeof error === 'string' && error?.length > 50
 
