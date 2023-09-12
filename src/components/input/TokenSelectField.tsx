@@ -1,15 +1,14 @@
 import { useField } from 'formik'
-import { useMemo } from 'react'
 import { ChevronIcon } from 'src/components/Chevron'
 import { Select } from 'src/components/input/Select'
-import { TokenId, getTokenById, getTokenOptionsByChainId } from 'src/config/tokens'
+import { TokenId, getTokenById } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
-import { useNetwork } from 'wagmi'
 
 type Props = {
   name: string
   label: string
   onChange?: (optionValue: string) => void
+  tokenOptions: TokenId[]
 }
 
 const DEFAULT_VALUE = {
@@ -17,13 +16,8 @@ const DEFAULT_VALUE = {
   value: '',
 }
 
-export function TokenSelectField({ name, label, onChange }: Props) {
+export function TokenSelectField({ name, label, onChange, tokenOptions }: Props) {
   const [field, , helpers] = useField<string>(name)
-
-  const { chain } = useNetwork()
-  const tokenOptions = useMemo(() => {
-    return chain ? getTokenOptionsByChainId(chain.id) : Object.values(TokenId)
-  }, [chain])
 
   const handleChange = (optionValue: string) => {
     helpers.setValue(optionValue || '')

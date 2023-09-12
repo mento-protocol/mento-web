@@ -40,8 +40,31 @@ export const AlfajoresExchanges: Exchange[] = [
       '0x87D61dA3d668797786D73BC674F053f87111570d',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x3e6d9109df536ba3f4c166e598bdfe132dca06573a54ca40c2b6f23ac6bd6cc6',
+    assets: [
+      '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
+      '0x87D61dA3d668797786D73BC674F053f87111570d',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0xcfaa6be9334ee54fda94f2cfdf4c8bc376f24ce008ab9559b2a06b9fc388e78c',
+    assets: [
+      '0xE4D517785D091D3c54818832dB6094bcc2744545',
+      '0x87D61dA3d668797786D73BC674F053f87111570d',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0xe807b1ebe8b57ac4e5c1b8d51fcf8e3b21e919fd788bab807886c4f446a74d37',
+    assets: [
+      '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
+      '0x6e673502c5b55F3169657C004e5797fFE5be6653',
+    ],
+  },
 ]
-
 export const BaklavaExchanges: Exchange[] = [
   {
     providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
@@ -75,8 +98,31 @@ export const BaklavaExchanges: Exchange[] = [
       '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
     ],
   },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x3e6d9109df536ba3f4c166e598bdfe132dca06573a54ca40c2b6f23ac6bd6cc6',
+    assets: [
+      '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
+      '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0xcfaa6be9334ee54fda94f2cfdf4c8bc376f24ce008ab9559b2a06b9fc388e78c',
+    assets: [
+      '0x6a0EEf2bed4C30Dc2CB42fe6c5f01F80f7EF16d1',
+      '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0xe807b1ebe8b57ac4e5c1b8d51fcf8e3b21e919fd788bab807886c4f446a74d37',
+    assets: [
+      '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
+      '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
+    ],
+  },
 ]
-
 export const CeloExchanges: Exchange[] = [
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
