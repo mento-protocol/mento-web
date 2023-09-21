@@ -77,7 +77,7 @@ export const eXOF: Token = Object.freeze({
   symbol: TokenId.eXOF,
   name: 'eXOF',
   color: Color.usdcBlue, // TODO: Change to EUROC
-  decimals: 6,
+  decimals: 18,
 })
 
 export const Tokens: Record<TokenId, Token> = {
