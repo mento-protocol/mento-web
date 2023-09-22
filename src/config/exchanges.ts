@@ -122,6 +122,22 @@ export const BaklavaExchanges: Exchange[] = [
       '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
     ],
   },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x269dcbdbc07fff1a4aaab9c7c03b3f629cd9bbed49aa0efebab874e4da1ffd07',
+    assets: [
+      '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
+      '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x66c5917862c8dc589e789d43752aa17ad251126276ce88ea20d89865e67bdabe',
+    assets: [
+      '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
+      '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
+    ],
+  },
 ]
 export const CeloExchanges: Exchange[] = [
   {
