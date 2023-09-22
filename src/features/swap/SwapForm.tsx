@@ -234,17 +234,21 @@ function AmountField({
 }
 
 function ReverseTokenButton() {
-  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const { values, setValues } = useFormikContext<SwapFormValues>()
   const { fromTokenId, toTokenId } = values
 
-  const onClickReverse = () => {
-    setFieldValue('fromTokenId', toTokenId)
-    setFieldValue('toTokenId', fromTokenId)
+  const onClickReverse = async () => {
+    setValues({
+      ...values,
+      toTokenId: fromTokenId,
+      fromTokenId: toTokenId,
+    })
   }
 
   return (
     <button
       title="Swap inputs"
+      type="button"
       onClick={onClickReverse}
       className="flex items-center justify-center rounded-full border h-[36px] w-[36px] border-primary-dark dark:border-none  dark:bg-[#545457] text-primary-dark dark:text-white"
     >
