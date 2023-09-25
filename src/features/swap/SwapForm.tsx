@@ -6,6 +6,7 @@ import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
+import { Celo } from 'src/config/chains'
 import {
   TokenId,
   Tokens,
@@ -92,13 +93,13 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { chain } = useNetwork()
 
   const tokensForChain = useMemo(() => {
-    return chain ? getTokenOptionsByChainId(chain?.id) : Object.values(TokenId)
+    return chain ? getTokenOptionsByChainId(chain?.id) : getTokenOptionsByChainId(Celo.chainId)
   }, [chain])
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
   const swappableTokenOptions = useMemo(() => {
-    return chain ? getSwappableTokenOptions(values.fromTokenId, chain?.id) : Object.values(TokenId)
+    return getSwappableTokenOptions(values.fromTokenId, chain ? chain?.id : Celo.chainId)
   }, [chain, values])
 
   const { amount, direction, fromTokenId, toTokenId } = values
