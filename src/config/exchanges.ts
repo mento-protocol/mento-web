@@ -64,6 +64,22 @@ export const AlfajoresExchanges: Exchange[] = [
       '0x6e673502c5b55F3169657C004e5797fFE5be6653',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x269dcbdbc07fff1a4aaab9c7c03b3f629cd9bbed49aa0efebab874e4da1ffd07',
+    assets: [
+      '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
+      '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x66c5917862c8dc589e789d43752aa17ad251126276ce88ea20d89865e67bdabe',
+    assets: [
+      '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
+      '0x6e673502c5b55F3169657C004e5797fFE5be6653',
+    ],
+  },
 ]
 export const BaklavaExchanges: Exchange[] = [
   {
