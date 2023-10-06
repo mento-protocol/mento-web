@@ -112,8 +112,8 @@ export function SwapConfirmCard({ formValues }: Props) {
     }
     const rateBN = new BigNumber(rate)
     if (
-      ((toTokenId || fromTokenId) !== 'eXOF' && rateBN.lt(MIN_EXCHANGE_RATE)) ||
-      rateBN.gt(MAX_EXCHANGE_RATE)
+      (toTokenId || fromTokenId) !== 'eXOF' &&
+      (rateBN.lt(MIN_EXCHANGE_RATE) || rateBN.gt(MAX_EXCHANGE_RATE))
     ) {
       toast.error('Rate seems incorrect')
       return
