@@ -12,14 +12,16 @@ This project uses Next.JS, React, Redux, Tailwind, Wagmi, and RainbowKit.
 
 ## Run Locally
 
-Install deps: `yarn`
-
-Start server: `yarn dev`
+1. Install deps: `yarn`
+1. Create a local `.env` from the example: `cp .env.example .env`
+1. Start server: `yarn dev`
+1. `open http://localhost:3000`
 
 ## Deploy
 
-Deployments happen automatically via Vercel's Github app after pushing branch updates.
-Production deployments for mento v1 trigger from the `production-v1` branch, and mento v2 from `production-v2`.
+- Deployments happen automatically via Vercel's Github app.
+- Every push into `main` is automatically deployed to app.mento.org
+- Deployment configuration can be changed by Mento Labs Team Members at <https://vercel.com/mentolabs/mento-web>
 
 ## Contribute
 
