@@ -1,7 +1,10 @@
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
+import Decimal from 'decimal.js-light'
+import JSBI from 'jsbi'
 import { DISPLAY_DECIMALS, MIN_ROUNDED_VALUE, STANDARD_TOKEN_DECIMALS } from 'src/config/consts'
 import { logger } from 'src/utils/logger'
+import toFormat from 'toformat'
 
 export type NumberT = BigNumber.Value
 
@@ -104,4 +107,26 @@ export const toFixidity = (n: BigNumber.Value) => {
 // Keeps the decimal portion
 export const fromFixidity = (f: BigNumber.Value) => {
   return new BigNumber(f).div(fixed1)
+}
+
+const getDecimal = () => {
+  return toFormat(Decimal)
+}
+
+export const toSignificant = (
+  amount: string,
+  significantDigits = 6,
+  format: object = { groupSeparator: '' }
+  // rounding = 0
+): string => {
+  const Decimal = getDecimal().set({
+    precision: significantDigits + 1,
+    rounding: 0,
+  })
+
+  const quotient = new Decimal(amount)
+
+    .div(JSBI.BigInt(1).toString())
+    .toSignificantDigits(significantDigits)
+  return quotient.toFormat(quotient.decimalPlaces(), format)
 }

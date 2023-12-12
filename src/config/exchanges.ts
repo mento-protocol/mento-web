@@ -40,8 +40,47 @@ export const AlfajoresExchanges: Exchange[] = [
       '0x87D61dA3d668797786D73BC674F053f87111570d',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x3e6d9109df536ba3f4c166e598bdfe132dca06573a54ca40c2b6f23ac6bd6cc6',
+    assets: [
+      '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
+      '0x87D61dA3d668797786D73BC674F053f87111570d',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0xcfaa6be9334ee54fda94f2cfdf4c8bc376f24ce008ab9559b2a06b9fc388e78c',
+    assets: [
+      '0xE4D517785D091D3c54818832dB6094bcc2744545',
+      '0x87D61dA3d668797786D73BC674F053f87111570d',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0xe807b1ebe8b57ac4e5c1b8d51fcf8e3b21e919fd788bab807886c4f446a74d37',
+    assets: [
+      '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
+      '0x6e673502c5b55F3169657C004e5797fFE5be6653',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x269dcbdbc07fff1a4aaab9c7c03b3f629cd9bbed49aa0efebab874e4da1ffd07',
+    assets: [
+      '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
+      '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x66c5917862c8dc589e789d43752aa17ad251126276ce88ea20d89865e67bdabe',
+    assets: [
+      '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
+      '0x6e673502c5b55F3169657C004e5797fFE5be6653',
+    ],
+  },
 ]
-
 export const BaklavaExchanges: Exchange[] = [
   {
     providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
@@ -75,8 +114,47 @@ export const BaklavaExchanges: Exchange[] = [
       '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
     ],
   },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x3e6d9109df536ba3f4c166e598bdfe132dca06573a54ca40c2b6f23ac6bd6cc6',
+    assets: [
+      '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
+      '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0xcfaa6be9334ee54fda94f2cfdf4c8bc376f24ce008ab9559b2a06b9fc388e78c',
+    assets: [
+      '0x6a0EEf2bed4C30Dc2CB42fe6c5f01F80f7EF16d1',
+      '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0xe807b1ebe8b57ac4e5c1b8d51fcf8e3b21e919fd788bab807886c4f446a74d37',
+    assets: [
+      '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
+      '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x269dcbdbc07fff1a4aaab9c7c03b3f629cd9bbed49aa0efebab874e4da1ffd07',
+    assets: [
+      '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
+      '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x66c5917862c8dc589e789d43752aa17ad251126276ce88ea20d89865e67bdabe',
+    assets: [
+      '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
+      '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
+    ],
+  },
 ]
-
 export const CeloExchanges: Exchange[] = [
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
@@ -108,6 +186,46 @@ export const CeloExchanges: Exchange[] = [
     assets: [
       '0x765DE816845861e75A25fCA122bb6898B8B1282a',
       '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xf418803158d881fda22694067bf6479476cec22ecfeeca2f6a65a6259bdbb9c0',
+    assets: [
+      '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
+      '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x40c8472edd23f2976b0503db2692e8f06f0eb52db690e84697cad36a6b44e2df',
+    assets: [
+      '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
+      '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xfca6d94b46122eb9a4b86cf9d3e1e856fea8a826d0fc26c5baf17c43fbaf0f48',
+    assets: [
+      '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
+      '0x061cc5a2C863E0C1Cb404006D559dB18A34C762d',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x269dcbdbc07fff1a4aaab9c7c03b3f629cd9bbed49aa0efebab874e4da1ffd07',
+    assets: [
+      '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
+      '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xcc68743c58a31c4ec3c56bca3d579409b4e2424e5f37e54a85f917b22af74e7c',
+    assets: [
+      '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
+      '0x061cc5a2C863E0C1Cb404006D559dB18A34C762d',
     ],
   },
 ]

@@ -1,28 +1,40 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { ReactNode, SVGProps, useCallback } from 'react'
+import { ReactNode, SVGProps, useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
-import { TokenId, Tokens, isNativeStableToken, isUSDCVariant } from 'src/config/tokens'
+import { Celo } from 'src/config/chains'
+import {
+  TokenId,
+  Tokens,
+  getSwappableTokenOptions,
+  getTokenOptionsByChainId,
+  isSwappable,
+} from 'src/config/tokens'
+import { reset as accountReset } from 'src/features/accounts/accountSlice'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
+import { reset as blockReset } from 'src/features/blocks/blockSlice'
+import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
-import { setFormValues } from 'src/features/swap/swapSlice'
+import { setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { fromWeiRounded } from 'src/utils/amount'
-import { useTimeout } from 'src/utils/timeout'
-import { useAccount } from 'wagmi'
+import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
+import { escapeRegExp, inputRegex } from 'src/utils/string'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
   toTokenId: TokenId.cUSD,
   amount: '',
+  quote: '',
   direction: 'in',
   slippage: '1.0',
 }
@@ -35,7 +47,7 @@ export function SwapFormCard() {
       classes="overflow-visible border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
     >
       <div className="flex justify-between border-b border-primary-dark dark:border-[#333336] p-6">
-        <h2 className=" text-[32px] leading-10 font-fg font-medium text-primary-dark dark:text-clean-white ">
+        <h2 className="text-[32px] leading-10 font-fg font-medium text-primary-dark dark:text-white">
           Swap
         </h2>
         <SettingsMenu />
@@ -62,7 +74,7 @@ function SwapForm() {
       initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validateForm}
-      validateOnChange={false}
+      validateOnChange={true}
       validateOnBlur={false}
     >
       <Form>
@@ -78,15 +90,39 @@ function SwapForm() {
 
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { address, isConnected } = useAccount()
+  const { chain } = useNetwork()
+
+  const tokensForChain = useMemo(() => {
+    return chain ? getTokenOptionsByChainId(chain?.id) : getTokenOptionsByChainId(Celo.chainId)
+  }, [chain])
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+
+  const swappableTokenOptions = useMemo(() => {
+    return getSwappableTokenOptions(values.fromTokenId, chain ? chain?.id : Celo.chainId)
+  }, [chain, values])
+
   const { amount, direction, fromTokenId, toTokenId } = values
 
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
+  useEffect(() => {
+    setFieldValue('quote', quote)
+  }, [quote, setFieldValue])
+
+  useEffect(() => {
+    if (chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id)) {
+      setFieldValue(
+        'toTokenId',
+        swappableTokenOptions.length < 1 ? TokenId.cUSD : swappableTokenOptions[0]
+      )
+    }
+  }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
+
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
-    setFieldValue('amount', roundedBalance)
+    setFieldValue('amount', fromWei(balances[fromTokenId]))
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
@@ -94,31 +130,22 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
   const onChangeToken = (isFromToken: boolean) => (tokenId: string) => {
     const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
-    const otherField = isFromToken ? 'toTokenId' : 'fromTokenId'
-    if (isUSDCVariant(tokenId)) {
-      setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, TokenId.cUSD)
-    } else if (isNativeStableToken(tokenId)) {
-      setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, TokenId.CELO)
-    } else {
-      const currentTargetTokenId = values[targetField]
-      const stableTokenId = isNativeStableToken(currentTargetTokenId)
-        ? currentTargetTokenId
-        : TokenId.cUSD
-      setFieldValue(targetField, tokenId)
-      setFieldValue(otherField, stableTokenId)
-    }
+    setFieldValue(targetField, tokenId)
   }
 
   return (
     <div className="flex flex-col gap-3">
       <TokenSelectFieldWrapper>
         <div className="flex items-center ">
-          <TokenSelectField name="fromTokenId" label="From Token" onChange={onChangeToken(true)} />
+          <TokenSelectField
+            name="fromTokenId"
+            label="From Token"
+            tokenOptions={tokensForChain}
+            onChange={onChangeToken(true)}
+          />
         </div>
         <div className="flex flex-col items-end">
-          {address && isConnected && (
+          {address && isConnected && isRoundedBalanceGreaterThanZero && (
             <button
               type="button"
               title="Use full balance"
@@ -139,7 +166,12 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
       </div>
       <TokenSelectFieldWrapper>
         <div className="flex items-center">
-          <TokenSelectField name="toTokenId" label="To Token" onChange={onChangeToken(false)} />
+          <TokenSelectField
+            name="toTokenId"
+            label="To Token"
+            tokenOptions={swappableTokenOptions}
+            onChange={onChangeToken(false)}
+          />
         </div>
         <AmountField quote={quote} isQuoteLoading={isLoading} direction="out" />
       </TokenSelectFieldWrapper>
@@ -149,7 +181,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
 const TokenSelectFieldWrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex items-center justify-between pl-[5px] py-[5px] pr-[20px] rounded-xl bg-clean-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
+    <div className="flex items-center justify-between pl-[5px] py-[5px] pr-[20px] rounded-xl bg-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
       {children}
     </div>
   )
@@ -170,7 +202,13 @@ function AmountField({
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setValues({ ...values, amount: value, direction })
+
+    if (typeof value === 'undefined') return
+    const val = `${value}`.replace(/,/g, '.')
+
+    if (inputRegex.test(escapeRegExp(val))) {
+      setValues({ ...values, amount: val, direction })
+    }
   }
 
   if (!isCurrentInput && isQuoteLoading) {
@@ -185,45 +223,45 @@ function AmountField({
 
   return (
     <input
-      value={isCurrentInput ? values.amount : quote}
+      autoComplete="off"
+      value={isCurrentInput ? values.amount : toSignificant(quote)}
       name={`amount-${direction}`}
-      type="number"
       step="any"
       placeholder="0.00"
-      className="pt-1 text-[20px] dark:text-clean-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
+      className="pt-1 truncate text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
   )
 }
 
 function ReverseTokenButton() {
-  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const { values, setValues } = useFormikContext<SwapFormValues>()
   const { fromTokenId, toTokenId } = values
 
-  const onClickReverse = () => {
-    setFieldValue('fromTokenId', toTokenId)
-    setFieldValue('toTokenId', fromTokenId)
+  const onClickReverse = async () => {
+    setValues({
+      ...values,
+      toTokenId: fromTokenId,
+      fromTokenId: toTokenId,
+    })
   }
 
   return (
     <button
       title="Swap inputs"
+      type="button"
       onClick={onClickReverse}
-      className="flex items-center justify-center rounded-full border h-[36px] w-[36px] border-primary-dark dark:border-none  dark:bg-[#545457] text-primary-dark dark:text-clean-white"
+      className="flex items-center justify-center rounded-full border h-[36px] w-[36px] border-primary-dark dark:border-none  dark:bg-[#545457] text-primary-dark dark:text-white"
     >
       <DownArrow />
     </button>
   )
 }
 
-// function FieldDividerLine() {
-//   return <div className="w-px h-12 ml-3 bg-gray-300"></div>
-// }
-
 function SlippageRow() {
   return (
     <div
-      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-clean-white px-[5px] font-medium"
+      className="relative flex items-center justify-between my-6 text-sm space-x-7 dark:text-white px-[5px] font-medium"
       role="group"
     >
       <div>Max Slippage:</div>
@@ -236,28 +274,64 @@ function SlippageRow() {
 
 function SubmitButton() {
   const { address, isConnected } = useAccount()
+  const { chain, chains } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
-  const isAccountReady = address && isConnected
+  const dispatch = useAppDispatch()
+  const { errors, touched } = useFormikContext<SwapFormValues>()
 
-  const { errors, setErrors, touched, setTouched } = useFormikContext<SwapFormValues>()
+  const isAccountReady = address && isConnected
+  const isOnCelo = chains.some((chn) => chn.id === chain?.id)
+
+  const switchToNetwork = async () => {
+    try {
+      if (!switchNetworkAsync) throw new Error('switchNetworkAsync undefined')
+      logger.debug('Resetting and switching to Celo')
+      await switchNetworkAsync(42220)
+      dispatch(blockReset())
+      dispatch(accountReset())
+      dispatch(swapReset())
+      dispatch(resetTokenPrices())
+    } catch (error) {
+      logger.error('Error updating network', error)
+      toast.error('Could not switch network, does wallet support switching?')
+    }
+  }
+
   const error =
     touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
-  const text = error ? error : isAccountReady ? 'Continue' : 'Connect Wallet'
+  let text
+
+  if (error) {
+    text = error
+  } else if (!isAccountReady) {
+    text = 'Connect Wallet'
+  } else if (!isOnCelo) {
+    text = 'Switch to Celo Network'
+  } else {
+    text = 'Continue'
+  }
+
   const type = isAccountReady ? 'submit' : 'button'
-  const onClick = isAccountReady ? undefined : openConnectModal
+  let onClick
 
-  const clearErrors = useCallback(() => {
-    setErrors({})
-    setTouched({})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setErrors, setTouched, errors, touched])
+  if (!isAccountReady) {
+    onClick = openConnectModal
+  } else if (!isOnCelo) {
+    onClick = switchToNetwork
+  }
 
-  useTimeout(clearErrors, 3000)
+  const showLongError = typeof error === 'string' && error?.length > 50
 
   return (
-    <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
-      {text}
-    </Button3D>
+    <div className="flex flex-col w-full items-center justify-center">
+      {showLongError ? (
+        <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{error}</div>
+      ) : null}
+      <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
+        {showLongError ? 'Error' : text}
+      </Button3D>
+    </div>
   )
 }
 

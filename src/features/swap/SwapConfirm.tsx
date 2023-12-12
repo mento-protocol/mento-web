@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
-// import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { TokenId, Tokens } from 'src/config/tokens'
@@ -19,7 +18,7 @@ import { getMaxSellAmount, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
-import { fromWeiRounded, getAdjustedAmount } from 'src/utils/amount'
+import { fromWeiRounded, getAdjustedAmount, toSignificant } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useAccount, useChainId } from 'wagmi'
 
@@ -112,7 +111,10 @@ export function SwapConfirmCard({ formValues }: Props) {
       return
     }
     const rateBN = new BigNumber(rate)
-    if (rateBN.lt(MIN_EXCHANGE_RATE) || rateBN.gt(MAX_EXCHANGE_RATE)) {
+
+    // ignore eXOF for now until we have a better way to handle it
+    const tradeHasEXOF = toTokenId === 'eXOF' || fromTokenId === 'eXOF'
+    if (!tradeHasEXOF && (rateBN.lt(MIN_EXCHANGE_RATE) || rateBN.gt(MAX_EXCHANGE_RATE))) {
       toast.error('Rate seems incorrect')
       return
     }
@@ -165,24 +167,24 @@ export function SwapConfirmCard({ formValues }: Props) {
 
   return (
     <FloatingBox
-      width="w-[432px]"
+      width="w-screen md:w-[432px] "
       padding="p-0"
       classes="border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]"
     >
       <div className="flex justify-between p-6  border-b border-primary-dark dark:border-[#333336]">
         <button
           onClick={onClickBack}
-          className="group h-[36px] w-[36px] flex items-center justify-center dark:bg-[#545457]  dark:text-clean-white rounded-full border border-primary-dark dark:border-transparent"
+          className="group h-[36px] w-[36px] flex items-center justify-center dark:bg-[#545457]  dark:text-white rounded-full border border-primary-dark dark:border-transparent"
         >
           <BackArrow className="transform transition-all duration-300 ease-in-out group-hover:-translate-x-[2px]" />
         </button>
 
-        <h2 className="text-[32px] dark:text-clean-white leading-[40px] font-fg font-medium">
+        <h2 className="text-[32px] dark:text-white leading-[40px] font-fg font-medium">
           Confirm Swap
         </h2>
         <button
           onClick={onClickRefresh}
-          className="h-[36px] w-[36px] flex items-center justify-center transform hover:rotate-90 transition-transform duration-500 ease-in-out dark:bg-[#545457]  dark:text-clean-white rounded-full border border-primary-dark dark:border-transparent"
+          className="h-[36px] w-[36px] flex items-center justify-center transform hover:rotate-90 transition-transform duration-500 ease-in-out dark:bg-[#545457]  dark:text-white rounded-full border border-primary-dark dark:border-transparent"
         >
           <RefreshSpinner />
         </button>
@@ -198,14 +200,14 @@ export function SwapConfirmCard({ formValues }: Props) {
           <div className="w-32 text-right text-[#636768] dark:text-[#AAB3B6] mr-6">
             Max Slippage:
           </div>
-          <div className="w-32 pr-4 text-right dark:text-clean-white">{`${slippage}%`}</div>
+          <div className="w-32 pr-4 text-right dark:text-white">{`${slippage}%`}</div>
         </div>
         <div className="w-full border-b border-[#E5E7E9]  dark:border-[#303033]" />
         <div className="flex items-center justify-between w-full py-4 mx-6">
           <div className="w-32 text-[#636768] dark:text-[#AAB3B6] text-right mr-6">
             {direction === 'in' ? 'Min Received:' : 'Max Sold'}
           </div>
-          <div className="w-32 pr-4 text-right dark:text-clean-white">{thresholdAmount}</div>
+          <div className="w-32 pr-4 text-right dark:text-white">{thresholdAmount}</div>
         </div>
       </div>
 
@@ -238,15 +240,15 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
 
   return (
     <div className="dark:bg-[#18181B] bg-[#EFF1F3] rounded-xl mt-6 mx-6 ">
-      <div className="relative flex items-center gap-3 rounded-xl justify-between bg-clean-white border border-[#E5E7E9] dark:border-transparent dark:bg-[#303033]  p-[5px]">
+      <div className="relative flex items-center gap-3 rounded-xl justify-between bg-white border border-[#E5E7E9] dark:border-transparent dark:bg-[#303033]  p-[5px]">
         <div className="flex flex-1 items-center pl-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="my-[15px]">
             <TokenIcon size="l" token={fromToken} />
           </div>
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{fromToken.symbol}</div>
-            <div className="text-lg font-semibold leading-6 text-center dark:text-clean-white">
-              {from.amount}
+            <div className="text-lg font-semibold leading-6 text-center dark:text-white">
+              {toSignificant(from.amount)}
             </div>
           </div>
         </div>
@@ -256,8 +258,8 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
         <div className="flex flex-1 items-center pr-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{toToken.symbol}</div>
-            <div className="text-lg font-semibold leading-6 text-center dark:text-clean-white">
-              {to.amount || '0'}
+            <div className="text-lg font-semibold leading-6 text-center dark:text-white">
+              {toSignificant(to.amount) || '0'}
             </div>
           </div>
           <div className="my-[15px]">
@@ -309,21 +311,6 @@ const MentoLogoLoader = () => {
     </>
   )
 }
-
-// function BasicSpinner() {
-//   const { connector } = useAccount()
-//   return (
-//     <div className="flex flex-col items-center justify-center my-6">
-//       <Spinner />
-//       <div className="mt-5 text-sm text-center text-gray-500">
-//         Sending two transactions: Approve and Swap
-//       </div>
-//       <div className="mt-3 text-sm text-center text-gray-500">{`Sign with ${
-//         connector?.name || 'wallet'
-//       } to proceed`}</div>
-//     </div>
-//   )
-// }
 
 const BackArrow = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={7} height={12} fill="none" {...props}>

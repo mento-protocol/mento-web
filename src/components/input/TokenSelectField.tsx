@@ -1,15 +1,14 @@
 import { useField } from 'formik'
-import { useMemo } from 'react'
 import { ChevronIcon } from 'src/components/Chevron'
 import { Select } from 'src/components/input/Select'
-import { TokenId, getTokenById, getTokenOptionsByChainId } from 'src/config/tokens'
+import { TokenId, getTokenById } from 'src/config/tokens'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
-import { useNetwork } from 'wagmi'
 
 type Props = {
   name: string
   label: string
   onChange?: (optionValue: string) => void
+  tokenOptions: TokenId[]
 }
 
 const DEFAULT_VALUE = {
@@ -17,13 +16,8 @@ const DEFAULT_VALUE = {
   value: '',
 }
 
-export function TokenSelectField({ name, label, onChange }: Props) {
+export function TokenSelectField({ name, label, onChange, tokenOptions }: Props) {
   const [field, , helpers] = useField<string>(name)
-
-  const { chain } = useNetwork()
-  const tokenOptions = useMemo(() => {
-    return chain ? getTokenOptionsByChainId(chain.id) : Object.values(TokenId)
-  }, [chain])
 
   const handleChange = (optionValue: string) => {
     helpers.setValue(optionValue || '')
@@ -45,14 +39,14 @@ export function TokenSelectField({ name, label, onChange }: Props) {
 function TokenButton(tokenId: string, buttonLabel?: string) {
   const token = getTokenById(tokenId)
   return (
-    <div className="flex items-center p-1 transition-all rounded-lg border-[1px] min-w-[180px] border-solid border-black dark:border-[#636366] py-3 pl-3 pr-4 dark:bg-[#404043]">
+    <div className="flex items-center p-1 transition-all rounded-lg border min-w-[180px] border-solid border-black dark:border-[#636366] py-3 pl-3 pr-4 dark:bg-[#404043]">
       <TokenIcon size="l" token={token} />
       <div className="ml-3">
-        <label className="text-xs text-gray-400 cursor-pointer dark:text-clean-white">
+        <label className="text-xs text-gray-400 cursor-pointer dark:text-white">
           {buttonLabel || DEFAULT_VALUE.label}
         </label>
         <div className="flex items-center font-semibold">
-          <div className="dark:text-clean-white">{token?.symbol || DEFAULT_VALUE.value}</div>
+          <div className="dark:text-white">{token?.symbol || DEFAULT_VALUE.value}</div>
           <div className="ml-1">
             <ChevronIcon direction="s" width={12} height={6} />
           </div>

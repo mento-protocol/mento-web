@@ -1734,7 +1734,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.29.14
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
-    "@types/classnames": ^2.3.1
+    "@types/big.js": ^6.2.0
     "@types/jest": ^29.5.2
     "@types/node": ^18.15.11
     "@types/react": ^18.2.12
@@ -1744,8 +1744,9 @@ __metadata:
     "@typescript-eslint/parser": ^5.59.11
     "@vercel/analytics": ^1.0.1
     autoprefixer: ^10.4.14
+    big.js: ^6.2.1
     bignumber.js: ^9.1.1
-    classnames: ^2.3.2
+    decimal.js-light: ^2.5.1
     eslint: ^8.43.0
     eslint-config-next: ^13.4.6
     eslint-config-prettier: ^8.8.0
@@ -1753,6 +1754,7 @@ __metadata:
     formik: 2.2.9
     frappe-charts: ^1.6.2
     jest: ^29.5.0
+    jsbi: ^4.3.0
     lottie-react: ^2.4.0
     next: 13.4.6
     postcss: ^8.4.24
@@ -1762,6 +1764,7 @@ __metadata:
     react-redux: ^8.1.0
     react-toastify: ^9.1.3
     tailwindcss: ^3.3.2
+    toformat: ^2.0.0
     ts-jest: ^29.1.0
     ts-node: ^10.9.1
     typescript: ^5.1.3
@@ -2631,6 +2634,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/big.js@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@types/big.js@npm:6.2.0"
+  checksum: 69216051378559083453eb89ff63c70300928ebe3e5ccf2af98be39cdce1591d206a2206f1b3b97234b281646b54ded4c7bdf67fa4e383dccd278d129694af67
+  languageName: node
+  linkType: hard
+
 "@types/chrome@npm:^0.0.136":
   version: 0.0.136
   resolution: "@types/chrome@npm:0.0.136"
@@ -2638,15 +2648,6 @@ __metadata:
     "@types/filesystem": "*"
     "@types/har-format": "*"
   checksum: af96fdc79fb019d827fdb6269f831921f8f36215ee05a2624436dd2ad4d84d7be12333cc6f54912fb8bae0ca49cbfde5a78de94723bfbd20d309d2e71e274a1b
-  languageName: node
-  linkType: hard
-
-"@types/classnames@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "@types/classnames@npm:2.3.1"
-  dependencies:
-    classnames: "*"
-  checksum: 09a17ea08fcb83380921efdfdac94cfa162f87025cae0bf6f4ba508c2fa5f436459ce7612905a3f968fdddb68c03b8e6ff08e762ed2d0c110c5c4fceb244dc55
   languageName: node
   linkType: hard
 
@@ -4194,6 +4195,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"big.js@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "big.js@npm:6.2.1"
+  checksum: 0b234a2fd56c52bed2798ed2020bcab6fef5e9523b99a05406ad071d1aed6ee97ada9fb8de9576092da74c68825c276e19015743b8d1baea269b60a5c666b0cd
+  languageName: node
+  linkType: hard
+
 "bigint-buffer@npm:^1.1.5":
   version: 1.1.5
   resolution: "bigint-buffer@npm:1.1.5"
@@ -4572,13 +4580,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:*, classnames@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "classnames@npm:2.3.2"
-  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
-  languageName: node
-  linkType: hard
-
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -4882,6 +4883,13 @@ __metadata:
   version: 1.2.0
   resolution: "decamelize@npm:1.2.0"
   checksum: ad8c51a7e7e0720c70ec2eeb1163b66da03e7616d7b98c9ef43cce2416395e84c1e9548dd94f5f6ffecfee9f8b94251fc57121a8b021f2ff2469b2bae247b8aa
+  languageName: node
+  linkType: hard
+
+"decimal.js-light@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "decimal.js-light@npm:2.5.1"
+  checksum: f5a2c7eac1c4541c8ab8a5c8abea64fc1761cefc7794bd5f8afd57a8a78d1b51785e0c4e4f85f4895a043eaa90ddca1edc3981d1263eb6ddce60f32bf5fe66c9
   languageName: node
   linkType: hard
 
@@ -7577,6 +7585,13 @@ __metadata:
   bin:
     js-yaml: bin/js-yaml.js
   checksum: c7830dfd456c3ef2c6e355cc5a92e6700ceafa1d14bba54497b34a99f0376cecbb3e9ac14d3e5849b426d5a5140709a66237a8c991c675431271c4ce5504151a
+  languageName: node
+  linkType: hard
+
+"jsbi@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "jsbi@npm:4.3.0"
+  checksum: 27c4f178eb7fd9d1756144066fdebc62f4a0176e877f55e646e8ce84075c13551bd575a316b9959ccdcca9d5dc05a81c9907cfa09f0cfeb43c9777797e36b0e9
   languageName: node
   linkType: hard
 
@@ -10338,6 +10353,13 @@ __metadata:
   dependencies:
     is-number: ^7.0.0
   checksum: f76fa01b3d5be85db6a2a143e24df9f60dd047d151062d0ba3df62953f2f697b16fe5dad9b0ac6191c7efc7b1d9dcaa4b768174b7b29da89d4428e64bc0a20ed
+  languageName: node
+  linkType: hard
+
+"toformat@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "toformat@npm:2.0.0"
+  checksum: c75341911a811a85c309e2c3eb8e9c7b60f26e2c629170179fc92ed339a2faf44433ebde75d4ac6dbe6f55a2aa044e1d4cd5242dbdd5e4c047babbe6defd8387
   languageName: node
   linkType: hard
 
