@@ -154,7 +154,32 @@ export const BaklavaExchanges: Exchange[] = [
       '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
     ],
   },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0xd8573fd7c4151f38cde9b2349a26a6bb03be4b3791105bc625731ad2d71c54ba',
+    assets: [
+      '0x62492A644A588FD904270BeD06ad52B9abfEA1aE',
+      '0xB407D37d76c417B6343310D42611FCA106B2abB8',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x3839dd748e34fa87f5cd928e10d3e0ecafd9230ac9932c6cb2b0d5a358b72618',
+    assets: [
+      '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
+      '0xB407D37d76c417B6343310D42611FCA106B2abB8',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0xbfd96ed0ed5098d2b2bff8b9d8423dc47001fccf2391ee6e532618ef79c12075',
+    assets: [
+      '0x6a0EEf2bed4C30Dc2CB42fe6c5f01F80f7EF16d1',
+      '0xB407D37d76c417B6343310D42611FCA106B2abB8',
+    ],
+  },
 ]
+
 export const CeloExchanges: Exchange[] = [
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
