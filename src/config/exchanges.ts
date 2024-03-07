@@ -80,6 +80,30 @@ export const AlfajoresExchanges: Exchange[] = [
       '0x6e673502c5b55F3169657C004e5797fFE5be6653',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7',
+    assets: [
+      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
+      '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x99be8b8341ba00914600cda701568ab27eea9aca7a32fa48c26e07b86841020c',
+    assets: [
+      '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
+      '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0xe8693b17c0f002f6a2fe839525557cef10dfeacef9e16c9bbdcb01c57933ce58',
+    assets: [
+      '0xE4D517785D091D3c54818832dB6094bcc2744545',
+      '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
+    ],
+  },
 ]
 export const BaklavaExchanges: Exchange[] = [
   {
