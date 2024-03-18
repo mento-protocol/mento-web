@@ -277,6 +277,30 @@ export const CeloExchanges: Exchange[] = [
       '0x061cc5a2C863E0C1Cb404006D559dB18A34C762d',
     ],
   },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x99be8b8341ba00914600cda701568ab27eea9aca7a32fa48c26e07b86841020c',
+    assets: [
+      '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
+      '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0xe8693b17c0f002f6a2fe839525557cef10dfeacef9e16c9bbdcb01c57933ce58',
+    assets: [
+      '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
+      '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+    ],
+  },
 ]
 
 export const MentoExchanges: Record<ChainId, Array<Exchange>> = {
