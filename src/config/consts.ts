@@ -12,8 +12,6 @@ export const SIGN_OPERATION_TIMEOUT = 90000 // 90 seconds
 export const STALE_TOKEN_PRICE_TIME = 900000 // 15 minutes
 export const MAX_TOKEN_PRICE_NUM_DAYS = 14 // 14 days
 
-export const MAX_EXCHANGE_TOKEN_SIZE = '100000000000000000000000' // 100,000 Tokens
-
 export const MAX_FEE_SIZE = '1000000000000000000' // 1 Token
 export const MAX_GAS_PRICE = '5000000000' // 5 Gwei
 export const MAX_GAS_LIMIT = '10000000' // 10 million
