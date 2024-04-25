@@ -6,7 +6,7 @@ import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { Button3D } from 'src/components/buttons/3DButton'
-import { MAX_EXCHANGE_RATE, MAX_EXCHANGE_TOKEN_SIZE, MIN_EXCHANGE_RATE } from 'src/config/consts'
+import { MAX_EXCHANGE_RATE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setFormValues } from 'src/features/swap/swapSlice'
@@ -106,10 +106,6 @@ export function SwapConfirmCard({ formValues }: Props) {
 
   const onSubmit = async () => {
     if (!rate || !amountWei || !address || !isConnected) return
-    if (new BigNumber(amountWei).gt(MAX_EXCHANGE_TOKEN_SIZE)) {
-      toast.error('Amount exceeds limit')
-      return
-    }
     const rateBN = new BigNumber(rate)
 
     // ignore eXOF for now until we have a better way to handle it
