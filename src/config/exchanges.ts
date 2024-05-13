@@ -202,6 +202,14 @@ export const BaklavaExchanges: Exchange[] = [
       '0xB407D37d76c417B6343310D42611FCA106B2abB8',
     ],
   },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    assets: [
+      '0x62492A644A588FD904270BeD06ad52B9abfEA1aE',
+      '0x8813Ae180017057d0Cf98C930cED1E7101B97370',
+    ],
+  },
 ]
 
 export const CeloExchanges: Exchange[] = [
