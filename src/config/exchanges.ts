@@ -104,7 +104,16 @@ export const AlfajoresExchanges: Exchange[] = [
       '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    assets: [
+      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
+      '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
+    ],
+  },
 ]
+
 export const BaklavaExchanges: Exchange[] = [
   {
     providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
