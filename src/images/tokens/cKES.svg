@@ -1,17 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
-	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-]>
-<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" viewBox="113 0 616 595.28" enable-background="new 113 0 616 595.28" xml:space="preserve">
-<g>
-	<polygon points="542.863,487.081 602.685,487.081 440.506,235.311 566.075,108.199 466.872,108.199 317.198,257.247 
-		317.198,108.199 239.315,108.199 239.315,487.081 317.198,487.081 317.198,360.13 345.291,331.687 445.301,487.081 
-		505.126,487.081 381.523,295.018 404.23,272.02 	"/>
-</g>
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="500" height="500" fill="#A5E5F7"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M194.252 159.008C145.667 175.749 110.762 221.868 110.762 276.139C110.762 344.544 166.215 399.998 234.62 399.998C288.455 399.998 334.268 365.652 351.342 317.677H314.518C299.506 346.494 269.361 366.171 234.62 366.171C184.897 366.171 144.588 325.862 144.588 276.139C144.588 240.93 164.799 210.442 194.252 195.642V159.008Z" fill="black"/>
+<path d="M269.485 100.002H231.051V287.372H269.485V224.132L283.15 210.468L332.472 287.372L363.042 287.372L301.049 192.568L312.147 181.471L379.094 287.372L409.665 287.372L330.042 163.575L391.41 102.207L337.075 102.207L269.485 169.784V100.002Z" fill="black"/>
 </svg>
