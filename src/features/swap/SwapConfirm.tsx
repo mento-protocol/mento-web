@@ -1,12 +1,9 @@
-import BigNumber from 'bignumber.js'
 import Lottie from 'lottie-react'
 import { SVGProps, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { Button3D } from 'src/components/buttons/3DButton'
-import { MAX_EXCHANGE_RATE, MIN_EXCHANGE_RATE } from 'src/config/consts'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setFormValues } from 'src/features/swap/swapSlice'
@@ -106,14 +103,6 @@ export function SwapConfirmCard({ formValues }: Props) {
 
   const onSubmit = async () => {
     if (!rate || !amountWei || !address || !isConnected) return
-    const rateBN = new BigNumber(rate)
-
-    // ignore eXOF for now until we have a better way to handle it
-    const tradeHasEXOF = toTokenId === 'eXOF' || fromTokenId === 'eXOF'
-    if (!tradeHasEXOF && (rateBN.lt(MIN_EXCHANGE_RATE) || rateBN.gt(MAX_EXCHANGE_RATE))) {
-      toast.error('Rate seems incorrect')
-      return
-    }
 
     if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
       logger.debug('Approve already started or finished, ignoring submit')

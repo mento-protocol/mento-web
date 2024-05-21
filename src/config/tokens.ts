@@ -24,6 +24,7 @@ export enum TokenId {
   axlUSDC = 'axlUSDC',
   axlEUROC = 'axlEUROC',
   eXOF = 'eXOF',
+  cKES = 'cKES',
 }
 
 export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
@@ -87,6 +88,13 @@ export const eXOF: Token = Object.freeze({
   color: Color.usdcBlue,
   decimals: 18,
 })
+export const cKES: Token = Object.freeze({
+  id: TokenId.cKES,
+  symbol: TokenId.cKES,
+  name: 'cKES',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
 
 export const Tokens: Record<TokenId, Token> = {
   CELO,
@@ -97,6 +105,7 @@ export const Tokens: Record<TokenId, Token> = {
   axlUSDC,
   axlEUROC,
   eXOF,
+  cKES,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
@@ -109,6 +118,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlUSDC]: '0x87D61dA3d668797786D73BC674F053f87111570d',
     [TokenId.axlEUROC]: '0x6e673502c5b55F3169657C004e5797fFE5be6653',
     [TokenId.eXOF]: '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
+    [TokenId.cKES]: '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -119,6 +129,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlUSDC]: '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
     [TokenId.axlEUROC]: '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
     [TokenId.eXOF]: '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
+    [TokenId.cKES]: '0x8813Ae180017057d0Cf98C930cED1E7101B97370',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
@@ -129,6 +140,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlUSDC]: '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
     [TokenId.axlEUROC]: '0x061cc5a2C863E0C1Cb404006D559dB18A34C762d',
     [TokenId.eXOF]: '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
+    [TokenId.cKES]: '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
   },
 })
 

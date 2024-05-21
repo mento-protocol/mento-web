@@ -18,6 +18,4 @@ export const MAX_GAS_LIMIT = '10000000' // 10 million
 
 export const MIN_ROUNDED_VALUE = 0.0001
 export const DISPLAY_DECIMALS = 4
-export const MIN_EXCHANGE_RATE = 0.01 // 1<->100 ratio
-export const MAX_EXCHANGE_RATE = 100 // 1<->100 ratio
 export const MAX_EXCHANGE_SPREAD = 0.1 // 10%

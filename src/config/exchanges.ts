@@ -104,7 +104,16 @@ export const AlfajoresExchanges: Exchange[] = [
       '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    assets: [
+      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
+      '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
+    ],
+  },
 ]
+
 export const BaklavaExchanges: Exchange[] = [
   {
     providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
@@ -200,6 +209,14 @@ export const BaklavaExchanges: Exchange[] = [
     assets: [
       '0x6a0EEf2bed4C30Dc2CB42fe6c5f01F80f7EF16d1',
       '0xB407D37d76c417B6343310D42611FCA106B2abB8',
+    ],
+  },
+  {
+    providerAddr: '0xFF9a3da00F42839CD6D33AD7adf50bCc97B41411',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    assets: [
+      '0x62492A644A588FD904270BeD06ad52B9abfEA1aE',
+      '0x8813Ae180017057d0Cf98C930cED1E7101B97370',
     ],
   },
 ]
@@ -299,6 +316,14 @@ export const CeloExchanges: Exchange[] = [
     assets: [
       '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
       '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
     ],
   },
 ]
