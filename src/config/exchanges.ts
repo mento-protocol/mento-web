@@ -34,10 +34,10 @@ export const AlfajoresExchanges: Exchange[] = [
   },
   {
     providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
-    id: '0xf77561650ba043a244ae9c58f778c141532c4afdb7cae5e6fd623b565c5584a0',
+    id: '0xe8693b17c0f002f6a2fe839525557cef10dfeacef9e16c9bbdcb01c57933ce58',
     assets: [
-      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
-      '0x87D61dA3d668797786D73BC674F053f87111570d',
+      '0xE4D517785D091D3c54818832dB6094bcc2744545',
+      '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
     ],
   },
   {
@@ -82,10 +82,10 @@ export const AlfajoresExchanges: Exchange[] = [
   },
   {
     providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
-    id: '0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
     assets: [
       '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
-      '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
+      '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
     ],
   },
   {
@@ -98,18 +98,26 @@ export const AlfajoresExchanges: Exchange[] = [
   },
   {
     providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
-    id: '0xe8693b17c0f002f6a2fe839525557cef10dfeacef9e16c9bbdcb01c57933ce58',
+    id: '0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7',
     assets: [
-      '0xE4D517785D091D3c54818832dB6094bcc2744545',
+      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
       '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
     ],
   },
   {
     providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
-    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    id: '0xf77561650ba043a244ae9c58f778c141532c4afdb7cae5e6fd623b565c5584a0',
     assets: [
       '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
-      '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
+      '0x87D61dA3d668797786D73BC674F053f87111570d',
+    ],
+  },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x36e12d20b7a59b463a1a113caf338cbad9d64ee017548d00a791681f2fbf0763',
+    assets: [
+      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
+      '0xBba91F588d031469ABCCA566FE80fB1Ad8Ee3287',
     ],
   },
 ]
