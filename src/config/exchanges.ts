@@ -264,10 +264,10 @@ export const CeloExchanges: Exchange[] = [
   },
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
-    id: '0x0d739efbfc30f303e8d1976c213b4040850d1af40f174f4169b846f6fd3d2f20',
+    id: '0xe8693b17c0f002f6a2fe839525557cef10dfeacef9e16c9bbdcb01c57933ce58',
     assets: [
-      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
-      '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+      '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
+      '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
     ],
   },
   {
@@ -312,10 +312,10 @@ export const CeloExchanges: Exchange[] = [
   },
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
-    id: '0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7',
+    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
     assets: [
       '0x765DE816845861e75A25fCA122bb6898B8B1282a',
-      '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+      '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
     ],
   },
   {
@@ -328,18 +328,26 @@ export const CeloExchanges: Exchange[] = [
   },
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
-    id: '0xe8693b17c0f002f6a2fe839525557cef10dfeacef9e16c9bbdcb01c57933ce58',
+    id: '0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7',
     assets: [
-      '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
       '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
     ],
   },
   {
     providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
-    id: '0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b',
+    id: '0x0d739efbfc30f303e8d1976c213b4040850d1af40f174f4169b846f6fd3d2f20',
     assets: [
       '0x765DE816845861e75A25fCA122bb6898B8B1282a',
-      '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
+      '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x773bcec109cee923b5e04706044fd9d6a5121b1a6a4c059c36fdbe5b845d4e9b',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e',
     ],
   },
 ]
