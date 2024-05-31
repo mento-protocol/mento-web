@@ -3,7 +3,6 @@ import { TokenId } from 'src/config/tokens'
 export enum ForeignQuoteCurrency {
   BTC = 'BTC',
   USD = 'USD',
-  USDT = 'USDT',
 }
 
 export type QuoteCurrency = TokenId | ForeignQuoteCurrency

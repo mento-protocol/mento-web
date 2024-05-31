@@ -21,6 +21,7 @@ export enum TokenId {
   cEUR = 'cEUR',
   cREAL = 'cREAL',
   USDC = 'USDC',
+  USDT = 'USDT',
   axlUSDC = 'axlUSDC',
   axlEUROC = 'axlEUROC',
   eXOF = 'eXOF',
@@ -66,6 +67,13 @@ export const USDC: Token = Object.freeze({
   color: Color.usdcBlue,
   decimals: 6,
 })
+export const USDT: Token = Object.freeze({
+  id: TokenId.USDT,
+  symbol: TokenId.USDT,
+  name: 'USDT',
+  color: Color.usdcBlue,
+  decimals: 6,
+})
 export const axlUSDC: Token = Object.freeze({
   id: TokenId.axlUSDC,
   symbol: TokenId.axlUSDC,
@@ -102,6 +110,7 @@ export const Tokens: Record<TokenId, Token> = {
   cEUR,
   cREAL,
   USDC,
+  USDT,
   axlUSDC,
   axlEUROC,
   eXOF,
@@ -115,6 +124,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cEUR]: '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
     [TokenId.cREAL]: '0xE4D517785D091D3c54818832dB6094bcc2744545',
     [TokenId.USDC]: '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
+    [TokenId.USDT]: '0xBba91F588d031469ABCCA566FE80fB1Ad8Ee3287',
     [TokenId.axlUSDC]: '0x87D61dA3d668797786D73BC674F053f87111570d',
     [TokenId.axlEUROC]: '0x6e673502c5b55F3169657C004e5797fFE5be6653',
     [TokenId.eXOF]: '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
@@ -126,6 +136,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cEUR]: '0xf9ecE301247aD2CE21894941830A2470f4E774ca',
     [TokenId.cREAL]: '0x6a0EEf2bed4C30Dc2CB42fe6c5f01F80f7EF16d1',
     [TokenId.USDC]: '0xB407D37d76c417B6343310D42611FCA106B2abB8',
+    [TokenId.USDT]: '0x27c586469038A1749B27BF5914DAff7A14227AfB',
     [TokenId.axlUSDC]: '0xD4079B322c392D6b196f90AA4c439fC2C16d6770',
     [TokenId.axlEUROC]: '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
     [TokenId.eXOF]: '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
@@ -137,6 +148,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cEUR]: '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73',
     [TokenId.cREAL]: '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787',
     [TokenId.USDC]: '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+    [TokenId.USDT]: '0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e',
     [TokenId.axlUSDC]: '0xEB466342C4d449BC9f53A865D5Cb90586f405215',
     [TokenId.axlEUROC]: '0x061cc5a2C863E0C1Cb404006D559dB18A34C762d',
     [TokenId.eXOF]: '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
