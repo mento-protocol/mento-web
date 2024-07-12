@@ -122,7 +122,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
-    setFieldValue('amount', fromWei(balances[fromTokenId]))
+    setFieldValue('amount', fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals))
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
