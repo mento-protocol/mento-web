@@ -140,7 +140,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlEUROC]: '0x6e673502c5b55F3169657C004e5797fFE5be6653',
     [TokenId.eXOF]: '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
     [TokenId.cKES]: '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
-    [TokenId.PUSO]: '',
+    [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -153,7 +153,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlEUROC]: '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
     [TokenId.eXOF]: '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
     [TokenId.cKES]: '0x8813Ae180017057d0Cf98C930cED1E7101B97370',
-    [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
+    [TokenId.PUSO]: '',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
