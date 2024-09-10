@@ -120,6 +120,14 @@ export const AlfajoresExchanges: Exchange[] = [
       '0xBba91F588d031469ABCCA566FE80fB1Ad8Ee3287',
     ],
   },
+  {
+    providerAddr: '0x9B64E8EaBD1a035b148cE970d3319c5C3Ad53EC3',
+    id: '0x7952984d7278ca3417febf52815c321984ac3147ced2c02bb6a02b0bcab08413',
+    assets: [
+      '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
+      '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
+    ],
+  },
 ]
 
 export const BaklavaExchanges: Exchange[] = [
@@ -348,6 +356,14 @@ export const CeloExchanges: Exchange[] = [
     assets: [
       '0x765DE816845861e75A25fCA122bb6898B8B1282a',
       '0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e',
+    ],
+  },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x7952984d7278ca3417febf52815c321984ac3147ced2c02bb6a02b0bcab08413',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     ],
   },
 ]

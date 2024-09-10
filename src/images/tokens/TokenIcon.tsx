@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { memo } from 'react'
 import { Token, TokenId } from 'src/config/tokens'
 import CeloIcon from 'src/images/tokens/CELO.svg'
+import PUSOIcon from 'src/images/tokens/PUSO.svg'
 import USDCIcon from 'src/images/tokens/USDC.svg'
 import USDTIcon from 'src/images/tokens/USDT.svg'
 import axlEUROCIcon from 'src/images/tokens/axlEUROC.svg'
@@ -43,6 +44,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   else if (token?.id === TokenId.axlEUROC) imgSrc = axlEUROCIcon
   else if (token?.id === TokenId.eXOF) imgSrc = eXOFIcon
   else if (token?.id === TokenId.cKES) imgSrc = cKESIcon
+  else if (token?.id === TokenId.PUSO) imgSrc = PUSOIcon
 
   if (imgSrc) {
     return (

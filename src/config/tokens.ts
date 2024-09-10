@@ -26,6 +26,7 @@ export enum TokenId {
   axlEUROC = 'axlEUROC',
   eXOF = 'eXOF',
   cKES = 'cKES',
+  PUSO = 'PUSO',
 }
 
 export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
@@ -104,6 +105,14 @@ export const cKES: Token = Object.freeze({
   decimals: 18,
 })
 
+export const PUSO: Token = Object.freeze({
+  id: TokenId.PUSO,
+  symbol: TokenId.PUSO,
+  name: 'PUSO',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
 export const Tokens: Record<TokenId, Token> = {
   CELO,
   cUSD,
@@ -115,6 +124,7 @@ export const Tokens: Record<TokenId, Token> = {
   axlEUROC,
   eXOF,
   cKES,
+  PUSO,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
@@ -129,6 +139,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlEUROC]: '0x6e673502c5b55F3169657C004e5797fFE5be6653',
     [TokenId.eXOF]: '0xB0FA15e002516d0301884059c0aaC0F0C72b019D',
     [TokenId.cKES]: '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
+    [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -141,6 +152,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlEUROC]: '0x6f90ac394b1F45290d3023e4Ba0203005cAF2A4B',
     [TokenId.eXOF]: '0x64c1D812673E93Bc036AdC3D547d9950696DA5Af',
     [TokenId.cKES]: '0x8813Ae180017057d0Cf98C930cED1E7101B97370',
+    [TokenId.PUSO]: '',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
@@ -153,6 +165,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.axlEUROC]: '0x061cc5a2C863E0C1Cb404006D559dB18A34C762d',
     [TokenId.eXOF]: '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
     [TokenId.cKES]: '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
+    [TokenId.PUSO]: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
   },
 })
 
