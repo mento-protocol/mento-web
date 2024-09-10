@@ -1,8 +1,7 @@
-import { ChainId } from 'src/config/chains';
-import { MentoExchanges } from 'src/config/exchanges';
-import { Color } from 'src/styles/Color';
-import { areAddressesEqual } from 'src/utils/addresses';
-
+import { ChainId } from 'src/config/chains'
+import { MentoExchanges } from 'src/config/exchanges'
+import { Color } from 'src/styles/Color'
+import { areAddressesEqual } from 'src/utils/addresses'
 
 export interface Token {
   id: string
@@ -125,7 +124,7 @@ export const Tokens: Record<TokenId, Token> = {
   axlEUROC,
   eXOF,
   cKES,
-  PUSO
+  PUSO,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
