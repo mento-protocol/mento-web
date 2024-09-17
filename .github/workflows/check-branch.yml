@@ -1,0 +1,15 @@
+name: Prevent PR to Main
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-target-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if PR targets the main branch
+        run: |
+          echo "PRs should not be merged into the main branch directly."
+          exit 1
