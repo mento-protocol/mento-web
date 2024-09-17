@@ -1,4 +1,4 @@
-name: Prevent Non-Release PRs to Main
+name: Prevent Non-Release/Non-Hotfix PRs to Main
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Check if the source branch is a release branch
         run: |
-          if [[ "${{ github.head_ref }}" != release/* ]]; then
-            echo "Only release branches can be merged into the main branch."
+          if [[ "${{ github.head_ref }}" != release/* && "${{ github.head_ref }}" != hotfix/* ]]; then
+            echo "Only release and hotfix branches can be merged into the main branch."
             exit 1
           fi
