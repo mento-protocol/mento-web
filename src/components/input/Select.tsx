@@ -23,7 +23,7 @@ export function Select({ value, optionValues, onChange, button, option, buttonLa
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto dark:bg-[#3F3F46] bg-white rounded-[8px] shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none border border-solid border-black">
+          <Listbox.Options className="absolute z-20 w-full py-1 mt-1 overflow-auto dark:bg-[#3F3F46] bg-white rounded-[8px] shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none border border-solid border-black sm:mobile-dropdown dropdown-menu">
             {optionValues.map((optionValue) => (
               <Listbox.Option
                 key={optionValue}
