@@ -1,0 +1,21 @@
+name: Prevent Non-Release/Non-Hotfix PRs to Main
+
+on:
+  pull_request:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  check-target-branch:
+    if: github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the source branch is a release branch
+        run: |
+          if [[ "${{ github.head_ref }}" != release/* && "${{ github.head_ref }}" != hotfix/* ]]; then
+            echo "Only release and hotfix branches can be merged into the main branch."
+            exit 1
+          fi

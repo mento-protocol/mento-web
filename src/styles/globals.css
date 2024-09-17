@@ -214,3 +214,14 @@ Toasts
   --toastify-color-progress-warning: var(--toastify-color-warning);
   --toastify-color-progress-error: var(--toastify-color-error);
 }
+
+@media (max-width: 640px) {
+  .dropdown-menu {
+    position: fixed !important;
+    bottom: auto !important;
+    top: auto !important;
+    max-height: 25vh !important;
+    width: 48% !important;
+    z-index: 9999 !important;
+  }
+}
