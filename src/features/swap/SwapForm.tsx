@@ -107,8 +107,10 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   useEffect(() => {
-    setFieldValue('quote', quote)
-  }, [quote, setFieldValue])
+    if (values.direction === 'in' && quote) {
+      setFieldValue('quote', quote)
+    }
+  }, [quote, setFieldValue, values.direction])
 
   useEffect(() => {
     if (chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id)) {
@@ -122,7 +124,10 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
-    setFieldValue('amount', fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals))
+    const maxAmount = fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals)
+    setFieldValue('amount', maxAmount)
+
+    setFieldValue('direction', 'in')
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
