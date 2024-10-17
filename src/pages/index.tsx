@@ -10,11 +10,12 @@ export default function SwapPage() {
   return (
     <div className="flex justify-center items-center h-full flex-wrap w-full">
       <div className="mb-6 w-full max-w-md">
-      {!formValues || !confirmView ? (
+        {!formValues || !confirmView ? (
           <SwapFormCard />
         ) : (
           <SwapConfirmCard formValues={formValues} />
-        )}      </div>
+        )}{' '}
+      </div>
       {config.showPriceChart && showChart && (
         <div className="mb-6 md:ml-10">
           <PriceChartCelo stableTokenId={TokenId.cUSD} height={265} />
