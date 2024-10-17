@@ -6,6 +6,7 @@ export interface SwapState {
   toCeloRates: ToCeloRates
   showSlippage: boolean
   showChart: boolean
+  confirmView: boolean,
 }
 
 const initialState: SwapState = {
@@ -13,6 +14,7 @@ const initialState: SwapState = {
   toCeloRates: {},
   showSlippage: false,
   showChart: false,
+  confirmView: false,
 }
 
 export const swapSlice = createSlice({
@@ -29,8 +31,11 @@ export const swapSlice = createSlice({
       state.showChart = action.payload
     },
     reset: () => initialState,
+    setConfirmView(state, action) {
+      state.confirmView = action.payload
+    },
   },
 })
 
-export const { setFormValues, setShowSlippage, setShowChart, reset } = swapSlice.actions
+export const { setFormValues, setShowSlippage, setShowChart, reset, setConfirmView } = swapSlice.actions
 export const swapReducer = swapSlice.reducer
