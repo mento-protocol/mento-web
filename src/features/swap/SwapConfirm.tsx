@@ -6,7 +6,7 @@ import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { Button3D } from 'src/components/buttons/3DButton'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
-import { setFormValues } from 'src/features/swap/swapSlice'
+import { setConfirmView, setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
 import { useApproveTransaction } from 'src/features/swap/useApproveTransaction'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
@@ -142,7 +142,7 @@ export function SwapConfirmCard({ formValues }: Props) {
   }, [isApproveTxSuccess, isSwapTxLoading, isSwapTxSuccess, sendSwapTx, chainId, dispatch])
 
   const onClickBack = () => {
-    dispatch(setFormValues(null))
+    dispatch(setConfirmView(false))
   }
 
   const onClickRefresh = () => {
