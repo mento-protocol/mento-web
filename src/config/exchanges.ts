@@ -374,6 +374,14 @@ export const CeloExchanges: Exchange[] = [
       '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     ],
   },
+  {
+    providerAddr: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
+    id: '0x1c9378bd0973ff313a599d3effc654ba759f8ccca655ab6d6ce5bd39a212943b',
+    assets: [
+      '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+      '0x8A567e2aE79CA692Bd748aB832081C45de4041eA',
+    ],
+  },
 ]
 
 export const MentoExchanges: Record<ChainId, Array<Exchange>> = {
