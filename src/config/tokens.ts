@@ -178,7 +178,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.eXOF]: '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
     [TokenId.cKES]: '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
     [TokenId.PUSO]: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
-    [TokenId.cCOP]: '',
+    [TokenId.cCOP]: '0x8A567e2aE79CA692Bd748aB832081C45de4041eA',
   },
 })
 
