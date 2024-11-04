@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Identicon } from 'src/components/Identicon'
 import { SolidButton } from 'src/components/buttons/SolidButton'
@@ -25,11 +25,10 @@ export function ConnectButton() {
   const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
 
-  useEffect(() => {
-    if (isConnected) {
-      cleanupStaleWalletSessions()
-    }
-  }, [isConnected])
+  const onClickConnect = () => {
+    cleanupStaleWalletSessions()
+    openConnectModal?.()
+  }
 
   const onClickCopy = async () => {
     if (!address) return
@@ -98,7 +97,7 @@ export function ConnectButton() {
               styles="sm:mr-3"
             />
           }
-          onClick={openConnectModal}
+          onClick={onClickConnect}
         >
           <div className="hidden sm:block">Connect</div>
         </SolidButton>
