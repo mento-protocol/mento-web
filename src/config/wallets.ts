@@ -7,6 +7,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { Valora } from 'src/config/celoWallets'
 import { config } from 'src/config/config'
+import { logger } from 'src/utils/logger'
 
 export function getWalletConnectors(chains: Chain[]) {
   const connectorConfig = {
@@ -26,29 +27,28 @@ export function getWalletConnectors(chains: Chain[]) {
 }
 
 /**
- * Remove wallet sessions older than 1 hour
+ * Remove wallet connect local storage data
  * @dev We got into an issue where the walletconnect data was in a corrupted state
- *      and causing issues with wallet connection. This will remove the data from localStorage to clean up the state.
+ *      and causing issues with wallet connection. This will remove the data from
+ *      localStorage to clean up the state.
  */
 export const cleanupStaleWalletSessions = () => {
+  logger.debug('Clearing wallet connect local storage data')
   const wcStorageKeys = Object.keys(localStorage).filter(
     (key) => key.startsWith('wc@') || key.startsWith('walletconnect')
   )
+
+  logger.debug(`Found ${wcStorageKeys.length} wallet connect keys`)
 
   wcStorageKeys.forEach((key) => {
     try {
       const item = localStorage.getItem(key)
       if (!item) return
-      const data = JSON.parse(item)
-      const timestamp = data?.lastUpdated || data?.timestamp
 
-      // Remove sessions older than 1 hour
-      if (timestamp && Date.now() - timestamp > 60 * 60 * 1000) {
-        localStorage.removeItem(key)
-      }
-    } catch {
-      // Just in case, remove the item if it's corrupted
       localStorage.removeItem(key)
+      logger.debug(`Removed wallet connect value for key: ${key}`)
+    } catch (error) {
+      logger.error(`Failed to remove wallet connect value for key: ${key}`, error)
     }
   })
 }
