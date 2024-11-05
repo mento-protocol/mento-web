@@ -7,6 +7,7 @@ import USDCIcon from 'src/images/tokens/USDC.svg'
 import USDTIcon from 'src/images/tokens/USDT.svg'
 import axlEUROCIcon from 'src/images/tokens/axlEUROC.svg'
 import axlUSDCIcon from 'src/images/tokens/axlUSDC.svg'
+import cCOPIcon from 'src/images/tokens/cCOP.svg'
 import cEURIcon from 'src/images/tokens/cEUR.svg'
 import cKESIcon from 'src/images/tokens/cKES.svg'
 import cREALIcon from 'src/images/tokens/cREAL.svg'
@@ -45,6 +46,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   else if (token?.id === TokenId.eXOF) imgSrc = eXOFIcon
   else if (token?.id === TokenId.cKES) imgSrc = cKESIcon
   else if (token?.id === TokenId.PUSO) imgSrc = PUSOIcon
+  else if (token?.id === TokenId.cCOP) imgSrc = cCOPIcon
 
   if (imgSrc) {
     return (
