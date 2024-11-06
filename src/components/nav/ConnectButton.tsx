@@ -6,6 +6,7 @@ import { Identicon } from 'src/components/Identicon'
 import { SolidButton } from 'src/components/buttons/SolidButton'
 import { BalancesSummary } from 'src/components/nav/BalancesSummary'
 import { NetworkModal } from 'src/components/nav/NetworkModal'
+import { cleanupStaleWalletSessions } from 'src/config/wallets'
 import ClipboardDark from 'src/images/icons/clipboard-plus-dark.svg'
 import Clipboard from 'src/images/icons/clipboard-plus.svg'
 import CubeDark from 'src/images/icons/cube-dark.svg'
@@ -23,6 +24,11 @@ export function ConnectButton() {
   const { address, isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
+
+  const onClickConnect = () => {
+    cleanupStaleWalletSessions()
+    openConnectModal?.()
+  }
 
   const onClickCopy = async () => {
     if (!address) return
@@ -91,7 +97,7 @@ export function ConnectButton() {
               styles="sm:mr-3"
             />
           }
-          onClick={openConnectModal}
+          onClick={onClickConnect}
         >
           <div className="hidden sm:block">Connect</div>
         </SolidButton>
