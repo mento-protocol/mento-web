@@ -20,7 +20,7 @@ import { reset as blockReset } from 'src/features/blocks/blockSlice'
 import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
-import { setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
+import { setConfirmView, setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
@@ -66,12 +66,15 @@ function SwapForm() {
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
     dispatch(setFormValues(values))
+    dispatch(setConfirmView(true)) // Switch to confirm view
   }
   const validateForm = useFormValidator(balances)
+  const storedFormValues = useAppSelector((s) => s.swap.formValues) // Get stored form values
+  const initialFormValues = storedFormValues || initialValues // Use stored values if they exist
 
   return (
     <Formik<SwapFormValues>
-      initialValues={initialValues}
+      initialValues={initialFormValues}
       onSubmit={onSubmit}
       validate={validateForm}
       validateOnChange={true}
