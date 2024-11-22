@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { useEffect } from 'react'
-import { toast } from 'react-toastify'
 import { SWAP_QUOTE_REFETCH_INTERVAL } from 'src/config/consts'
 import { TokenId, Tokens, getTokenAddress } from 'src/config/tokens'
 import { getMentoSdk } from 'src/features/sdk'
@@ -13,14 +12,22 @@ import {
 } from 'src/features/swap/utils'
 import { fromWei } from 'src/utils/amount'
 import { useDebounce } from 'src/utils/debounce'
-import { logger } from 'src/utils/logger'
 import { useChainId } from 'wagmi'
+
+export interface SwapQuote {
+  amountWei: BigNumber
+  quoteWei: BigNumber
+  quote: string
+  rate: string
+}
 
 export function useSwapQuote(
   amount: string | number,
   direction: SwapDirection,
   fromTokenId: TokenId,
-  toTokenId: TokenId
+  toTokenId: TokenId,
+  onError?: (error: Error) => void,
+  onSuccess?: (data: SwapQuote) => void
 ) {
   const chainId = useChainId()
 
@@ -62,23 +69,28 @@ export function useSwapQuote(
     {
       staleTime: SWAP_QUOTE_REFETCH_INTERVAL,
       refetchInterval: SWAP_QUOTE_REFETCH_INTERVAL,
+      onError: (error) => {
+        onError?.(error as Error)
+      },
+      onSuccess,
     }
   )
 
   useEffect(() => {
     if (error) {
-      toast.error('Unable to fetch swap out amount')
-      logger.error(error)
+      // toast.error('Unable to fetch swap out amount')
+      // logger.error(error)
+      onError?.(error as Error)
     }
-  }, [error])
+  }, [error, onError])
 
   return {
-    isLoading,
-    isError,
     amountWei: data?.amountWei || '0',
     quoteWei: data?.quoteWei || '0',
     quote: data?.quote || '0',
     rate: data?.rate,
     refetch,
+    isLoading,
+    isError,
   }
 }

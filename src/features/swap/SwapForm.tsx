@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { ReactNode, SVGProps, useEffect, useMemo } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
@@ -20,12 +20,13 @@ import { reset as blockReset } from 'src/features/blocks/blockSlice'
 import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
-import { setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
+import { setConfirmView, setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
 import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { debounce } from 'src/utils/debounce'
 import { logger } from 'src/utils/logger'
 import { escapeRegExp, inputRegex } from 'src/utils/string'
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
@@ -66,14 +67,21 @@ function SwapForm() {
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
     dispatch(setFormValues(values))
+    dispatch(setConfirmView(true)) // Switch to confirm view
   }
   const validateForm = useFormValidator(balances)
+  const storedFormValues = useAppSelector((s) => s.swap.formValues) // Get stored form values
+  const initialFormValues = storedFormValues || initialValues // Use stored values if they exist
+
+  const debouncedValidate = debounce(async (values: SwapFormValues) => {
+    return await validateForm(values)
+  }, 750)
 
   return (
     <Formik<SwapFormValues>
-      initialValues={initialValues}
+      initialValues={initialFormValues}
       onSubmit={onSubmit}
-      validate={validateForm}
+      validate={debouncedValidate}
       validateOnChange={true}
       validateOnBlur={false}
     >
@@ -96,7 +104,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
     return chain ? getTokenOptionsByChainId(chain?.id) : getTokenOptionsByChainId(Celo.chainId)
   }, [chain])
 
-  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
+  const { values, setFieldValue, setFieldError } = useFormikContext<SwapFormValues>()
 
   const swappableTokenOptions = useMemo(() => {
     return getSwappableTokenOptions(values.fromTokenId, chain ? chain?.id : Celo.chainId)
@@ -107,8 +115,10 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   useEffect(() => {
-    setFieldValue('quote', quote)
-  }, [quote, setFieldValue])
+    if (values.direction === 'in' && quote) {
+      setFieldValue('quote', quote)
+    }
+  }, [quote, setFieldError, setFieldValue, values.direction])
 
   useEffect(() => {
     if (chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id)) {
@@ -119,10 +129,18 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
     }
   }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
 
-  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  const roundedBalance = fromWeiRounded(
+    balances[fromTokenId as keyof AccountBalances],
+    Tokens[fromTokenId as TokenId].decimals
+  )
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
-    setFieldValue('amount', fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals))
+    const maxAmount = fromWei(
+      balances[fromTokenId as keyof AccountBalances],
+      Tokens[fromTokenId as TokenId].decimals
+    )
+    setFieldValue('amount', maxAmount)
+    setFieldValue('direction', 'in')
     if (fromTokenId === TokenId.CELO) {
       toast.warn('Consider keeping some CELO for transaction fees')
     }
@@ -278,12 +296,12 @@ function SubmitButton() {
   const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
   const dispatch = useAppDispatch()
-  const { errors, touched } = useFormikContext<SwapFormValues>()
+  const { errors, touched, values, isValidating } = useFormikContext<SwapFormValues>()
 
   const isAccountReady = address && isConnected
   const isOnCelo = chains.some((chn) => chn.id === chain?.id)
 
-  const switchToNetwork = async () => {
+  const switchToNetwork = useCallback(async () => {
     try {
       if (!switchNetworkAsync) throw new Error('switchNetworkAsync undefined')
       logger.debug('Resetting and switching to Celo')
@@ -296,40 +314,70 @@ function SubmitButton() {
       logger.error('Error updating network', error)
       toast.error('Could not switch network, does wallet support switching?')
     }
-  }
+  }, [switchNetworkAsync, dispatch])
 
-  const error =
-    touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
-  let text
+  const amountWasModified = touched.amount || values.amount
+  const quoteLikelyStillLoading = useMemo(
+    () =>
+      values.amount && values.quote && values.quote === '0' && errors.amount === 'Amount Required',
+    [values.amount, values.quote, errors.amount]
+  )
 
-  if (error) {
-    text = error
-  } else if (!isAccountReady) {
-    text = 'Connect Wallet'
-  } else if (!isOnCelo) {
-    text = 'Switch to Celo Network'
-  } else {
-    text = 'Continue'
-  }
+  const hasError = useMemo(
+    () =>
+      amountWasModified &&
+      !quoteLikelyStillLoading &&
+      (errors.amount || errors.quote || errors.fromTokenId || errors.toTokenId || errors.slippage),
+    [amountWasModified, quoteLikelyStillLoading, errors]
+  )
 
-  const type = isAccountReady ? 'submit' : 'button'
-  let onClick
+  const buttonText = useMemo(() => {
+    if (isValidating && (!errors.amount || !quoteLikelyStillLoading))
+      return (
+        <div
+          className="flex items-center justify-center
+          gap-2 h-6"
+        >
+          <span>Loading...</span>
+        </div>
+      )
+    if (hasError) {
+      const isLongError = typeof hasError === 'string' && hasError.length > 50
+      return isLongError ? 'Error' : hasError
+    }
+    if (!isAccountReady) return 'Connect Wallet'
+    if (!isOnCelo) return 'Switch to Celo Network'
+    return 'Continue'
+  }, [hasError, isValidating, errors.amount, quoteLikelyStillLoading, isAccountReady, isOnCelo])
 
-  if (!isAccountReady) {
-    onClick = openConnectModal
-  } else if (!isOnCelo) {
-    onClick = switchToNetwork
-  }
+  const onClick = useMemo(() => {
+    if (!isAccountReady) return openConnectModal
+    if (!isOnCelo) return switchToNetwork
+    return undefined
+  }, [isAccountReady, isOnCelo, openConnectModal, switchToNetwork])
 
-  const showLongError = typeof error === 'string' && error?.length > 50
+  const buttonType = useMemo(
+    () => (isAccountReady && !hasError ? 'submit' : 'button'),
+    [isAccountReady, hasError]
+  )
+
+  const isErrorState = useMemo(
+    () => hasError && (!isValidating || (!quoteLikelyStillLoading && !errors.amount)),
+    [hasError, isValidating, quoteLikelyStillLoading, errors.amount]
+  )
+
+  const showLongError = useMemo(
+    () => typeof hasError === 'string' && hasError?.length > 50,
+    [hasError]
+  )
 
   return (
     <div className="flex flex-col w-full items-center justify-center">
       {showLongError ? (
-        <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{error}</div>
+        <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{hasError}</div>
       ) : null}
-      <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
-        {showLongError ? 'Error' : text}
+      <Button3D fullWidth onClick={onClick} type={buttonType} error={isErrorState}>
+        {buttonText}
       </Button3D>
     </div>
   )
