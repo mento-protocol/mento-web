@@ -23,11 +23,24 @@ export function useFormValidator(balances: AccountBalances, lastUpdated: number 
         const tokenId = values.fromTokenId
         const tokenBalance = balances[tokenId]
         const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
+
         if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
           return { amount: 'Amount exceeds balance' }
         }
+
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
+
+        if (values.amount && values.quote === '0')
+          return {
+            quote:
+              'Trading temporarily paused.  ' +
+              `Unable to determine accurate ${Tokens[values.fromTokenId].symbol} to ${
+                Tokens[values.toTokenId].symbol
+              } exchange rate at this time. ` +
+              'Please try again in a few minutes.',
+          }
+
         return {}
       })().catch((error) => {
         logger.error(error)

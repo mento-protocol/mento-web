@@ -24,7 +24,7 @@ export function useSwapQuote(
 ) {
   const chainId = useChainId()
 
-  const debouncedAmount = useDebounce(amount, 350)
+  const debouncedAmount = useDebounce(amount, 0)
 
   const { isLoading, isError, error, data, refetch } = useQuery(
     ['useSwapQuote', debouncedAmount, fromTokenId, toTokenId, direction],
