@@ -25,7 +25,6 @@ export function useSwapTransaction(
 
   let canSwap = false
 
-
   if (needsApproval) {
     canSwap = isApproveConfirmed ?? false
   } else {
@@ -56,7 +55,7 @@ export function useSwapTransaction(
         logger.info('Returning null')
         return null
       }
-      
+
       const sdk = await getMentoSdk(chainId)
       const fromTokenAddr = getTokenAddress(fromToken, chainId)
       const toTokenAddr = getTokenAddress(toToken, chainId)
