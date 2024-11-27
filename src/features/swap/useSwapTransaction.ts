@@ -15,24 +15,9 @@ export function useSwapTransaction(
   amountInWei: string,
   thresholdAmountInWei: string,
   direction: SwapDirection,
-  needsApproval: boolean,
   accountAddress?: Address,
   isApproveConfirmed?: boolean
 ) {
-  logger.info('Entered useSwapTransaction hook')
-  logger.info(`Needs approval: ${needsApproval}`)
-  logger.info(`Is approve confirmed: ${isApproveConfirmed}`)
-
-  let canSwap = false
-
-  if (needsApproval) {
-    canSwap = isApproveConfirmed ?? false
-  } else {
-    canSwap = true
-  }
-
-  logger.info(`Can swap: ${canSwap}`)
-
   const { error: txPrepError, data: txRequest } = useQuery(
     [
       'useSwapTransaction',
@@ -43,19 +28,16 @@ export function useSwapTransaction(
       thresholdAmountInWei,
       direction,
       accountAddress,
-      canSwap,
+      isApproveConfirmed,
     ],
     async () => {
       if (
         !accountAddress ||
-        !canSwap ||
+        !isApproveConfirmed ||
         new BigNumber(amountInWei).lte(0) ||
         new BigNumber(thresholdAmountInWei).lte(0)
-      ) {
-        logger.info('Returning null')
+      )
         return null
-      }
-
       const sdk = await getMentoSdk(chainId)
       const fromTokenAddr = getTokenAddress(fromToken, chainId)
       const toTokenAddr = getTokenAddress(toToken, chainId)
@@ -67,7 +49,7 @@ export function useSwapTransaction(
   )
 
   const { config, error: sendPrepError } = usePrepareSendTransaction(
-    canSwap && txRequest ? { request: txRequest } : undefined
+    isApproveConfirmed && txRequest ? { request: txRequest } : undefined
   )
   const {
     data: txResult,
@@ -79,11 +61,11 @@ export function useSwapTransaction(
 
   useEffect(() => {
     if (txPrepError || (sendPrepError?.message && !isLoading && !isSuccess)) {
-      toast.error('Unable to prepare swap transaction. If this persists, please contact support.')
-      logger.error(`Error preparing swap transaction: ${txPrepError || sendPrepError?.message}`)
+      toast.error('Unable to prepare swap transaction')
+      logger.error(txPrepError || sendPrepError?.message)
     } else if (txSendError) {
-      toast.error('Unable to prepare swap transaction. If this persists, please contact support.')
-      logger.error(`Error preparing swap transaction: ${txSendError}`)
+      toast.error('Unable to execute swap transaction')
+      logger.error(txSendError)
     }
   }, [txPrepError, sendPrepError, isLoading, isSuccess, txSendError])
 
