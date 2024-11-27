@@ -13,10 +13,16 @@ export function BalancesSummary() {
         {tokenIds.map((id) => {
           const balance = fromWeiRounded(balances[id], Tokens[id].decimals)
           if (balance !== '0') {
+            const token = Tokens[id]
             // TODO: @bayo Either revert this !== 0 check or add some animation for when balances are loading
             return (
-              <div style={{ minWidth: '35%' }} className="flex pb-4 dark:text-white" key={id}>
-                <TokenIcon token={Tokens[id]} size="xs" />
+              <div
+                style={{ minWidth: '35%' }}
+                className="flex pb-4 dark:text-white"
+                key={id}
+                data-testid={`walletSettings_${token.id}_balance`}
+              >
+                <TokenIcon token={token} size="xs" />
                 <div className="ml-3">{balance}</div>
               </div>
             )
