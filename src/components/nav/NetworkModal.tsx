@@ -16,6 +16,7 @@ interface Props {
 }
 
 export function NetworkModal({ isOpen, close }: Props) {
+  const baseLocator = 'networkModal'
   const latestBlock = useAppSelector((s) => s.block.latestBlock)
   const chainId = useChainId()
   const currentChain = chainIdToChain[chainId]
@@ -46,7 +47,10 @@ export function NetworkModal({ isOpen, close }: Props) {
             <div className="text-neutral-500 dark:text-gray-400 text-[14px] sm:text-[15px] font-normal leading-tight">
               Connected to:
             </div>
-            <div className="opacity-90 text-right text-gray-950 dark:text-white text-[15px] font-medium leading-tight">
+            <div
+              className="opacity-90 text-right text-gray-950 dark:text-white text-[15px] font-medium leading-tight"
+              data-testid={`${baseLocator}_currentNetwork`}
+            >
               {currentChain?.name || 'Unknown'}
             </div>
           </div>
@@ -55,7 +59,10 @@ export function NetworkModal({ isOpen, close }: Props) {
             <div className="text-neutral-500 dark:text-gray-400 text-[14px] sm:text-[15px] font-normal leading-tight">
               Block Number:
             </div>
-            <div className="opacity-90 text-right text-gray-950 dark:text-white text-[14px] sm:text-[15px] font-medium leading-tight">
+            <div
+              className="opacity-90 text-right text-gray-950 dark:text-white text-[14px] sm:text-[15px] font-medium leading-tight"
+              data-testid={`${baseLocator}_currentBlockNumber`}
+            >
               {latestBlock?.number || 'Unknown'}
             </div>
           </div>
@@ -64,7 +71,10 @@ export function NetworkModal({ isOpen, close }: Props) {
             <div className="text-neutral-500 dark:text-gray-400 text-[14px] sm:text-[15px] font-normal leading-tight">
               Node Rpc Url:
             </div>
-            <div className="opacity-90 text-right text-gray-950 dark:text-white text-[14px] sm:text-[15px] font-medium leading-tight">
+            <div
+              className="opacity-90 text-right text-gray-950 dark:text-white text-[14px] sm:text-[15px] font-medium leading-tight"
+              data-testid={`${baseLocator}_currentNodeRpcUrl`}
+            >
               {shortenUrl(currentChain?.rpcUrl) || 'Unknown'}
             </div>
           </div>
