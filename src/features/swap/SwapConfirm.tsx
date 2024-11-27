@@ -82,12 +82,9 @@ export function SwapConfirmCard({ formValues }: Props) {
     approveAmount = thresholdAmountWei
   }
 
-  const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading } = useApproveTransaction(
-    chainId,
-    fromTokenId,
-    approveAmount,
-    address
-  )
+  const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading, needsApproval } =
+    useApproveTransaction(chainId, fromTokenId, approveAmount, address)
+
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
   const { sendSwapTx, isSwapTxLoading, isSwapTxSuccess } = useSwapTransaction(
@@ -97,6 +94,7 @@ export function SwapConfirmCard({ formValues }: Props) {
     amountWei,
     thresholdAmountWei,
     direction,
+    needsApproval,
     address,
     isApproveConfirmed
   )
@@ -104,23 +102,49 @@ export function SwapConfirmCard({ formValues }: Props) {
   const onSubmit = async () => {
     if (!rate || !amountWei || !address || !isConnected) return
 
-    if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
-      logger.debug('Approve already started or finished, ignoring submit')
-      return
-    }
-
     setIsModalOpen(true)
 
-    try {
-      logger.info('Sending approve tx')
-      const approveResult = await sendApproveTx()
-      const approveReceipt = await approveResult.wait(1)
-      toastToYourSuccess('Approve complete, starting swap', approveReceipt.transactionHash, chainId)
-      setApproveConfirmed(true)
-      logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
-    } catch (error) {
-      logger.error('Failed to approve token', error)
-      setIsModalOpen(false)
+    if (needsApproval) {
+      if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
+        logger.debug('Approve already started or finished, ignoring submit')
+        return
+      }
+
+      try {
+        logger.info('Sending approve tx')
+        const approveResult = await sendApproveTx()
+        const approveReceipt = await approveResult.wait(1)
+        toastToYourSuccess(
+          'Approve complete, starting swap',
+          approveReceipt.transactionHash,
+          chainId
+        )
+        setApproveConfirmed(true)
+        logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
+      } catch (error) {
+        logger.error('Failed to approve token', error)
+        setIsModalOpen(false)
+      }
+    } else {
+      // If no approval needed, trigger swap directly
+      if (!sendSwapTx) {
+        logger.error('Swap transaction not ready')
+        setIsModalOpen(false)
+        return
+      }
+
+      try {
+        logger.info('Sending swap tx')
+        const swapResult = await sendSwapTx()
+        const swapReceipt = await swapResult.wait(1)
+        logger.info(`Tx receipt received for swap: ${swapReceipt.transactionHash}`)
+        toastToYourSuccess('Swap Complete!', swapReceipt.transactionHash, chainId)
+        dispatch(setFormValues(null))
+        setIsModalOpen(false)
+      } catch (error) {
+        logger.error('Failed to execute swap', error)
+        setIsModalOpen(false)
+      }
     }
   }
 
@@ -207,7 +231,7 @@ export function SwapConfirmCard({ formValues }: Props) {
         close={() => setIsModalOpen(false)}
         width="max-w-[432px]"
       >
-        <MentoLogoLoader />
+        <MentoLogoLoader needsApproval={needsApproval} />
       </Modal>
     </FloatingBox>
   )
@@ -271,7 +295,7 @@ const ChevronRight = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
-const MentoLogoLoader = () => {
+const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
   const { connector } = useAccount()
 
   return (
@@ -286,12 +310,14 @@ const MentoLogoLoader = () => {
       </div>
 
       <div className="my-6">
-        <div className=" text-sm text-center text-[#636768]  dark:text-[#AAB3B6]">
-          Sending two transactions: Approve and Swap
+        <div className="text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
+          {needsApproval
+            ? 'Sending two transactions: Approve and Swap'
+            : 'Sending swap transaction'}
         </div>
-        <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">{`Sign with ${
-          connector?.name || 'wallet'
-        } to proceed`}</div>
+        <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
+          {`Sign with ${connector?.name || 'wallet'} to proceed`}
+        </div>
       </div>
     </>
   )
