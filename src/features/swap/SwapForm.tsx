@@ -125,7 +125,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
-  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
+  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseFloat(roundedBalance) > 0)
   const onClickUseMax = () => {
     const maxAmount = fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals)
     setFieldValue('amount', maxAmount)
