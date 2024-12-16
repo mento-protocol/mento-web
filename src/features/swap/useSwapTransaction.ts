@@ -36,8 +36,10 @@ export function useSwapTransaction(
         !isApproveConfirmed ||
         new BigNumber(amountInWei).lte(0) ||
         new BigNumber(thresholdAmountInWei).lte(0)
-      )
+      ) {
+        logger.debug('Skipping swap transaction')
         return null
+      }
       const sdk = await getMentoSdk(chainId)
       const fromTokenAddr = getTokenAddress(fromToken, chainId)
       const toTokenAddr = getTokenAddress(toToken, chainId)
