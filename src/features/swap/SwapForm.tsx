@@ -25,7 +25,7 @@ import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
-import { fromWeiAsString, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { escapeRegExp, inputRegex } from 'src/utils/string'
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
@@ -127,7 +127,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
   const onClickUseMax = () => {
-    const maxAmount = fromWeiAsString(balances[fromTokenId], Tokens[fromTokenId].decimals)
+    const maxAmount = fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals)
     setFieldValue('amount', maxAmount)
 
     setFieldValue('direction', 'in')
