@@ -18,6 +18,16 @@ export function fromWei(
   return parseFloat(formatUnits(flooredValue, decimals))
 }
 
+export function fromWeiAsString(
+  value: NumberT | null | undefined,
+  decimals = STANDARD_TOKEN_DECIMALS
+): string {
+  if (!value) return '0'
+  const valueString = value.toString().trim()
+  const flooredValue = new BigNumber(valueString).toFixed(0, BigNumber.ROUND_FLOOR)
+  return formatUnits(flooredValue, decimals)
+}
+
 // Similar to fromWei above but rounds to set number of decimals
 // with a minimum floor, configured per token
 export function fromWeiRounded(
