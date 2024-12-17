@@ -48,7 +48,7 @@ export function useSwapQuote(
         quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
       }
 
-      const quote = fromWei(quoteWei, quoteDecimals).toString()
+      const quote = fromWei(quoteWei, quoteDecimals)
       const rateIn = calcExchangeRate(amountWei, amountDecimals, quoteWei, quoteDecimals)
       const rate = isSwapIn ? rateIn : invertExchangeRate(rateIn)
 
