@@ -11,11 +11,11 @@ export type NumberT = BigNumber.Value
 export function fromWei(
   value: NumberT | null | undefined,
   decimals = STANDARD_TOKEN_DECIMALS
-): number {
-  if (!value) return 0
+): string {
+  if (!value) return '0'
   const valueString = value.toString().trim()
   const flooredValue = new BigNumber(valueString).toFixed(0, BigNumber.ROUND_FLOOR)
-  return parseFloat(formatUnits(flooredValue, decimals))
+  return formatUnits(flooredValue, decimals)
 }
 
 // Similar to fromWei above but rounds to set number of decimals

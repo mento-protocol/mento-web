@@ -332,7 +332,7 @@ function SubmitButton() {
   const showLongError = typeof error === 'string' && error?.length > 50
 
   return (
-    <div className="flex flex-col w-full items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full">
       {showLongError ? (
         <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{error}</div>
       ) : null}

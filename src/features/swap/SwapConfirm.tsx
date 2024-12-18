@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import Lottie from 'lottie-react'
 import { SVGProps, useEffect, useState } from 'react'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
@@ -8,6 +9,7 @@ import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setConfirmView, setFormValues } from 'src/features/swap/swapSlice'
 import { SwapFormValues } from 'src/features/swap/types'
+import { useAllowance } from 'src/features/swap/useAllowance'
 import { useApproveTransaction } from 'src/features/swap/useApproveTransaction'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { useSwapTransaction } from 'src/features/swap/useSwapTransaction'
@@ -90,6 +92,21 @@ export function SwapConfirmCard({ formValues }: Props) {
   )
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
+  const { allowance, isLoading: isAllowanceLoading } = useAllowance(chainId, fromTokenId, address)
+  const needsApproval = !isAllowanceLoading && new BigNumber(allowance).lte(approveAmount)
+  const skipApprove = !isAllowanceLoading && !needsApproval
+
+  logger.info(`Allowance loading: ${isAllowanceLoading}`)
+  logger.info(`Needs approval: ${needsApproval}`)
+
+  useEffect(() => {
+    if (skipApprove) {
+      // Enables swap transaction preparation when approval isn't needed
+      // See useSwapTransaction hook for more details
+      setApproveConfirmed(true)
+    }
+  }, [skipApprove])
+
   const { sendSwapTx, isSwapTxLoading, isSwapTxSuccess } = useSwapTransaction(
     chainId,
     fromTokenId,
@@ -104,12 +121,28 @@ export function SwapConfirmCard({ formValues }: Props) {
   const onSubmit = async () => {
     if (!rate || !amountWei || !address || !isConnected) return
 
+    setIsModalOpen(true)
+
+    if (skipApprove && sendSwapTx) {
+      try {
+        logger.info('Skipping approve, sending swap tx directly')
+        const swapResult = await sendSwapTx()
+        const swapReceipt = await swapResult.wait(1)
+        logger.info(`Tx receipt received for swap: ${swapReceipt?.transactionHash}`)
+        toastToYourSuccess('Swap Complete!', swapReceipt?.transactionHash, chainId)
+        dispatch(setFormValues(null))
+      } catch (error) {
+        logger.error('Failed to execute swap', error)
+      } finally {
+        setIsModalOpen(false)
+      }
+      return
+    }
+
     if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
       logger.debug('Approve already started or finished, ignoring submit')
       return
     }
-
-    setIsModalOpen(true)
 
     try {
       logger.info('Sending approve tx')
@@ -207,7 +240,7 @@ export function SwapConfirmCard({ formValues }: Props) {
         close={() => setIsModalOpen(false)}
         width="max-w-[432px]"
       >
-        <MentoLogoLoader />
+        <MentoLogoLoader needsApproval={needsApproval} />
       </Modal>
     </FloatingBox>
   )
@@ -271,7 +304,7 @@ const ChevronRight = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
-const MentoLogoLoader = () => {
+const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
   const { connector } = useAccount()
 
   return (
@@ -286,12 +319,14 @@ const MentoLogoLoader = () => {
       </div>
 
       <div className="my-6">
-        <div className=" text-sm text-center text-[#636768]  dark:text-[#AAB3B6]">
-          Sending two transactions: Approve and Swap
+        <div className="text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
+          {needsApproval
+            ? 'Sending two transactions: Approve and Swap'
+            : 'Sending swap transaction'}
         </div>
-        <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">{`Sign with ${
-          connector?.name || 'wallet'
-        } to proceed`}</div>
+        <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
+          {`Sign with ${connector?.name || 'wallet'} to proceed`}
+        </div>
       </div>
     </>
   )
