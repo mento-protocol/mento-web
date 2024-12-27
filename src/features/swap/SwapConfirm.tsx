@@ -5,6 +5,7 @@ import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
 import { Button3D } from 'src/components/buttons/3DButton'
+import { Tooltip } from 'src/components/tooltip/Tooltip'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { setConfirmView, setFormValues } from 'src/features/swap/swapSlice'
@@ -19,6 +20,7 @@ import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
 import { fromWeiRounded, getAdjustedAmount, toSignificant } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
+import { truncateTextByLength } from 'src/utils/string'
 import { useAccount, useChainId } from 'wagmi'
 
 interface Props {
@@ -253,8 +255,28 @@ interface SwapConfirmSummaryProps {
 }
 
 export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) {
+  const optimalAmountLength = 8
   const fromToken = Tokens[from.token]
   const toToken = Tokens[to.token]
+
+  const handleAmount = (amount: string) => {
+    const shouldTruncate = amount.length > optimalAmountLength
+    const displayedAmount = shouldTruncate
+      ? truncateTextByLength(optimalAmountLength, amount)
+      : amount
+
+    return shouldTruncate ? (
+      // todo: Replace to module.css. Couldn't been replaced because of incorrect styles while replacing
+      <div className="relative text-lg font-semibold leading-6 text-center dark:text-white group">
+        <span data-testid="truncatedAmount"> {displayedAmount}</span>
+        <Tooltip text={amount}></Tooltip>
+      </div>
+    ) : (
+      <div className="relative text-lg font-semibold leading-6 text-center dark:text-white group">
+        <span data-testid="fullAmount"> {displayedAmount}</span>
+      </div>
+    )
+  }
 
   return (
     <div className="dark:bg-[#18181B] bg-[#EFF1F3] rounded-xl mt-6 mx-6 ">
@@ -265,20 +287,16 @@ export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) 
           </div>
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{fromToken.symbol}</div>
-            <div className="text-lg font-semibold leading-6 text-center dark:text-white">
-              {toSignificant(from.amount)}
-            </div>
+            {handleAmount(toSignificant(from.amount))}
           </div>
         </div>
-        <div className=" dark:text-[#AAB3B6]">
+        <div className="dark:text-[#AAB3B6]">
           <ChevronRight />
         </div>
         <div className="flex flex-1 items-center pr-3 h-[70px] bg-[#EFF1F3] dark:bg-[#18181B] rounded-lg">
           <div className="flex flex-col items-center flex-1 px-2">
             <div className="text-sm text-center dark:text-[#AAB3B6]">{toToken.symbol}</div>
-            <div className="text-lg font-semibold leading-6 text-center dark:text-white">
-              {toSignificant(to.amount) || '0'}
-            </div>
+            {handleAmount(toSignificant(to.amount) || '0')}
           </div>
           <div className="my-[15px]">
             <TokenIcon size="l" token={toToken} />

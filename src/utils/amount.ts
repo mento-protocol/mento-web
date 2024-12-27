@@ -125,7 +125,6 @@ export const toSignificant = (
   })
 
   const quotient = new Decimal(amount)
-
     .div(JSBI.BigInt(1).toString())
     .toSignificantDigits(significantDigits)
   return quotient.toFormat(quotient.decimalPlaces(), format)
