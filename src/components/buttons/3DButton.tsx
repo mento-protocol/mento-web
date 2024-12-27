@@ -2,48 +2,51 @@ import { PropsWithChildren } from 'react'
 
 type BaseButtonProps = {
   onClick?: () => void
-  error?: boolean
-  fullWidth?: boolean
   type?: 'button' | 'submit' | 'reset'
-  disabled?: boolean
+  isError?: boolean
+  isFullWidth?: boolean
+  isDisabled?: boolean
+  isAccountReady?: boolean
 }
 
 export const Button3D = ({ children, ...restProps }: PropsWithChildren<BaseButtonProps>) => {
   return <_3DButtonLink {...restProps}>{children}</_3DButtonLink>
 }
 
-const _3DButtonLink = ({
-  children,
-  error,
-  fullWidth,
-  onClick,
-  type,
-  disabled,
-}: PropsWithChildren<BaseButtonProps>) => {
+const _3DButtonLink = (props: PropsWithChildren<BaseButtonProps>) => {
+  const {
+    children,
+    onClick,
+    type = 'button',
+    isError,
+    isFullWidth,
+    isDisabled,
+    isAccountReady,
+  } = props
   return (
     <button
-      className={fullWidth ? 'w-full' : ''}
+      className={isFullWidth ? 'w-full' : ''}
       onClick={onClick}
-      type={type ?? 'button'}
-      disabled={disabled}
+      type={type}
+      disabled={isDisabled}
     >
       <span
         className={`group font-inter outline-offset-4 cursor-pointer ${
-          disabled ? 'bg-[#666666]' : error ? 'bg-[#863636]' : 'bg-[#2A326A]'
+          isDisabled ? 'bg-[#666666]' : isError && isAccountReady ? 'bg-[#863636]' : 'bg-[#2A326A]'
         } ${
-          fullWidth ? 'w-full ' : ''
+          isFullWidth ? 'w-full ' : ''
         } border-b rounded-lg border-primary-dark font-medium select-none inline-block`}
       >
         <span
-          className={`${'pr-10'} pl-10 group-active:-translate-y-[2px] block py-[18px] transition-transform delay-[250] ${
-            disabled ? 'hover:translate-y-[-4px]' : 'hover:-translate-y-[6px]'
+          className={`pr-10 pl-10 group-active:-translate-y-[2px] block py-[18px] transition-transform delay-[250] ${
+            isDisabled ? 'hover:translate-y-[-4px]' : 'hover:-translate-y-[6px]'
           } -translate-y-[4px] font-medium text-[15px] border rounded-lg border-primary-dark leading-5 ${
-            disabled
+            isDisabled
               ? 'bg-[#888888] text-white cursor-not-allowed'
-              : error
+              : isError && isAccountReady
               ? 'bg-[#E14F4F] text-white'
               : 'bg-[#4D62F0] text-white '
-          } ${fullWidth ? 'w-full flex items-center justify-center' : ''} `}
+          } ${isFullWidth ? 'w-full flex items-center justify-center' : ''} `}
         >
           <span className="flex items-center">{children}</span>
         </span>

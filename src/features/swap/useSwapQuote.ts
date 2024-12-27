@@ -41,12 +41,9 @@ export function useSwapQuote(
       const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const mento = await getMentoSdk(chainId)
 
-      let quoteWei: string
-      if (isSwapIn) {
-        quoteWei = (await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
-      } else {
-        quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
-      }
+      const quoteWei = isSwapIn
+        ? (await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
+        : (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
 
       const quote = fromWei(quoteWei, quoteDecimals)
       const rateIn = calcExchangeRate(amountWei, amountDecimals, quoteWei, quoteDecimals)
