@@ -348,9 +348,7 @@ function SubmitButton() {
     if (isValidating && (!errors.amount || !quoteLikelyStillLoading)) return 'Continue'
     if (!isAccountReady) return 'Connect Wallet'
     if (!isOnCelo) return 'Switch to Celo Network'
-    if (hasError) {
-      return showLongError ? 'Error' : errorText
-    }
+    if (hasError) return showLongError ? 'Error' : errorText
     return 'Continue'
   }, [
     errors.amount,
@@ -380,11 +378,12 @@ function SubmitButton() {
         <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{errorText}</div>
       ) : null}
       <Button3D
-        disabled={isValidating}
-        error={hasError}
-        fullWidth
+        isDisabled={isValidating}
+        isError={hasError}
+        isFullWidth
         onClick={onClick}
         type={buttonType}
+        isAccountReady={isAccountReady}
       >
         {buttonText}
       </Button3D>

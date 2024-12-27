@@ -230,7 +230,7 @@ export function SwapConfirmCard({ formValues }: Props) {
       </div>
 
       <div className="flex w-full px-6 pb-6 mt-6">
-        <Button3D fullWidth onClick={onSubmit}>
+        <Button3D isFullWidth onClick={onSubmit}>
           Swap
         </Button3D>
       </div>
