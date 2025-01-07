@@ -44,7 +44,7 @@ export function toWei(
   decimals = STANDARD_TOKEN_DECIMALS
 ): BigNumber {
   if (!value) return new BigNumber(0)
-  const valueString = value.toString().trim()
+  const valueString = new BigNumber(value).toFixed().trim()
   const components = valueString.split('.')
   if (components.length === 1) {
     return new BigNumber(parseUnits(valueString, decimals).toString())
