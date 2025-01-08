@@ -220,8 +220,8 @@ export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
     : []
 }
 
-export function getTokenById(id: string): Token | null {
-  return Tokens[id as TokenId] || null
+export function getTokenById(id: TokenId | string): Token {
+  return Tokens[id as TokenId]
 }
 
 export function getTokenAddress(id: TokenId, chainId: ChainId): Address {
