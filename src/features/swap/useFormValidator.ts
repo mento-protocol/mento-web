@@ -1,7 +1,7 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
-import { Tokens, getTokenAddress, getTokenByAddress, getTokenById } from 'src/config/tokens'
+import { Tokens, getTokenAddress, getTokenByAddress } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { getMentoSdk } from 'src/features/sdk'
 import { SwapFormValues } from 'src/features/swap/types'
@@ -29,16 +29,7 @@ export function useFormValidator(balances: AccountBalances) {
 
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
-
-        if (values.amount && values.quote === '0')
-          return {
-            quote:
-              'Trading temporarily paused.  ' +
-              `Unable to determine accurate ${getTokenById(values.fromTokenId).symbol} to ${
-                getTokenById(values.toTokenId).symbol
-              } exchange rate at this time. ` +
-              'Please try again in a few minutes.',
-          }
+        if (values.amount && values.quote === '0') return { quote: 'Error' }
 
         return {}
       })().catch((error) => {

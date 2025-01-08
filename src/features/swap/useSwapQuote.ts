@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { SWAP_QUOTE_REFETCH_INTERVAL } from 'src/config/consts'
-import { TokenId, Tokens, getTokenAddress } from 'src/config/tokens'
+import { TokenId, getTokenAddress, getTokenById } from 'src/config/tokens'
 import { getMentoSdk } from 'src/features/sdk'
 import { SwapDirection } from 'src/features/swap/types'
 import {
@@ -23,14 +23,13 @@ export function useSwapQuote(
   toTokenId: TokenId
 ) {
   const chainId = useChainId()
-
+  const fromToken = getTokenById(fromTokenId)
+  const toToken = getTokenById(toTokenId)
   const debouncedAmount = useDebounce(amount, 0)
 
   const { isLoading, isError, error, data, refetch } = useQuery<ISwapData | null, ISwapError>(
     ['useSwapQuote', debouncedAmount, fromTokenId, toTokenId, direction],
     async (): Promise<ISwapData | null> => {
-      const fromToken = Tokens[fromTokenId]
-      const toToken = Tokens[toTokenId]
       const isSwapIn = direction === 'in'
       const amountWei = parseInputExchangeAmount(amount, isSwapIn ? fromTokenId : toTokenId)
       const amountWeiBN = ethers.BigNumber.from(amountWei)
@@ -64,7 +63,12 @@ export function useSwapQuote(
 
   useEffect(() => {
     if (error) {
-      toast.error(getToastErrorMessage(error?.message))
+      toast.error(
+        getToastErrorMessage(error.message, {
+          fromTokenSymbol: fromToken.symbol,
+          toTokenSymbol: toToken.symbol,
+        })
+      )
       logger.error(error)
     }
   }, [error])
@@ -80,15 +84,30 @@ export function useSwapQuote(
   }
 }
 
-function getToastErrorMessage(swapErrorMessage: string): string {
+function getToastErrorMessage(
+  swapErrorMessage: string,
+  { fromTokenSymbol, toTokenSymbol }: IGetToastErrorOptions = {}
+): string {
   switch (true) {
     case swapErrorMessage.includes(`overflow x1y1`):
       return 'Swap out amount is too large'
     case swapErrorMessage.includes(`can't create fixidity number larger than`):
       return 'Swap in amount is too large'
+    case swapErrorMessage.includes(`no valid median`):
+    case swapErrorMessage.includes(`Trading is suspended for this reference rate`):
+      return (
+        'Trading temporarily paused.  ' +
+        `Unable to determine accurate ${fromTokenSymbol} to ${toTokenSymbol} exchange rate now. ` +
+        'Please try again later.'
+      )
     default:
       return 'Unable to fetch swap amount'
   }
+}
+
+interface IGetToastErrorOptions {
+  fromTokenSymbol?: string
+  toTokenSymbol?: string
 }
 
 interface ISwapError {
