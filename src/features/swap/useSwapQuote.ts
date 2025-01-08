@@ -26,9 +26,9 @@ export function useSwapQuote(
 
   const debouncedAmount = useDebounce(amount, 0)
 
-  const { isLoading, isError, error, data, refetch } = useQuery(
+  const { isLoading, isError, error, data, refetch } = useQuery<ISwapData | null, ISwapError>(
     ['useSwapQuote', debouncedAmount, fromTokenId, toTokenId, direction],
-    async () => {
+    async (): Promise<ISwapData | null> => {
       const fromToken = Tokens[fromTokenId]
       const toToken = Tokens[toTokenId]
       const isSwapIn = direction === 'in'
@@ -64,7 +64,7 @@ export function useSwapQuote(
 
   useEffect(() => {
     if (error) {
-      toast.error('Unable to fetch swap out amount')
+      toast.error(getToastErrorMessage(error?.message))
       logger.error(error)
     }
   }, [error])
@@ -78,4 +78,26 @@ export function useSwapQuote(
     rate: data?.rate,
     refetch,
   }
+}
+
+function getToastErrorMessage(swapErrorMessage: string): string {
+  switch (true) {
+    case swapErrorMessage.includes(`overflow x1y1`):
+      return 'Swap out amount is too large'
+    case swapErrorMessage.includes(`can't create fixidity number larger than`):
+      return 'Swap in amount is too large'
+    default:
+      return 'Unable to fetch swap amount'
+  }
+}
+
+interface ISwapError {
+  message: string
+}
+
+interface ISwapData {
+  amountWei: string
+  quoteWei: string
+  quote: string
+  rate: string
 }
