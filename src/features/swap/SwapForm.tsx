@@ -61,7 +61,7 @@ export function SwapFormCard() {
 }
 
 function SwapForm() {
-  const { balances, lastUpdated } = useAppSelector((s) => s.account)
+  const { balances } = useAppSelector((s) => s.account)
   const { showSlippage } = useAppSelector((s) => s.swap)
 
   const dispatch = useAppDispatch()
@@ -69,7 +69,7 @@ function SwapForm() {
     dispatch(setFormValues(values))
     dispatch(setConfirmView(true)) // Switch to confirm view
   }
-  const validateForm = useFormValidator(balances, lastUpdated)
+  const validateForm = useFormValidator(balances)
   const storedFormValues = useAppSelector((s) => s.swap.formValues) // Get stored form values
   const initialFormValues = storedFormValues || initialValues // Use stored values if they exist
 
@@ -292,6 +292,7 @@ function SubmitButton() {
   const { openConnectModal } = useConnectModal()
   const dispatch = useAppDispatch()
   const { errors, touched, values, isValidating } = useFormikContext<SwapFormValues>()
+  const { lastUpdated } = useAppSelector((s) => s.account)
 
   const isAccountReady = address && isConnected
   const isOnCelo = chains.some((chn) => chn.id === chain?.id)
@@ -345,8 +346,9 @@ function SubmitButton() {
   const showLongError = useMemo(() => errorText.length > 50, [errorText])
 
   const buttonText = useMemo(() => {
-    if (isValidating && (!errors.amount || !quoteLikelyStillLoading)) return 'Continue'
     if (!isAccountReady) return 'Connect Wallet'
+    if (isAccountReady && !lastUpdated) return 'Balance still loading...'
+    if (isValidating && (!errors.amount || !quoteLikelyStillLoading)) return 'Continue'
     if (!isOnCelo) return 'Switch to Celo Network'
     if (hasError) return showLongError ? 'Error' : errorText
     return 'Continue'
@@ -359,6 +361,7 @@ function SubmitButton() {
     isValidating,
     quoteLikelyStillLoading,
     showLongError,
+    lastUpdated,
   ])
 
   const onClick = useMemo(() => {
@@ -384,6 +387,7 @@ function SubmitButton() {
         onClick={onClick}
         type={buttonType}
         isAccountReady={isAccountReady}
+        isBalanceLoaded={Boolean(lastUpdated)}
       >
         {buttonText}
       </Button3D>

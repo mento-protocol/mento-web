@@ -7,6 +7,7 @@ type BaseButtonProps = {
   isFullWidth?: boolean
   isDisabled?: boolean
   isAccountReady?: boolean
+  isBalanceLoaded?: boolean
 }
 
 export const Button3D = ({ children, ...restProps }: PropsWithChildren<BaseButtonProps>) => {
@@ -22,6 +23,7 @@ const _3DButtonLink = (props: PropsWithChildren<BaseButtonProps>) => {
     isFullWidth,
     isDisabled,
     isAccountReady,
+    isBalanceLoaded,
   } = props
   return (
     <button
@@ -32,7 +34,11 @@ const _3DButtonLink = (props: PropsWithChildren<BaseButtonProps>) => {
     >
       <span
         className={`group font-inter outline-offset-4 cursor-pointer ${
-          isDisabled ? 'bg-[#666666]' : isError && isAccountReady ? 'bg-[#863636]' : 'bg-[#2A326A]'
+          isDisabled || (isAccountReady && !isBalanceLoaded)
+            ? 'bg-[#666666]'
+            : isError && isAccountReady
+            ? 'bg-[#863636]'
+            : 'bg-[#2A326A]'
         } ${
           isFullWidth ? 'w-full ' : ''
         } border-b rounded-lg border-primary-dark font-medium select-none inline-block`}
@@ -41,7 +47,7 @@ const _3DButtonLink = (props: PropsWithChildren<BaseButtonProps>) => {
           className={`pr-10 pl-10 group-active:-translate-y-[2px] block py-[18px] transition-transform delay-[250] ${
             isDisabled ? 'hover:translate-y-[-4px]' : 'hover:-translate-y-[6px]'
           } -translate-y-[4px] font-medium text-[15px] border rounded-lg border-primary-dark leading-5 ${
-            isDisabled
+            isDisabled || (isAccountReady && !isBalanceLoaded)
               ? 'bg-[#888888] text-white cursor-not-allowed'
               : isError && isAccountReady
               ? 'bg-[#E14F4F] text-white'
