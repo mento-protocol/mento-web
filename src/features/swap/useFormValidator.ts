@@ -28,6 +28,7 @@ export function useFormValidator(balances: AccountBalances, lastUpdated: number 
         }
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
+        if (values.amount && values.quote === '0') return { quote: 'Error' }
         return {}
       })().catch((error) => {
         logger.error(error)
