@@ -60,7 +60,7 @@ export function SwapFormCard() {
 }
 
 function SwapForm() {
-  const balances = useAppSelector((s) => s.account.balances)
+  const { balances, lastUpdated } = useAppSelector((s) => s.account)
   const { showSlippage } = useAppSelector((s) => s.swap)
 
   const dispatch = useAppDispatch()
@@ -68,7 +68,7 @@ function SwapForm() {
     dispatch(setFormValues(values))
     dispatch(setConfirmView(true)) // Switch to confirm view
   }
-  const validateForm = useFormValidator(balances)
+  const validateForm = useFormValidator(balances, lastUpdated)
   const storedFormValues = useAppSelector((s) => s.swap.formValues) // Get stored form values
   const initialFormValues = storedFormValues || initialValues // Use stored values if they exist
 
@@ -125,7 +125,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
-  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseInt(roundedBalance) > 0)
+  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseFloat(roundedBalance) > 0)
   const onClickUseMax = () => {
     const maxAmount = fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals)
     setFieldValue('amount', maxAmount)

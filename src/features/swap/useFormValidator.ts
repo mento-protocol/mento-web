@@ -9,11 +9,12 @@ import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useChainId } from 'wagmi'
 
-export function useFormValidator(balances: AccountBalances) {
+export function useFormValidator(balances: AccountBalances, lastUpdated: number | null) {
   const chainId = useChainId()
   return useCallback(
     (values?: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
       return (async () => {
+        if (!lastUpdated) return { fromTokenId: 'Balance still loading' }
         if (!values || !values.amount) return { amount: 'Amount Required' }
         const parsedAmount = parseAmount(values.amount)
         if (!parsedAmount) return { amount: 'Amount is Invalid' }
@@ -33,7 +34,7 @@ export function useFormValidator(balances: AccountBalances) {
         return {}
       })
     },
-    [balances, chainId]
+    [balances, chainId, lastUpdated]
   )
 }
 
