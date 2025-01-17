@@ -5,7 +5,7 @@ import { Tokens, getTokenAddress, getTokenByAddress } from 'src/config/tokens'
 import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { getMentoSdk } from 'src/features/sdk'
 import { SwapFormValues } from 'src/features/swap/types'
-import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
+import { parseAmount, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useChainId } from 'wagmi'
 
@@ -23,7 +23,7 @@ export function useFormValidator(balances: AccountBalances, lastUpdated: number 
         const tokenId = values.fromTokenId
         const tokenBalance = balances[tokenId]
         const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
-        if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
+        if (weiAmount.gt(tokenBalance)) {
           return { amount: 'Amount exceeds balance' }
         }
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)

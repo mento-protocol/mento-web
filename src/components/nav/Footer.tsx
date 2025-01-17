@@ -16,7 +16,7 @@ import { isStale } from 'src/utils/time'
 
 export function Footer() {
   return (
-    <div className="z-20 inline-flex justify-between w-full p-3 mt-10 sm:px-5 sm:py-7 pt-7">
+    <div className="z-10 inline-flex justify-between w-full p-3 mt-10 sm:px-5 sm:py-7 pt-7">
       <div className="inline-flex items-start justify-start gap-4">
         <div className="p-2 justify-start items-start gap-2.5 flex">
           <FooterIconLink to={links.twitter} imgSrc={Twitter} alt="Twitter" />
