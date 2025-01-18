@@ -5,6 +5,7 @@ import { AccountBalances, fetchBalances } from 'src/features/accounts/fetchBalan
 interface AccountState {
   balances: AccountBalances
   lastUpdated: number | null
+  isFetchingBalance: boolean
 }
 
 const initialState: AccountState = {
@@ -13,6 +14,7 @@ const initialState: AccountState = {
     return result
   }, {} as AccountBalances),
   lastUpdated: null,
+  isFetchingBalance: true, // Initialize isFetchingBalance to true
 }
 
 export const accountSlice = createSlice({
@@ -22,12 +24,17 @@ export const accountSlice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchBalances.fulfilled, (state, action) => {
-      const balances = action.payload
-      if (!balances) return
-      state.balances = balances
-      state.lastUpdated = Date.now()
-    })
+    builder
+      .addCase(fetchBalances.fulfilled, (state, action) => {
+        const balances = action.payload
+        if (!balances) return
+        state.balances = balances
+        state.lastUpdated = Date.now()
+        state.isFetchingBalance = false // Set isFetchingBalance to false when fetching is complete
+      })
+      .addCase(fetchBalances.rejected, (state) => {
+        state.isFetchingBalance = false // Set isFetchingBalance to false if fetching fails
+      })
   },
 })
 
