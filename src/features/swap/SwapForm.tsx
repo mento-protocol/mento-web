@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Form, Formik, useFormikContext } from 'formik';
-import { ReactNode, SVGProps, useEffect, useMemo } from 'react';
+import { Form, Formik, FormikProps, useFormikContext } from 'formik';
+import { ReactNode, SVGProps, useEffect, useMemo, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { Spinner } from 'src/components/animation/Spinner';
 import { Button3D } from 'src/components/buttons/3DButton';
@@ -66,14 +66,23 @@ function SwapForm() {
   const dispatch = useAppDispatch();
   const onSubmit = (values: SwapFormValues) => {
     dispatch(setFormValues(values));
-    dispatch(setConfirmView(true)); // Switch to confirm view
+    dispatch(setConfirmView(true)); 
   };
   const validateForm = useFormValidator(isFetchingBalance, balances, lastUpdated);
-  const storedFormValues = useAppSelector((s) => s.swap.formValues); // Get stored form values
-  const initialFormValues = storedFormValues || initialValues; // Use stored values if they exist
+  const storedFormValues = useAppSelector((s) => s.swap.formValues); 
+  const initialFormValues = storedFormValues || initialValues; 
+
+  const formikRef = useRef<FormikProps<SwapFormValues>>(null);
+
+  useEffect(() => {
+    if (formikRef.current && !isFetchingBalance) {
+      formikRef.current.submitForm();
+    }
+  }, [isFetchingBalance]);
 
   return (
     <Formik<SwapFormValues>
+      innerRef={formikRef}
       initialValues={initialFormValues}
       onSubmit={onSubmit}
       validate={validateForm}
@@ -91,7 +100,7 @@ function SwapForm() {
   );
 }
 
-function SwapFormInputs({  balances }: {  balances: AccountBalances; }) {
+function SwapFormInputs({ balances }: { balances: AccountBalances; }) {
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
 
@@ -338,7 +347,7 @@ function SubmitButton({ isFetchingBalance }: { isFetchingBalance: boolean; }) {
       {showLongError ? (
         <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{error}</div>
       ) : null}
-      <Button3D disabled={isFetchingBalance} fullWidth onClick={onClick} type={type} error={error ? true : false}>
+      <Button3D fullWidth onClick={onClick} type={type} error={error ? true : false}>
         {showLongError ? 'Error' : text}
       </Button3D>
     </div>

@@ -9,30 +9,12 @@ import { parseAmount, toWei } from 'src/utils/amount';
 import { logger } from 'src/utils/logger';
 import { useChainId } from 'wagmi';
 
-function convertTimestampToDateTime(timestamp) {
-  // Ensure the timestamp is in milliseconds
-  const date = new Date(timestamp);
-
-  // Extract human-readable components
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  // Combine components into a readable format
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
 export function useFormValidator(isFetchingBalance: boolean, balances: AccountBalances, lastUpdated: number | null) {
-  console.log(878787, isFetchingBalance, balances, convertTimestampToDateTime(lastUpdated));
   const chainId = useChainId();
   return useCallback(
     (values?: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
       return (async () => {
         if (isFetchingBalance) return { fromTokenId: 'Balance still loading' };
-        // if (!lastUpdated) return { fromTokenId: 'Balance still loading' };
         if (!values || !values.amount) return { amount: 'Amount Required' };
         const parsedAmount = parseAmount(values.amount);
         if (!parsedAmount) return { amount: 'Amount is Invalid' };
