@@ -71,7 +71,6 @@ function SwapForm() {
   const validateForm = useFormValidator(isFetchingBalance, balances, lastUpdated);
   const storedFormValues = useAppSelector((s) => s.swap.formValues); 
   const initialFormValues = storedFormValues || initialValues; 
-
   const formikRef = useRef<FormikProps<SwapFormValues>>(null);
 
   useEffect(() => {
