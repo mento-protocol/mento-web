@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import Lottie from 'lottie-react'
+import dynamic from 'next/dynamic'
 import { SVGProps, useEffect, useState } from 'react'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
@@ -24,6 +24,8 @@ import { useAccount, useChainId } from 'wagmi'
 interface Props {
   formValues: SwapFormValues
 }
+
+const DynamicLottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 export function SwapConfirmCard({ formValues }: Props) {
   const { amount, direction, fromTokenId, toTokenId, slippage } = formValues
@@ -311,10 +313,10 @@ const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
     <>
       <div className="border-y border-[#E5E7E9] dark:border-[#333336]">
         <div className="w-[124px] h-[124px] mx-auto my-6 dark:hidden">
-          <Lottie animationData={mentoLoaderBlue} />
+          <DynamicLottie animationData={mentoLoaderBlue} />
         </div>
         <div className="w-[124px] h-[124px] mx-auto my-6 hidden dark:block ">
-          <Lottie animationData={mentoLoaderGreen} />
+          <DynamicLottie animationData={mentoLoaderGreen} />
         </div>
       </div>
 
