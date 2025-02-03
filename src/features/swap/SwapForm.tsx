@@ -21,15 +21,16 @@ import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
 import { SettingsMenu } from 'src/features/swap/SettingsMenu'
 import { setConfirmView, setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
-import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
+import { ISubmitButtonProps, SwapDirection, SwapFormValues } from 'src/features/swap/types'
 import { useFormValidator } from 'src/features/swap/useFormValidator'
 import { useSwapQuote } from 'src/features/swap/useSwapQuote'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
-import { debounce } from 'src/utils/debounce'
 import { logger } from 'src/utils/logger'
 import { escapeRegExp, inputRegex } from 'src/utils/string'
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
+
+import { debounce } from '../../utils/debounce'
 
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
@@ -61,27 +62,32 @@ export function SwapFormCard() {
 }
 
 function SwapForm() {
+  const { address, isConnected } = useAccount()
   const { balances, lastUpdated } = useAppSelector((s) => s.account)
   const { showSlippage } = useAppSelector((s) => s.swap)
+
+  const isWalletConnected = address && isConnected
+  const isBalanceLoaded = balances && Boolean(lastUpdated)
 
   const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
     dispatch(setFormValues(values))
     dispatch(setConfirmView(true)) // Switch to confirm view
   }
-  const validateForm = useFormValidator(balances, lastUpdated)
+  const validateForm = useFormValidator({
+    balances,
+    isBalanceLoaded,
+    isWalletConnected,
+  })
+  const debouncedValidateForm = debounce(async (values) => validateForm(values), 100)
   const storedFormValues = useAppSelector((s) => s.swap.formValues) // Get stored form values
   const initialFormValues = storedFormValues || initialValues // Use stored values if they exist
-
-  const debouncedValidate = debounce(async (values: SwapFormValues) => {
-    return await validateForm(values)
-  }, 750)
 
   return (
     <Formik<SwapFormValues>
       initialValues={initialFormValues}
       onSubmit={onSubmit}
-      validate={debouncedValidate}
+      validate={debouncedValidateForm}
       validateOnChange={true}
       validateOnBlur={false}
     >
@@ -89,7 +95,7 @@ function SwapForm() {
         <SwapFormInputs balances={balances} />
         {showSlippage && <SlippageRow />}
         <div className="flex justify-center w-full my-6 mb-0">
-          <SubmitButton />
+          <SubmitButton isWalletConnected={isWalletConnected} />
         </div>
       </Form>
     </Formik>
@@ -297,16 +303,12 @@ function SlippageRow() {
   )
 }
 
-function SubmitButton() {
-  const { address, isConnected } = useAccount()
+function SubmitButton({ isWalletConnected }: ISubmitButtonProps) {
   const { chain, chains } = useNetwork()
   const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
   const dispatch = useAppDispatch()
-  const { errors, touched, values, isValidating } = useFormikContext<SwapFormValues>()
-
-  const isAccountReady = address && isConnected
-  const isOnCelo = chains.some((chn) => chn.id === chain?.id)
+  const { errors, touched, values } = useFormikContext<SwapFormValues>()
 
   const switchToNetwork = useCallback(async () => {
     try {
@@ -323,17 +325,18 @@ function SubmitButton() {
     }
   }, [switchNetworkAsync, dispatch])
 
-  const amountWasModified = touched.amount || values.amount
-  const quoteLikelyStillLoading = useMemo(
-    () =>
-      values.amount && values.quote && values.quote === '0' && errors.amount === 'Amount Required',
+  const isOnCelo = chains.some((chn) => chn.id === chain?.id)
+  const isAmountModified = useMemo(
+    () => touched.amount || values.amount,
+    [touched.amount, values.amount]
+  )
+  const isQuoteStillLoading = useMemo(
+    () => values.amount && values?.quote && errors.amount === 'Amount Required',
     [values.amount, values.quote, errors.amount]
   )
-
   const hasError = useMemo(() => {
-    if (!amountWasModified) return false
-    if (quoteLikelyStillLoading) return false
-
+    if (!isAmountModified) return false
+    if (isQuoteStillLoading) return false
     return !!(
       errors.amount ||
       errors.quote ||
@@ -341,7 +344,8 @@ function SubmitButton() {
       errors.toTokenId ||
       errors.slippage
     )
-  }, [amountWasModified, quoteLikelyStillLoading, errors])
+  }, [isAmountModified, isQuoteStillLoading, errors])
+  const isDisabled = isWalletConnected && !Number(values.quote) && !hasError
 
   const errorText = useMemo(
     () =>
@@ -353,49 +357,31 @@ function SubmitButton() {
       '',
     [errors]
   )
-
-  const showLongError = useMemo(() => errorText.length > 50, [errorText])
-
+  const buttonType = useMemo(
+    () => (isWalletConnected && !hasError ? 'submit' : 'button'),
+    [isWalletConnected, hasError]
+  )
   const buttonText = useMemo(() => {
-    if (!isAccountReady) return 'Connect Wallet'
-    if (isValidating && (!errors.amount || !quoteLikelyStillLoading)) return 'Continue'
+    if (!isWalletConnected) return 'Connect Wallet'
     if (!isOnCelo) return 'Switch to Celo Network'
-    if (hasError) return showLongError ? 'Error' : errorText
+    if (hasError) return errorText
     return 'Continue'
-  }, [
-    errors.amount,
-    errorText,
-    hasError,
-    isAccountReady,
-    isOnCelo,
-    isValidating,
-    quoteLikelyStillLoading,
-    showLongError,
-  ])
-
+  }, [errorText, hasError, isWalletConnected, isOnCelo])
   const onClick = useMemo(() => {
-    if (!isAccountReady) return openConnectModal
+    if (!isWalletConnected) return openConnectModal
     if (!isOnCelo) return switchToNetwork
     return undefined
-  }, [isAccountReady, isOnCelo, openConnectModal, switchToNetwork])
-
-  const buttonType = useMemo(
-    () => (isAccountReady && !hasError ? 'submit' : 'button'),
-    [isAccountReady, hasError]
-  )
+  }, [isWalletConnected, isOnCelo, openConnectModal, switchToNetwork])
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      {showLongError ? (
-        <div className="bg-[#E14F4F] rounded-md text-white p-4 mb-6">{errorText}</div>
-      ) : null}
       <Button3D
-        isDisabled={isValidating}
+        isDisabled={isDisabled}
         isError={hasError}
         isFullWidth
         onClick={onClick}
         type={buttonType}
-        isAccountReady={isAccountReady}
+        isWalletConnected={isWalletConnected}
       >
         {buttonText}
       </Button3D>

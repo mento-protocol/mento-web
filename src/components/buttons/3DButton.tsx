@@ -6,7 +6,7 @@ type BaseButtonProps = {
   isError?: boolean
   isFullWidth?: boolean
   isDisabled?: boolean
-  isAccountReady?: boolean
+  isWalletConnected?: boolean
 }
 
 export const Button3D = ({
@@ -16,7 +16,7 @@ export const Button3D = ({
   isError,
   isFullWidth,
   isDisabled,
-  isAccountReady,
+  isWalletConnected,
 }: PropsWithChildren<BaseButtonProps>) => {
   return (
     <button
@@ -28,7 +28,7 @@ export const Button3D = ({
       <span
         className={`group font-inter outline-offset-4 cursor-pointer ${getSubstrateButtonColor({
           isDisabled,
-          isAccountReady,
+          isWalletConnected,
           isError,
         })} ${
           isFullWidth ? 'w-full ' : ''
@@ -40,7 +40,7 @@ export const Button3D = ({
           }] -translate-y-[4px] font-medium text-[15px] border rounded-lg border-primary-dark leading-5 ${getButtonColor(
             {
               isDisabled,
-              isAccountReady,
+              isWalletConnected,
               isError,
             }
           )} ${isFullWidth ? 'w-full flex items-center justify-center' : ''} `}
@@ -52,22 +52,22 @@ export const Button3D = ({
   )
 }
 
-function getSubstrateButtonColor({ isDisabled, isAccountReady, isError }: IGetButtonColorArgs) {
+function getSubstrateButtonColor({ isDisabled, isWalletConnected, isError }: IGetButtonColorArgs) {
   switch (true) {
     case isDisabled:
       return 'bg-[#666666]'
-    case isError && isAccountReady:
+    case isError && isWalletConnected:
       return 'bg-[#863636]'
     default:
       return 'bg-[#2A326A]'
   }
 }
 
-function getButtonColor({ isDisabled, isAccountReady, isError }: IGetButtonColorArgs) {
+function getButtonColor({ isDisabled, isWalletConnected, isError }: IGetButtonColorArgs) {
   switch (true) {
     case isDisabled:
       return 'bg-[#888888] text-white cursor-not-allowed'
-    case isError && isAccountReady:
+    case isError && isWalletConnected:
       return 'bg-[#E14F4F] text-white'
     default:
       return 'bg-[#4D62F0] text-white '
@@ -75,7 +75,7 @@ function getButtonColor({ isDisabled, isAccountReady, isError }: IGetButtonColor
 }
 
 interface IGetButtonColorArgs {
-  isAccountReady: boolean | undefined
+  isWalletConnected: boolean | undefined
   isDisabled: boolean | undefined
   isError: boolean | undefined
 }
