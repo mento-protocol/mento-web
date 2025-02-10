@@ -39,4 +39,5 @@ export interface IUseFormValidatorProps {
 
 export interface ISubmitButtonProps {
   isWalletConnected: boolean | undefined
+  isBalanceLoaded: boolean | undefined
 }
