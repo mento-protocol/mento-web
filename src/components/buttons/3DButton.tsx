@@ -7,6 +7,7 @@ type BaseButtonProps = {
   isFullWidth?: boolean
   isDisabled?: boolean
   isWalletConnected?: boolean
+  isBalanceLoaded?: boolean
 }
 
 export const Button3D = ({
@@ -17,6 +18,7 @@ export const Button3D = ({
   isFullWidth,
   isDisabled,
   isWalletConnected,
+  isBalanceLoaded,
 }: PropsWithChildren<BaseButtonProps>) => {
   return (
     <button
@@ -30,6 +32,7 @@ export const Button3D = ({
           isDisabled,
           isWalletConnected,
           isError,
+          isBalanceLoaded,
         })} ${
           isFullWidth ? 'w-full ' : ''
         } border-b rounded-lg border-primary-dark font-medium select-none inline-block`}
@@ -42,6 +45,7 @@ export const Button3D = ({
               isDisabled,
               isWalletConnected,
               isError,
+              isBalanceLoaded,
             }
           )} ${isFullWidth ? 'w-full flex items-center justify-center' : ''} `}
         >
@@ -52,9 +56,15 @@ export const Button3D = ({
   )
 }
 
-function getSubstrateButtonColor({ isDisabled, isWalletConnected, isError }: IGetButtonColorArgs) {
+function getSubstrateButtonColor({
+  isDisabled,
+  isWalletConnected,
+  isError,
+  isBalanceLoaded,
+}: IGetButtonColorArgs) {
   switch (true) {
     case isDisabled:
+    case isWalletConnected && !isBalanceLoaded:
       return 'bg-[#666666]'
     case isError && isWalletConnected:
       return 'bg-[#863636]'
@@ -63,9 +73,15 @@ function getSubstrateButtonColor({ isDisabled, isWalletConnected, isError }: IGe
   }
 }
 
-function getButtonColor({ isDisabled, isWalletConnected, isError }: IGetButtonColorArgs) {
+function getButtonColor({
+  isDisabled,
+  isWalletConnected,
+  isError,
+  isBalanceLoaded,
+}: IGetButtonColorArgs) {
   switch (true) {
     case isDisabled:
+    case isWalletConnected && !isBalanceLoaded:
       return 'bg-[#888888] text-white cursor-not-allowed'
     case isError && isWalletConnected:
       return 'bg-[#E14F4F] text-white'
@@ -76,6 +92,7 @@ function getButtonColor({ isDisabled, isWalletConnected, isError }: IGetButtonCo
 
 interface IGetButtonColorArgs {
   isWalletConnected: boolean | undefined
+  isBalanceLoaded: boolean | undefined
   isDisabled: boolean | undefined
   isError: boolean | undefined
 }

@@ -95,7 +95,7 @@ function SwapForm() {
         <SwapFormInputs balances={balances} />
         {showSlippage && <SlippageRow />}
         <div className="flex justify-center w-full my-6 mb-0">
-          <SubmitButton isWalletConnected={isWalletConnected} />
+          <SubmitButton isWalletConnected={isWalletConnected} isBalanceLoaded={isBalanceLoaded} />
         </div>
       </Form>
     </Formik>
@@ -303,7 +303,7 @@ function SlippageRow() {
   )
 }
 
-function SubmitButton({ isWalletConnected }: ISubmitButtonProps) {
+function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButtonProps) {
   const { chain, chains } = useNetwork()
   const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
@@ -364,14 +364,15 @@ function SubmitButton({ isWalletConnected }: ISubmitButtonProps) {
   const buttonText = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
     if (!isOnCelo) return 'Switch to Celo Network'
+    if (isWalletConnected && !isBalanceLoaded) return 'Balance still loading...'
     if (hasError) return errorText
     return 'Continue'
-  }, [errorText, hasError, isWalletConnected, isOnCelo])
+  }, [errorText, hasError, isWalletConnected, isOnCelo, isBalanceLoaded])
   const onClick = useMemo(() => {
     if (!isWalletConnected) return openConnectModal
     if (!isOnCelo) return switchToNetwork
     return undefined
-  }, [isWalletConnected, isOnCelo, openConnectModal, switchToNetwork])
+  }, [isWalletConnected, isBalanceLoaded, isOnCelo, openConnectModal, switchToNetwork])
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -382,6 +383,7 @@ function SubmitButton({ isWalletConnected }: ISubmitButtonProps) {
         onClick={onClick}
         type={buttonType}
         isWalletConnected={isWalletConnected}
+        isBalanceLoaded={isBalanceLoaded}
       >
         {buttonText}
       </Button3D>

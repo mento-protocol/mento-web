@@ -21,7 +21,6 @@ export function useFormValidator({
       const { amount, fromTokenId } = values
       const tokenBalance = balances[fromTokenId]
       return (async () => {
-        if (isWalletConnected && !isBalanceLoaded) return { fromTokenId: 'Balance still loading' }
         if (!amount) return { amount: 'Amount Required' }
         const parsedAmount = parseAmount(amount)
         if (!parsedAmount) return { amount: 'Amount is Invalid' }
