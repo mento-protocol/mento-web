@@ -92,9 +92,9 @@ function getToastErrorMessage(
 ): string {
   switch (true) {
     case swapErrorMessage.includes(`overflow x1y1`):
-      return 'Swap out amount is too large'
+      return 'Amount in is too large'
     case swapErrorMessage.includes(`can't create fixidity number larger than`):
-      return 'Swap in amount is too large'
+      return 'Amount out is too large'
     case swapErrorMessage.includes(`no valid median`):
     case swapErrorMessage.includes(`Trading is suspended for this reference rate`):
       return (
