@@ -197,9 +197,9 @@ export async function isSwappable(token_1: string, token_2: string, chainId: num
   if (token_1 === token_2) return false
 
   return tradablePairs.some(
-    (obj) =>
-      obj.assets.find((asset) => asset.address === getTokenAddress(token_1 as TokenId, chainId)) &&
-      obj.assets.find((asset) => asset.address === getTokenAddress(token_2 as TokenId, chainId))
+    (assets) =>
+      assets.find((asset) => asset.address === getTokenAddress(token_1 as TokenId, chainId)) &&
+      assets.find((asset) => asset.address === getTokenAddress(token_2 as TokenId, chainId))
   )
 }
 

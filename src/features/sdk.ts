@@ -18,8 +18,5 @@ export async function getTradablePairForTokens(chainId: ChainId, tokenInId: Toke
   const sdk = await getMentoSdk(chainId)
   const tokenInAddr = getTokenAddress(tokenInId, chainId)
   const tokenOutAddr = getTokenAddress(tokenOutId, chainId)
-  const tradablePairs = await sdk.getTradablePairs()
-  const tradablePair = tradablePairs.find((pair) => pair.assets.some((asset) => asset.address === tokenInAddr) && pair.assets.some((asset) => asset.address === tokenOutAddr))
-  if (!tradablePair) throw new Error(`Tradable pair not found for tokens ${tokenInId} and ${tokenOutId} on chain ${chainId}`)
-  return tradablePair
+  return await sdk.findPairForTokens(tokenInAddr, tokenOutAddr)
 }
