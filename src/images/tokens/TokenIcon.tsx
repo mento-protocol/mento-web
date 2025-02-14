@@ -13,6 +13,7 @@ import cKESIcon from 'src/images/tokens/cKES.svg'
 import cREALIcon from 'src/images/tokens/cREAL.svg'
 import cUSDIcon from 'src/images/tokens/cUSD.svg'
 import eXOFIcon from 'src/images/tokens/eXOF.svg'
+import cGHSIcon from 'src/images/tokens/cGHS.svg'
 
 interface Props {
   token?: Token | null
@@ -47,6 +48,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   else if (token?.id === TokenId.cKES) imgSrc = cKESIcon
   else if (token?.id === TokenId.PUSO) imgSrc = PUSOIcon
   else if (token?.id === TokenId.cCOP) imgSrc = cCOPIcon
+  else if (token?.id === TokenId.cGHS) imgSrc = cGHSIcon
 
   if (imgSrc) {
     return (
