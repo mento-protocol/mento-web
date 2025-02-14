@@ -78,7 +78,8 @@
   },
   "resolutions": {
     "bignumber.js": "9.1.1",
-    "@types/react": "18.0.34"
+    "@types/react": "18.0.34",
+    "@mento-protocol/mento-sdk": "portal:/Users/bogdan/Workspace/mento/mento-sdk"
   },
   "packageManager": "yarn@3.3.1"
 }

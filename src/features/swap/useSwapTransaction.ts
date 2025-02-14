@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { TokenId, getTokenAddress } from 'src/config/tokens'
-import { getMentoSdk } from 'src/features/sdk'
+import { getMentoSdk, getTradablePairForTokens } from 'src/features/sdk'
 import { SwapDirection } from 'src/features/swap/types'
 import { logger } from 'src/utils/logger'
 import { usePrepareSendTransaction, useSendTransaction } from 'wagmi'
@@ -43,10 +43,14 @@ export function useSwapTransaction(
       const sdk = await getMentoSdk(chainId)
       const fromTokenAddr = getTokenAddress(fromToken, chainId)
       const toTokenAddr = getTokenAddress(toToken, chainId)
-      const brokerAddr = sdk.getBroker().address
+      const tradablePair = await getTradablePairForTokens(chainId, fromToken, toToken)
       const swapFn = direction === 'in' ? sdk.swapIn.bind(sdk) : sdk.swapOut.bind(sdk)
-      const txRequest = await swapFn(fromTokenAddr, toTokenAddr, amountInWei, thresholdAmountInWei)
-      return { ...txRequest, to: brokerAddr }
+      const txRequest = await swapFn(fromTokenAddr, toTokenAddr, amountInWei, thresholdAmountInWei, tradablePair)
+      // This should be populated by the SDK as either broker or router, but if it's not, throw an error
+      if (!txRequest.to) {
+        throw new Error('Swap transaction to address is undefined')
+      }
+      return { ...txRequest, to: txRequest.to! }
     }
   )
 

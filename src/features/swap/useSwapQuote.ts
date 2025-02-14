@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { SWAP_QUOTE_REFETCH_INTERVAL } from 'src/config/consts'
 import { TokenId, Tokens, getTokenAddress } from 'src/config/tokens'
-import { getMentoSdk } from 'src/features/sdk'
+import { getMentoSdk, getTradablePairForTokens } from 'src/features/sdk'
 import { SwapDirection } from 'src/features/swap/types'
 import {
   calcExchangeRate,
@@ -40,12 +40,13 @@ export function useSwapQuote(
       const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
       const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const mento = await getMentoSdk(chainId)
+      const tradablePair = await getTradablePairForTokens(chainId, fromTokenId, toTokenId)
 
       let quoteWei: string
       if (isSwapIn) {
-        quoteWei = (await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
+        quoteWei = (await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountWeiBN, tradablePair)).toString()
       } else {
-        quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN)).toString()
+        quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN, tradablePair)).toString()
       }
 
       const quote = fromWei(quoteWei, quoteDecimals)

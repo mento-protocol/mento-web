@@ -87,12 +87,13 @@ export function SwapConfirmCard({ formValues }: Props) {
   const { sendApproveTx, isApproveTxSuccess, isApproveTxLoading } = useApproveTransaction(
     chainId,
     fromTokenId,
+    toTokenId,
     approveAmount,
     address
   )
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
-  const { allowance, isLoading: isAllowanceLoading } = useAllowance(chainId, fromTokenId, address)
+  const { allowance, isLoading: isAllowanceLoading } = useAllowance(chainId, fromTokenId, toTokenId, address)
   const needsApproval = !isAllowanceLoading && new BigNumber(allowance).lte(approveAmount)
   const skipApprove = !isAllowanceLoading && !needsApproval
 
