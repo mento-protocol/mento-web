@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/mento-web",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "A simple DApp for Celo Mento exchanges",
   "keywords": [
     "Celo",
