@@ -34,7 +34,12 @@ async function fetchAllowance(
   return allowance.toString()
 }
 
-export function useAllowance(chainId: number, fromTokenId: TokenId, toTokenId: TokenId, accountAddress?: string) {
+export function useAllowance(
+  chainId: number,
+  fromTokenId: TokenId,
+  toTokenId: TokenId,
+  accountAddress?: string
+) {
   const { data: allowance, isLoading } = useQuery(
     ['tokenAllowance', chainId, fromTokenId, toTokenId, accountAddress],
     async () => {

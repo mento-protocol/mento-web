@@ -44,9 +44,13 @@ export function useSwapQuote(
 
       let quoteWei: string
       if (isSwapIn) {
-        quoteWei = (await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountWeiBN, tradablePair)).toString()
+        quoteWei = (
+          await mento.getAmountOut(fromTokenAddr, toTokenAddr, amountWeiBN, tradablePair)
+        ).toString()
       } else {
-        quoteWei = (await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN, tradablePair)).toString()
+        quoteWei = (
+          await mento.getAmountIn(fromTokenAddr, toTokenAddr, amountWeiBN, tradablePair)
+        ).toString()
       }
 
       const quote = fromWei(quoteWei, quoteDecimals)

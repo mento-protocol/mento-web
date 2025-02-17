@@ -45,7 +45,13 @@ export function useSwapTransaction(
       const toTokenAddr = getTokenAddress(toToken, chainId)
       const tradablePair = await getTradablePairForTokens(chainId, fromToken, toToken)
       const swapFn = direction === 'in' ? sdk.swapIn.bind(sdk) : sdk.swapOut.bind(sdk)
-      const txRequest = await swapFn(fromTokenAddr, toTokenAddr, amountInWei, thresholdAmountInWei, tradablePair)
+      const txRequest = await swapFn(
+        fromTokenAddr,
+        toTokenAddr,
+        amountInWei,
+        thresholdAmountInWei,
+        tradablePair
+      )
       // This should be populated by the SDK as either broker or router, but if it's not, throw an error
       if (!txRequest.to) {
         throw new Error('Swap transaction to address is undefined')

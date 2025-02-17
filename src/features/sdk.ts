@@ -1,6 +1,6 @@
 import { Mento, TradablePair } from '@mento-protocol/mento-sdk'
 import { ChainId } from 'src/config/chains'
-import { getTokenAddress, TokenId } from 'src/config/tokens'
+import { TokenId, getTokenAddress } from 'src/config/tokens'
 import { getProvider } from 'src/features/providers'
 
 const cache: Record<number, Mento> = {}
@@ -14,7 +14,11 @@ export async function getMentoSdk(chainId: ChainId): Promise<Mento> {
   return mento
 }
 
-export async function getTradablePairForTokens(chainId: ChainId, tokenInId: TokenId, tokenOutId: TokenId): Promise<TradablePair> {
+export async function getTradablePairForTokens(
+  chainId: ChainId,
+  tokenInId: TokenId,
+  tokenOutId: TokenId
+): Promise<TradablePair> {
   const sdk = await getMentoSdk(chainId)
   const tokenInAddr = getTokenAddress(tokenInId, chainId)
   const tokenOutAddr = getTokenAddress(tokenOutId, chainId)
