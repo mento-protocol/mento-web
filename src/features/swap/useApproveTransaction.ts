@@ -3,24 +3,26 @@ import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { TokenId, getTokenAddress } from 'src/config/tokens'
-import { getMentoSdk } from 'src/features/sdk'
+import { getMentoSdk, getTradablePairForTokens } from 'src/features/sdk'
 import { logger } from 'src/utils/logger'
 import { usePrepareSendTransaction, useSendTransaction } from 'wagmi'
 
 export function useApproveTransaction(
   chainId: number,
-  tokenId: TokenId,
+  tokenInId: TokenId,
+  tokenOutId: TokenId,
   amountInWei: string,
   accountAddress?: Address
 ) {
   const { error: txPrepError, data: txRequest } = useQuery(
-    ['useApproveTransaction', chainId, tokenId, amountInWei, accountAddress],
+    ['useApproveTransaction', chainId, tokenInId, tokenOutId, amountInWei, accountAddress],
     async () => {
       if (!accountAddress || new BigNumber(amountInWei).lte(0)) return null
       const sdk = await getMentoSdk(chainId)
-      const tokenAddr = getTokenAddress(tokenId, chainId)
-      const txRequest = await sdk.increaseTradingAllowance(tokenAddr, amountInWei)
-      return { ...txRequest, to: tokenAddr }
+      const tokenInAddr = getTokenAddress(tokenInId, chainId)
+      const tradablePair = await getTradablePairForTokens(chainId, tokenInId, tokenOutId)
+      const txRequest = await sdk.increaseTradingAllowance(tokenInAddr, amountInWei, tradablePair)
+      return { ...txRequest, to: tokenInAddr }
     },
     {
       retry: false,
