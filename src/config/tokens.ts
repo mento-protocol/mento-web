@@ -1,5 +1,5 @@
 import { ChainId } from 'src/config/chains'
-import { MentoExchanges } from 'src/config/exchanges'
+import { getMentoSdk } from 'src/features/sdk'
 import { Color } from 'src/styles/Color'
 import { areAddressesEqual } from 'src/utils/addresses'
 
@@ -190,17 +190,16 @@ export function isNativeStableToken(tokenId: string) {
   return NativeStableTokenIds.includes(tokenId as TokenId)
 }
 
-export function isSwappable(token_1: string, token_2: string, chainId: number) {
-  const exchanges = MentoExchanges[chainId as ChainId]
-
-  if (!exchanges) return false
-
+export async function isSwappable(token_1: string, token_2: string, chainId: number) {
+  const sdk = await getMentoSdk(chainId)
+  const tradablePairs = await sdk.getTradablePairs()
+  if (!tradablePairs) return false
   if (token_1 === token_2) return false
 
-  return exchanges.some(
-    (obj) =>
-      obj.assets.includes(getTokenAddress(token_1 as TokenId, chainId)) &&
-      obj.assets.includes(getTokenAddress(token_2 as TokenId, chainId))
+  return tradablePairs.some(
+    (assets) =>
+      assets.find((asset) => asset.address === getTokenAddress(token_1 as TokenId, chainId)) &&
+      assets.find((asset) => asset.address === getTokenAddress(token_2 as TokenId, chainId))
   )
 }
 
