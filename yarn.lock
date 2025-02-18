@@ -1885,21 +1885,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mento-protocol/mento-core-ts@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@mento-protocol/mento-core-ts@npm:0.1.1"
-  checksum: 336df2ae8338bc23de39327f346f29f26b2be2d335aa8ca125291a9408ba0bfac3699b17920dc269eaa988c535b0ad7bf4332da2d2947983335023239ea6f1e3
+"@mento-protocol/mento-core-ts@npm:^0.2.0":
+  version: 0.2.3
+  resolution: "@mento-protocol/mento-core-ts@npm:0.2.3"
+  checksum: 334877806d44e8e2ff905f22cc6ed695b3a61b22ec0456bfa6a7b6ee6cb068492af10da62cb939e2ebe17d87b2e4610826448f57cd390390f4e409b768513a49
   languageName: node
   linkType: hard
 
-"@mento-protocol/mento-sdk@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@mento-protocol/mento-sdk@npm:0.1.5"
+"@mento-protocol/mento-sdk@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@mento-protocol/mento-sdk@npm:1.0.2"
   dependencies:
-    "@mento-protocol/mento-core-ts": ^0.1.1
+    "@mento-protocol/mento-core-ts": ^0.2.0
+    mento-router-ts: ^0.2.0
   peerDependencies:
     ethers: ^5.7
-  checksum: 91e00199f88f5f369fca9daf699218a1d652166ca0d15e8a539662170952b53498969e23bf0e039f32251633c8e87318adc333a6617869b790ab266893e88095
+  checksum: 3aa3e1798f9abaaa3a0c0362c241711e1365a82906ed8e11baedebe285a3b16524110a6fe92e39c7ad12ad66c1b4ebb83a79e308c6b210f964c1e3e4a80eac22
   languageName: node
   linkType: hard
 
@@ -1910,7 +1911,7 @@ __metadata:
     "@celo/rainbowkit-celo": ^0.11.0
     "@headlessui-float/react": ^0.11.2
     "@headlessui/react": ^1.7.13
-    "@mento-protocol/mento-sdk": ^0.1.5
+    "@mento-protocol/mento-sdk": ^1.0.2
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28"
     "@metamask/post-message-stream": 6.1.2
     "@metamask/providers": 10.2.1
@@ -2996,11 +2997,11 @@ __metadata:
   linkType: hard
 
 "@types/react-dom@npm:^18.2.5":
-  version: 18.2.5
-  resolution: "@types/react-dom@npm:18.2.5"
-  dependencies:
-    "@types/react": "*"
-  checksum: c48209f8c60cb9054f3deee5365bc9fd6dadd8f901b67f1612a334057b2671518fc5145f14aca63ff276a926ccb5358308a6cf58ec700178f382bb3ebde96d91
+  version: 18.3.5
+  resolution: "@types/react-dom@npm:18.3.5"
+  peerDependencies:
+    "@types/react": ^18.0.0
+  checksum: 95c757684f71e761515c5a11299e5feec550c72bb52975487f360e6f0d359b26454c26eaf2ce45dd22748205aa9b2c2fe0abe7005ebcbd233a7615283ac39a7d
   languageName: node
   linkType: hard
 
@@ -8186,6 +8187,13 @@ __metadata:
   dependencies:
     "@babel/runtime": ^7.12.5
   checksum: 8ef956d9e63fe6f4041988beda69843b3a6bb48228ea2923a066f6e7c8f7c5dba75fae357318c48a97ed5beae840b8425cb7e727fc1bb77acc65f2005f8945ab
+  languageName: node
+  linkType: hard
+
+"mento-router-ts@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "mento-router-ts@npm:0.2.0"
+  checksum: 94a01a2cd898dc20379a2961f17b3c8bb29b01cd2bb9e5efb6b5d67d0270d9e347411b89eb8afb7c6b6f272b4242a3dd21465802e78fc724067316bc7661ad61
   languageName: node
   linkType: hard
 
