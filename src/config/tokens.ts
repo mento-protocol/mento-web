@@ -203,10 +203,20 @@ export async function isSwappable(token_1: string, token_2: string, chainId: num
   )
 }
 
-export function getSwappableTokenOptions(token: string, chainId: ChainId) {
-  return getTokenOptionsByChainId(chainId)
-    .filter((tkn) => isSwappable(tkn, token, chainId))
-    .filter((tkn) => token !== tkn)
+export async function getSwappableTokenOptions(token: string, chainId: ChainId) {
+  const options = getTokenOptionsByChainId(chainId)
+
+  const swappableOptions = await Promise.all(
+    options.map(async (tkn) => ({
+      token: tkn,
+      isSwappable: await isSwappable(tkn, token, chainId),
+    }))
+  ).then((results) => {
+    return results
+      .filter((result) => result.isSwappable && result.token !== token)
+      .map((result) => result.token)
+  })
+  return swappableOptions
 }
 
 export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
