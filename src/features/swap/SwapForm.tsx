@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Form, Formik, useFormikContext } from 'formik'
-import { ReactNode, SVGProps, useEffect, useMemo } from 'react'
+import { ReactNode, SVGProps, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
 import { Button3D } from 'src/components/buttons/3DButton'
@@ -94,6 +94,7 @@ function SwapForm() {
 function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { address, isConnected } = useAccount()
   const { chain } = useNetwork()
+  const [swappableTokens, setSwappableTokens] = useState<TokenId[]>([])
 
   const tokensForChain = useMemo(() => {
     return chain ? getTokenOptionsByChainId(chain?.id) : getTokenOptionsByChainId(Celo.chainId)
@@ -101,9 +102,16 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
 
   const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
-  const swappableTokenOptions = useMemo(() => {
-    return getSwappableTokenOptions(values.fromTokenId, chain ? chain?.id : Celo.chainId)
-  }, [chain, values])
+  useEffect(() => {
+    const fetchSwappableTokens = async () => {
+      const tokens = await getSwappableTokenOptions(
+        values.fromTokenId,
+        chain ? chain?.id : Celo.chainId
+      )
+      setSwappableTokens(tokens)
+    }
+    fetchSwappableTokens().catch(logger.error)
+  }, [chain, values.fromTokenId, values.toTokenId])
 
   const { amount, direction, fromTokenId, toTokenId } = values
 
@@ -116,13 +124,17 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   }, [quote, setFieldValue, values.direction])
 
   useEffect(() => {
-    if (chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id)) {
-      setFieldValue(
-        'toTokenId',
-        swappableTokenOptions.length < 1 ? TokenId.cUSD : swappableTokenOptions[0]
-      )
+    const setToToken = async () => {
+      if (
+        chain &&
+        isConnected &&
+        !(await isSwappable(values.fromTokenId, values.toTokenId, chain?.id))
+      ) {
+        setFieldValue('toTokenId', swappableTokens.length < 1 ? TokenId.cUSD : swappableTokens[0])
+      }
     }
-  }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
+    setToToken().catch(logger.error)
+  }, [setFieldValue, chain, values, swappableTokens, isConnected])
 
   const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
   const isRoundedBalanceGreaterThanZero = Boolean(Number.parseFloat(roundedBalance) > 0)
@@ -177,7 +189,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
           <TokenSelectField
             name="toTokenId"
             label="To Token"
-            tokenOptions={swappableTokenOptions}
+            tokenOptions={swappableTokens}
             onChange={onChangeToken(false)}
           />
         </div>
