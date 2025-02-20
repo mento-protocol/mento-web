@@ -3,7 +3,7 @@ import { Form, Formik, useFormikContext } from 'formik'
 import { ReactNode, SVGProps, useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'src/components/animation/Spinner'
-import { Button3D } from 'src/components/buttons/3DButton'
+import { Button3D, Button3DText } from 'src/components/buttons/3DButton'
 import { RadioInput } from 'src/components/input/RadioInput'
 import { TokenSelectField } from 'src/components/input/TokenSelectField'
 import { Celo } from 'src/config/chains'
@@ -345,7 +345,6 @@ function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButtonProps
       errors.slippage
     )
   }, [isAmountModified, isQuoteStillLoading, errors])
-  const isDisabled = isWalletConnected && !Number(values.quote) && !hasError
 
   const errorText = useMemo(
     () =>
@@ -362,17 +361,22 @@ function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButtonProps
     [isWalletConnected, hasError]
   )
   const buttonText = useMemo(() => {
-    if (!isWalletConnected) return 'Connect Wallet'
-    if (!isOnCelo) return 'Switch to Celo Network'
-    if (isWalletConnected && !isBalanceLoaded) return 'Balance still loading...'
+    if (!isWalletConnected) return Button3DText.connectWallet
+    if (!isOnCelo) return Button3DText.switchToCeloNetwork
+    if (isWalletConnected && !isBalanceLoaded) return Button3DText.balanceStillLoading
     if (hasError) return errorText
-    return 'Continue'
+    return Button3DText.continue
   }, [errorText, hasError, isWalletConnected, isOnCelo, isBalanceLoaded])
   const onClick = useMemo(() => {
     if (!isWalletConnected) return openConnectModal
     if (!isOnCelo) return switchToNetwork
     return undefined
   }, [isWalletConnected, isBalanceLoaded, isOnCelo, openConnectModal, switchToNetwork])
+
+  const isDisabled =
+    buttonText === Button3DText.balanceStillLoading
+      ? isWalletConnected && !hasError
+      : isWalletConnected && !Number(values.quote) && !hasError
 
   return (
     <div className="flex flex-col items-center justify-center w-full">

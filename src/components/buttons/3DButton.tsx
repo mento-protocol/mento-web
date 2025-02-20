@@ -10,6 +10,13 @@ type BaseButtonProps = {
   isBalanceLoaded?: boolean
 }
 
+export enum Button3DText {
+  connectWallet = 'Connect Wallet',
+  continue = 'Continue',
+  balanceStillLoading = 'Balance still loading...',
+  switchToCeloNetwork = 'Switch to Celo Network',
+}
+
 export const Button3D = ({
   children,
   onClick,
