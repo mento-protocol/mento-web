@@ -261,15 +261,13 @@ interface SwapConfirmSummaryProps {
 }
 
 export function SwapConfirmSummary({ from, to, rate }: SwapConfirmSummaryProps) {
-  const optimalAmountLength = 8
+  const maxAmountLength = 8
   const fromToken = Tokens[from.token]
   const toToken = Tokens[to.token]
 
   const handleAmount = (amount: string) => {
-    const shouldTruncate = amount.length > optimalAmountLength
-    const displayedAmount = shouldTruncate
-      ? truncateTextByLength(optimalAmountLength, amount)
-      : amount
+    const shouldTruncate = amount.length > maxAmountLength
+    const displayedAmount = shouldTruncate ? truncateTextByLength(maxAmountLength, amount) : amount
 
     return shouldTruncate ? (
       // todo: Replace to module.css. Couldn't been replaced because of incorrect styles while replacing
