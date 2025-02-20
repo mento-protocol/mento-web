@@ -191,6 +191,8 @@ export function SwapConfirmCard({ formValues }: Props) {
     refetch().catch((e) => logger.error('Failed to refetch quote:', e))
   }
 
+  const isButtonDisabled = !sendApproveTx || isApproveTxSuccess || isApproveTxLoading
+
   return (
     <FloatingBox
       width="w-screen md:w-[432px] "
@@ -238,7 +240,7 @@ export function SwapConfirmCard({ formValues }: Props) {
       </div>
 
       <div className="flex w-full px-6 pb-6 mt-6">
-        <Button3D isFullWidth onClick={onSubmit}>
+        <Button3D isFullWidth onClick={onSubmit} isDisabled={isButtonDisabled}>
           Swap
         </Button3D>
       </div>
