@@ -129,7 +129,7 @@ function SwapFormInputs({ balances }: { balances: AccountBalances }) {
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   useEffect(() => {
-    if (values.direction === 'in' && quote && values.quote !== quote) {
+    if (values.direction && quote && values.quote !== quote) {
       setFieldValue('quote', quote)
     }
   }, [quote, setFieldError, setFieldValue, values.direction, values.quote])
