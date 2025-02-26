@@ -5,4 +5,9 @@ export function toTitleCase(str: string) {
 }
 
 export const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
+
 export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+
+export const truncateTextByLength = (length: number, text: string): string => {
+  return text.length > length ? text.slice(0, length) + '...' : text
+}

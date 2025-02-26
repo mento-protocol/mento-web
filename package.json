@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/mento-web",
-  "version": "2.3.3",
+  "version": "2.3.7",
   "description": "A simple DApp for Celo Mento exchanges",
   "keywords": [
     "Celo",
@@ -29,7 +29,7 @@
     "@celo/rainbowkit-celo": "^0.11.0",
     "@headlessui-float/react": "^0.11.2",
     "@headlessui/react": "^1.7.13",
-    "@mento-protocol/mento-sdk": "^0.1.5",
+    "@mento-protocol/mento-sdk": "^1.0.3",
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
     "@metamask/post-message-stream": "6.1.2",
     "@metamask/providers": "10.2.1",
@@ -45,7 +45,7 @@
     "frappe-charts": "^1.6.2",
     "jsbi": "^4.3.0",
     "lottie-react": "^2.4.0",
-    "next": "13.5.7-canary.37",
+    "next": "14.2.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.0",

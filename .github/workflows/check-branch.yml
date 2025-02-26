@@ -1,21 +1,24 @@
-name: Prevent Non-Release/Non-Hotfix PRs to Main
+# NOTE: @chapati23 disabled this check today on 18.02.2025 as a conscious tradeoff to prioritize simpler and faster delivery
+# over a slower release cycle with more checks. We can turn it back on if we notice that we have more production issues but
+# for the moment we don't have a lot of users on this DApp so should prioritize faster improvements until we reach greater scale.
 
-on:
-  pull_request:
-    branches:
-      - main
-  pull_request_target:
-    branches:
-      - main
+# name: Prevent Non-Release/Non-Hotfix PRs to Main
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#   pull_request_target:
+#     branches:
+#       - main
 
-jobs:
-  check-target-branch:
-    if: github.base_ref == 'main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if the source branch is a release branch
-        run: |
-          if [[ "${{ github.head_ref }}" != release/* && "${{ github.head_ref }}" != hotfix/* ]]; then
-            echo "Only release and hotfix branches can be merged into the main branch."
-            exit 1
-          fi
+# jobs:
+#   check-target-branch:
+#     if: github.base_ref == 'main'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check if the source branch is a release branch
+#         run: |
+#           if [[ "${{ github.head_ref }}" != release/* && "${{ github.head_ref }}" != hotfix/* ]]; then
+#             echo "Only release and hotfix branches can be merged into the main branch."
+#             exit 1
+#           fi

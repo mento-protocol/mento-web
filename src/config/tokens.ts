@@ -1,5 +1,5 @@
 import { ChainId } from 'src/config/chains'
-import { MentoExchanges } from 'src/config/exchanges'
+import { getMentoSdk } from 'src/features/sdk'
 import { Color } from 'src/styles/Color'
 import { areAddressesEqual } from 'src/utils/addresses'
 
@@ -28,6 +28,7 @@ export enum TokenId {
   cKES = 'cKES',
   PUSO = 'PUSO',
   cCOP = 'cCOP',
+  cGHS = 'cGHS',
 }
 
 export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
@@ -122,6 +123,14 @@ export const cCOP: Token = Object.freeze({
   decimals: 18,
 })
 
+export const cGHS: Token = Object.freeze({
+  id: TokenId.cGHS,
+  symbol: TokenId.cGHS,
+  name: 'cGHS',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
 export const Tokens: Record<TokenId, Token> = {
   CELO,
   cUSD,
@@ -135,6 +144,7 @@ export const Tokens: Record<TokenId, Token> = {
   cKES,
   PUSO,
   cCOP,
+  cGHS,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
@@ -151,6 +161,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cKES]: '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
     [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
     [TokenId.cCOP]: '0xe6A57340f0df6E020c1c0a80bC6E13048601f0d4',
+    [TokenId.cGHS]: '0xf419dfab059c36cbafb43a088ebeb2811f9789b9',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -165,6 +176,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cKES]: '0x8813Ae180017057d0Cf98C930cED1E7101B97370',
     [TokenId.PUSO]: '',
     [TokenId.cCOP]: '',
+    [TokenId.cGHS]: '',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
@@ -179,6 +191,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cKES]: '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
     [TokenId.PUSO]: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     [TokenId.cCOP]: '0x8A567e2aE79CA692Bd748aB832081C45de4041eA',
+    [TokenId.cGHS]: '0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313',
   },
 })
 
@@ -190,24 +203,33 @@ export function isNativeStableToken(tokenId: string) {
   return NativeStableTokenIds.includes(tokenId as TokenId)
 }
 
-export function isSwappable(token_1: string, token_2: string, chainId: number) {
-  const exchanges = MentoExchanges[chainId as ChainId]
-
-  if (!exchanges) return false
-
+export async function isSwappable(token_1: string, token_2: string, chainId: number) {
+  const sdk = await getMentoSdk(chainId)
+  const tradablePairs = await sdk.getTradablePairs()
+  if (!tradablePairs) return false
   if (token_1 === token_2) return false
 
-  return exchanges.some(
-    (obj) =>
-      obj.assets.includes(getTokenAddress(token_1 as TokenId, chainId)) &&
-      obj.assets.includes(getTokenAddress(token_2 as TokenId, chainId))
+  return tradablePairs.some(
+    (assets) =>
+      assets.find((asset) => asset.address === getTokenAddress(token_1 as TokenId, chainId)) &&
+      assets.find((asset) => asset.address === getTokenAddress(token_2 as TokenId, chainId))
   )
 }
 
-export function getSwappableTokenOptions(token: string, chainId: ChainId) {
-  return getTokenOptionsByChainId(chainId)
-    .filter((tkn) => isSwappable(tkn, token, chainId))
-    .filter((tkn) => token !== tkn)
+export async function getSwappableTokenOptions(token: string, chainId: ChainId) {
+  const options = getTokenOptionsByChainId(chainId)
+
+  const swappableOptions = await Promise.all(
+    options.map(async (tkn) => ({
+      token: tkn,
+      isSwappable: await isSwappable(tkn, token, chainId),
+    }))
+  ).then((results) => {
+    return results
+      .filter((result) => result.isSwappable && result.token !== token)
+      .map((result) => result.token)
+  })
+  return swappableOptions
 }
 
 export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
@@ -220,8 +242,8 @@ export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
     : []
 }
 
-export function getTokenById(id: string): Token | null {
-  return Tokens[id as TokenId] || null
+export function getTokenById(id: TokenId | string): Token {
+  return Tokens[id as TokenId]
 }
 
 export function getTokenAddress(id: TokenId, chainId: ChainId): Address {
