@@ -1,34 +1,34 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Form, Formik, FormikProps, useFormikContext } from 'formik';
-import { ReactNode, SVGProps, useEffect, useMemo, useRef } from 'react';
-import { toast } from 'react-toastify';
-import { Spinner } from 'src/components/animation/Spinner';
-import { Button3D } from 'src/components/buttons/3DButton';
-import { RadioInput } from 'src/components/input/RadioInput';
-import { TokenSelectField } from 'src/components/input/TokenSelectField';
-import { Celo } from 'src/config/chains';
+import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { Form, Formik, FormikProps, useFormikContext } from 'formik'
+import { ReactNode, SVGProps, useEffect, useMemo, useRef } from 'react'
+import { toast } from 'react-toastify'
+import { Spinner } from 'src/components/animation/Spinner'
+import { Button3D } from 'src/components/buttons/3DButton'
+import { RadioInput } from 'src/components/input/RadioInput'
+import { TokenSelectField } from 'src/components/input/TokenSelectField'
+import { Celo } from 'src/config/chains'
 import {
   TokenId,
   Tokens,
   getSwappableTokenOptions,
   getTokenOptionsByChainId,
   isSwappable,
-} from 'src/config/tokens';
-import { reset as accountReset } from 'src/features/accounts/accountSlice';
-import { AccountBalances } from 'src/features/accounts/fetchBalances';
-import { reset as blockReset } from 'src/features/blocks/blockSlice';
-import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice';
-import { useAppDispatch, useAppSelector } from 'src/features/store/hooks';
-import { SettingsMenu } from 'src/features/swap/SettingsMenu';
-import { setConfirmView, setFormValues, reset as swapReset } from 'src/features/swap/swapSlice';
-import { SwapDirection, SwapFormValues } from 'src/features/swap/types';
-import { useFormValidator } from 'src/features/swap/useFormValidator';
-import { useSwapQuote } from 'src/features/swap/useSwapQuote';
-import { FloatingBox } from 'src/layout/FloatingBox';
-import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount';
-import { logger } from 'src/utils/logger';
-import { escapeRegExp, inputRegex } from 'src/utils/string';
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+} from 'src/config/tokens'
+import { reset as accountReset } from 'src/features/accounts/accountSlice'
+import { AccountBalances } from 'src/features/accounts/fetchBalances'
+import { reset as blockReset } from 'src/features/blocks/blockSlice'
+import { resetTokenPrices } from 'src/features/chart/tokenPriceSlice'
+import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
+import { SettingsMenu } from 'src/features/swap/SettingsMenu'
+import { setConfirmView, setFormValues, reset as swapReset } from 'src/features/swap/swapSlice'
+import { SwapDirection, SwapFormValues } from 'src/features/swap/types'
+import { useFormValidator } from 'src/features/swap/useFormValidator'
+import { useSwapQuote } from 'src/features/swap/useSwapQuote'
+import { FloatingBox } from 'src/layout/FloatingBox'
+import { fromWei, fromWeiRounded, toSignificant } from 'src/utils/amount'
+import { logger } from 'src/utils/logger'
+import { escapeRegExp, inputRegex } from 'src/utils/string'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 
 const initialValues: SwapFormValues = {
   fromTokenId: TokenId.CELO,
@@ -37,7 +37,7 @@ const initialValues: SwapFormValues = {
   quote: '',
   direction: 'in',
   slippage: '1.0',
-};
+}
 
 export function SwapFormCard() {
   return (
@@ -56,28 +56,28 @@ export function SwapFormCard() {
         <SwapForm />
       </div>
     </FloatingBox>
-  );
+  )
 }
 
 function SwapForm() {
-  const { balances, isFetchingBalance, lastUpdated } = useAppSelector((s) => s.account);
-  const { showSlippage } = useAppSelector((s) => s.swap);
+  const { balances, isFetchingBalance, lastUpdated } = useAppSelector((s) => s.account)
+  const { showSlippage } = useAppSelector((s) => s.swap)
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   const onSubmit = (values: SwapFormValues) => {
-    dispatch(setFormValues(values));
-    dispatch(setConfirmView(true)); 
-  };
-  const validateForm = useFormValidator(isFetchingBalance, balances, lastUpdated);
-  const storedFormValues = useAppSelector((s) => s.swap.formValues); 
-  const initialFormValues = storedFormValues || initialValues; 
-  const formikRef = useRef<FormikProps<SwapFormValues>>(null);
+    dispatch(setFormValues(values))
+    dispatch(setConfirmView(true))
+  }
+  const validateForm = useFormValidator(isFetchingBalance, balances, lastUpdated)
+  const storedFormValues = useAppSelector((s) => s.swap.formValues)
+  const initialFormValues = storedFormValues || initialValues
+  const formikRef = useRef<FormikProps<SwapFormValues>>(null)
 
   useEffect(() => {
     if (formikRef.current && !isFetchingBalance) {
-      formikRef.current.submitForm();
+      formikRef.current.submitForm()
     }
-  }, [isFetchingBalance]);
+  }, [isFetchingBalance])
 
   return (
     <Formik<SwapFormValues>
@@ -96,58 +96,58 @@ function SwapForm() {
         </div>
       </Form>
     </Formik>
-  );
+  )
 }
 
-function SwapFormInputs({ balances }: { balances: AccountBalances; }) {
-  const { address, isConnected } = useAccount();
-  const { chain } = useNetwork();
+function SwapFormInputs({ balances }: { balances: AccountBalances }) {
+  const { address, isConnected } = useAccount()
+  const { chain } = useNetwork()
 
   const tokensForChain = useMemo(() => {
-    return chain ? getTokenOptionsByChainId(chain?.id) : getTokenOptionsByChainId(Celo.chainId);
-  }, [chain]);
+    return chain ? getTokenOptionsByChainId(chain?.id) : getTokenOptionsByChainId(Celo.chainId)
+  }, [chain])
 
-  const { values, setFieldValue } = useFormikContext<SwapFormValues>();
+  const { values, setFieldValue } = useFormikContext<SwapFormValues>()
 
   const swappableTokenOptions = useMemo(() => {
-    return getSwappableTokenOptions(values.fromTokenId, chain ? chain?.id : Celo.chainId);
-  }, [chain, values]);
+    return getSwappableTokenOptions(values.fromTokenId, chain ? chain?.id : Celo.chainId)
+  }, [chain, values])
 
-  const { amount, direction, fromTokenId, toTokenId } = values;
+  const { amount, direction, fromTokenId, toTokenId } = values
 
-  const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId);
+  const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   useEffect(() => {
     if (values.direction === 'in' && quote) {
-      setFieldValue('quote', quote);
+      setFieldValue('quote', quote)
     }
-  }, [quote, setFieldValue, values.direction]);
+  }, [quote, setFieldValue, values.direction])
 
   useEffect(() => {
     if (chain && isConnected && !isSwappable(values.fromTokenId, values.toTokenId, chain?.id)) {
       setFieldValue(
         'toTokenId',
         swappableTokenOptions.length < 1 ? TokenId.cUSD : swappableTokenOptions[0]
-      );
+      )
     }
-  }, [setFieldValue, chain, values, swappableTokenOptions, isConnected]);
+  }, [setFieldValue, chain, values, swappableTokenOptions, isConnected])
 
-  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals);
-  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseFloat(roundedBalance) > 0);
+  const roundedBalance = fromWeiRounded(balances[fromTokenId], Tokens[fromTokenId].decimals)
+  const isRoundedBalanceGreaterThanZero = Boolean(Number.parseFloat(roundedBalance) > 0)
   const onClickUseMax = () => {
-    const maxAmount = fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals);
-    setFieldValue('amount', maxAmount);
+    const maxAmount = fromWei(balances[fromTokenId], Tokens[fromTokenId].decimals)
+    setFieldValue('amount', maxAmount)
 
-    setFieldValue('direction', 'in');
+    setFieldValue('direction', 'in')
     if (fromTokenId === TokenId.CELO) {
-      toast.warn('Consider keeping some CELO for transaction fees');
+      toast.warn('Consider keeping some CELO for transaction fees')
     }
-  };
+  }
 
   const onChangeToken = (isFromToken: boolean) => (tokenId: string) => {
-    const targetField = isFromToken ? 'fromTokenId' : 'toTokenId';
-    setFieldValue(targetField, tokenId);
-  };
+    const targetField = isFromToken ? 'fromTokenId' : 'toTokenId'
+    setFieldValue(targetField, tokenId)
+  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -192,40 +192,40 @@ function SwapFormInputs({ balances }: { balances: AccountBalances; }) {
         <AmountField quote={quote} isQuoteLoading={isLoading} direction="out" />
       </TokenSelectFieldWrapper>
     </div>
-  );
+  )
 }
 
-const TokenSelectFieldWrapper = ({ children }: { children: ReactNode; }) => {
+const TokenSelectFieldWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex items-center justify-between pl-[5px] py-[5px] pr-[20px] rounded-xl bg-white border border-primary-dark dark:border-[#333336] dark:bg-[#1D1D20]">
       {children}
     </div>
-  );
-};
+  )
+}
 
 function AmountField({
   direction,
   quote,
   isQuoteLoading,
 }: {
-  direction: SwapDirection;
-  quote: string;
-  isQuoteLoading: boolean;
+  direction: SwapDirection
+  quote: string
+  isQuoteLoading: boolean
 }) {
-  const { values, setValues } = useFormikContext<SwapFormValues>();
+  const { values, setValues } = useFormikContext<SwapFormValues>()
 
-  const isCurrentInput = values.direction == direction;
+  const isCurrentInput = values.direction == direction
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    if (typeof value === 'undefined') return;
-    const val = `${value}`.replace(/,/g, '.');
+    if (typeof value === 'undefined') return
+    const val = `${value}`.replace(/,/g, '.')
 
     if (inputRegex.test(escapeRegExp(val))) {
-      setValues({ ...values, amount: val, direction });
+      setValues({ ...values, amount: val, direction })
     }
-  };
+  }
 
   if (!isCurrentInput && isQuoteLoading) {
     return (
@@ -234,7 +234,7 @@ function AmountField({
           <Spinner />
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -247,20 +247,20 @@ function AmountField({
       className="pt-1 truncate text-[20px] dark:text-white font-medium text-right bg-transparent font-fg w-36 focus:outline-none"
       onChange={onChange}
     />
-  );
+  )
 }
 
 function ReverseTokenButton() {
-  const { values, setValues } = useFormikContext<SwapFormValues>();
-  const { fromTokenId, toTokenId } = values;
+  const { values, setValues } = useFormikContext<SwapFormValues>()
+  const { fromTokenId, toTokenId } = values
 
   const onClickReverse = async () => {
     setValues({
       ...values,
       toTokenId: fromTokenId,
       fromTokenId: toTokenId,
-    });
-  };
+    })
+  }
 
   return (
     <button
@@ -271,7 +271,7 @@ function ReverseTokenButton() {
     >
       <DownArrow />
     </button>
-  );
+  )
 }
 
 function SlippageRow() {
@@ -285,61 +285,61 @@ function SlippageRow() {
       <RadioInput name="slippage" value="1.0" label="1.0%" />
       <RadioInput name="slippage" value="1.5" label="1.5%" />
     </div>
-  );
+  )
 }
 
-function SubmitButton({ isFetchingBalance }: { isFetchingBalance: boolean; }) {
-  const { address, isConnected } = useAccount();
-  const { chain, chains } = useNetwork();
-  const { switchNetworkAsync } = useSwitchNetwork();
-  const { openConnectModal } = useConnectModal();
-  const dispatch = useAppDispatch();
-  const { errors, touched } = useFormikContext<SwapFormValues>();
+function SubmitButton({ isFetchingBalance }: { isFetchingBalance: boolean }) {
+  const { address, isConnected } = useAccount()
+  const { chain, chains } = useNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
+  const { openConnectModal } = useConnectModal()
+  const dispatch = useAppDispatch()
+  const { errors, touched } = useFormikContext<SwapFormValues>()
 
-  const isAccountReady = address && isConnected;
-  const isOnCelo = chains.some((chn) => chn.id === chain?.id);
+  const isAccountReady = address && isConnected
+  const isOnCelo = chains.some((chn) => chn.id === chain?.id)
 
   const switchToNetwork = async () => {
     try {
-      if (!switchNetworkAsync) throw new Error('switchNetworkAsync undefined');
-      logger.debug('Resetting and switching to Celo');
-      await switchNetworkAsync(42220);
-      dispatch(blockReset());
-      dispatch(accountReset());
-      dispatch(swapReset());
-      dispatch(resetTokenPrices());
+      if (!switchNetworkAsync) throw new Error('switchNetworkAsync undefined')
+      logger.debug('Resetting and switching to Celo')
+      await switchNetworkAsync(42220)
+      dispatch(blockReset())
+      dispatch(accountReset())
+      dispatch(swapReset())
+      dispatch(resetTokenPrices())
     } catch (error) {
-      logger.error('Error updating network', error);
-      toast.error('Could not switch network, does wallet support switching?');
+      logger.error('Error updating network', error)
+      toast.error('Could not switch network, does wallet support switching?')
     }
-  };
+  }
 
   const error =
-    touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage);
-  let text;
+    touched.amount && (errors.amount || errors.fromTokenId || errors.toTokenId || errors.slippage)
+  let text
 
   if (error) {
-    text = error;
+    text = error
   } else if (isFetchingBalance) {
-    text = 'Retrieving Balance...';
+    text = 'Retrieving Balance...'
   } else if (!isAccountReady) {
-    text = 'Connect Wallet';
+    text = 'Connect Wallet'
   } else if (!isOnCelo) {
-    text = 'Switch to Celo Network';
+    text = 'Switch to Celo Network'
   } else {
-    text = 'Continue';
+    text = 'Continue'
   }
 
-  const type = isAccountReady ? 'submit' : 'button';
-  let onClick;
+  const type = isAccountReady ? 'submit' : 'button'
+  let onClick
 
   if (!isAccountReady) {
-    onClick = openConnectModal;
+    onClick = openConnectModal
   } else if (!isOnCelo) {
-    onClick = switchToNetwork;
+    onClick = switchToNetwork
   }
 
-  const showLongError = typeof error === 'string' && error?.length > 50;
+  const showLongError = typeof error === 'string' && error?.length > 50
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -350,7 +350,7 @@ function SubmitButton({ isFetchingBalance }: { isFetchingBalance: boolean; }) {
         {showLongError ? 'Error' : text}
       </Button3D>
     </div>
-  );
+  )
 }
 
 const DownArrow = (props: SVGProps<SVGSVGElement>) => (
@@ -362,4 +362,4 @@ const DownArrow = (props: SVGProps<SVGSVGElement>) => (
       d="M7 .75v12.5m0 0 5.625-5.625M7 13.25 1.375 7.625"
     />
   </svg>
-);
+)
