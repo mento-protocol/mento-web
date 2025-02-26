@@ -9,6 +9,7 @@ import axlEUROCIcon from 'src/images/tokens/axlEUROC.svg'
 import axlUSDCIcon from 'src/images/tokens/axlUSDC.svg'
 import cCOPIcon from 'src/images/tokens/cCOP.svg'
 import cEURIcon from 'src/images/tokens/cEUR.svg'
+import cGHSIcon from 'src/images/tokens/cGHS.svg'
 import cKESIcon from 'src/images/tokens/cKES.svg'
 import cREALIcon from 'src/images/tokens/cREAL.svg'
 import cUSDIcon from 'src/images/tokens/cUSD.svg'
@@ -47,6 +48,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
   else if (token?.id === TokenId.cKES) imgSrc = cKESIcon
   else if (token?.id === TokenId.PUSO) imgSrc = PUSOIcon
   else if (token?.id === TokenId.cCOP) imgSrc = cCOPIcon
+  else if (token?.id === TokenId.cGHS) imgSrc = cGHSIcon
 
   if (imgSrc) {
     return (

@@ -4,7 +4,7 @@ import BackgroundTiles from 'src/images/background/background_tiles_light.png'
 
 export function BottomGrid() {
   return (
-    <div className="absolute bottom-0 z-10 transform -translate-x-1/2 left-1/2">
+    <div className="absolute bottom-0 transform -translate-x-1/2 left-1/2 pointer-events-none">
       <div className="w-screen h-[201px] relative">
         <Image
           src={BackgroundTiles}

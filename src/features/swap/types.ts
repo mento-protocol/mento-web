@@ -1,5 +1,7 @@
 import { TokenId } from 'src/config/tokens'
 
+import { AccountBalances } from '../accounts/fetchBalances'
+
 export type SwapDirection = 'in' | 'out'
 
 export interface SwapFormValues {
@@ -28,3 +30,14 @@ export interface SimpleExchangeRate {
 }
 
 export type SizeLimits = Partial<Record<TokenId, { min: string; max: string }>>
+
+export interface IUseFormValidatorProps {
+  balances: AccountBalances
+  isBalanceLoaded: boolean | undefined
+  isWalletConnected: boolean | undefined
+}
+
+export interface ISubmitButtonProps {
+  isWalletConnected: boolean | undefined
+  isBalanceLoaded: boolean | undefined
+}
