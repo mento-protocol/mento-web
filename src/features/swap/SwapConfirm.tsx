@@ -147,21 +147,22 @@ export function SwapConfirmCard({ formValues }: Props) {
       return
     }
 
-    if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
-      logger.debug('Approve already started or finished, ignoring submit')
-      return
-    }
-
-    try {
-      logger.info('Sending approve tx')
-      const approveResult = await sendApproveTx()
-      const approveReceipt = await approveResult.wait(1)
-      toastToYourSuccess('Approve complete, starting swap', approveReceipt.transactionHash, chainId)
-      setApproveConfirmed(true)
-      logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
-    } catch (error) {
-      logger.error('Failed to approve token', error)
-      setIsModalOpen(false)
+    if (sendApproveTx) {
+      try {
+        logger.info('Sending approve tx')
+        const approveResult = await sendApproveTx()
+        const approveReceipt = await approveResult.wait(1)
+        toastToYourSuccess(
+          'Approve complete, starting swap',
+          approveReceipt.transactionHash,
+          chainId
+        )
+        setApproveConfirmed(true)
+        logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
+      } catch (error) {
+        logger.error('Failed to approve token', error)
+        setIsModalOpen(false)
+      }
     }
   }
 

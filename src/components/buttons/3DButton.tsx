@@ -35,7 +35,7 @@ export const Button3D = ({
       disabled={isDisabled}
     >
       <span
-        className={`group font-inter outline-offset-4 cursor-pointer ${getSubstrateButtonColor({
+        className={`group font-inter outline-offset-4 cursor-pointer ${getShadowButtonColor({
           isDisabled,
           isWalletConnected,
           isError,
@@ -63,7 +63,7 @@ export const Button3D = ({
   )
 }
 
-function getSubstrateButtonColor({
+function getShadowButtonColor({
   isDisabled,
   isWalletConnected,
   isError,
