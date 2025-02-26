@@ -1,30 +1,32 @@
 import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
-import { Tokens, getTokenAddress, getTokenByAddress } from 'src/config/tokens'
-import { AccountBalances } from 'src/features/accounts/fetchBalances'
-import { getMentoSdk } from 'src/features/sdk'
-import { SwapFormValues } from 'src/features/swap/types'
-import { areAmountsNearlyEqual, parseAmount, toWei } from 'src/utils/amount'
+import { Tokens, getTokenByAddress } from 'src/config/tokens'
+import { getMentoSdk, getTradablePairForTokens } from 'src/features/sdk'
+import { IUseFormValidatorProps, SwapFormValues } from 'src/features/swap/types'
+import { parseAmount, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useChainId } from 'wagmi'
 
-export function useFormValidator(balances: AccountBalances) {
+export function useFormValidator({
+  balances,
+  isBalanceLoaded,
+  isWalletConnected,
+}: IUseFormValidatorProps) {
   const chainId = useChainId()
+  const isAccountReady = isWalletConnected && isBalanceLoaded
   return useCallback(
-    (values?: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
+    async (values: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
+      const { amount, fromTokenId } = values
+      const tokenBalance = balances[fromTokenId]
       return (async () => {
-        if (!values || !values.amount) return { amount: 'Amount Required' }
-        const parsedAmount = parseAmount(values.amount)
+        if (!amount) return { amount: 'Amount Required' }
+        const parsedAmount = parseAmount(amount)
         if (!parsedAmount) return { amount: 'Amount is Invalid' }
-        if (parsedAmount.lt(0)) return { amount: 'Amount cannot be negative' }
-        if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { amount: 'Amount too small' }
-        const tokenId = values.fromTokenId
-        const tokenBalance = balances[tokenId]
-        const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
-        if (weiAmount.gt(tokenBalance) && !areAmountsNearlyEqual(weiAmount, tokenBalance)) {
-          return { amount: 'Amount exceeds balance' }
-        }
+        const isNegativeAmount = parsedAmount.lt(MIN_ROUNDED_VALUE)
+        if (isAccountReady && isNegativeAmount) return { amount: 'Amount too small' }
+        const isExceededBalance = toWei(parsedAmount, Tokens[fromTokenId].decimals).gt(tokenBalance)
+        if (isAccountReady && isExceededBalance) return { amount: 'Amount exceeds balance' }
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
         return {}
@@ -33,7 +35,7 @@ export function useFormValidator(balances: AccountBalances) {
         return {}
       })
     },
-    [balances, chainId]
+    [balances, chainId, isBalanceLoaded, isWalletConnected]
   )
 }
 
@@ -41,10 +43,10 @@ async function checkTradingLimits(
   values: SwapFormValues,
   chainId: number
 ): Promise<{ exceeds: boolean; errorMsg: string }> {
-  const token0 = getTokenAddress(values.fromTokenId, chainId)
-  const token1 = getTokenAddress(values.toTokenId, chainId)
   const mento = await getMentoSdk(chainId)
-  const exchangeId = (await mento.getExchangeForTokens(token0, token1)).id
+  const tradablePair = await getTradablePairForTokens(chainId, values.fromTokenId, values.toTokenId)
+  // TODO: handle multiple hops
+  const exchangeId = tradablePair.path[0].id
   const tradingLimits = await mento.getTradingLimits(exchangeId)
 
   let timestampIn = 0
