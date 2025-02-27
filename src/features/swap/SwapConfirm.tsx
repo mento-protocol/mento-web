@@ -147,21 +147,22 @@ export function SwapConfirmCard({ formValues }: Props) {
       return
     }
 
-    if (!sendApproveTx || isApproveTxSuccess || isApproveTxLoading) {
-      logger.debug('Approve already started or finished, ignoring submit')
-      return
-    }
-
-    try {
-      logger.info('Sending approve tx')
-      const approveResult = await sendApproveTx()
-      const approveReceipt = await approveResult.wait(1)
-      toastToYourSuccess('Approve complete, starting swap', approveReceipt.transactionHash, chainId)
-      setApproveConfirmed(true)
-      logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
-    } catch (error) {
-      logger.error('Failed to approve token', error)
-      setIsModalOpen(false)
+    if (!skipApprove && sendApproveTx) {
+      try {
+        logger.info('Sending approve tx')
+        const approveResult = await sendApproveTx()
+        const approveReceipt = await approveResult.wait(1)
+        toastToYourSuccess(
+          'Approve complete, starting swap',
+          approveReceipt.transactionHash,
+          chainId
+        )
+        setApproveConfirmed(true)
+        logger.info(`Tx receipt received for approve: ${approveReceipt.transactionHash}`)
+      } catch (error) {
+        logger.error('Failed to approve token', error)
+        setIsModalOpen(false)
+      }
     }
   }
 
@@ -190,6 +191,8 @@ export function SwapConfirmCard({ formValues }: Props) {
     // Note, rates automatically re-fetch regularly
     refetch().catch((e) => logger.error('Failed to refetch quote:', e))
   }
+
+  const isSwapReady = !sendApproveTx || isApproveTxSuccess || isApproveTxLoading
 
   return (
     <FloatingBox
@@ -238,7 +241,7 @@ export function SwapConfirmCard({ formValues }: Props) {
       </div>
 
       <div className="flex w-full px-6 pb-6 mt-6">
-        <Button3D isFullWidth onClick={onSubmit}>
+        <Button3D isFullWidth onClick={onSubmit} isDisabled={isSwapReady}>
           Swap
         </Button3D>
       </div>
@@ -248,7 +251,7 @@ export function SwapConfirmCard({ formValues }: Props) {
         close={() => setIsModalOpen(false)}
         width="max-w-[432px]"
       >
-        <MentoLogoLoader needsApproval={needsApproval} />
+        <MentoLogoLoader skipApprove={skipApprove} />
       </Modal>
     </FloatingBox>
   )
@@ -326,7 +329,7 @@ const ChevronRight = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
-const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
+const MentoLogoLoader = ({ skipApprove }: { skipApprove: boolean }) => {
   const { connector } = useAccount()
 
   return (
@@ -342,9 +345,7 @@ const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
 
       <div className="my-6">
         <div className="text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
-          {needsApproval
-            ? 'Sending two transactions: Approve and Swap'
-            : 'Sending swap transaction'}
+          {skipApprove ? 'Sending swap transaction' : 'Sending two transactions: Approve and Swap'}
         </div>
         <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
           {`Sign with ${connector?.name || 'wallet'} to proceed`}
