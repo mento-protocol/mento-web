@@ -147,7 +147,7 @@ export function SwapConfirmCard({ formValues }: Props) {
       return
     }
 
-    if (sendApproveTx) {
+    if (!skipApprove && sendApproveTx) {
       try {
         logger.info('Sending approve tx')
         const approveResult = await sendApproveTx()
@@ -251,7 +251,7 @@ export function SwapConfirmCard({ formValues }: Props) {
         close={() => setIsModalOpen(false)}
         width="max-w-[432px]"
       >
-        <MentoLogoLoader needsApproval={needsApproval} />
+        <MentoLogoLoader skipApprove={skipApprove} />
       </Modal>
     </FloatingBox>
   )
@@ -329,7 +329,7 @@ const ChevronRight = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
-const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
+const MentoLogoLoader = ({ skipApprove }: { skipApprove: boolean }) => {
   const { connector } = useAccount()
 
   return (
@@ -345,9 +345,7 @@ const MentoLogoLoader = ({ needsApproval }: { needsApproval: boolean }) => {
 
       <div className="my-6">
         <div className="text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
-          {needsApproval
-            ? 'Sending two transactions: Approve and Swap'
-            : 'Sending swap transaction'}
+          {skipApprove ? 'Sending swap transaction' : 'Sending two transactions: Approve and Swap'}
         </div>
         <div className="mt-3 text-sm text-center text-[#636768] dark:text-[#AAB3B6]">
           {`Sign with ${connector?.name || 'wallet'} to proceed`}
