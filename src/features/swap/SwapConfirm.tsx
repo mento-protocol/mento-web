@@ -1,5 +1,5 @@
 import Lottie from 'lottie-react'
-import { SVGProps, useEffect, useState } from 'react'
+import { SVGProps, useEffect, useMemo, useState } from 'react'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
@@ -125,11 +125,10 @@ export function SwapConfirmCard({ formValues }: Props) {
   const onSubmit = async () => {
     if (!rate || !amountWei || !address || !isConnected) return
 
-    setIsModalOpen(true)
-
     if (skipApprove && sendSwapTx) {
       try {
         logger.info('Skipping approve, sending swap tx directly')
+        setIsModalOpen(true)
         const swapResult = await sendSwapTx()
         const swapReceipt = await swapResult.wait(1)
         logger.info(`Tx receipt received for swap: ${swapReceipt?.transactionHash}`)
@@ -146,6 +145,7 @@ export function SwapConfirmCard({ formValues }: Props) {
     if (!skipApprove && sendApproveTx) {
       try {
         logger.info('Sending approve tx')
+        setIsModalOpen(true)
         const approveResult = await sendApproveTx()
         const approveReceipt = await approveResult.wait(1)
         toastToYourSuccess(
@@ -189,6 +189,11 @@ export function SwapConfirmCard({ formValues }: Props) {
   }
 
   const isSwapReady = !sendApproveTx || isApproveTxSuccess || isApproveTxLoading
+
+  const buttonText = useMemo(() => {
+    if (isSwapReady) return 'Preparing Swap Transaction...'
+    return 'Swap'
+  }, [isSwapReady])
 
   return (
     <FloatingBox
@@ -238,7 +243,7 @@ export function SwapConfirmCard({ formValues }: Props) {
 
       <div className="flex w-full px-6 pb-6 mt-6">
         <Button3D isFullWidth onClick={onSubmit} isDisabled={isSwapReady}>
-          Swap
+          {buttonText}
         </Button3D>
       </div>
       <Modal
