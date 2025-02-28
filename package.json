@@ -14,6 +14,7 @@
   },
   "homepage": "https://app.mento.org",
   "license": "Apache-2.0",
+  "packageManager": "yarn@4.6.0",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -80,5 +81,4 @@
     "bignumber.js": "9.1.1",
     "@types/react": "18.0.34"
   },
-  "packageManager": "yarn@3.3.1"
 }
