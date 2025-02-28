@@ -30,10 +30,12 @@ export function SwapFormInputs({ balances }: Props) {
   const { isLoading, quote, rate } = useSwapQuote(amount, direction, fromTokenId, toTokenId)
 
   useEffect(() => {
-    if (values.direction === 'in' && quote && values.quote !== quote) {
-      setFieldValue('quote', quote)
-    }
-  }, [quote, setFieldValue, values.direction, values.quote])
+    if (!quote || values.quote === quote) return
+
+    // For direction 'in', quote is the output amount
+    // For direction 'out', quote is the input amount
+    setFieldValue('quote', quote)
+  }, [quote, setFieldValue, values.quote])
 
   return (
     <div className="flex flex-col gap-3">
