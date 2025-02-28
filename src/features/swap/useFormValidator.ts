@@ -2,30 +2,31 @@ import { FormikErrors } from 'formik'
 import { useCallback } from 'react'
 import { MIN_ROUNDED_VALUE } from 'src/config/consts'
 import { Tokens, getTokenByAddress } from 'src/config/tokens'
-import { AccountBalances } from 'src/features/accounts/fetchBalances'
 import { getMentoSdk, getTradablePairForTokens } from 'src/features/sdk'
-import { SwapFormValues } from 'src/features/swap/types'
+import { IUseFormValidatorProps, SwapFormValues } from 'src/features/swap/types'
 import { parseAmount, toWei } from 'src/utils/amount'
 import { logger } from 'src/utils/logger'
 import { useChainId } from 'wagmi'
 
-export function useFormValidator(balances: AccountBalances, lastUpdated: number | null) {
+export function useFormValidator({
+  balances,
+  isBalanceLoaded,
+  isWalletConnected,
+}: IUseFormValidatorProps) {
   const chainId = useChainId()
+  const isAccountReady = isWalletConnected && isBalanceLoaded
   return useCallback(
-    (values?: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
+    async (values: SwapFormValues): Promise<FormikErrors<SwapFormValues>> => {
+      const { amount, fromTokenId } = values
+      const tokenBalance = balances[fromTokenId]
       return (async () => {
-        if (!lastUpdated) return { fromTokenId: 'Balance still loading' }
-        if (!values || !values.amount) return { amount: 'Amount Required' }
-        const parsedAmount = parseAmount(values.amount)
+        if (!amount) return { amount: 'Amount Required' }
+        const parsedAmount = parseAmount(amount)
         if (!parsedAmount) return { amount: 'Amount is Invalid' }
-        if (parsedAmount.lt(0)) return { amount: 'Amount cannot be negative' }
-        if (parsedAmount.lt(MIN_ROUNDED_VALUE)) return { amount: 'Amount too small' }
-        const tokenId = values.fromTokenId
-        const tokenBalance = balances[tokenId]
-        const weiAmount = toWei(parsedAmount, Tokens[values.fromTokenId].decimals)
-        if (weiAmount.gt(tokenBalance)) {
-          return { amount: 'Amount exceeds balance' }
-        }
+        const isNegativeAmount = parsedAmount.lt(MIN_ROUNDED_VALUE)
+        if (isAccountReady && isNegativeAmount) return { amount: 'Amount too small' }
+        const isExceededBalance = toWei(parsedAmount, Tokens[fromTokenId].decimals).gt(tokenBalance)
+        if (isAccountReady && isExceededBalance) return { amount: 'Amount exceeds balance' }
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
         if (exceeds) return { amount: errorMsg }
         return {}
@@ -34,7 +35,7 @@ export function useFormValidator(balances: AccountBalances, lastUpdated: number 
         return {}
       })
     },
-    [balances, chainId, lastUpdated]
+    [balances, chainId, isBalanceLoaded, isWalletConnected]
   )
 }
 
