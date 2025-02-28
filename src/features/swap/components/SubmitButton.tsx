@@ -22,7 +22,7 @@ export function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButt
   const { switchNetworkAsync } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal()
   const dispatch = useAppDispatch()
-  const { errors, touched, values } = useFormikContext<SwapFormValues>()
+  const { errors, touched, values, isSubmitting } = useFormikContext<SwapFormValues>()
 
   const switchToNetwork = useCallback(async () => {
     try {
@@ -93,10 +93,12 @@ export function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButt
     return undefined
   }, [isWalletConnected, isOnCelo, openConnectModal, switchToNetwork])
 
-  const isDisabled =
-    buttonText === Button3DText.balanceStillLoading
-      ? isWalletConnected && !hasError
-      : isWalletConnected && !Number(values.quote) && !hasError
+  const isDisabled = useMemo(() => {
+    if (!isWalletConnected || hasError) return false
+    if (buttonText === Button3DText.balanceStillLoading) return true
+    if (isSubmitting) return true
+    return !Number(values.quote)
+  }, [isWalletConnected, hasError, buttonText, values.quote, isSubmitting])
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -109,7 +111,7 @@ export function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButt
         isWalletConnected={isWalletConnected}
         isBalanceLoaded={isBalanceLoaded}
       >
-        {buttonText}
+        {isSubmitting ? 'Loading...' : buttonText}
       </Button3D>
     </div>
   )
