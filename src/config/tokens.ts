@@ -204,32 +204,38 @@ export function isNativeStableToken(tokenId: string) {
 }
 
 export async function isSwappable(token_1: string, token_2: string, chainId: number) {
+  // Exit early if the same token was passed in two times
+  if (token_1 === token_2) return false
+
   const sdk = await getMentoSdk(chainId)
   const tradablePairs = await sdk.getTradablePairs()
   if (!tradablePairs) return false
-  if (token_1 === token_2) return false
+
+  const token1Address = getTokenAddress(token_1 as TokenId, chainId)
+  const token2Address = getTokenAddress(token_2 as TokenId, chainId)
 
   return tradablePairs.some(
-    (assets) =>
-      assets.find((asset) => asset.address === getTokenAddress(token_1 as TokenId, chainId)) &&
-      assets.find((asset) => asset.address === getTokenAddress(token_2 as TokenId, chainId))
+    (pair) =>
+      pair.find((asset) => asset.address === token1Address) &&
+      pair.find((asset) => asset.address === token2Address)
   )
 }
 
-export async function getSwappableTokenOptions(token: string, chainId: ChainId) {
-  const options = getTokenOptionsByChainId(chainId)
+export async function getSwappableTokenOptions(inputTokenId: string, chainId: ChainId) {
+  const allTokenOptions = getTokenOptionsByChainId(chainId)
 
-  const swappableOptions = await Promise.all(
-    options.map(async (tkn) => ({
-      token: tkn,
-      isSwappable: await isSwappable(tkn, token, chainId),
+  // Filter out the input token first
+  const tokenOptions = allTokenOptions.filter((tokenId) => tokenId !== inputTokenId)
+
+  // Check which tokens are swappable with the input token
+  const swappableChecks = await Promise.all(
+    tokenOptions.map(async (tokenId) => ({
+      tokenId,
+      swappable: await isSwappable(tokenId, inputTokenId, chainId),
     }))
-  ).then((results) => {
-    return results
-      .filter((result) => result.isSwappable && result.token !== token)
-      .map((result) => result.token)
-  })
-  return swappableOptions
+  )
+
+  return swappableChecks.filter(({ swappable }) => swappable).map(({ tokenId }) => tokenId)
 }
 
 export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
