@@ -84,8 +84,9 @@ export function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButt
     if (!isOnCelo) return Button3DText.switchToCeloNetwork
     if (isWalletConnected && !isBalanceLoaded) return Button3DText.balanceStillLoading
     if (hasError) return errorText
+    if (isSubmitting) return 'Loading...'
     return Button3DText.continue
-  }, [errorText, hasError, isWalletConnected, isOnCelo, isBalanceLoaded])
+  }, [errorText, hasError, isWalletConnected, isOnCelo, isBalanceLoaded, isSubmitting])
 
   const onClick = useMemo(() => {
     if (!isWalletConnected) return openConnectModal
@@ -111,7 +112,7 @@ export function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButt
         isWalletConnected={isWalletConnected}
         isBalanceLoaded={isBalanceLoaded}
       >
-        {isSubmitting ? 'Loading...' : buttonText}
+        {buttonText}
       </Button3D>
     </div>
   )
