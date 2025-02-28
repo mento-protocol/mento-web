@@ -5,13 +5,16 @@ import { logger } from 'src/utils/logger'
 
 import { useAllowance } from './useAllowance'
 
-export function useSwapAllowance(
-  chainId: number,
-  fromTokenId: TokenId,
-  toTokenId: TokenId,
-  address: string,
+interface ISwapAllowanceOptions {
+  chainId: number
+  fromTokenId: TokenId
+  toTokenId: TokenId
   approveAmount: string
-) {
+  address?: string
+}
+
+export function useSwapAllowance(options: ISwapAllowanceOptions) {
+  const { chainId, fromTokenId, toTokenId, approveAmount, address } = options
   const { allowance, isLoading: isAllowanceLoading } = useAllowance(
     chainId,
     fromTokenId,

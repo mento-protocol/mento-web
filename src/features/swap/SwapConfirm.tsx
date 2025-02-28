@@ -95,13 +95,13 @@ export function SwapConfirmCard({ formValues }: Props) {
   )
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
-  const { skipApprove } = useSwapAllowance(
+  const { skipApprove } = useSwapAllowance({
     chainId,
     fromTokenId,
     toTokenId,
-    address ?? '',
-    approveAmount
-  )
+    approveAmount,
+    address,
+  })
 
   useEffect(() => {
     if (skipApprove) {

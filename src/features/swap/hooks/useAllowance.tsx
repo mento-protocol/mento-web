@@ -38,17 +38,17 @@ export function useAllowance(
   chainId: number,
   fromTokenId: TokenId,
   toTokenId: TokenId,
-  accountAddress?: string
+  address?: string
 ) {
   const { data: allowance, isLoading } = useQuery(
-    ['tokenAllowance', chainId, fromTokenId, toTokenId, accountAddress],
+    ['tokenAllowance', chainId, fromTokenId, toTokenId, address],
     async () => {
-      if (!accountAddress) return '0'
-      return fetchAllowance(fromTokenId, toTokenId, accountAddress, chainId)
+      if (!address) return '0'
+      return fetchAllowance(fromTokenId, toTokenId, address, chainId)
     },
     {
       retry: false,
-      enabled: Boolean(accountAddress && chainId && fromTokenId && toTokenId),
+      enabled: Boolean(address && chainId && fromTokenId && toTokenId),
       staleTime: 5000, // Consider allowance stale after 5 seconds
     }
   )
