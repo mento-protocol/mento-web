@@ -203,16 +203,16 @@ export function isNativeStableToken(tokenId: string) {
   return NativeStableTokenIds.includes(tokenId as TokenId)
 }
 
-export async function isSwappable(token_1: string, token_2: string, chainId: number) {
+export async function isSwappable(token1: string, token2: string, chainId: number) {
   // Exit early if the same token was passed in two times
-  if (token_1 === token_2) return false
+  if (token1 === token2) return false
 
   const sdk = await getMentoSdk(chainId)
   const tradablePairs = await sdk.getTradablePairs()
   if (!tradablePairs) return false
 
-  const token1Address = getTokenAddress(token_1 as TokenId, chainId)
-  const token2Address = getTokenAddress(token_2 as TokenId, chainId)
+  const token1Address = getTokenAddress(token1 as TokenId, chainId)
+  const token2Address = getTokenAddress(token2 as TokenId, chainId)
 
   return tradablePairs.some(
     (pair) =>
