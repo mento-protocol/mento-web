@@ -35,7 +35,7 @@ export function useFormValidator({
         return {}
       })
     },
-    [balances, chainId, isBalanceLoaded, isWalletConnected]
+    [balances, chainId, isAccountReady]
   )
 }
 

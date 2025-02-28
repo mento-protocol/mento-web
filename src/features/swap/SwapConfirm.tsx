@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import Lottie from 'lottie-react'
 import { SVGProps, useEffect, useState } from 'react'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
@@ -8,13 +7,6 @@ import { Button3D } from 'src/components/buttons/3DButton'
 import { Tooltip } from 'src/components/tooltip/Tooltip'
 import { TokenId, Tokens } from 'src/config/tokens'
 import { useAppDispatch, useAppSelector } from 'src/features/store/hooks'
-import { setConfirmView, setFormValues } from 'src/features/swap/swapSlice'
-import { SwapFormValues } from 'src/features/swap/types'
-import { useAllowance } from 'src/features/swap/useAllowance'
-import { useApproveTransaction } from 'src/features/swap/useApproveTransaction'
-import { useSwapQuote } from 'src/features/swap/useSwapQuote'
-import { useSwapTransaction } from 'src/features/swap/useSwapTransaction'
-import { getMaxSellAmount, getMinBuyAmount } from 'src/features/swap/utils'
 import { TokenIcon } from 'src/images/tokens/TokenIcon'
 import { FloatingBox } from 'src/layout/FloatingBox'
 import { Modal } from 'src/layout/Modal'
@@ -22,6 +14,14 @@ import { fromWeiRounded, getAdjustedAmount, toSignificant } from 'src/utils/amou
 import { logger } from 'src/utils/logger'
 import { truncateTextByLength } from 'src/utils/string'
 import { useAccount, useChainId } from 'wagmi'
+
+import { useApproveTransaction } from './hooks/useApproveTransaction'
+import { useSwapAllowance } from './hooks/useSwapAllowance'
+import { useSwapQuote } from './hooks/useSwapQuote'
+import { useSwapTransaction } from './hooks/useSwapTransaction'
+import { setConfirmView, setFormValues } from './swapSlice'
+import type { SwapFormValues } from './types'
+import { getMaxSellAmount, getMinBuyAmount } from './utils'
 
 interface Props {
   formValues: SwapFormValues
@@ -95,17 +95,13 @@ export function SwapConfirmCard({ formValues }: Props) {
   )
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
-  const { allowance, isLoading: isAllowanceLoading } = useAllowance(
+  const { skipApprove } = useSwapAllowance(
     chainId,
     fromTokenId,
     toTokenId,
-    address
+    address ?? '',
+    approveAmount
   )
-  const needsApproval = !isAllowanceLoading && new BigNumber(allowance).lte(approveAmount)
-  const skipApprove = !isAllowanceLoading && !needsApproval
-
-  logger.info(`Allowance loading: ${isAllowanceLoading}`)
-  logger.info(`Needs approval: ${needsApproval}`)
 
   useEffect(() => {
     if (skipApprove) {
