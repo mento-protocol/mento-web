@@ -222,20 +222,21 @@ export async function isSwappable(token1: string, token2: string, chainId: numbe
 }
 
 export async function getSwappableTokenOptions(inputTokenId: string, chainId: ChainId) {
-  const allTokenOptions = getTokenOptionsByChainId(chainId)
-
-  // Filter out the input token first
-  const tokenOptions = allTokenOptions.filter((tokenId) => tokenId !== inputTokenId)
-
-  // Check which tokens are swappable with the input token
-  const swappableChecks = await Promise.all(
-    tokenOptions.map(async (tokenId) => ({
-      tokenId,
-      swappable: await isSwappable(tokenId, inputTokenId, chainId),
-    }))
+  // Get all available tokens for the chain except the input token
+  const tokenOptions = getTokenOptionsByChainId(chainId).filter(
+    (tokenId) => tokenId !== inputTokenId
   )
 
-  return swappableChecks.filter(({ swappable }) => swappable).map(({ tokenId }) => tokenId)
+  // Check swappability in parallel and maintain order
+  const swappableTokens = await Promise.all(
+    tokenOptions.map(async (tokenId) => {
+      const swappable = await isSwappable(tokenId, inputTokenId, chainId)
+      return swappable ? tokenId : null
+    })
+  )
+
+  // Filter out non-swappable tokens (null values)
+  return swappableTokens.filter((tokenId): tokenId is TokenId => tokenId !== null)
 }
 
 export function getTokenOptionsByChainId(chainId: ChainId): TokenId[] {
