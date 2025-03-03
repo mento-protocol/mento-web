@@ -84,7 +84,7 @@ export function SubmitButton({ isWalletConnected, isBalanceLoaded }: ISubmitButt
     if (!isOnCelo) return Button3DText.switchToCeloNetwork
     if (isWalletConnected && !isBalanceLoaded) return Button3DText.balanceStillLoading
     if (hasError) return errorText
-    if (isSubmitting) return 'Loading Swap...'
+    if (isSubmitting) return 'Preparing Swap...'
     return Button3DText.continue
   }, [errorText, hasError, isWalletConnected, isOnCelo, isBalanceLoaded, isSubmitting])
 

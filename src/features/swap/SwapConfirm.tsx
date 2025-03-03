@@ -1,5 +1,5 @@
 import Lottie from 'lottie-react'
-import { SVGProps, useEffect, useMemo, useState } from 'react'
+import { SVGProps, useEffect, useState } from 'react'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
@@ -18,6 +18,7 @@ import { useAccount, useChainId } from 'wagmi'
 import { useApproveTransaction } from './hooks/useApproveTransaction'
 import { useSwapAllowance } from './hooks/useSwapAllowance'
 import { useSwapQuote } from './hooks/useSwapQuote'
+import { useSwapState } from './hooks/useSwapState'
 import { useSwapTransaction } from './hooks/useSwapTransaction'
 import { setConfirmView, setFormValues } from './swapSlice'
 import type { SwapFormValues } from './types'
@@ -95,7 +96,7 @@ export function SwapConfirmCard({ formValues }: Props) {
   )
   const [isApproveConfirmed, setApproveConfirmed] = useState(false)
 
-  const { skipApprove } = useSwapAllowance({
+  const { skipApprove, isAllowanceLoading } = useSwapAllowance({
     chainId,
     fromTokenId,
     toTokenId,
@@ -188,12 +189,15 @@ export function SwapConfirmCard({ formValues }: Props) {
     refetch().catch((e) => logger.error('Failed to refetch quote:', e))
   }
 
-  const isSwapReady = !sendApproveTx || isApproveTxSuccess || isApproveTxLoading
-
-  const buttonText = useMemo(() => {
-    if (isSwapReady) return 'Preparing Swap Transaction...'
-    return 'Swap'
-  }, [isSwapReady])
+  const { text: buttonText, disabled: isButtonDisabled } = useSwapState({
+    isAllowanceLoading,
+    skipApprove,
+    sendApproveTx,
+    isApproveTxLoading,
+    isApproveTxSuccess,
+    sendSwapTx,
+    fromTokenId,
+  })
 
   return (
     <FloatingBox
@@ -242,7 +246,7 @@ export function SwapConfirmCard({ formValues }: Props) {
       </div>
 
       <div className="flex w-full px-6 pb-6 mt-6">
-        <Button3D isFullWidth onClick={onSubmit} isDisabled={isSwapReady}>
+        <Button3D isFullWidth onClick={onSubmit} isDisabled={isButtonDisabled}>
           {buttonText}
         </Button3D>
       </div>
