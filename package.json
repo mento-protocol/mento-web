@@ -14,8 +14,12 @@
   },
   "homepage": "https://app.mento.org",
   "license": "Apache-2.0",
+  "engines": {
+    "node": "^18.20.6"
+  },
+  "packageManager": "yarn@4.6.0",
   "scripts": {
-    "dev": "next",
+    "dev": "NODE_ENV=development next",
     "build": "next build",
     "typecheck": "tsc",
     "start": "next start",
@@ -80,5 +84,7 @@
     "bignumber.js": "9.1.1",
     "@types/react": "18.0.34"
   },
-  "packageManager": "yarn@3.3.1"
+  "volta": {
+    "node": "18.20.7"
+  }
 }

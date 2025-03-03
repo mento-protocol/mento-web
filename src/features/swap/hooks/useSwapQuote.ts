@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { SWAP_QUOTE_REFETCH_INTERVAL } from 'src/config/consts'
-import { TokenId, getTokenAddress, getTokenById } from 'src/config/tokens'
+import { TokenId, Tokens, getTokenAddress } from 'src/config/tokens'
 import { getMentoSdk, getTradablePairForTokens } from 'src/features/sdk'
 import { SwapDirection } from 'src/features/swap/types'
 import {
@@ -23,21 +23,21 @@ export function useSwapQuote(
   toTokenId: TokenId
 ) {
   const chainId = useChainId()
-  const fromToken = getTokenById(fromTokenId)
-  const toToken = getTokenById(toTokenId)
-  const debouncedAmount = useDebounce(amount, 0)
+  const fromToken = Tokens[fromTokenId]
+  const toToken = Tokens[toTokenId]
+  const debouncedAmount = useDebounce(amount, 350)
 
   const { isLoading, isError, error, data, refetch } = useQuery<ISwapData | null, ISwapError>(
     ['useSwapQuote', debouncedAmount, fromTokenId, toTokenId, direction],
-    async (): Promise<ISwapData | null> => {
+    async () => {
+      const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
+      const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const isSwapIn = direction === 'in'
       const amountWei = parseInputExchangeAmount(amount, isSwapIn ? fromTokenId : toTokenId)
       const amountWeiBN = ethers.BigNumber.from(amountWei)
       const amountDecimals = isSwapIn ? fromToken.decimals : toToken.decimals
       const quoteDecimals = isSwapIn ? toToken.decimals : fromToken.decimals
       if (amountWeiBN.lte(0) || !fromToken || !toToken) return null
-      const fromTokenAddr = getTokenAddress(fromTokenId, chainId)
-      const toTokenAddr = getTokenAddress(toTokenId, chainId)
       const mento = await getMentoSdk(chainId)
       const tradablePair = await getTradablePairForTokens(chainId, fromTokenId, toTokenId)
 
