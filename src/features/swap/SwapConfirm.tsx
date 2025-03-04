@@ -246,7 +246,12 @@ export function SwapConfirmCard({ formValues }: Props) {
       </div>
 
       <div className="flex w-full px-6 pb-6 mt-6">
-        <Button3D isFullWidth onClick={onSubmit} isDisabled={isButtonDisabled}>
+        <Button3D
+          isFullWidth
+          onClick={onSubmit}
+          isDisabled={isButtonDisabled}
+          dataTestId={'confirm-button'}
+        >
           {buttonText}
         </Button3D>
       </div>

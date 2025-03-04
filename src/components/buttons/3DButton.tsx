@@ -8,6 +8,7 @@ type BaseButtonProps = {
   isDisabled?: boolean
   isWalletConnected?: boolean
   isBalanceLoaded?: boolean
+  dataTestId?: string
 }
 
 export enum Button3DText {
@@ -15,6 +16,7 @@ export enum Button3DText {
   continue = 'Continue',
   balanceStillLoading = 'Balance still loading...',
   switchToCeloNetwork = 'Switch to Celo Network',
+  preparingSwap = 'Preparing Swap...',
 }
 
 export const Button3D = ({
@@ -26,6 +28,7 @@ export const Button3D = ({
   isDisabled,
   isWalletConnected,
   isBalanceLoaded,
+  dataTestId,
 }: PropsWithChildren<BaseButtonProps>) => {
   return (
     <button
@@ -33,6 +36,7 @@ export const Button3D = ({
       onClick={onClick}
       type={type}
       disabled={isDisabled}
+      data-testId={dataTestId}
     >
       <span
         className={`group font-inter outline-offset-4 cursor-pointer ${getShadowButtonColor({
