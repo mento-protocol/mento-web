@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { BigNumberish, Contract } from 'ethers'
+import { Contract } from 'ethers'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
 import { TokenId, getTokenAddress, getTokenOptionsByChainId } from 'src/config/tokens'
 import { getProvider } from 'src/features/providers'
@@ -7,6 +7,8 @@ import type { AppDispatch, AppState } from 'src/features/store/store'
 import { validateAddress } from 'src/utils/addresses'
 import { isStale } from 'src/utils/time'
 import { erc20ABI } from 'wagmi'
+
+import { logger } from '../../utils/logger'
 
 interface FetchBalancesParams {
   address: string
@@ -30,15 +32,34 @@ export const fetchBalances = createAsyncThunk<
   }
 })
 
-async function _fetchBalances(address: string, chainId: number) {
+async function _fetchBalances(address: string, chainId: number): Promise<Record<TokenId, string>> {
   validateAddress(address, 'fetchBalances')
   const tokenBalances: Partial<Record<TokenId, string>> = {}
-  for (const tokenId of getTokenOptionsByChainId(chainId)) {
-    const tokenAddr = getTokenAddress(tokenId, chainId)
-    const provider = getProvider(chainId)
-    const tokenContract = new Contract(tokenAddr, erc20ABI, provider)
-    const balance: BigNumberish = await tokenContract.balanceOf(address)
-    tokenBalances[tokenId] = balance.toString()
+  for (const tokenSymbol of getTokenOptionsByChainId(chainId)) {
+    tokenBalances[tokenSymbol] = await getTokenBalance({ address, chainId, tokenSymbol })
   }
   return tokenBalances as Record<TokenId, string>
+}
+
+async function getTokenBalance({
+  address,
+  chainId,
+  tokenSymbol,
+}: IGetTokenBalance): Promise<string | undefined> {
+  const tokenAddress = getTokenAddress(tokenSymbol, chainId)
+  const provider = getProvider(chainId)
+  try {
+    const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
+    return (await tokenContract.balanceOf(address)).toString()
+  } catch (error) {
+    // todo: Send such error to Sentry
+    logger.error(`Error on getting balance of '${tokenSymbol}' token.`, { error })
+    return undefined
+  }
+}
+
+interface IGetTokenBalance {
+  address: string
+  chainId: number
+  tokenSymbol: TokenId
 }

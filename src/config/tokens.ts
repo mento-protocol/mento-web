@@ -161,7 +161,7 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cKES]: '0x1E0433C1769271ECcF4CFF9FDdD515eefE6CdF92',
     [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
     [TokenId.cCOP]: '0xe6A57340f0df6E020c1c0a80bC6E13048601f0d4',
-    [TokenId.cGHS]: '0xf419dfab059c36cbafb43a088ebeb2811f9789b9',
+    [TokenId.cGHS]: '0x295B66bE7714458Af45E6A6Ea142A5358A6cA375',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
