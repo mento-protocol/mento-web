@@ -1,5 +1,5 @@
 import Lottie from 'lottie-react'
-import { SVGProps, useEffect, useState } from 'react'
+import { SVGProps, useEffect, useRef, useState } from 'react'
 import mentoLoaderBlue from 'src/animations/Mentoloader_blue.json'
 import mentoLoaderGreen from 'src/animations/Mentoloader_green.json'
 import { toastToYourSuccess } from 'src/components/TxSuccessToast'
@@ -150,7 +150,7 @@ export function SwapConfirmCard({ formValues }: Props) {
         const approveResult = await sendApproveTx()
         const approveReceipt = await approveResult.wait(1)
         toastToYourSuccess(
-          'Approve complete, starting swap',
+          'Approve complete! Sending swap tx',
           approveReceipt.transactionHash,
           chainId
         )
@@ -163,9 +163,18 @@ export function SwapConfirmCard({ formValues }: Props) {
     }
   }
 
+  const swapRejectedRef = useRef(false)
+
   // TODO find a way to have this trigger from the onSubmit
   useEffect(() => {
-    if (isSwapTxLoading || isSwapTxSuccess || !isApproveTxSuccess || !sendSwapTx) return
+    if (
+      isSwapTxLoading ||
+      isSwapTxSuccess ||
+      !isApproveTxSuccess ||
+      !sendSwapTx ||
+      swapRejectedRef.current
+    )
+      return
     logger.info('Sending swap tx')
     sendSwapTx()
       .then((swapResult) => swapResult.wait(1))
@@ -173,9 +182,13 @@ export function SwapConfirmCard({ formValues }: Props) {
         logger.info(`Tx receipt received for swap: ${swapReceipt.transactionHash}`)
         toastToYourSuccess('Swap Complete!', swapReceipt.transactionHash, chainId)
         dispatch(setFormValues(null))
+        swapRejectedRef.current = false
       })
-      .catch((e) => {
-        logger.error('Swap failure:', e)
+      .catch((error) => {
+        logger.error('Swap failure:', error)
+        if (error.message === 'User rejected request') {
+          swapRejectedRef.current = true
+        }
       })
       .finally(() => setIsModalOpen(false))
   }, [isApproveTxSuccess, isSwapTxLoading, isSwapTxSuccess, sendSwapTx, chainId, dispatch])
