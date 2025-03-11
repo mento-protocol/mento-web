@@ -26,8 +26,8 @@ export function PollingWorker() {
       dispatch(fetchBalances({ address, chainId }))
         .unwrap()
         .catch((err) => {
-          toast.warn('Error retrieving account balances')
-          logger.error('Failed to retrieve balances', err)
+          toast.warn(`Can't retrieve account balances.\n Try to refresh the page`)
+          logger.error('Unexpected error on retrieving balances', err)
         })
     }
   }
