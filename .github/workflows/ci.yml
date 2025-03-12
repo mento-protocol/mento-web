@@ -120,7 +120,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Smoke E2E tests
-        uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml
+        uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
         with:
           CUSTOM_URL: ${{ github.event.deployment_status.environment_url }}
           IS_MAINNET: "false"
