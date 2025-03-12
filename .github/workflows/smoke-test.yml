@@ -9,3 +9,4 @@ jobs:
     with:
       CUSTOM_URL: ${{ github.event.deployment_status.environment_url }}
       IS_MAINNET: "false"
+    secrets: inherit
