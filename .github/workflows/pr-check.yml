@@ -1,4 +1,4 @@
-name: ci
+name: PR Check
 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -119,11 +119,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Run Smoke E2E tests
-        uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+      - name: Run Smoke Test
+        uses: ./.github/workflows/smoke-test.yml
         with:
-          CUSTOM_URL: ${{ github.event.deployment_status.environment_url }}
+          BASE_URL: ${{ github.event.deployment_status.environment_url }}
           IS_MAINNET: "false"
-
-      - name: test
-        run: yarn run test

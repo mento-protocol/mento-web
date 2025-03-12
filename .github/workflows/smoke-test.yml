@@ -1,0 +1,20 @@
+name: Smoke Test Run
+
+on:
+  workflow_call:
+    inputs:
+      BASE_URL:
+        description: "Base url of env to run tests"
+        required: true
+        type: string
+      IS_MAINNET:
+        description: "Flag to specify chain to run tests"
+        required: true
+        type: string
+
+jobs:
+  smoke-test:
+    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+    with:
+      CUSTOM_URL: ${{ inputs.BASE_URL }}
+      IS_MAINNET: ${{ inputs.IS_MAINNET }}
