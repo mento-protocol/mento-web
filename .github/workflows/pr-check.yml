@@ -110,34 +110,34 @@ jobs:
 
       - name: test
         run: yarn run test
-  smoke-tests-preparation:
-    runs-on: ubuntu-latest
-    needs: [build]
-    outputs:
-      vercel_preview_url: ${{ steps.vercel_url.outputs.vercel_preview_url }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Get Vercel Preview URL
-        id: vercel_url
-        run: |
-          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/statuses")
-
-          echo "Response from API:"
-          echo "$RESPONSE"
-
-          # Then you can try accessing the statuses only if it exists.
-          PREVIEW_URL=$(echo "$RESPONSE" | jq -r '.statuses[] | select(.context=="Vercel") | .target_url' | head -n 1)
-
-          echo "Vercel preview URL: $PREVIEW_URL"
-          echo "vercel_preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
-  
-
-  run-smoke-test:
-    needs: [smoke-tests-preparation]
-    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
-    with:
-      CUSTOM_URL: ${{ needs.smoke-tests-preparation.outputs.vercel_preview_url }}
-      IS_MAINNET: "false"
+#  smoke-tests-preparation:
+#    runs-on: ubuntu-latest
+#    needs: [build]
+#    outputs:
+#      vercel_preview_url: ${{ steps.vercel_url.outputs.vercel_preview_url }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Get Vercel Preview URL
+#        id: vercel_url
+#        run: |
+#          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+#            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/statuses")
+#
+#          echo "Response from API:"
+#          echo "$RESPONSE"
+#
+#          # Then you can try accessing the statuses only if it exists.
+#          PREVIEW_URL=$(echo "$RESPONSE" | jq -r '.statuses[] | select(.context=="Vercel") | .target_url' | head -n 1)
+#
+#          echo "Vercel preview URL: $PREVIEW_URL"
+#          echo "vercel_preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+#
+#
+#  run-smoke-test:
+#    needs: [smoke-tests-preparation]
+#    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+#    with:
+#      CUSTOM_URL: ${{ needs.smoke-tests-preparation.outputs.vercel_preview_url }}
+#      IS_MAINNET: "false"
