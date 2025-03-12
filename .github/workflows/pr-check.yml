@@ -111,7 +111,7 @@ jobs:
 
       - name: test
         run: yarn run test
-  smoke-tests:
+  smoke-tests-preparation:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
@@ -128,8 +128,9 @@ jobs:
           echo "Vercel preview URL: $PREVIEW_URL"
           echo "VERCEL_PREVIEW_URL=$PREVIEW_URL" >> $GITHUB_ENV
 
-      - name: Run Smoke Test
-        uses: ./.github/workflows/smoke-test.yml
-        with:
-          BASE_URL: ${{ env.VERCEL_PREVIEW_URL }}
-          IS_MAINNET: "false"
+  run-smoke-test:
+    needs: [smoke-tests-preparation]
+    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+    with:
+      CUSTOM_URL: ${{ env.VERCEL_PREVIEW_URL }}
+      IS_MAINNET: "false"
