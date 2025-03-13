@@ -1,10 +1,10 @@
 name: PR Check
 
 on:
+  push:
+    branches: [main, dev]
   pull_request:
-    types:
-      - opened
-      - synchronize
+    branches: [main, dev]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
