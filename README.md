@@ -13,9 +13,9 @@ This project uses Next.JS, React, Redux, Tailwind, Wagmi, and RainbowKit.
 ## Run Locally
 
 1. Install deps: `yarn`
-1. Create a local `.env` from the example: `cp .env.example .env`
-1. Start server: `yarn dev`
-1. `open http://localhost:3000`
+2. Create a local `.env` from the example: `cp .env.example .env`
+3. Start server: `yarn dev`
+4. `open http://localhost:3000`
 
 ## Deploy
 
