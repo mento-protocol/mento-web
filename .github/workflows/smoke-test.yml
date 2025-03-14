@@ -1,0 +1,15 @@
+name: Smoke Test Run
+on:
+  deployment_status:
+
+jobs:
+  smoke-test:
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+    with:
+      CUSTOM_URL: ${{ github.event.deployment_status.environment_url }}
+      IS_MAINNET: "false"
+    secrets:
+      SEED_PHRASE: ${{ secrets.SEED_PHRASE }}
+      WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+      TESTOMAT_API_KEY: ${{ secrets.TESTOMAT_API_KEY }}

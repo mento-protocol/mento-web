@@ -1,7 +1,6 @@
-name: ci
+name: PR Check
 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [main, dev]
   pull_request:
@@ -95,7 +94,7 @@ jobs:
       - name: lint 
         run: yarn run lint
 
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
