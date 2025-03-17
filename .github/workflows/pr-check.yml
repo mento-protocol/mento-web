@@ -94,7 +94,7 @@ jobs:
       - name: lint 
         run: yarn run lint
 
-  unit-tests:
+  test:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
