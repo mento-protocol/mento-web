@@ -5,7 +5,7 @@ on:
 jobs:
   smoke-test:
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
-    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@feat/AUT-12-update-ci-secrets
     with:
       CUSTOM_URL: ${{ github.event.deployment_status.environment_url }}
       IS_MAINNET: "false"
