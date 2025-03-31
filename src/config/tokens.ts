@@ -202,10 +202,10 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
     [TokenId.cCOP]: '0xe6A57340f0df6E020c1c0a80bC6E13048601f0d4',
     [TokenId.cGHS]: '0x295B66bE7714458Af45E6A6Ea142A5358A6cA375',
-    [TokenId.cGBP]: '0x47f2fb88105155a18c390641c8a73f1402b2bb12',
-    [TokenId.cZAR]: '0x1e5b44015ff90610b54000daad31c89b3284df4d',
-    [TokenId.cCAD]: '0x02ec9e0d2fd73e89168c1709e542a48f58d7b133',
-    [TokenId.cAUD]: '0x84cbd49f5ae07632b6b88094e81cce8236125fe0',
+    [TokenId.cGBP]: '0x47f2Fb88105155a18c390641C8a73f1402B2BB12',
+    [TokenId.cZAR]: '0x1e5b44015Ff90610b54000DAad31C89b3284df4d',
+    [TokenId.cCAD]: '0x02EC9E0D2Fd73e89168C1709e542a48f58d7B133',
+    [TokenId.cAUD]: '0x84CBD49F5aE07632B6B88094E81Cce8236125Fe0',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -262,6 +262,8 @@ export async function isSwappable(token1: string, token2: string, chainId: numbe
   const sdk = await getMentoSdk(chainId)
   const tradablePairs = await sdk.getTradablePairs()
   if (!tradablePairs) return false
+
+  console.log('tradablePairs', tradablePairs)
 
   const token1Address = getTokenAddress(token1 as TokenId, chainId)
   const token2Address = getTokenAddress(token2 as TokenId, chainId)
