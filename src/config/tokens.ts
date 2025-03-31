@@ -263,7 +263,6 @@ export async function isSwappable(token1: string, token2: string, chainId: numbe
   const tradablePairs = await sdk.getTradablePairs()
   if (!tradablePairs) return false
 
-
   const token1Address = getTokenAddress(token1 as TokenId, chainId)
   const token2Address = getTokenAddress(token2 as TokenId, chainId)
 
