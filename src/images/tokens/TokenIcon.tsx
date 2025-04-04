@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Token } from 'src/config/tokens'
 
 interface Props {
@@ -7,8 +7,9 @@ interface Props {
   size?: 'xs' | 's' | 'm' | 'l'
 }
 
-function _TokenIcon({ token, size = 'm' }: Props) {
+function TokenIconBase({ token, size = 'm' }: Props) {
   const { actualSize, fontSize } = sizeValues[size]
+  const [imgError, setImgError] = useState(false)
 
   if (!token) {
     return (
@@ -22,10 +23,19 @@ function _TokenIcon({ token, size = 'm' }: Props) {
     )
   }
 
-  const imgSrc = token ? `/tokens/${token.id}.svg` : '/tokens/default.svg'
+  const imgSrc = `/tokens/${token.id}.svg`
 
-  if (imgSrc) {
-    return <Image src={imgSrc} alt="" width={actualSize} height={actualSize} priority={true} />
+  if (imgSrc && !imgError) {
+    return (
+      <Image
+        src={imgSrc}
+        alt=""
+        width={actualSize}
+        height={actualSize}
+        priority={true}
+        onError={() => setImgError(true)}
+      />
+    )
   }
 
   return (
@@ -43,7 +53,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
           fontSize,
         }}
       >
-        {token.symbol[0].toUpperCase()}
+        {token.symbol[0].toUpperCase() + token.symbol[1].toUpperCase()}
       </div>
     </div>
   )
@@ -68,4 +78,4 @@ const sizeValues = {
   },
 }
 
-export const TokenIcon = memo(_TokenIcon)
+export const TokenIcon = memo(TokenIconBase)
