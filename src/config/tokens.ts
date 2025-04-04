@@ -29,6 +29,10 @@ export enum TokenId {
   PUSO = 'PUSO',
   cCOP = 'cCOP',
   cGHS = 'cGHS',
+  cGBP = 'cGBP',
+  cZAR = 'cZAR',
+  cCAD = 'cCAD',
+  cAUD = 'cAUD',
 }
 
 export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
@@ -131,6 +135,38 @@ export const cGHS: Token = Object.freeze({
   decimals: 18,
 })
 
+export const cGBP: Token = Object.freeze({
+  id: TokenId.cGBP,
+  symbol: TokenId.cGBP,
+  name: 'Celo British Pound',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cZAR: Token = Object.freeze({
+  id: TokenId.cZAR,
+  symbol: TokenId.cZAR,
+  name: 'Celo South African Rand',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cCAD: Token = Object.freeze({
+  id: TokenId.cCAD,
+  symbol: TokenId.cCAD,
+  name: 'Celo Canadian Dollar',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cAUD: Token = Object.freeze({
+  id: TokenId.cAUD,
+  symbol: TokenId.cAUD,
+  name: 'Celo Australian Dollar',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
 export const Tokens: Record<TokenId, Token> = {
   CELO,
   cUSD,
@@ -145,6 +181,10 @@ export const Tokens: Record<TokenId, Token> = {
   PUSO,
   cCOP,
   cGHS,
+  cGBP,
+  cZAR,
+  cCAD,
+  cAUD,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
@@ -162,6 +202,10 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
     [TokenId.cCOP]: '0xe6A57340f0df6E020c1c0a80bC6E13048601f0d4',
     [TokenId.cGHS]: '0x295B66bE7714458Af45E6A6Ea142A5358A6cA375',
+    [TokenId.cGBP]: '0x47f2Fb88105155a18c390641C8a73f1402B2BB12',
+    [TokenId.cZAR]: '0x1e5b44015Ff90610b54000DAad31C89b3284df4d',
+    [TokenId.cCAD]: '0x02EC9E0D2Fd73e89168C1709e542a48f58d7B133',
+    [TokenId.cAUD]: '0x84CBD49F5aE07632B6B88094E81Cce8236125Fe0',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -177,6 +221,10 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '',
     [TokenId.cCOP]: '',
     [TokenId.cGHS]: '',
+    [TokenId.cGBP]: '',
+    [TokenId.cZAR]: '',
+    [TokenId.cCAD]: '',
+    [TokenId.cAUD]: '',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
@@ -192,6 +240,10 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     [TokenId.cCOP]: '0x8A567e2aE79CA692Bd748aB832081C45de4041eA',
     [TokenId.cGHS]: '0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313',
+    [TokenId.cGBP]: '',
+    [TokenId.cZAR]: '',
+    [TokenId.cCAD]: '',
+    [TokenId.cAUD]: '',
   },
 })
 
