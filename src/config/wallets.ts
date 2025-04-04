@@ -2,6 +2,7 @@ import type { Chain } from '@rainbow-me/rainbowkit'
 import {
   metaMaskWallet,
   omniWallet,
+  rainbowWallet,
   trustWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
@@ -23,6 +24,7 @@ export function getWalletConnectors(chains: Chain[]) {
     // CeloWallet(connectorConfig),
     omniWallet(connectorConfig),
     trustWallet(connectorConfig),
+    rainbowWallet(connectorConfig),
   ]
 }
 
