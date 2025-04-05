@@ -41,10 +41,13 @@ async function _fetchBalances(address: string, chainId: number): Promise<Record<
     return { tokenSymbol, balance }
   })
 
-  const results = await Promise.all(balancePromises)
-  results.forEach(({ tokenSymbol, balance }) => {
-    if (balance !== undefined) {
-      tokenBalances[tokenSymbol] = balance
+  const results = await Promise.allSettled(balancePromises)
+  results.forEach((result) => {
+    if (result.status === 'fulfilled') {
+      const { tokenSymbol, balance } = result.value
+      if (balance !== undefined) {
+        tokenBalances[tokenSymbol] = balance
+      }
     }
   })
 
