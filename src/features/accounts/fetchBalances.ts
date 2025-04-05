@@ -35,9 +35,19 @@ export const fetchBalances = createAsyncThunk<
 async function _fetchBalances(address: string, chainId: number): Promise<Record<TokenId, string>> {
   validateAddress(address, 'fetchBalances')
   const tokenBalances: Partial<Record<TokenId, string>> = {}
-  for (const tokenSymbol of getTokenOptionsByChainId(chainId)) {
-    tokenBalances[tokenSymbol] = await getTokenBalance({ address, chainId, tokenSymbol })
-  }
+
+  const balancePromises = getTokenOptionsByChainId(chainId).map(async (tokenSymbol) => {
+    const balance = await getTokenBalance({ address, chainId, tokenSymbol })
+    return { tokenSymbol, balance }
+  })
+
+  const results = await Promise.all(balancePromises)
+  results.forEach(({ tokenSymbol, balance }) => {
+    if (balance !== undefined) {
+      tokenBalances[tokenSymbol] = balance
+    }
+  })
+
   return tokenBalances as Record<TokenId, string>
 }
 
