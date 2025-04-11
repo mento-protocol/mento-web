@@ -71,20 +71,36 @@ export function useSwapTransaction(
     sendTransactionAsync,
   } = useSendTransaction(config)
 
+  const prepareError = txPrepError || sendPrepError?.message
+
   useEffect(() => {
-    if (txPrepError || (sendPrepError?.message && !isLoading && !isSuccess)) {
-      toast.error('Unable to prepare swap transaction')
-      logger.error(txPrepError || sendPrepError?.message)
-    } else if (txSendError) {
-      toast.error('Unable to execute swap transaction')
-      logger.error(txSendError)
+    if (prepareError && !isLoading && !isSuccess) {
+      const toastError = getToastErrorMessage(String(prepareError))
+      toast.error(toastError)
+      logger.error(`Prepare Error: ${prepareError}`)
+      return
     }
-  }, [txPrepError, sendPrepError, isLoading, isSuccess, txSendError])
+    if (txSendError) {
+      toast.error('Unable to execute swap transaction')
+      logger.error(`Execute Error: ${txSendError}`)
+      return
+    }
+  }, [isLoading, isSuccess, txSendError, prepareError])
 
   return {
     sendSwapTx: sendTransactionAsync,
     swapTxResult: txResult,
     isSwapTxLoading: isLoading,
     isSwapTxSuccess: isSuccess,
+  }
+}
+
+function getToastErrorMessage(errorMessage: string): string {
+  switch (true) {
+    case errorMessage.includes(`Trading is suspended for this reference rate`):
+      return 'Trading temporarily paused.  ' + 'Please try again later.'
+
+    default:
+      return 'Unable to prepare swap transaction'
   }
 }
