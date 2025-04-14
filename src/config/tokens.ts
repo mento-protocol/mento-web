@@ -240,10 +240,10 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     [TokenId.cCOP]: '0x8A567e2aE79CA692Bd748aB832081C45de4041eA',
     [TokenId.cGHS]: '0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313',
-    [TokenId.cGBP]: '',
-    [TokenId.cZAR]: '',
-    [TokenId.cCAD]: '',
-    [TokenId.cAUD]: '',
+    [TokenId.cGBP]: '0xCCF663b1fF11028f0b19058d0f7B674004a40746',
+    [TokenId.cZAR]: '0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6',
+    [TokenId.cCAD]: '0xff4Ab19391af240c311c54200a492233052B6325',
+    [TokenId.cAUD]: '0x7175504C455076F15c04A2F90a8e352281F492F9',
   },
 })
 

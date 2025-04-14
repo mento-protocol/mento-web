@@ -1892,15 +1892,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mento-protocol/mento-sdk@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "@mento-protocol/mento-sdk@npm:1.0.6"
+"@mento-protocol/mento-sdk@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "@mento-protocol/mento-sdk@npm:1.0.7"
   dependencies:
     "@mento-protocol/mento-core-ts": "npm:^0.2.0"
     mento-router-ts: "npm:^0.2.0"
   peerDependencies:
     ethers: ^5.7
-  checksum: 10/6bace5e095d0d39845c7d9f88d99785d1c36d914b505995644d0776ec1ba80372d0d33c9162da109a647810bdba924e29c476f7d5a1d272dcdabd6fc7dad2842
+  checksum: 10/efeb076bdd6ef35e35e47161e3de99a68adb53e8b0451ab40283653464f37307ba36aa68a88e04a10cf8c648ba9c99dfaf6231b8314e7fb3df5a8670360b6a40
   languageName: node
   linkType: hard
 
@@ -1911,7 +1911,7 @@ __metadata:
     "@celo/rainbowkit-celo": "npm:^0.11.0"
     "@headlessui-float/react": "npm:^0.11.2"
     "@headlessui/react": "npm:^1.7.13"
-    "@mento-protocol/mento-sdk": "npm:^1.0.6"
+    "@mento-protocol/mento-sdk": "npm:^1.0.7"
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28"
     "@metamask/post-message-stream": "npm:6.1.2"
     "@metamask/providers": "npm:10.2.1"
