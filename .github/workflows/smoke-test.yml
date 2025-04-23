@@ -5,8 +5,8 @@ on:
 jobs:
   smoke-test:
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
-    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@main
+    uses: mento-protocol/mento-automation-tests/.github/workflows/smoke-mento-web-test.yml@feat/add-discord-notification
     with:
       CUSTOM_URL: ${{ github.event.deployment_status.environment_url }}
-      IS_MAINNET: "false"
+      IS_MAINNET: 'false'
     secrets: inherit
