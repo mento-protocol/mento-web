@@ -10,6 +10,13 @@ export default function SwapPage() {
   return (
     <div className="flex justify-center items-center h-full flex-wrap w-full">
       <div className="mb-6 w-full max-w-md">
+        <button
+          onClick={() => {
+            throw new Error('Prod Sentry Error')
+          }}
+        >
+          TEST SENTRY
+        </button>
         {!formValues || !confirmView ? (
           <SwapFormCard />
         ) : (

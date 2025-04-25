@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import * as Sentry from '@sentry/nextjs'
 import { Contract } from 'ethers'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
 import { TokenId, getTokenAddress, getTokenOptionsByChainId } from 'src/config/tokens'
@@ -65,8 +66,8 @@ async function getTokenBalance({
     const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
     return (await tokenContract.balanceOf(address)).toString()
   } catch (error) {
-    // todo: Send such error to Sentry
     logger.error(`Error on getting balance of '${tokenSymbol}' token.`, { error })
+    Sentry.captureException(error)
     return undefined
   }
 }
