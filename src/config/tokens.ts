@@ -305,19 +305,6 @@ export async function isSwappable(token1: string, token2: string, chainId: numbe
   const token1Address = getTokenAddress(token1 as TokenId, chainId)
   const token2Address = getTokenAddress(token2 as TokenId, chainId)
 
-  if (token1 === TokenId.cCHF || token2 === TokenId.cCHF) {
-    console.log('Token 1', token1, 'Token 2', token2, 'Chain', chainId)
-    console.log('Token 1 Address', token1Address, 'Token 2 Address', token2Address)
-
-    console.log('Tradable pairs', tradablePairs)
-    let filterPairs = tradablePairs.filter((pair) => {
-      return pair.find((asset) => asset.address === token1Address) //&&
-      // pair.find((asset) => asset.address === token2Address)
-    })
-
-    console.log('Filter pairs', filterPairs)
-  }
-
   return tradablePairs.some(
     (pair) =>
       pair.find((asset) => asset.address === token1Address) &&
@@ -326,7 +313,6 @@ export async function isSwappable(token1: string, token2: string, chainId: numbe
 }
 
 export async function getSwappableTokenOptions(inputTokenId: string, chainId: ChainId) {
-  console.log('Input, chain ', inputTokenId, chainId)
   // Get all available tokens for the chain except the input token
   const tokenOptions = getTokenOptionsByChainId(chainId).filter(
     (tokenId) => tokenId !== inputTokenId
@@ -339,8 +325,6 @@ export async function getSwappableTokenOptions(inputTokenId: string, chainId: Ch
       return swappable ? tokenId : null
     })
   )
-
-  console.log('Swappable tokens', swappableTokens)
 
   // Filter out non-swappable tokens (null values)
   return swappableTokens.filter((tokenId): tokenId is TokenId => tokenId !== null)
