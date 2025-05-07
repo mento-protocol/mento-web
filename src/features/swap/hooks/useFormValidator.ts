@@ -24,7 +24,7 @@ export function useFormValidator({
         const parsedAmount = parseAmount(amount)
         if (!parsedAmount) return { amount: 'Amount is Invalid' }
         const isNegativeAmount = parsedAmount.lt(MIN_ROUNDED_VALUE)
-        if (isAccountReady && isNegativeAmount) return { amount: 'Amount too small' }
+        if (isAccountReady && isNegativeAmount) return { amount: 'Amount too Different' }
         const isExceededBalance = toWei(parsedAmount, Tokens[fromTokenId].decimals).gt(tokenBalance)
         if (isAccountReady && isExceededBalance) return { amount: 'Amount exceeds balance' }
         const { exceeds, errorMsg } = await checkTradingLimits(values, chainId)
