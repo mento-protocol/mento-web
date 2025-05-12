@@ -280,9 +280,9 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cZAR]: '0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6',
     [TokenId.cCAD]: '0xff4Ab19391af240c311c54200a492233052B6325',
     [TokenId.cAUD]: '0x7175504C455076F15c04A2F90a8e352281F492F9',
-    [TokenId.cCHF]: '',
-    [TokenId.cJPY]: '',
-    [TokenId.cNGN]: '',
+    [TokenId.cCHF]: '0xb55a79F398E759E43C95b979163f30eC87Ee131D',
+    [TokenId.cJPY]: '0xc45eCF20f3CD864B32D9794d6f76814aE8892e20',
+    [TokenId.cNGN]: '0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71',
   },
 })
 
