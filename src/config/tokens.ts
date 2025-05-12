@@ -33,6 +33,9 @@ export enum TokenId {
   cZAR = 'cZAR',
   cCAD = 'cCAD',
   cAUD = 'cAUD',
+  cCHF = 'cCHF',
+  cJPY = 'cJPY',
+  cNGN = 'cNGN',
 }
 
 export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
@@ -167,6 +170,30 @@ export const cAUD: Token = Object.freeze({
   decimals: 18,
 })
 
+export const cCHF: Token = Object.freeze({
+  id: TokenId.cCHF,
+  symbol: TokenId.cCHF,
+  name: 'Celo Swiss Franc',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cJPY: Token = Object.freeze({
+  id: TokenId.cJPY,
+  symbol: TokenId.cJPY,
+  name: 'Celo Japanese Yen',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cNGN: Token = Object.freeze({
+  id: TokenId.cNGN,
+  symbol: TokenId.cNGN,
+  name: 'Celo Nigerian Naira',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
 export const Tokens: Record<TokenId, Token> = {
   CELO,
   cUSD,
@@ -185,6 +212,9 @@ export const Tokens: Record<TokenId, Token> = {
   cZAR,
   cCAD,
   cAUD,
+  cCHF,
+  cJPY,
+  cNGN,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
@@ -206,6 +236,9 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cZAR]: '0x1e5b44015Ff90610b54000DAad31C89b3284df4d',
     [TokenId.cCAD]: '0x02EC9E0D2Fd73e89168C1709e542a48f58d7B133',
     [TokenId.cAUD]: '0x84CBD49F5aE07632B6B88094E81Cce8236125Fe0',
+    [TokenId.cCHF]: '0xADC57C2C34aD021Df4421230a6532F4e2E1dCE4F',
+    [TokenId.cJPY]: '0x2E51F41238cA36a421C9B8b3e189e8Cc7653FE67',
+    [TokenId.cNGN]: '0x4a5b03B8b16122D330306c65e4CA4BC5Dd6511d0',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -225,6 +258,9 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cZAR]: '',
     [TokenId.cCAD]: '',
     [TokenId.cAUD]: '',
+    [TokenId.cCHF]: '',
+    [TokenId.cJPY]: '',
+    [TokenId.cNGN]: '',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
@@ -244,6 +280,9 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.cZAR]: '0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6',
     [TokenId.cCAD]: '0xff4Ab19391af240c311c54200a492233052B6325',
     [TokenId.cAUD]: '0x7175504C455076F15c04A2F90a8e352281F492F9',
+    [TokenId.cCHF]: '0xb55a79F398E759E43C95b979163f30eC87Ee131D',
+    [TokenId.cJPY]: '0xc45eCF20f3CD864B32D9794d6f76814aE8892e20',
+    [TokenId.cNGN]: '0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71',
   },
 })
 

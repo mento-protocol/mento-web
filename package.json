@@ -33,7 +33,7 @@
     "@celo/rainbowkit-celo": "^0.11.0",
     "@headlessui-float/react": "^0.11.2",
     "@headlessui/react": "^1.7.13",
-    "@mento-protocol/mento-sdk": "^1.0.7",
+    "@mento-protocol/mento-sdk": "^1.0.9",
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
     "@metamask/post-message-stream": "6.1.2",
     "@metamask/providers": "10.2.1",
