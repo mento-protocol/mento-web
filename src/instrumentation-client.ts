@@ -2,11 +2,11 @@
 // The added config here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 import * as Sentry from '@sentry/nextjs'
-import { IS_PROD } from 'src/middleware'
+import { IS_PROD, SENTRY_DSN } from 'src/middleware'
 
 Sentry.init({
   enabled: IS_PROD,
-  dsn: 'https://75592e6d2b8872d2e1c76d74c1cb8f82@o4504211835256832.ingest.us.sentry.io/4509208704712704',
+  dsn: SENTRY_DSN,
 
   // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
