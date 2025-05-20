@@ -57,17 +57,17 @@ async function checkTradingLimits(
     const isSwapIn = values.direction === 'in'
     const assetOut = path.assets[0] === assetIn ? path.assets[1] : path.assets[0]
 
+    const tokenIn = getTokenByAddress(assetIn)
+    const tokenOut = getTokenByAddress(assetOut)
+
     const pair = await getTradablePairForTokens(
       chainId,
-      getTokenByAddress(assetIn).id as TokenId,
-      getTokenByAddress(assetOut).id as TokenId
+      tokenIn.id as TokenId,
+      tokenOut.id as TokenId
     )
-
     const amountWei = parseInputExchangeAmount(
       amount,
-      isSwapIn
-        ? (getTokenByAddress(assetIn).id as TokenId)
-        : (getTokenByAddress(assetOut).id as TokenId)
+      isSwapIn ? (tokenIn.id as TokenId) : (tokenOut.id as TokenId)
     )
 
     const quoteWei = (
@@ -75,16 +75,10 @@ async function checkTradingLimits(
         ? await mento.getAmountOut(assetIn, assetOut, amountWei, pair)
         : await mento.getAmountIn(assetIn, assetOut, amountWei, pair)
     ).toString()
-
-    const quoteDecimals = isSwapIn
-      ? getTokenByAddress(assetOut).decimals
-      : getTokenByAddress(assetIn).decimals
-
+    const quoteDecimals = isSwapIn ? tokenOut.decimals : tokenIn.decimals
     const quote = fromWei(quoteWei, quoteDecimals)
 
-    const assetsToCheck = [assetIn, assetOut]
-
-    for (const asset of assetsToCheck) {
+    for (const asset of [assetIn, assetOut]) {
       // Find the trading limits for the specific asset we're checking
       const assetLimits = tradingLimits.filter((limit) => limit.asset === asset)
 
