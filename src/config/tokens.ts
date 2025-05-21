@@ -29,6 +29,13 @@ export enum TokenId {
   PUSO = 'PUSO',
   cCOP = 'cCOP',
   cGHS = 'cGHS',
+  cGBP = 'cGBP',
+  cZAR = 'cZAR',
+  cCAD = 'cCAD',
+  cAUD = 'cAUD',
+  cCHF = 'cCHF',
+  cJPY = 'cJPY',
+  cNGN = 'cNGN',
 }
 
 export const NativeStableTokenIds = [TokenId.cUSD, TokenId.cEUR, TokenId.cREAL]
@@ -131,6 +138,62 @@ export const cGHS: Token = Object.freeze({
   decimals: 18,
 })
 
+export const cGBP: Token = Object.freeze({
+  id: TokenId.cGBP,
+  symbol: TokenId.cGBP,
+  name: 'Celo British Pound',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cZAR: Token = Object.freeze({
+  id: TokenId.cZAR,
+  symbol: TokenId.cZAR,
+  name: 'Celo South African Rand',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cCAD: Token = Object.freeze({
+  id: TokenId.cCAD,
+  symbol: TokenId.cCAD,
+  name: 'Celo Canadian Dollar',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cAUD: Token = Object.freeze({
+  id: TokenId.cAUD,
+  symbol: TokenId.cAUD,
+  name: 'Celo Australian Dollar',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cCHF: Token = Object.freeze({
+  id: TokenId.cCHF,
+  symbol: TokenId.cCHF,
+  name: 'Celo Swiss Franc',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cJPY: Token = Object.freeze({
+  id: TokenId.cJPY,
+  symbol: TokenId.cJPY,
+  name: 'Celo Japanese Yen',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
+export const cNGN: Token = Object.freeze({
+  id: TokenId.cNGN,
+  symbol: TokenId.cNGN,
+  name: 'Celo Nigerian Naira',
+  color: Color.usdcBlue,
+  decimals: 18,
+})
+
 export const Tokens: Record<TokenId, Token> = {
   CELO,
   cUSD,
@@ -145,6 +208,13 @@ export const Tokens: Record<TokenId, Token> = {
   PUSO,
   cCOP,
   cGHS,
+  cGBP,
+  cZAR,
+  cCAD,
+  cAUD,
+  cCHF,
+  cJPY,
+  cNGN,
 }
 
 export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.freeze({
@@ -162,6 +232,13 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '0x5E0E3c9419C42a1B04e2525991FB1A2C467AB8bF',
     [TokenId.cCOP]: '0xe6A57340f0df6E020c1c0a80bC6E13048601f0d4',
     [TokenId.cGHS]: '0x295B66bE7714458Af45E6A6Ea142A5358A6cA375',
+    [TokenId.cGBP]: '0x47f2Fb88105155a18c390641C8a73f1402B2BB12',
+    [TokenId.cZAR]: '0x1e5b44015Ff90610b54000DAad31C89b3284df4d',
+    [TokenId.cCAD]: '0x02EC9E0D2Fd73e89168C1709e542a48f58d7B133',
+    [TokenId.cAUD]: '0x84CBD49F5aE07632B6B88094E81Cce8236125Fe0',
+    [TokenId.cCHF]: '0xADC57C2C34aD021Df4421230a6532F4e2E1dCE4F',
+    [TokenId.cJPY]: '0x2E51F41238cA36a421C9B8b3e189e8Cc7653FE67',
+    [TokenId.cNGN]: '0x4a5b03B8b16122D330306c65e4CA4BC5Dd6511d0',
   },
   [ChainId.Baklava]: {
     [TokenId.CELO]: '0xdDc9bE57f553fe75752D61606B94CBD7e0264eF8',
@@ -177,6 +254,13 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '',
     [TokenId.cCOP]: '',
     [TokenId.cGHS]: '',
+    [TokenId.cGBP]: '',
+    [TokenId.cZAR]: '',
+    [TokenId.cCAD]: '',
+    [TokenId.cAUD]: '',
+    [TokenId.cCHF]: '',
+    [TokenId.cJPY]: '',
+    [TokenId.cNGN]: '',
   },
   [ChainId.Celo]: {
     [TokenId.CELO]: '0x471EcE3750Da237f93B8E339c536989b8978a438',
@@ -192,6 +276,13 @@ export const TokenAddresses: Record<ChainId, Record<TokenId, Address>> = Object.
     [TokenId.PUSO]: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     [TokenId.cCOP]: '0x8A567e2aE79CA692Bd748aB832081C45de4041eA',
     [TokenId.cGHS]: '0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313',
+    [TokenId.cGBP]: '0xCCF663b1fF11028f0b19058d0f7B674004a40746',
+    [TokenId.cZAR]: '0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6',
+    [TokenId.cCAD]: '0xff4Ab19391af240c311c54200a492233052B6325',
+    [TokenId.cAUD]: '0x7175504C455076F15c04A2F90a8e352281F492F9',
+    [TokenId.cCHF]: '0xb55a79F398E759E43C95b979163f30eC87Ee131D',
+    [TokenId.cJPY]: '0xc45eCF20f3CD864B32D9794d6f76814aE8892e20',
+    [TokenId.cNGN]: '0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71',
   },
 })
 

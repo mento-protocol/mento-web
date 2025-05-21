@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import * as Sentry from '@sentry/nextjs'
 import { Contract } from 'ethers'
 import { BALANCE_STALE_TIME } from 'src/config/consts'
 import { TokenId, getTokenAddress, getTokenOptionsByChainId } from 'src/config/tokens'
@@ -35,9 +36,22 @@ export const fetchBalances = createAsyncThunk<
 async function _fetchBalances(address: string, chainId: number): Promise<Record<TokenId, string>> {
   validateAddress(address, 'fetchBalances')
   const tokenBalances: Partial<Record<TokenId, string>> = {}
-  for (const tokenSymbol of getTokenOptionsByChainId(chainId)) {
-    tokenBalances[tokenSymbol] = await getTokenBalance({ address, chainId, tokenSymbol })
-  }
+
+  const balancePromises = getTokenOptionsByChainId(chainId).map(async (tokenSymbol) => {
+    const balance = await getTokenBalance({ address, chainId, tokenSymbol })
+    return { tokenSymbol, balance }
+  })
+
+  const results = await Promise.allSettled(balancePromises)
+  results.forEach((result) => {
+    if (result.status === 'fulfilled') {
+      const { tokenSymbol, balance } = result.value
+      if (balance !== undefined) {
+        tokenBalances[tokenSymbol] = balance
+      }
+    }
+  })
+
   return tokenBalances as Record<TokenId, string>
 }
 
@@ -52,8 +66,8 @@ async function getTokenBalance({
     const tokenContract = new Contract(tokenAddress, erc20ABI, provider)
     return (await tokenContract.balanceOf(address)).toString()
   } catch (error) {
-    // todo: Send such error to Sentry
     logger.error(`Error on getting balance of '${tokenSymbol}' token.`, { error })
+    Sentry.captureException(error)
     return undefined
   }
 }

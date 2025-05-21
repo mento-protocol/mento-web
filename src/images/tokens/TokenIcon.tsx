@@ -1,27 +1,15 @@
 import Image from 'next/image'
-import { memo } from 'react'
-import { Token, TokenId } from 'src/config/tokens'
-import CeloIcon from 'src/images/tokens/CELO.svg'
-import PUSOIcon from 'src/images/tokens/PUSO.svg'
-import USDCIcon from 'src/images/tokens/USDC.svg'
-import USDTIcon from 'src/images/tokens/USDT.svg'
-import axlEUROCIcon from 'src/images/tokens/axlEUROC.svg'
-import axlUSDCIcon from 'src/images/tokens/axlUSDC.svg'
-import cCOPIcon from 'src/images/tokens/cCOP.svg'
-import cEURIcon from 'src/images/tokens/cEUR.svg'
-import cGHSIcon from 'src/images/tokens/cGHS.svg'
-import cKESIcon from 'src/images/tokens/cKES.svg'
-import cREALIcon from 'src/images/tokens/cREAL.svg'
-import cUSDIcon from 'src/images/tokens/cUSD.svg'
-import eXOFIcon from 'src/images/tokens/eXOF.svg'
+import { memo, useState } from 'react'
+import { Token } from 'src/config/tokens'
 
 interface Props {
   token?: Token | null
   size?: 'xs' | 's' | 'm' | 'l'
 }
 
-function _TokenIcon({ token, size = 'm' }: Props) {
+function TokenIconBase({ token, size = 'm' }: Props) {
   const { actualSize, fontSize } = sizeValues[size]
+  const [imgError, setImgError] = useState(false)
 
   if (!token) {
     return (
@@ -35,29 +23,17 @@ function _TokenIcon({ token, size = 'm' }: Props) {
     )
   }
 
-  let imgSrc
-  if (token?.id === TokenId.CELO) imgSrc = CeloIcon
-  else if (token?.id === TokenId.cUSD) imgSrc = cUSDIcon
-  else if (token?.id === TokenId.cEUR) imgSrc = cEURIcon
-  else if (token?.id === TokenId.cREAL) imgSrc = cREALIcon
-  else if (token?.id === TokenId.USDC) imgSrc = USDCIcon
-  else if (token?.id === TokenId.USDT) imgSrc = USDTIcon
-  else if (token?.id === TokenId.axlUSDC) imgSrc = axlUSDCIcon
-  else if (token?.id === TokenId.axlEUROC) imgSrc = axlEUROCIcon
-  else if (token?.id === TokenId.eXOF) imgSrc = eXOFIcon
-  else if (token?.id === TokenId.cKES) imgSrc = cKESIcon
-  else if (token?.id === TokenId.PUSO) imgSrc = PUSOIcon
-  else if (token?.id === TokenId.cCOP) imgSrc = cCOPIcon
-  else if (token?.id === TokenId.cGHS) imgSrc = cGHSIcon
+  const imgSrc = `/tokens/${token.id}.svg`
 
-  if (imgSrc) {
+  if (imgSrc && !imgError) {
     return (
       <Image
         src={imgSrc}
-        alt="" // Not using real alt because it looks strange while loading
+        alt=""
         width={actualSize}
         height={actualSize}
         priority={true}
+        onError={() => setImgError(true)}
       />
     )
   }
@@ -77,7 +53,7 @@ function _TokenIcon({ token, size = 'm' }: Props) {
           fontSize,
         }}
       >
-        {token.symbol[0].toUpperCase()}
+        {token.symbol[0].toUpperCase() + token.symbol[1].toUpperCase()}
       </div>
     </div>
   )
@@ -102,4 +78,4 @@ const sizeValues = {
   },
 }
 
-export const TokenIcon = memo(_TokenIcon)
+export const TokenIcon = memo(TokenIconBase)
