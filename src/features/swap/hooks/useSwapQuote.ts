@@ -96,6 +96,7 @@ function getToastErrorMessage(
     case swapErrorMessage.includes(`can't create fixidity number larger than`):
       return 'Amount out is too large'
     case swapErrorMessage.includes(`no valid median`):
+      return `Oracle error. Price information for ${fromTokenSymbol} to ${toTokenSymbol} trades is currently unreliable.`
     case swapErrorMessage.includes(`Trading is suspended for this reference rate`):
       return (
         'Trading temporarily paused.  ' +
