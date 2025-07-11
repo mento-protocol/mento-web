@@ -7,7 +7,7 @@
     "Mento",
     "Exchange"
   ],
-  "author": "J M Rossy",
+  "author": "Mento Labs",
   "repository": {
     "type": "git",
     "url": "https://github.com/mento-protocol/mento-web"
@@ -33,7 +33,7 @@
     "@celo/rainbowkit-celo": "^0.11.0",
     "@headlessui-float/react": "^0.11.2",
     "@headlessui/react": "^1.7.13",
-    "@mento-protocol/mento-sdk": "^1.0.12",
+    "@mento-protocol/mento-sdk": "^1.10.3",
     "@metamask/jazzicon": "https://github.com/jmrossy/jazzicon#7a8df28",
     "@metamask/post-message-stream": "6.1.2",
     "@metamask/providers": "10.2.1",
